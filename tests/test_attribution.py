@@ -134,3 +134,28 @@ def test_artifact_guard_rejects_changed_source_without_guessing() -> None:
     assert section_attribution("Introduction", metadata)["role"] == "unclassified"
     assert section_attribution("Introduction", metadata | {"_artifact_sha256": "b" * 64})["role"] == "unclassified"
     assert section_attribution("Introduction", metadata | {"_artifact_sha256": "a" * 64})["author"] == "Audited editor"
+
+
+def test_same_title_contents_does_not_inherit_provider_notice_author() -> None:
+    metadata = {
+        "author": "Doyle",
+        "section_attributions": [
+            {
+                "title_contains": "Adventures",
+                "author": "Unidentified editorial contributor",
+                "role": "editorial",
+                "text_contains": "THERE IS AN ILLUSTRATED EDITION",
+            }
+        ],
+    }
+    assert (
+        section_attribution("Adventures", metadata | {"_section_text": "I. A Scandal in Bohemia"})["role"]
+        == "unclassified"
+    )
+    assert (
+        section_attribution(
+            "Adventures", metadata | {"_section_text": "There is an illustrated edition of this title"}
+        )["role"]
+        == "editorial"
+    )
+    assert section_attribution("Adventures", metadata)["role"] == "unclassified"

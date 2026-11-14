@@ -136,3 +136,121 @@ the most permissive license.
 3. Separate catalog identity counts from verified work/volume/periodical counts.
 4. Acquire one pinned modern technical book with its actual embedded license,
    then evaluate math/code extraction and cross-language queries independently.
+
+## Table poetry and heading recovery, 2026-11-14
+
+A fresh import replay found a concrete extraction regression in Gutenberg
+**#10912, *The Infant's Delight: Poetry***. The cached 3,873,124-byte EPUB has
+source SHA-256
+`0b2a28bda9cd1bac75fe88d9bc31ba7671aa8980eab0724e63095d3bea8b8dea`.
+Its main narrative XHTML contains **50 tables, 50 rows and 50 cells**, with poem
+lines stored directly in `TD` elements and separated by `BR`. The prior parser
+ignored tables and retained whitespace-only `PRE` blocks (including NBSP).
+Those blocks incorrectly made the section list appear nonempty, disabled the
+fallback, and were then discarded by the final whitespace filter. The book
+failed with “No extractable text” despite containing ordinary selectable text.
+This is a format handling defect, not a scan or an OCR requirement.
+
+The corrected HTML extractor rejects whitespace-only blocks before section
+creation and owns each table subtree once. It retains caption/header text,
+logical row and cell order, explicit BR verse breaks and nested block text.
+Cells are separated by TAB, rows by blank lines. Empty span positions preserve
+basic column association without copying a cell's words into multiple places.
+Nested paragraphs, lists and layout tables are emitted once. A containing
+quotation retains its own text before and after an embedded table. Explicit
+`PRE` code inside a cell preserves its indentation, tabs, internal spaces and
+string literals. Ordinary non-table prose normalization is unchanged.
+
+This remains a linear text representation, not a facsimile or an interpreted
+scientific spreadsheet. Complex merged-cell layout and nested column geometry
+are not guaranteed. Spans are bounded to 100 positions and nested table-specific
+rendering to 16 levels, followed by readable text fallback. Images and visual
+formulas are not acquired or reconstructed by this parser change.
+
+The same source exposed a separate heading loss: a poem title followed
+immediately by an H2 biblical epigraph overwrote the first pending heading.
+Consecutive headings now remain as their original strings joined by LF in the
+section title, without invented labels or added attribution. The first ordinary
+H1→H2 chapter can therefore have a composite title; its body text stays unchanged.
+Later chapters remain separate. A trailing heading-only fragment is retained as
+source text instead of creating an empty section or disappearing.
+
+The first poem's title, `BLIND MAN'S BUFF.`, uses a styled DIV instead of a heading.
+A narrow audited gate recognizes the source's `style1` + `xhtml_div_align` classes,
+short uppercase text and an immediately following nonempty structural table
+block. It stops at an intervening heading/prose block and does not classify
+generic layout DIVs as titles. This preserves actual source words and does not
+infer a contributor from formatting.
+
+### Real-source validation
+
+The corrected cached EPUB yields **50 nonempty sections and 25,938 body
+characters**. All **57 original H1–H6 headings** occur in the resulting section
+titles/text, and the source's visible-word multiset has **zero missing tokens**
+after the same provider boilerplate exclusion. The first title includes both
+`The Infant's Delight` and `BLIND MAN'S BUFF.`. The first verse is present with
+its explicit source line breaks:
+
+> When the win-ter winds are blow-ing,
+
+This was measured against the original local EPUB; source bytes were unchanged.
+The shorter canonical character count than a previous index entry is not used
+as an extraction quality score: canonical whitespace, heading placement and
+source boilerplate filtering affect that count.
+
+The pinned D2L artifact was also replayed: **483/483 source code and math blocks**
+remain exact substrings, with **148 sections and 413,906 body characters**,
+unchanged. Its explicit FB2 code path was not edited. No frozen evaluation
+snapshot was modified.
+
+All 20 curated full EPUBs parsed successfully. Their flat section total changed
+from **1,614 to 1,619** as formerly hidden tables and their headings became
+available. **1,594 new sections** retain an exact previous body hash. Remaining
+canonical changes concern newly retained source text, table whitespace/order or
+heading-only fragments. These parser changes require a versioned reindex and a
+new corpus fingerprint before any fresh retrieval comparison.
+
+Evidence and the exact prior parser source are saved under ignored
+`data/audit/table-parser-v1/`. `report.json` records raw source hashes, old/new
+parser fingerprints, every curated section-title comparison, recovered poem
+structure and the D2L literal-block checks. The current parser fingerprint is
+`00ad86bd421ff2d9fc0dc17331602a0f7031b3bbeb419ae717a4c8d97b6fc44e`.
+
+### Attribution selector regression audit
+
+The parser replay evaluated all **13 artifact-bound attribution rules** against
+the previous parser and the new extraction, plus the independently curated
+Jowett introduction rule. An unchanged source-artifact hash cannot establish
+that a title selector retains its old scope after heading handling changes.
+
+**One artifact-bound rule needs explicit scope review:** Gutenberg #1661,
+*The Adventures of Sherlock Holmes*, uses the book title as its selector. It
+previously matched one section and now matches two:
+
+- the source's notice about an illustrated edition;
+- the recovered Contents table under the composite title
+  `The Adventures of Sherlock Holmes` / `by Arthur Conan Doyle` / `Contents`
+  (actual title strings are LF-separated, without the display slashes).
+
+Neither new match is a narrative story, but the rule's count and matched body
+hashes changed. The audit flags both bindings for review; it does not authorize
+or automatically accept the wider selector. No rules, source manifests or
+library attribution rows were changed by this work.
+
+The other **12 artifact-bound rules** retain their match counts and exact
+matched bodies. Jowett's `INTRODUCTION AND ANALYSIS` retains **three** matches.
+No rule gained a match on a previously unmatched, otherwise unchanged body.
+The full old/new titles and previews of changed bindings are in the runtime
+report. Review #1661's selector scope before a blanket refresh; retain manual
+curation precedence and make any changed attribution decision separately.
+
+### Verification
+
+The parser suite now has **33 tests**, including the minimal H1 + blank PRE +
+TD/BR poem regression, scientific headers/values and row associations, nested
+layout tables, P/LI duplication, quotation siblings, cell PRE code, spans,
+consecutive poem/epigraph headings, ordinary H1/H2 chapter structure and the
+narrow styled-title gate. Ruff and ty pass. Parser/modern-source/Russian-source/
+attribution tests pass **77/77**, and ingestion/integration/integrity/library
+regressions pass **28/28**. Measurements were read-only with respect to library
+and evaluation databases.

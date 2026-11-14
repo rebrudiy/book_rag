@@ -47,6 +47,18 @@ def section_attribution(title: str, metadata: dict[str, Any]) -> dict[str, str]:
                 raise ValueError(f"section_attributions[{index}].source_artifact_sha256 must be a SHA-256 digest")
         if rule["role"] not in EXPLICIT_ROLES:
             raise ValueError(f"section_attributions[{index}].role must be main_text or editorial")
+        required_ordinal = rule.get("section_ordinal")
+        if required_ordinal is not None and (type(required_ordinal) is not int or required_ordinal < 0):
+            raise ValueError(f"section_attributions[{index}].section_ordinal must be a nonnegative integer")
+        required_text = rule.get("text_contains")
+        if required_text is not None and (not isinstance(required_text, str) or not required_text.strip()):
+            raise ValueError(f"section_attributions[{index}].text_contains must be nonempty text")
+        if required_ordinal is not None and metadata.get("_section_ordinal") != required_ordinal:
+            continue
+        if required_text is not None and _normalized(required_text) not in _normalized(
+            str(metadata.get("_section_text", ""))
+        ):
+            continue
         if expected_artifact is not None and metadata.get("_artifact_sha256") != expected_artifact:
             continue
         if _normalized(rule["title_contains"]) in normalized_title:

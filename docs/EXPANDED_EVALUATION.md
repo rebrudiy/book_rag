@@ -14,6 +14,14 @@ The checked-in `corpus/manifest.json` is the source manifest. Its digest, each e
 
 Database byte hashes can change after legitimate database maintenance even if canonical source text is unchanged. Retain the artifact/content/metadata digests and canonical evidence anchors when rebuilding. Do not silently reuse scores after changing the source snapshot or labels.
 
+Current `bookrag evaluate` and the calibration runner preserve this frozen input
+by migrating an owned temporary SQLite copy. They reuse the selected ready
+vector generation without copying its arrays; source files remain unchanged.
+See [evaluation isolation](EVALUATION.md#preserve-frozen-input-bytes). Constructing
+`Library(snapshot_path)` directly can migrate the original and must be avoided
+for published inputs. This isolation change does not rewrite historical reports
+or their recorded source digests.
+
 ## Query coverage
 
 The fixture contains 54 natural-language queries: 44 answerable and 10 explicitly scoped negatives. Query languages are English (34), Russian (8), French (6) and German (6).

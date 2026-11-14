@@ -1,0 +1,54 @@
+{
+  "book_id": "pg63371-full",
+  "original_url": "https://www.gutenberg.org/cache/epub/63371/pg63371-images-3.epub",
+  "validated_url": "https://www.gutenberg.org/ebooks/63371.epub.noimages",
+  "artifact_bytes": 1187675,
+  "max_download_bytes": 104857600,
+  "illustrations_included": false,
+  "trial_integrity": {
+    "valid": true,
+    "canonical_valid": true,
+    "status": "passed",
+    "books_checked": 1,
+    "passages_checked": 1623,
+    "artifacts_requested": true,
+    "artifacts_checked": 1,
+    "originals_complete": true,
+    "error_count": 0,
+    "errors": [],
+    "errors_truncated": false,
+    "warnings": [],
+    "elapsed_seconds": 0.011,
+    "scope": "Canonical text/digests and optional original file digests, not source transcription accuracy"
+  },
+  "sections": 123,
+  "stats_after_adoption": {
+    "books": 1308,
+    "works": 1307,
+    "passages": 442507,
+    "status_counts": {
+      "indexed": 1308
+    },
+    "work_count_is_provisional": true,
+    "curated_work_groups": 25,
+    "periodical_editions": 60,
+    "languages": [
+      {
+        "language": "de",
+        "count": 113
+      },
+      {
+        "language": "en",
+        "count": 1047
+      },
+      {
+        "language": "fr",
+        "count": 138
+      },
+      {
+        "language": "ru",
+        "count": 10
+      }
+    ]
+  }
+}

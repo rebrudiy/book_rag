@@ -1,0 +1,2072 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-11-14T12:52:56.839209+00:00",
+  "reviewer": "AI agent review; not human ratings or independently adjudicated expert ground truth",
+  "purpose": "Diagnose conservative reference anchors vs actual retrieval, source-role and context failures; propose only, never mutate labels or scores.",
+  "inputs": {
+    "evals/dev-expanded.json": "8955a6cf471318fa70d24f518c3a08f410865f9a9f4a751f47d29de3a94deb44",
+    "experiments/expanded-hybrid-v1.json": "3bd238ef8bd72c9000bd0cf9c4a442680158690c6d9c3bc4984ba13c32df8152",
+    "experiments/expanded-reranked-v1.json": "927cdfe4b5b1f720ec2ff97ca123dc27136f0d4a9eae977bd14d69e9f0cee499",
+    "experiments/calibration-reranker-v1.json": "0bf47af807c7a5401e71a407a8fb4b4b1ae4cfeec11e60e1811a5ad732d2c31a"
+  },
+  "source_database": "data/snapshots/curated20-v3/library.sqlite3",
+  "source_database_sha256": "ea1feab7c1d1c58acd7457529ef70885f2767ceeab6050ec12db0fa4f74bb4b8",
+  "selection": {
+    "minilm_cases": "All9positive cases in original expanded-hybrid-v1 with a declared relevant edition in top5 but no labeled phrase.",
+    "reranker_cases": "All19answerable reference-missing top1 results, including all6with rawlogit>=3, not only flattering examples.",
+    "raw_logit_source": "calibration-reranker-v1; every reviewed top1ID checked equal to original expanded-reranked-v1.",
+    "new_fixed_pool_reports_used": false,
+    "old_heldout_read": false
+  },
+  "method": [
+    "Read actual returned passage text and bounded same-section neighboring context; preserve query-specific entities, relations, roles, literal constraints and edition scope.",
+    "Classify sufficient_support,partial_related,irrelevant,ambiguous; a correctly named book alone does not establish support.",
+    "Distinguish standalone excerpt support from explicitly cited adjacent support and one-sided comparison components.",
+    "Source-role probes retain editorial/character/nested quotation identities; no inferred author stance from catalog metadata.",
+    "Alternative references remain proposals and are independently checked as exact source substrings."
+  ],
+  "counts": {
+    "selected_cases": 20,
+    "original_minilm_top5_cases": 9,
+    "original_reranker_top1_cases": 19,
+    "unique_returned_passages": 58,
+    "minilm_set_judgments": {
+      "sufficient_support": 5,
+      "partial_related": 4
+    },
+    "reranker_top1_judgments": {
+      "sufficient_support": 7,
+      "partial_related": 9,
+      "irrelevant": 3
+    },
+    "passage_judgments": {
+      "sufficient_support": 11,
+      "partial_related": 32,
+      "irrelevant": 14,
+      "ambiguous": 1
+    },
+    "reference_proposals": 16,
+    "bounded_neighbor_rescues": 3
+  },
+  "case_reviews": [
+    {
+      "query_id": "expanded-03",
+      "query": "\"There is grandeur in this view of life\"",
+      "type": "exact_quote",
+      "selection_reasons": [
+        "reranker_top1_reference_miss"
+      ],
+      "frozen_reference_evidence": [
+        {
+          "book_id": "pg1228-full",
+          "work_id": "pg1228-origin",
+          "section_ordinal": 17,
+          "section_title": "CHAPTER XIV. RECAPITULATION AND CONCLUSION.",
+          "text": "There is grandeur in this view of life"
+        }
+      ],
+      "minilm_top5_review": null,
+      "reranker_top1_review": {
+        "passage_id": 221898,
+        "raw_logit": 8.49901294708252,
+        "agent_judgment": "sufficient_support",
+        "reason": "Exact literal phrase in sixth edition; benchmark edition target is narrower than the unscoped query.",
+        "next_benefit": "clarify_edition_scope"
+      },
+      "additional_reference_proposals": [
+        10
+      ],
+      "caution": "Literal query is unscoped, but the returned sixth-edition passage cannot be presented as the benchmark’s1859 edition."
+    },
+    {
+      "query_id": "expanded-04",
+      "query": "How does Marcus Aurelius compare accepting death with leaving a play after three acts?",
+      "type": "idea",
+      "selection_reasons": [
+        "reranker_top1_reference_miss"
+      ],
+      "frozen_reference_evidence": [
+        {
+          "book_id": "pg2680-full",
+          "work_id": "pg2680-meditations",
+          "section_ordinal": 14,
+          "section_title": "THE TWELFTH BOOK",
+          "text": "in matter of life, three acts is the whole play"
+        }
+      ],
+      "minilm_top5_review": null,
+      "reranker_top1_review": {
+        "passage_id": 218631,
+        "raw_logit": -1.736393928527832,
+        "agent_judgment": "partial_related",
+        "reason": "Editorial discussion uses a voyage metaphor, not the three-act-play comparison.",
+        "next_benefit": "source_role_and_location_retrieval"
+      },
+      "additional_reference_proposals": []
+    },
+    {
+      "query_id": "expanded-10",
+      "query": "Find the detective story where a bell rope and a ventilator allow a snake to enter a bedroom.",
+      "type": "scene",
+      "selection_reasons": [
+        "minilm_top5_right_book_no_reference_anchor",
+        "reranker_top1_reference_miss"
+      ],
+      "frozen_reference_evidence": [
+        {
+          "book_id": "pg1661-full",
+          "work_id": "pg1661",
+          "section_ordinal": 10,
+          "section_title": "VIII. THE ADVENTURE OF THE SPECKLED BAND",
+          "text": "It is a swamp adder!"
+        }
+      ],
+      "minilm_top5_review": {
+        "passage_ids": [
+          222264,
+          222256,
+          222250,
+          222265,
+          222251
+        ],
+        "agent_judgment": "sufficient_support",
+        "reason": "The top-five set contains an explicit snake/ventilator/rope explanation; one species-name reference is incomplete.",
+        "next_benefit": "reference_evidence_expansion"
+      },
+      "reranker_top1_review": {
+        "passage_id": 222264,
+        "raw_logit": -0.5487834811210632,
+        "agent_judgment": "sufficient_support",
+        "reason": "Top1 explicitly explains the remembered mechanism.",
+        "next_benefit": "reference_evidence_expansion"
+      },
+      "additional_reference_proposals": [
+        0,
+        1
+      ]
+    },
+    {
+      "query_id": "expanded-13",
+      "query": "Where does the wounded Prince Andrew see the lofty sky and rethink the importance of the battle?",
+      "type": "scene",
+      "selection_reasons": [
+        "reranker_top1_reference_miss"
+      ],
+      "frozen_reference_evidence": [
+        {
+          "book_id": "pg2600-full",
+          "work_id": "pg2600",
+          "section_ordinal": 65,
+          "section_title": "CHAPTER XVI",
+          "text": "How quiet, peaceful, and solemn"
+        }
+      ],
+      "minilm_top5_review": null,
+      "reranker_top1_review": {
+        "passage_id": 224347,
+        "raw_logit": 3.284473419189453,
+        "agent_judgment": "partial_related",
+        "reason": "Scene/location is correct; next passage is needed for explicit valuation of battle/glory.",
+        "next_benefit": "adjacent_context"
+      },
+      "additional_reference_proposals": [
+        14
+      ],
+      "bounded_neighbor_context": {
+        "judgment": "sufficient_support",
+        "neighbor_passage_ids": [
+          224348
+        ],
+        "constraint": "Credit the neighboring source span explicitly; do not claim its content was in the returned excerpt."
+      }
+    },
+    {
+      "query_id": "expanded-18",
+      "query": "Why does a stone dropped from a moving railway carriage follow different paths for different observers?",
+      "type": "explanation",
+      "selection_reasons": [
+        "minilm_top5_right_book_no_reference_anchor"
+      ],
+      "frozen_reference_evidence": [
+        {
+          "book_id": "pg5001-full",
+          "work_id": "pg5001",
+          "section_ordinal": 4,
+          "section_title": "III Space and Time in Classical Mechanics",
+          "text": "the stone falls to earth in a parabolic curve"
+        }
+      ],
+      "minilm_top5_review": {
+        "passage_ids": [
+          228942,
+          228992,
+          228945,
+          228959,
+          228940
+        ],
+        "agent_judgment": "partial_related",
+        "reason": "The returned set is related but needs the preceding source passage to make the stone’s different trajectories explicit.",
+        "next_benefit": "adjacent_context"
+      },
+      "reranker_top1_review": null,
+      "additional_reference_proposals": [
+        13
+      ],
+      "bounded_neighbor_context": {
+        "judgment": "sufficient_support",
+        "neighbor_passage_ids": [
+          228939
+        ],
+        "constraint": "Credit the neighboring source span explicitly; do not claim its content was in the returned excerpt."
+      }
+    },
+    {
+      "query_id": "expanded-compare-01",
+      "query": "Compare Adam Smith and Marx on how narrow repetitive factory work changes the worker.",
+      "type": "compare",
+      "selection_reasons": [
+        "minilm_top5_right_book_no_reference_anchor",
+        "reranker_top1_reference_miss"
+      ],
+      "frozen_reference_evidence": [
+        {
+          "book_id": "pg3300-full",
+          "work_id": "pg3300-wealth",
+          "section_ordinal": 47,
+          "section_title": "PART III. Of the Expense of public Works and public Institutions.",
+          "text": "generally becomes as stupid and ignorant as it is possible for a human creature to become"
+        },
+        {
+          "book_id": "pg61-full",
+          "work_id": "pg61",
+          "section_ordinal": 2,
+          "section_title": "I. BOURGEOIS AND PROLETARIANS",
+          "text": "He becomes an appendage of the machine"
+        }
+      ],
+      "minilm_top5_review": {
+        "passage_ids": [
+          219517,
+          220044,
+          219284,
+          219233,
+          219457
+        ],
+        "agent_judgment": "partial_related",
+        "reason": "A valid Smith-side dexterity explanation appears, but the set has no Marx source and cannot complete comparison.",
+        "next_benefit": "multi_source_coverage_and_reference_components"
+      },
+      "reranker_top1_review": {
+        "passage_id": 219233,
+        "raw_logit": -2.714690685272217,
+        "agent_judgment": "partial_related",
+        "reason": "Valid Smith-side skill effect, but no Marx evidence in this top1.",
+        "next_benefit": "multi_source_coverage"
+      },
+      "additional_reference_proposals": [
+        11
+      ]
+    },
+    {
+      "query_id": "expanded-compare-02",
+      "query": "Compare Machiavelli and Hobbes on fear, security and the force behind political order.",
+      "type": "compare",
+      "selection_reasons": [
+        "reranker_top1_reference_miss"
+      ],
+      "frozen_reference_evidence": [
+        {
+          "book_id": "pg1232-full",
+          "work_id": "pg1232",
+          "section_ordinal": 24,
+          "section_title": "CHAPTER XVII. CONCERNING CRUELTY AND CLEMENCY, AND WHETHER IT IS BETTER TO BE LOVED THAN FEARED",
+          "text": "it is much safer to be feared than loved"
+        },
+        {
+          "book_id": "pg3207-full",
+          "work_id": "pg3207",
+          "section_ordinal": 187,
+          "section_title": "Which Is Not To Be Had From The Law Of Nature:",
+          "text": "Covenants, without the Sword, are but Words"
+        }
+      ],
+      "minilm_top5_review": null,
+      "reranker_top1_review": {
+        "passage_id": 227735,
+        "raw_logit": -2.390948534011841,
+        "agent_judgment": "partial_related",
+        "reason": "Valid Hobbes-side coercion argument, but no Machiavelli evidence in this top1.",
+        "next_benefit": "multi_source_coverage_and_reference_components"
+      },
+      "additional_reference_proposals": [
+        12
+      ]
+    },
+    {
+      "query_id": "expanded-compare-03",
+      "query": "Compare Marcus Aurelius and Nietzsche on the danger of becoming like the people one opposes.",
+      "type": "compare",
+      "selection_reasons": [
+        "minilm_top5_right_book_no_reference_anchor",
+        "reranker_top1_reference_miss"
+      ],
+      "frozen_reference_evidence": [
+        {
+          "book_id": "pg2680-full",
+          "work_id": "pg2680-meditations",
+          "section_ordinal": 8,
+          "section_title": "THE SIXTH BOOK",
+          "text": "The best kind of revenge is, not to become like unto them."
+        },
+        {
+          "book_id": "pg4363-full",
+          "work_id": "pg4363",
+          "section_ordinal": 6,
+          "section_title": "CHAPTER IV. APOPHTHEGMS AND INTERLUDES",
+          "text": "He who fights with monsters should be careful lest he thereby become a monster"
+        }
+      ],
+      "minilm_top5_review": {
+        "passage_ids": [
+          228901,
+          228844,
+          228711,
+          228771,
+          228808
+        ],
+        "agent_judgment": "partial_related",
+        "reason": "Some broad opponent/convergence motifs occur, but neither requested paired position is adequately evidenced and Marcus is absent.",
+        "next_benefit": "multi_source_and_intent_retrieval"
+      },
+      "reranker_top1_review": {
+        "passage_id": 218627,
+        "raw_logit": -0.6677456498146057,
+        "agent_judgment": "irrelevant",
+        "reason": "Unidentified editor compares Marcus with The Imitation of Christ, not Nietzsche or opponent imitation.",
+        "next_benefit": "source_role_and_pair_retrieval"
+      },
+      "additional_reference_proposals": [],
+      "caution": "The opponent-convergence reading of one Nietzsche passage is ambiguous and must not be elevated to a sufficient comparative answer."
+    },
+    {
+      "query_id": "expanded-compare-04",
+      "query": "Compare how the 1859 and sixth editions of Origin of Species explain the evolution of a complex eye.",
+      "type": "compare",
+      "selection_reasons": [
+        "reranker_top1_reference_miss"
+      ],
+      "frozen_reference_evidence": [
+        {
+          "book_id": "pg1228-full",
+          "work_id": "pg1228-origin",
+          "section_ordinal": 9,
+          "section_title": "CHAPTER VI. DIFFICULTIES ON THEORY.",
+          "text": "numerous gradations from a perfect and complex eye to one very imperfect and simple"
+        },
+        {
+          "book_id": "pg2009-full",
+          "work_id": "pg1228-origin",
+          "section_ordinal": 11,
+          "section_title": "CHAPTER VI. DIFFICULTIES OF THE THEORY.",
+          "text": "numerous gradations from a simple and imperfect eye to one complex and perfect"
+        }
+      ],
+      "minilm_top5_review": null,
+      "reranker_top1_review": {
+        "passage_id": 221920,
+        "raw_logit": -4.61157751083374,
+        "agent_judgment": "irrelevant",
+        "reason": "Dallas glossary definitions do not explain or compare Darwin’s complex-eye argument.",
+        "next_benefit": "argument_and_source_role_retrieval"
+      },
+      "additional_reference_proposals": []
+    },
+    {
+      "query_id": "expanded-cross-02",
+      "query": "Dans quelle lettre Darcy révèle-t-il que Wickham convoitait la fortune de sa sœur?",
+      "type": "cross_language",
+      "selection_reasons": [
+        "minilm_top5_right_book_no_reference_anchor",
+        "reranker_top1_reference_miss"
+      ],
+      "frozen_reference_evidence": [
+        {
+          "book_id": "pg1342-full",
+          "work_id": "pg1342-pride",
+          "section_ordinal": 39,
+          "section_title": "“Hearing herself called.” CHAPTER XXXV.",
+          "text": "my sister’s fortune, which is thirty thousand pounds"
+        }
+      ],
+      "minilm_top5_review": {
+        "passage_ids": [
+          217519,
+          217855,
+          217425,
+          217765,
+          217503
+        ],
+        "agent_judgment": "partial_related",
+        "reason": "All returned letter/fortune episodes concern different letters, sisters or intentions; none reveals the specified Darcy/Georgiana account.",
+        "next_benefit": "relation_specific_retrieval"
+      },
+      "reranker_top1_review": {
+        "passage_id": 217855,
+        "raw_logit": 7.233203887939453,
+        "agent_judgment": "partial_related",
+        "reason": "High-logit hit is Lydia’s money-request letter, not Darcy’s disclosure.",
+        "next_benefit": "relation_specific_reranking"
+      },
+      "additional_reference_proposals": []
+    },
+    {
+      "query_id": "expanded-cross-03",
+      "query": "Wie erklärt Darwin verkümmerte Organe durch Vererbung und Nichtgebrauch?",
+      "type": "cross_language",
+      "selection_reasons": [
+        "reranker_top1_reference_miss"
+      ],
+      "frozen_reference_evidence": [
+        {
+          "book_id": "pg1228-full",
+          "work_id": "pg1228-origin",
+          "section_ordinal": 16,
+          "section_title": "CHAPTER XIII. MUTUAL AFFINITIES OF ORGANIC BEINGS: MORPHOLOGY: EMBRYOLOGY: RUDIMENTARY ORGANS.",
+          "text": "when organs are reduced in size, either from disuse or selection"
+        }
+      ],
+      "minilm_top5_review": null,
+      "reranker_top1_review": {
+        "passage_id": 218533,
+        "raw_logit": 0.8067021369934082,
+        "agent_judgment": "sufficient_support",
+        "reason": "Top1 directly explains inherited reduction through disuse/selection.",
+        "next_benefit": "reference_evidence_expansion"
+      },
+      "additional_reference_proposals": [
+        7
+      ]
+    },
+    {
+      "query_id": "expanded-cross-04",
+      "query": "Почему Смит считает общественное образование особенно важным для простых людей?",
+      "type": "cross_language",
+      "selection_reasons": [
+        "minilm_top5_right_book_no_reference_anchor",
+        "reranker_top1_reference_miss"
+      ],
+      "frozen_reference_evidence": [
+        {
+          "book_id": "pg3300-full",
+          "work_id": "pg3300-wealth",
+          "section_ordinal": 47,
+          "section_title": "PART III. Of the Expense of public Works and public Institutions.",
+          "text": "The education of the common people requires"
+        }
+      ],
+      "minilm_top5_review": {
+        "passage_ids": [
+          220637,
+          219462,
+          220635,
+          220604,
+          220659
+        ],
+        "agent_judgment": "sufficient_support",
+        "reason": "Passage220635 directly gives the common people’s education constraints and public remedy.",
+        "next_benefit": "reference_evidence_expansion"
+      },
+      "reranker_top1_review": {
+        "passage_id": 220635,
+        "raw_logit": 1.8186357021331787,
+        "agent_judgment": "sufficient_support",
+        "reason": "Top1 provides the requested ordinary-worker education rationale.",
+        "next_benefit": "reference_evidence_expansion"
+      },
+      "additional_reference_proposals": [
+        2
+      ]
+    },
+    {
+      "query_id": "expanded-cross-05",
+      "query": "Pourquoi la créature exige-t-elle que Frankenstein lui crée une compagne?",
+      "type": "cross_language",
+      "selection_reasons": [
+        "minilm_top5_right_book_no_reference_anchor",
+        "reranker_top1_reference_miss"
+      ],
+      "frozen_reference_evidence": [
+        {
+          "book_id": "pg84-full",
+          "work_id": "pg84",
+          "section_ordinal": 22,
+          "section_title": "Chapter 17",
+          "text": "You must create a female for me"
+        }
+      ],
+      "minilm_top5_review": {
+        "passage_ids": [
+          222748,
+          222644,
+          222570,
+          222760,
+          222638
+        ],
+        "agent_judgment": "sufficient_support",
+        "reason": "Passage222644 directly gives the creature’s reasons for demanding a companion, although the first rank is poor.",
+        "next_benefit": "reference_evidence_expansion_and_ranking"
+      },
+      "reranker_top1_review": {
+        "passage_id": 222760,
+        "raw_logit": -0.008902570232748985,
+        "agent_judgment": "partial_related",
+        "reason": "Top1 is Victor’s justification for refusal, not the creature’s reason for requesting a companion.",
+        "next_benefit": "speaker_and_direction_reranking"
+      },
+      "additional_reference_proposals": [
+        3
+      ]
+    },
+    {
+      "query_id": "expanded-cross-06",
+      "query": "Warum weigert sich Ahab, der Rachel bei der Suche nach dem vermissten Sohn des Kapitäns zu helfen?",
+      "type": "cross_language",
+      "selection_reasons": [
+        "reranker_top1_reference_miss"
+      ],
+      "frozen_reference_evidence": [
+        {
+          "book_id": "pg2701-full",
+          "work_id": "pg2701",
+          "section_ordinal": 131,
+          "section_title": "CHAPTER 128. The Pequod Meets The Rachel.",
+          "text": "Captain Gardiner, I will not do it. Even now I lose time."
+        }
+      ],
+      "minilm_top5_review": null,
+      "reranker_top1_review": {
+        "passage_id": 223672,
+        "raw_logit": 8.438517570495605,
+        "agent_judgment": "partial_related",
+        "reason": "Top1 gives missing-boy backstory; one next passage contains the refusal/motive.",
+        "next_benefit": "adjacent_context"
+      },
+      "additional_reference_proposals": [
+        15
+      ],
+      "bounded_neighbor_context": {
+        "judgment": "sufficient_support",
+        "neighbor_passage_ids": [
+          223673
+        ],
+        "constraint": "Credit the neighboring source span explicitly; do not claim its content was in the returned excerpt."
+      }
+    },
+    {
+      "query_id": "expanded-cross-09",
+      "query": "Wie veranschaulichen die Gefangenen in der Höhle den Übergang von Unwissenheit zu Erkenntnis?",
+      "type": "cross_language",
+      "selection_reasons": [
+        "reranker_top1_reference_miss"
+      ],
+      "frozen_reference_evidence": [
+        {
+          "book_id": "pg1497-full",
+          "work_id": "pg1497",
+          "section_ordinal": 11,
+          "section_title": "BOOK VII.",
+          "text": "human beings living in a underground den",
+          "expected_section_author": "Plato, 428? BCE-348? BCE"
+        }
+      ],
+      "minilm_top5_review": null,
+      "reranker_top1_review": {
+        "passage_id": 227331,
+        "raw_logit": 3.2785422801971436,
+        "agent_judgment": "partial_related",
+        "reason": "Top1 mainly treats return-to-cave political duty, not the original ignorance-to-knowledge illustration.",
+        "next_benefit": "explanation_location_and_context"
+      },
+      "additional_reference_proposals": [],
+      "caution": "An interpretation of the later political application may be related; no new reference anchor is proposed for a complete original-allegory explanation."
+    },
+    {
+      "query_id": "expanded-cross-10",
+      "query": "Почему два удара молнии могут быть одновременными для насыпи, но не для движущегося поезда?",
+      "type": "cross_language",
+      "selection_reasons": [
+        "reranker_top1_reference_miss"
+      ],
+      "frozen_reference_evidence": [
+        {
+          "book_id": "pg5001-full",
+          "work_id": "pg5001",
+          "section_ordinal": 10,
+          "section_title": "IX The Relativity of Simultaneity",
+          "text": "which are simultaneous with reference to the railway embankment also simultaneous relatively to the train?"
+        }
+      ],
+      "minilm_top5_review": null,
+      "reranker_top1_review": {
+        "passage_id": 228957,
+        "raw_logit": 2.585139036178589,
+        "agent_judgment": "sufficient_support",
+        "reason": "Top1 is the actual relative-motion/light-arrival explanation.",
+        "next_benefit": "reference_evidence_expansion"
+      },
+      "additional_reference_proposals": [
+        8
+      ]
+    },
+    {
+      "query_id": "expanded-cross-11",
+      "query": "Comment le manifeste décrit-il les crises dans lesquelles la société produit trop de marchandises?",
+      "type": "cross_language",
+      "selection_reasons": [
+        "reranker_top1_reference_miss"
+      ],
+      "frozen_reference_evidence": [
+        {
+          "book_id": "pg61-full",
+          "work_id": "pg61",
+          "section_ordinal": 2,
+          "section_title": "I. BOURGEOIS AND PROLETARIANS",
+          "text": "Because there is too much civilisation, too much means of subsistence"
+        }
+      ],
+      "minilm_top5_review": null,
+      "reranker_top1_review": {
+        "passage_id": 229082,
+        "raw_logit": 0.5721024870872498,
+        "agent_judgment": "sufficient_support",
+        "reason": "Top1 explicitly describes recurring over-production crises, not merely a related economic topic.",
+        "next_benefit": "reference_evidence_expansion"
+      },
+      "additional_reference_proposals": [
+        9
+      ]
+    },
+    {
+      "query_id": "expanded-cross-12",
+      "query": "Wie hält der Zeitreisende die Morlocks mit Streichhölzern und Licht auf Abstand?",
+      "type": "cross_language",
+      "selection_reasons": [
+        "minilm_top5_right_book_no_reference_anchor",
+        "reranker_top1_reference_miss"
+      ],
+      "frozen_reference_evidence": [
+        {
+          "book_id": "pg35-full",
+          "work_id": "pg35",
+          "section_ordinal": 9,
+          "section_title": "IX. The Morlocks",
+          "text": "I struck another light, and waved it in their dazzled faces"
+        }
+      ],
+      "minilm_top5_review": {
+        "passage_ids": [
+          229221,
+          229209,
+          229156,
+          229234,
+          229161
+        ],
+        "agent_judgment": "sufficient_support",
+        "reason": "Passage229221 enacts the requested lit-match escape; the next paragraph is not the only valid evidence.",
+        "next_benefit": "reference_evidence_expansion_and_ranking"
+      },
+      "reranker_top1_review": {
+        "passage_id": 229140,
+        "raw_logit": 1.0013086795806885,
+        "agent_judgment": "irrelevant",
+        "reason": "Top1 demonstrates the time-machine model’s levers; it does not discuss Morlocks or defensive light.",
+        "next_benefit": "reranking"
+      },
+      "additional_reference_proposals": [
+        4
+      ]
+    },
+    {
+      "query_id": "expanded-late-03",
+      "query": "How does a coffin keep the surviving narrator afloat after the Pequod sinks?",
+      "type": "scene",
+      "selection_reasons": [
+        "reranker_top1_reference_miss"
+      ],
+      "frozen_reference_evidence": [
+        {
+          "book_id": "pg2701-full",
+          "work_id": "pg2701",
+          "section_ordinal": 139,
+          "section_title": "“AND I ONLY AM ESCAPED ALONE TO TELL THEE” Job.",
+          "text": "Buoyed up by that coffin"
+        }
+      ],
+      "minilm_top5_review": null,
+      "reranker_top1_review": {
+        "passage_id": 223685,
+        "raw_logit": -2.2756564617156982,
+        "agent_judgment": "partial_related",
+        "reason": "Coffin life-buoy foreshadowing does not describe the survivor’s post-sinking flotation.",
+        "next_benefit": "narrative_location_retrieval"
+      },
+      "additional_reference_proposals": []
+    },
+    {
+      "query_id": "expanded-role-01",
+      "query": "How does Benjamin Jowett’s introduction compare the Republic with Plato’s Laws and other dialogues?",
+      "type": "source_role",
+      "selection_reasons": [
+        "minilm_top5_right_book_no_reference_anchor",
+        "reranker_top1_reference_miss"
+      ],
+      "frozen_reference_evidence": [
+        {
+          "book_id": "pg1497-full",
+          "work_id": "pg1497",
+          "section_ordinal": 1,
+          "section_title": "INTRODUCTION AND ANALYSIS.",
+          "text": "The Republic of Plato is the longest of his works with the exception of the Laws",
+          "expected_section_role": "editorial",
+          "expected_section_author": "Benjamin Jowett"
+        }
+      ],
+      "minilm_top5_review": {
+        "passage_ids": [
+          226954,
+          226959,
+          226956,
+          226618,
+          226958
+        ],
+        "agent_judgment": "sufficient_support",
+        "reason": "Jowett226954 and226958 explicitly compare the named works with correct editorial attribution.",
+        "next_benefit": "reference_evidence_expansion"
+      },
+      "reranker_top1_review": {
+        "passage_id": 226954,
+        "raw_logit": 7.638625621795654,
+        "agent_judgment": "sufficient_support",
+        "reason": "Top1 is a directly relevant, correctly attributed Jowett comparison.",
+        "next_benefit": "reference_evidence_expansion"
+      },
+      "additional_reference_proposals": [
+        5,
+        6
+      ],
+      "caution": "Preserve Jowett’s editorial voice and Aristotle’s nested quotation credit."
+    }
+  ],
+  "passage_reviews": [
+    {
+      "passage_id": 217425,
+      "book_id": "pg1342-full",
+      "section_id": 12993,
+      "section_ordinal": 18,
+      "section_title": "CHAPTER XVI.",
+      "start": 16120,
+      "end": 17436,
+      "source_excerpt": "Mr. Wickham’s attention was caught; and after observing Mr. Collins for a few moments, he asked Elizabeth in a low voice whether her relations were very intimately acquainted with",
+      "source_text_sha256": "cdaee71b99838b62932105c66c02c89021a2fdf3e0770da07cc84238df3fb830",
+      "quote_exact_against_section": true,
+      "citation": "Austen, Jane, 1775-1817. Pride and Prejudice. Project Gutenberg #1342, full electronic edition; updated Sep 29, 2026. CHAPTER XVI., chars 16120–17436.",
+      "source_url": "https://www.gutenberg.org/ebooks/1342",
+      "judgment": "partial_related",
+      "textual_reason": "Discusses Lady Catherine, Anne Darcy and Miss de Bourgh’s inheritance, not Wickham’s intention toward Georgiana in Darcy’s letter.",
+      "support_scope": "complete_question",
+      "source_voice_note": null
+    },
+    {
+      "passage_id": 217503,
+      "book_id": "pg1342-full",
+      "section_id": 13002,
+      "section_ordinal": 27,
+      "section_title": "CHAPTER XXIV.",
+      "start": 9692,
+      "end": 10815,
+      "source_excerpt": "“Thank you, sir, but a less agreeable man would satisfy me. We must not all expect Jane’s good fortune.”\n\n“True,” said Mr. Bennet; “but it is a comfort to think that, whatever of",
+      "source_text_sha256": "736ade24bb3b13f7c874fd663530408bcac37e5419499b969ba94d454113be67",
+      "quote_exact_against_section": true,
+      "citation": "Austen, Jane, 1775-1817. Pride and Prejudice. Project Gutenberg #1342, full electronic edition; updated Sep 29, 2026. CHAPTER XXIV., chars 9692–10815.",
+      "source_url": "https://www.gutenberg.org/ebooks/1342",
+      "judgment": "partial_related",
+      "textual_reason": "Reports Wickham’s public allegations against Darcy and Jane’s doubts, not Darcy’s revealing letter.",
+      "support_scope": "complete_question",
+      "source_voice_note": null
+    },
+    {
+      "passage_id": 217519,
+      "book_id": "pg1342-full",
+      "section_id": 13004,
+      "section_ordinal": 29,
+      "section_title": "“Will you come and see me.” CHAPTER XXVI.",
+      "start": 10080,
+      "end": 11698,
+      "source_excerpt": "“Yours, etc.”\n\nThis letter gave Elizabeth some pain; but her spirits returned, as she considered that Jane would no longer be duped, by the sister at least. All expectation from",
+      "source_text_sha256": "344e9d81e8682bafa081df954a961af48d880980aba2f22af4a636f71a3967c0",
+      "quote_exact_against_section": true,
+      "citation": "Austen, Jane, 1775-1817. Pride and Prejudice. Project Gutenberg #1342, full electronic edition; updated Sep 29, 2026. “Will you come and see me.” CHAPTER XXVI., chars 10080–11698.",
+      "source_url": "https://www.gutenberg.org/ebooks/1342",
+      "judgment": "partial_related",
+      "textual_reason": "Combines Jane/Bingley correspondence and Wickham’s attraction to Miss King’s money. It is not Darcy’s letter revealing the attempted Georgiana match.",
+      "support_scope": "complete_question",
+      "source_voice_note": null
+    },
+    {
+      "passage_id": 217765,
+      "book_id": "pg1342-full",
+      "section_id": 13032,
+      "section_ordinal": 57,
+      "section_title": "“I am sure she did not listen.” CHAPTER LII.",
+      "start": 3630,
+      "end": 4867,
+      "source_excerpt": "But he found Lydia absolutely resolved on remaining where she was. She cared for none of her friends; she wanted no help of his; she would not hear of leaving Wickham. She was",
+      "source_text_sha256": "7b153422a0cd2fa1044673c2b42cc263803c22a919b818129af8fcd055199942",
+      "quote_exact_against_section": true,
+      "citation": "Austen, Jane, 1775-1817. Pride and Prejudice. Project Gutenberg #1342, full electronic edition; updated Sep 29, 2026. “I am sure she did not listen.” CHAPTER LII., chars 3630–4867.",
+      "source_url": "https://www.gutenberg.org/ebooks/1342",
+      "judgment": "partial_related",
+      "textual_reason": "Mrs Gardiner’s account discusses Lydia/Wickham and Darcy arranging their marriage. It concerns a different sister and letter from the requested Georgiana episode.",
+      "support_scope": "complete_question",
+      "source_voice_note": null
+    },
+    {
+      "passage_id": 217855,
+      "book_id": "pg1342-full",
+      "section_id": 13042,
+      "section_ordinal": 67,
+      "section_title": "CHAPTER LXI.",
+      "start": 2335,
+      "end": 3426,
+      "source_excerpt": "As for Wickham and Lydia, their characters suffered no revolution from the marriage of her sisters. He bore with philosophy the conviction that Elizabeth must now become",
+      "source_text_sha256": "563e4ce85da485a6467118762e40dab2fcbce54da0272bac059a0ba9ac3dba6c",
+      "quote_exact_against_section": true,
+      "citation": "Austen, Jane, 1775-1817. Pride and Prejudice. Project Gutenberg #1342, full electronic edition; updated Sep 29, 2026. CHAPTER LXI., chars 2335–3426.",
+      "source_url": "https://www.gutenberg.org/ebooks/1342",
+      "judgment": "partial_related",
+      "textual_reason": "The quoted letter is Lydia’s request for money/employment after Elizabeth marries Darcy. It is not Darcy’s letter about Wickham pursuing his sister’s fortune.",
+      "support_scope": "complete_question",
+      "source_voice_note": "Narrator introduces a letter by Lydia, not Darcy."
+    },
+    {
+      "passage_id": 218533,
+      "book_id": "pg1228-full",
+      "section_id": 13060,
+      "section_ordinal": 16,
+      "section_title": "CHAPTER XIII. MUTUAL AFFINITIES OF ORGANIC BEINGS: MORPHOLOGY: EMBRYOLOGY: RUDIMENTARY ORGANS.",
+      "start": 81261,
+      "end": 82768,
+      "source_excerpt": "Any change in function, which can be effected by insensibly small steps, is within the power of natural selection; so that an organ rendered, during changed habits of life,",
+      "source_text_sha256": "f2ba630610a7b8ab87e4648401dd673f4ac3fdbb3c35ff080dfdcf15d0b35241",
+      "quote_exact_against_section": true,
+      "citation": "Darwin, Charles, 1809-1882. On the Origin of Species By Means of Natural Selection Or, the Preservation of Favoured Races in the Struggle for Life. Project Gutenberg #1228, full electronic edition; updated Oct 6, 2026; 1859 first edition. CHAPTER XIII. MUTUAL AFFINITIES OF ORGANIC BEINGS: MORPHOLOGY: EMBRYOLOGY: RUDIMENTARY ORGANS., chars 81261–82768.",
+      "source_url": "https://www.gutenberg.org/ebooks/1228",
+      "judgment": "sufficient_support",
+      "textual_reason": "Explicitly explains disuse/selection reducing organs and inheritance reproducing the reduced state at corresponding ages. This directly answers the German question without the single labeled earlier phrase.",
+      "support_scope": "complete_question",
+      "source_voice_note": null
+    },
+    {
+      "passage_id": 218627,
+      "book_id": "pg2680-full",
+      "section_id": 13064,
+      "section_ordinal": 1,
+      "section_title": "INTRODUCTION",
+      "start": 20023,
+      "end": 21246,
+      "source_excerpt": "But there is one great difference between the two books we are considering. The Imitation is addressed to others, the Meditations by the writer to himself. We learn nothing from",
+      "source_text_sha256": "0b26c2454676e01df33890b1d7da1ef38d18303f1caca9493986655c7ef337cb",
+      "quote_exact_against_section": true,
+      "citation": "Marcus Aurelius, Emperor of Rome, 121-180. Meditations. Project Gutenberg #2680, full electronic edition; updated Jul 13, 2026; Meric Casaubon translation. INTRODUCTION, chars 20023–21246.",
+      "source_url": "https://www.gutenberg.org/ebooks/2680",
+      "judgment": "irrelevant",
+      "textual_reason": "An unidentified editor compares Meditations with The Imitation of Christ, not Nietzsche or the danger of becoming like opponents.",
+      "support_scope": "complete_question",
+      "source_voice_note": "Later editorial introduction, despite frozen unclassified/catalog Marcus label."
+    },
+    {
+      "passage_id": 218631,
+      "book_id": "pg2680-full",
+      "section_id": 13064,
+      "section_ordinal": 1,
+      "section_title": "INTRODUCTION",
+      "start": 25159,
+      "end": 26383,
+      "source_excerpt": "But although Marcus Aurelius may have held intellectually that his soul was destined to be absorbed, and to lose consciousness of itself, there were times when he felt, as all who",
+      "source_text_sha256": "c9448150868f76fbe0ed7c2871754f67ab5a792f083261711c8c4f1b482c5408",
+      "quote_exact_against_section": true,
+      "citation": "Marcus Aurelius, Emperor of Rome, 121-180. Meditations. Project Gutenberg #2680, full electronic edition; updated Jul 13, 2026; Meric Casaubon translation. INTRODUCTION, chars 25159–26383.",
+      "source_url": "https://www.gutenberg.org/ebooks/2680",
+      "judgment": "partial_related",
+      "textual_reason": "An editor discusses Marcus’s afterlife/death views and a voyage metaphor, not the three-act-play comparison requested.",
+      "support_scope": "complete_question",
+      "source_voice_note": "Later editorial voice with nested Marcus quotations; personal commentator unverified."
+    },
+    {
+      "passage_id": 219233,
+      "book_id": "pg3300-full",
+      "section_id": 13127,
+      "section_ordinal": 3,
+      "section_title": "CHAPTER I. OF THE DIVISION OF LABOUR.",
+      "start": 8884,
+      "end": 10650,
+      "source_excerpt": "First, the improvement of the dexterity of the workmen, necessarily increases the quantity of the work he can perform; and the division of labour, by reducing every man’s business",
+      "source_text_sha256": "71271849c24bd5cd4205e592f23ee7647ceb0e8a1e6735e76831d2a268af69cd",
+      "quote_exact_against_section": true,
+      "citation": "Smith, Adam, 1723-1790. An Inquiry into the Nature and Causes of the Wealth of Nations. Project Gutenberg #3300, full electronic edition; updated Jul 3, 2025. CHAPTER I. OF THE DIVISION OF LABOUR., chars 8884–10650.",
+      "source_url": "https://www.gutenberg.org/ebooks/3300",
+      "judgment": "partial_related",
+      "textual_reason": "Directly says sole lifelong performance of a simple operation improves worker dexterity. That is valid Smith-side evidence for the broadly worded question, but Marx is absent.",
+      "support_scope": "Smith_leg_only",
+      "source_voice_note": null
+    },
+    {
+      "passage_id": 219284,
+      "book_id": "pg3300-full",
+      "section_id": 13131,
+      "section_ordinal": 7,
+      "section_title": "CHAPTER V. OF THE REAL AND NOMINAL PRICE OF COMMODITIES, OR OF THEIR PRICE IN LABOUR, AND THEIR PRICE IN MONEY.",
+      "start": 19165,
+      "end": 20591,
+      "source_excerpt": "As it is the nominal or money price of goods, therefore, which finally determines the prudence or imprudence of all purchases and sales, and thereby regulates almost the whole",
+      "source_text_sha256": "eabfe5599721ce6de8b797e42e183e4efb2f0d6d7edc9ff6b05f2a0dc6cd069e",
+      "quote_exact_against_section": true,
+      "citation": "Smith, Adam, 1723-1790. An Inquiry into the Nature and Causes of the Wealth of Nations. Project Gutenberg #3300, full electronic edition; updated Jul 3, 2025. CHAPTER V. OF THE REAL AND NOMINAL PRICE OF COMMODITIES, OR OF THEIR PRICE IN LABOUR, AND THEIR PRICE IN MONEY., chars 19165–20591.",
+      "source_url": "https://www.gutenberg.org/ebooks/3300",
+      "judgment": "irrelevant",
+      "textual_reason": "Explains comparing real prices and command over labour, not repetitive factory work’s effect on the worker.",
+      "support_scope": "complete_question",
+      "source_voice_note": null
+    },
+    {
+      "passage_id": 219457,
+      "book_id": "pg3300-full",
+      "section_id": 13138,
+      "section_ordinal": 14,
+      "section_title": "PART II.—Inequalities occasioned by the Policy of Europe.",
+      "start": 28856,
+      "end": 30145,
+      "source_excerpt": "The long, tedious, and expensive education, therefore, of those who are, will not always procure them a suitable reward, the church being crowded with people, who, in order to get",
+      "source_text_sha256": "f842d353f31fd28c6cb9bf4425037d16971555f30b85c5eefe53eaf451ca151d",
+      "quote_exact_against_section": true,
+      "citation": "Smith, Adam, 1723-1790. An Inquiry into the Nature and Causes of the Wealth of Nations. Project Gutenberg #3300, full electronic edition; updated Jul 3, 2025. PART II.—Inequalities occasioned by the Policy of Europe., chars 28856–30145.",
+      "source_url": "https://www.gutenberg.org/ebooks/3300",
+      "judgment": "irrelevant",
+      "textual_reason": "Discusses clergy education, wages and journeymen’s pay rather than narrow repetitive production.",
+      "support_scope": "complete_question",
+      "source_voice_note": null
+    },
+    {
+      "passage_id": 219462,
+      "book_id": "pg3300-full",
+      "section_id": 13138,
+      "section_ordinal": 14,
+      "section_title": "PART II.—Inequalities occasioned by the Policy of Europe.",
+      "start": 34795,
+      "end": 35595,
+      "source_excerpt": "But the usual reward of the eminent teacher bears no proportion to that of the lawyer or physician, because the trade of the one is crowded with indigent people, who have been",
+      "source_text_sha256": "d6b885b900ed34890241492dabc4305c9d74a482f809879b27e2066af6b2038f",
+      "quote_exact_against_section": true,
+      "citation": "Smith, Adam, 1723-1790. An Inquiry into the Nature and Causes of the Wealth of Nations. Project Gutenberg #3300, full electronic edition; updated Jul 3, 2025. PART II.—Inequalities occasioned by the Policy of Europe., chars 34795–35595.",
+      "source_url": "https://www.gutenberg.org/ebooks/3300",
+      "judgment": "irrelevant",
+      "textual_reason": "Explains low teacher pay and crowded learned professions. It does not explain ordinary workers’ need for public education.",
+      "support_scope": "complete_question",
+      "source_voice_note": null
+    },
+    {
+      "passage_id": 219517,
+      "book_id": "pg3300-full",
+      "section_id": 13141,
+      "section_ordinal": 17,
+      "section_title": "PART II.—Of the Produce of Land, which sometimes does, and sometimes does not, afford Rent.",
+      "start": 5862,
+      "end": 7062,
+      "source_excerpt": "But when, by the improvement and cultivation of land, the labour of one family can provide food for two, the labour of half the society becomes sufficient to provide food for the",
+      "source_text_sha256": "752ce2739d27bcdc7fa62c50440aba6b2553fe280f49320c35c722a916b5563f",
+      "quote_exact_against_section": true,
+      "citation": "Smith, Adam, 1723-1790. An Inquiry into the Nature and Causes of the Wealth of Nations. Project Gutenberg #3300, full electronic edition; updated Jul 3, 2025. PART II.—Of the Produce of Land, which sometimes does, and sometimes does not, afford Rent., chars 5862–7062.",
+      "source_url": "https://www.gutenberg.org/ebooks/3300",
+      "judgment": "irrelevant",
+      "textual_reason": "Discusses consumption, agricultural surplus and rich/poor material wants, not how repetitive factory operations change workers.",
+      "support_scope": "complete_question",
+      "source_voice_note": null
+    },
+    {
+      "passage_id": 220044,
+      "book_id": "pg3300-full",
+      "section_id": 13157,
+      "section_ordinal": 33,
+      "section_title": "CHAPTER II. OF RESTRAINTS UPON IMPORTATION FROM FOREIGN COUNTRIES OF SUCH GOODS AS CAN BE PRODUCED AT HOME.",
+      "start": 42826,
+      "end": 43972,
+      "source_excerpt": "The number of vagrants was scarce anywhere sensibly increased by it; even the wages of labour were not reduced by it in any occupation, so far as I have been able to learn, except",
+      "source_text_sha256": "ec661a6c92503186362be02a21d983d440dd2d0927afb140410ef5b1dc296b3b",
+      "quote_exact_against_section": true,
+      "citation": "Smith, Adam, 1723-1790. An Inquiry into the Nature and Causes of the Wealth of Nations. Project Gutenberg #3300, full electronic edition; updated Jul 3, 2025. CHAPTER II. OF RESTRAINTS UPON IMPORTATION FROM FOREIGN COUNTRIES OF SUCH GOODS AS CAN BE PRODUCED AT HOME., chars 42826–43972.",
+      "source_url": "https://www.gutenberg.org/ebooks/3300",
+      "judgment": "partial_related",
+      "textual_reason": "Discusses manufacturers’ work habits and reemployment compared with soldiers, not effects of narrow repetitive operations.",
+      "support_scope": "complete_question",
+      "source_voice_note": null
+    },
+    {
+      "passage_id": 220604,
+      "book_id": "pg3300-full",
+      "section_id": 13171,
+      "section_ordinal": 47,
+      "section_title": "PART III. Of the Expense of public Works and public Institutions.",
+      "start": 102105,
+      "end": 103364,
+      "source_excerpt": "In England, the public schools are much less corrupted than the universities. In the schools, the youth are taught, or at least may be taught, Greek and Latin; that is, everything",
+      "source_text_sha256": "bdc708ff418bf007591ecb1c3cd145523d9604596db04a37dcc7266b3d0a628f",
+      "quote_exact_against_section": true,
+      "citation": "Smith, Adam, 1723-1790. An Inquiry into the Nature and Causes of the Wealth of Nations. Project Gutenberg #3300, full electronic edition; updated Jul 3, 2025. PART III. Of the Expense of public Works and public Institutions., chars 102105–103364.",
+      "source_url": "https://www.gutenberg.org/ebooks/3300",
+      "judgment": "partial_related",
+      "textual_reason": "Compares English schools and universities/incentives. It does not establish the particular education constraints of common workers.",
+      "support_scope": "complete_question",
+      "source_voice_note": null
+    },
+    {
+      "passage_id": 220635,
+      "book_id": "pg3300-full",
+      "section_id": 13171,
+      "section_ordinal": 47,
+      "section_title": "PART III. Of the Expense of public Works and public Institutions.",
+      "start": 143499,
+      "end": 144639,
+      "source_excerpt": "It is otherwise with the common people. They have little time to spare for education. Their parents can scarce afford to maintain them, even in infancy. As soon as they are able",
+      "source_text_sha256": "6a44258cfa675cebb838a3b06981e05e6c204bedb8677b3fbfe3668699e081f0",
+      "quote_exact_against_section": true,
+      "citation": "Smith, Adam, 1723-1790. An Inquiry into the Nature and Causes of the Wealth of Nations. Project Gutenberg #3300, full electronic edition; updated Jul 3, 2025. PART III. Of the Expense of public Works and public Institutions., chars 143499–144639.",
+      "source_url": "https://www.gutenberg.org/ebooks/3300",
+      "judgment": "sufficient_support",
+      "textual_reason": "States that common people lack time and parental resources, enter simple exhausting trades early, and can acquire essential skills cheaply through public provision. This directly supplies the requested rationale.",
+      "support_scope": "complete_question",
+      "source_voice_note": null
+    },
+    {
+      "passage_id": 220637,
+      "book_id": "pg3300-full",
+      "section_id": 13171,
+      "section_ordinal": 47,
+      "section_title": "PART III. Of the Expense of public Works and public Institutions.",
+      "start": 146117,
+      "end": 148060,
+      "source_excerpt": "The public can encourage the acquisition of those most essential parts of education, by giving small premiums, and little badges of distinction, to the children of the common",
+      "source_text_sha256": "2fdc12489f588e6a6d2afadf6287bd5d3feb8c28c2a4d5cb907230a9c62e0994",
+      "quote_exact_against_section": true,
+      "citation": "Smith, Adam, 1723-1790. An Inquiry into the Nature and Causes of the Wealth of Nations. Project Gutenberg #3300, full electronic edition; updated Jul 3, 2025. PART III. Of the Expense of public Works and public Institutions., chars 146117–148060.",
+      "source_url": "https://www.gutenberg.org/ebooks/3300",
+      "judgment": "partial_related",
+      "textual_reason": "Describes methods to encourage or require basic education. It mostly answers how public education can be promoted, not why ordinary people especially need it.",
+      "support_scope": "complete_question",
+      "source_voice_note": null
+    },
+    {
+      "passage_id": 220659,
+      "book_id": "pg3300-full",
+      "section_id": 13171,
+      "section_ordinal": 47,
+      "section_title": "PART III. Of the Expense of public Works and public Institutions.",
+      "start": 173641,
+      "end": 174637,
+      "source_excerpt": "The first of those remedies is the study of science and philosophy, which the state might render almost universal among all people of middling or more than middling rank and",
+      "source_text_sha256": "205dd641abf9fc41cc47ecb998a2512c9f4e3ffda1e30db006e13be32b486fb2",
+      "quote_exact_against_section": true,
+      "citation": "Smith, Adam, 1723-1790. An Inquiry into the Nature and Causes of the Wealth of Nations. Project Gutenberg #3300, full electronic edition; updated Jul 3, 2025. PART III. Of the Expense of public Works and public Institutions., chars 173641–174637.",
+      "source_url": "https://www.gutenberg.org/ebooks/3300",
+      "judgment": "partial_related",
+      "textual_reason": "Recommends science against superstition chiefly for middling/higher ranks. It is a different policy rationale and social target.",
+      "support_scope": "complete_question",
+      "source_voice_note": null
+    },
+    {
+      "passage_id": 221898,
+      "book_id": "pg2009-full",
+      "section_id": 13199,
+      "section_ordinal": 20,
+      "section_title": "CHAPTER XV. RECAPITULATION AND CONCLUSION.",
+      "start": 67532,
+      "end": 68854,
+      "source_excerpt": "It is interesting to contemplate a tangled bank, clothed with many plants of many kinds, with birds singing on the bushes, with various insects flitting about, and with worms",
+      "source_text_sha256": "988cac2a0053cc8ac6f1d88cc70a55b56e7c36edde4dcbaadfaab8f9c455572e",
+      "quote_exact_against_section": true,
+      "citation": "Darwin, Charles, 1809-1882. The Origin of Species by Means of Natural Selection Or, the Preservation of Favoured Races in the Struggle for Life, 6th Edition. Project Gutenberg #2009, full electronic edition; updated Oct 7, 2026; sixth edition. CHAPTER XV. RECAPITULATION AND CONCLUSION., chars 67532–68854.",
+      "source_url": "https://www.gutenberg.org/ebooks/2009",
+      "judgment": "sufficient_support",
+      "textual_reason": "Contains the requested literal phrase exactly in Darwin’s sixth edition. The unscoped quote query does not request 1859, but the frozen benchmark accepts only that edition. This cannot be cited as the 1859 wording.",
+      "support_scope": "literal_quote_in_other_edition",
+      "source_voice_note": null
+    },
+    {
+      "passage_id": 221920,
+      "book_id": "pg2009-full",
+      "section_id": 13200,
+      "section_ordinal": 21,
+      "section_title": "GLOSSARY OF THE PRINCIPAL SCIENTIFIC TERMS USED IN THE PRESENT VOLUME.*",
+      "start": 25116,
+      "end": 26194,
+      "source_excerpt": "RADICLE.—The minute root of an embryo plant.\n\nRAMUS.—One half of the lower jaw in the Mammalia. The portion which rises to articulate with the skull is called the ascending",
+      "source_text_sha256": "ccfb0c1ad7992c09c2729c2463c847bf6ea7d9689d0d196e5d5db0c68b2ca5b7",
+      "quote_exact_against_section": true,
+      "citation": "Darwin, Charles, 1809-1882. The Origin of Species by Means of Natural Selection Or, the Preservation of Favoured Races in the Struggle for Life, 6th Edition. Project Gutenberg #2009, full electronic edition; updated Oct 7, 2026; sixth edition. GLOSSARY OF THE PRINCIPAL SCIENTIFIC TERMS USED IN THE PRESENT VOLUME.*, chars 25116–26194.",
+      "source_url": "https://www.gutenberg.org/ebooks/2009",
+      "judgment": "irrelevant",
+      "textual_reason": "Defines retina and unrelated glossary terms; it does not explain complex-eye evolution or compare two editions.",
+      "support_scope": "complete_question",
+      "source_voice_note": "The glossary definitions are credited to W. S. Dallas elsewhere in the source, distinct from Darwin’s opening acknowledgement."
+    },
+    {
+      "passage_id": 222250,
+      "book_id": "pg1661-full",
+      "section_id": 13214,
+      "section_ordinal": 10,
+      "section_title": "VIII. THE ADVENTURE OF THE SPECKLED BAND",
+      "start": 32075,
+      "end": 33263,
+      "source_excerpt": "A small side door led into the whitewashed corridor from which the three bedrooms opened. Holmes refused to examine the third chamber, so we passed at once to the second, that in",
+      "source_text_sha256": "01d34c448f017fb19a3c56fd79ad300811b3360858c3b6b97b5f66fc5f2b3c66",
+      "quote_exact_against_section": true,
+      "citation": "Doyle, Arthur Conan, 1859-1930. The Adventures of Sherlock Holmes. Project Gutenberg #1661, full electronic edition; updated Oct 10, 2023. VIII. THE ADVENTURE OF THE SPECKLED BAND, chars 32075–33263.",
+      "source_url": "https://www.gutenberg.org/ebooks/1661",
+      "judgment": "partial_related",
+      "textual_reason": "Describes the bedroom and bell-rope but not the snake/ventilator mechanism.",
+      "support_scope": "complete_question",
+      "source_voice_note": null
+    },
+    {
+      "passage_id": 222251,
+      "book_id": "pg1661-full",
+      "section_id": 13214,
+      "section_ordinal": 10,
+      "section_title": "VIII. THE ADVENTURE OF THE SPECKLED BAND",
+      "start": 33265,
+      "end": 34594,
+      "source_excerpt": "“It looks newer than the other things?”\n\n“Yes, it was only put there a couple of years ago.”\n\n“Your sister asked for it, I suppose?”\n\n“No, I never heard of her using it. We used",
+      "source_text_sha256": "9ef796315c68930607d14323bbb49ad4dd9107eb1b32de1f43678e43dc37c6a4",
+      "quote_exact_against_section": true,
+      "citation": "Doyle, Arthur Conan, 1859-1930. The Adventures of Sherlock Holmes. Project Gutenberg #1661, full electronic edition; updated Oct 10, 2023. VIII. THE ADVENTURE OF THE SPECKLED BAND, chars 33265–34594.",
+      "source_url": "https://www.gutenberg.org/ebooks/1661",
+      "judgment": "partial_related",
+      "textual_reason": "Shows that the bell-rope is a dummy next to the ventilator, but has not established what uses it.",
+      "support_scope": "complete_question",
+      "source_voice_note": null
+    },
+    {
+      "passage_id": 222256,
+      "book_id": "pg1661-full",
+      "section_id": 13214,
+      "section_ordinal": 10,
+      "section_title": "VIII. THE ADVENTURE OF THE SPECKLED BAND",
+      "start": 39716,
+      "end": 40936,
+      "source_excerpt": "“Do you know, Watson,” said Holmes as we sat together in the gathering darkness, “I have really some scruples as to taking you to-night. There is a distinct element of",
+      "source_text_sha256": "547a57592e39f3a830b599cb58a5a69d5b4b0530def0aedad047b72b3477385c",
+      "quote_exact_against_section": true,
+      "citation": "Doyle, Arthur Conan, 1859-1930. The Adventures of Sherlock Holmes. Project Gutenberg #1661, full electronic edition; updated Oct 10, 2023. VIII. THE ADVENTURE OF THE SPECKLED BAND, chars 39716–40936.",
+      "source_url": "https://www.gutenberg.org/ebooks/1661",
+      "judgment": "partial_related",
+      "textual_reason": "The dialogue identifies the bell-rope and inter-room ventilator, but does not yet connect them to a snake or explain the murder mechanism.",
+      "support_scope": "complete_question",
+      "source_voice_note": null
+    },
+    {
+      "passage_id": 222264,
+      "book_id": "pg1661-full",
+      "section_id": 13214,
+      "section_ordinal": 10,
+      "section_title": "VIII. THE ADVENTURE OF THE SPECKLED BAND",
+      "start": 49635,
+      "end": 50806,
+      "source_excerpt": "“I had,” said he, “come to an entirely erroneous conclusion which shows, my dear Watson, how dangerous it always is to reason from insufficient data. The presence of the gipsies,",
+      "source_text_sha256": "c3542b2cf1d530ba42cac3592c318ae772c5281cc880fc7a6dc6ee54e18d263d",
+      "quote_exact_against_section": true,
+      "citation": "Doyle, Arthur Conan, 1859-1930. The Adventures of Sherlock Holmes. Project Gutenberg #1661, full electronic edition; updated Oct 10, 2023. VIII. THE ADVENTURE OF THE SPECKLED BAND, chars 49635–50806.",
+      "source_url": "https://www.gutenberg.org/ebooks/1661",
+      "judgment": "sufficient_support",
+      "textual_reason": "Holmes explicitly connects the dummy bell-rope and ventilator to a bridge for a snake reaching the bed. This identifies the requested story without the later species-name anchor.",
+      "support_scope": "complete_question",
+      "source_voice_note": null
+    },
+    {
+      "passage_id": 222265,
+      "book_id": "pg1661-full",
+      "section_id": 13214,
+      "section_ordinal": 10,
+      "section_title": "VIII. THE ADVENTURE OF THE SPECKLED BAND",
+      "start": 50807,
+      "end": 51759,
+      "source_excerpt": "The idea of using a form of poison which could not possibly be discovered by any chemical test was just such a one as would occur to a clever and ruthless man who had had an",
+      "source_text_sha256": "b968963131149d7d84ac6ef3228c928c3c4178f25f2c052b326948d044ebcc27",
+      "quote_exact_against_section": true,
+      "citation": "Doyle, Arthur Conan, 1859-1930. The Adventures of Sherlock Holmes. Project Gutenberg #1661, full electronic edition; updated Oct 10, 2023. VIII. THE ADVENTURE OF THE SPECKLED BAND, chars 50807–51759.",
+      "source_url": "https://www.gutenberg.org/ebooks/1661",
+      "judgment": "sufficient_support",
+      "textual_reason": "Explains putting the snake through the ventilator so it crawls down the rope onto the victim’s bed; directly supplies the remembered mechanism.",
+      "support_scope": "complete_question",
+      "source_voice_note": null
+    },
+    {
+      "passage_id": 222570,
+      "book_id": "pg84-full",
+      "section_id": 13234,
+      "section_ordinal": 15,
+      "section_title": "Chapter 10",
+      "start": 11991,
+      "end": 12963,
+      "source_excerpt": "As he said this he led the way across the ice; I followed. My heart was full, and I did not answer him, but as I proceeded, I weighed the various arguments that he had used and",
+      "source_text_sha256": "b7ba2a6851ff4e1678d5eb092b8e49ffe4fd236237b7c24fddb150c4f2375701",
+      "quote_exact_against_section": true,
+      "citation": "Shelley, Mary Wollstonecraft, 1797-1851. Frankenstein; or, The modern Prometheus. Project Gutenberg #84, full electronic edition; updated Feb 10, 2026. Chapter 10, chars 11991–12963.",
+      "source_url": "https://www.gutenberg.org/ebooks/84",
+      "judgment": "partial_related",
+      "textual_reason": "Victor agrees to hear the creature’s story and considers a creator’s duties; this is not yet the later demand for a female companion.",
+      "support_scope": "complete_question",
+      "source_voice_note": null
+    },
+    {
+      "passage_id": 222638,
+      "book_id": "pg84-full",
+      "section_id": 13240,
+      "section_ordinal": 21,
+      "section_title": "Chapter 16",
+      "start": 12653,
+      "end": 13888,
+      "source_excerpt": "“But my toils now drew near a close, and in two months from this time I reached the environs of Geneva.\n\n“It was evening when I arrived, and I retired to a hiding-place among the",
+      "source_text_sha256": "62a8ce8bf7494c13ce1e69a7c39f5ed11aa3d043f92617b6c88e132f17e13a16",
+      "quote_exact_against_section": true,
+      "citation": "Shelley, Mary Wollstonecraft, 1797-1851. Frankenstein; or, The modern Prometheus. Project Gutenberg #84, full electronic edition; updated Feb 10, 2026. Chapter 16, chars 12653–13888.",
+      "source_url": "https://www.gutenberg.org/ebooks/84",
+      "judgment": "partial_related",
+      "textual_reason": "The creature hopes to recruit a child as a friend, illustrating loneliness, but this is a different attempted solution from demanding a female creature.",
+      "support_scope": "complete_question",
+      "source_voice_note": null
+    },
+    {
+      "passage_id": 222644,
+      "book_id": "pg84-full",
+      "section_id": 13241,
+      "section_ordinal": 22,
+      "section_title": "Chapter 17",
+      "start": 2257,
+      "end": 3567,
+      "source_excerpt": "“I intended to reason. This passion is detrimental to me, for you do not reflect that you are the cause of its excess. If any being felt emotions of benevolence towards me, I",
+      "source_text_sha256": "ef5f76df28e2ad03e4f4256d660c8079329b341d2a1927bf4615bc0d3fba4d85",
+      "quote_exact_against_section": true,
+      "citation": "Shelley, Mary Wollstonecraft, 1797-1851. Frankenstein; or, The modern Prometheus. Project Gutenberg #84, full electronic edition; updated Feb 10, 2026. Chapter 17, chars 2257–3567.",
+      "source_url": "https://www.gutenberg.org/ebooks/84",
+      "judgment": "sufficient_support",
+      "textual_reason": "The creature asks for a similarly hideous female, explains isolation and desired sympathy, and promises harmless life together. It directly answers why he demands a companion.",
+      "support_scope": "complete_question",
+      "source_voice_note": "The creature speaks; Victor responds in the final paragraph."
+    },
+    {
+      "passage_id": 222748,
+      "book_id": "pg84-full",
+      "section_id": 13248,
+      "section_ordinal": 29,
+      "section_title": "Chapter 24",
+      "start": 16389,
+      "end": 17706,
+      "source_excerpt": "You have read this strange and terrific story, Margaret; and do you not feel your blood congeal with horror, like that which even now curdles mine? Sometimes, seized with sudden",
+      "source_text_sha256": "23061e54f20349323d858d7effc7a8e80236b1f8ad7a88b2c0d0a76ccfa8e54e",
+      "quote_exact_against_section": true,
+      "citation": "Shelley, Mary Wollstonecraft, 1797-1851. Frankenstein; or, The modern Prometheus. Project Gutenberg #84, full electronic edition; updated Feb 10, 2026. Chapter 24, chars 16389–17706.",
+      "source_url": "https://www.gutenberg.org/ebooks/84",
+      "judgment": "irrelevant",
+      "textual_reason": "Walton discusses belief in Frankenstein’s story and the secret of the creature’s formation, not the creature’s reasons for requesting a companion.",
+      "support_scope": "complete_question",
+      "source_voice_note": "Walton narrates here."
+    },
+    {
+      "passage_id": 222760,
+      "book_id": "pg84-full",
+      "section_id": 13248,
+      "section_ordinal": 29,
+      "section_title": "Chapter 24",
+      "start": 31389,
+      "end": 33048,
+      "source_excerpt": "His sentence was pronounced, and I could only grieve and be patient. I sat by his bed, watching him; his eyes were closed, and I thought he slept; but presently he called to me in",
+      "source_text_sha256": "5373643c25648f3a0b83157dcd4e5bf49c97333d79176d5963c76b4719f75af7",
+      "quote_exact_against_section": true,
+      "citation": "Shelley, Mary Wollstonecraft, 1797-1851. Frankenstein; or, The modern Prometheus. Project Gutenberg #84, full electronic edition; updated Feb 10, 2026. Chapter 24, chars 31389–33048.",
+      "source_url": "https://www.gutenberg.org/ebooks/84",
+      "judgment": "partial_related",
+      "textual_reason": "Victor retrospectively justifies refusing to create a companion. That is the maker’s opposite decision, not the creature’s explanation of his demand.",
+      "support_scope": "complete_question",
+      "source_voice_note": "Victor speaks to Walton; do not substitute his rationale for the creature’s."
+    },
+    {
+      "passage_id": 223672,
+      "book_id": "pg2701-full",
+      "section_id": 13380,
+      "section_ordinal": 131,
+      "section_title": "CHAPTER 128. The Pequod Meets The Rachel.",
+      "start": 4237,
+      "end": 5899,
+      "source_excerpt": "“He’s drowned with the rest on ’em, last night,” said the old Manx sailor standing behind them; “I heard; all of ye heard their spirits.”\n\nNow, as it shortly turned out, what made",
+      "source_text_sha256": "858399c2f185011b95590140e5040a7fb265f45ceec6c5d38bbf74c332e5b6d3",
+      "quote_exact_against_section": true,
+      "citation": "Melville, Herman, 1819-1891. Moby Dick; Or, The Whale. Project Gutenberg #2701, full electronic edition; updated Oct 11, 2026. CHAPTER 128. The Pequod Meets The Rachel., chars 4237–5899.",
+      "source_url": "https://www.gutenberg.org/ebooks/2701",
+      "judgment": "partial_related",
+      "textual_reason": "Explains the Rachel’s missing boys and Ahab’s cold response, but not his stated refusal/motive; the next passage contains it.",
+      "support_scope": "complete_question",
+      "source_voice_note": null
+    },
+    {
+      "passage_id": 223685,
+      "book_id": "pg2701-full",
+      "section_id": 13383,
+      "section_ordinal": 134,
+      "section_title": "CHAPTER 131. The Pequod Meets The Delight.",
+      "start": 1363,
+      "end": 2439,
+      "source_excerpt": "“Then God keep thee, old man—see’st thou that”—pointing to the hammock—“I bury but one of five stout men, who were alive only yesterday; but were dead ere night. Only that one I",
+      "source_text_sha256": "7c0b0e09cdc173806d4d7c95d649093500ce359e479928227dc39f571e5a0b03",
+      "quote_exact_against_section": true,
+      "citation": "Melville, Herman, 1819-1891. Moby Dick; Or, The Whale. Project Gutenberg #2701, full electronic edition; updated Oct 11, 2026. CHAPTER 131. The Pequod Meets The Delight., chars 1363–2439.",
+      "source_url": "https://www.gutenberg.org/ebooks/2701",
+      "judgment": "partial_related",
+      "textual_reason": "Mentions the coffin life-buoy as foreshadowing while the Pequod sails away from another ship’s funeral. It does not describe the surviving narrator being supported after the Pequod sinks.",
+      "support_scope": "complete_question",
+      "source_voice_note": null
+    },
+    {
+      "passage_id": 224347,
+      "book_id": "pg2600-full",
+      "section_id": 13457,
+      "section_ordinal": 68,
+      "section_title": "CHAPTER XIX",
+      "start": 0,
+      "end": 1226,
+      "source_excerpt": "On the Pratzen Heights, where he had fallen with the flagstaff in his hand, lay Prince Andrew Bolkónski bleeding profusely and unconsciously uttering a gentle, piteous, and",
+      "source_text_sha256": "c3f995660d10dee085674744aee3caa9aee0305204c424ad7c38983093ee1311",
+      "quote_exact_against_section": true,
+      "citation": "Tolstoy, Leo, graf, 1828-1910. War and Peace. Project Gutenberg #2600, full electronic edition; updated Jun 14, 2022; translator Maude, Aylmer, 1858-1938, Maude, Louise, 1855-1939. CHAPTER XIX, chars 0–1226.",
+      "source_url": "https://www.gutenberg.org/ebooks/2600",
+      "judgment": "partial_related",
+      "textual_reason": "Locates wounded Andrew on Pratzen Heights and reprises the lofty sky, but the explicit devaluation of Napoleon/battle glory is in the next passage. Useful scene location; the complete premise needs that context.",
+      "support_scope": "complete_question",
+      "source_voice_note": null
+    },
+    {
+      "passage_id": 226618,
+      "book_id": "pg1497-full",
+      "section_id": 13793,
+      "section_ordinal": 1,
+      "section_title": "INTRODUCTION AND ANALYSIS.",
+      "start": 84963,
+      "end": 85902,
+      "source_excerpt": "Several interesting remarks which in modern times would have a place in a treatise on Political Economy are scattered up and down the writings of Plato: especially Laws,",
+      "source_text_sha256": "2855a7b502bac938c590e39b810759e1bb4a17f8f196132f92fd96f06f850ad5",
+      "quote_exact_against_section": true,
+      "citation": "Benjamin Jowett (editorial). In: Plato, 428? BCE-348? BCE. The Republic. Project Gutenberg #1497, full electronic edition; updated Oct 3, 2026; translator Jowett, Benjamin, 1817-1893. INTRODUCTION AND ANALYSIS., chars 84963–85902.",
+      "source_url": "https://www.gutenberg.org/ebooks/1497",
+      "judgment": "partial_related",
+      "textual_reason": "Compares economic topics in Plato’s Laws/Republic and other writings. Useful narrow background but not the full requested work-level comparison.",
+      "support_scope": "complete_question",
+      "source_voice_note": "Benjamin Jowett editorial."
+    },
+    {
+      "passage_id": 226954,
+      "book_id": "pg1497-full",
+      "section_id": 13795,
+      "section_ordinal": 3,
+      "section_title": "INTRODUCTION AND ANALYSIS.",
+      "start": 48755,
+      "end": 49939,
+      "source_excerpt": "5. For the relation of the Republic to the Statesman and the Laws, and the two other works of Plato which directly treat of politics, see the Introductions to the two latter; a",
+      "source_text_sha256": "1111886a1f4190066c689df0a8d46b354dcc746669db4aeb9103b96fffffdaa3",
+      "quote_exact_against_section": true,
+      "citation": "Benjamin Jowett (editorial). In: Plato, 428? BCE-348? BCE. The Republic. Project Gutenberg #1497, full electronic edition; updated Oct 3, 2026; translator Jowett, Benjamin, 1817-1893. INTRODUCTION AND ANALYSIS., chars 48755–49939.",
+      "source_url": "https://www.gutenberg.org/ebooks/1497",
+      "judgment": "sufficient_support",
+      "textual_reason": "Jowett explicitly compares Republic and Laws by period, optimism, completeness and dramatic form. This is direct comparative evidence, not merely another Plato passage.",
+      "support_scope": "Republic_vs_Laws_component",
+      "source_voice_note": "Benjamin Jowett, explicitly classified editorial in the frozen source."
+    },
+    {
+      "passage_id": 226956,
+      "book_id": "pg1497-full",
+      "section_id": 13795,
+      "section_ordinal": 3,
+      "section_title": "INTRODUCTION AND ANALYSIS.",
+      "start": 51120,
+      "end": 52822,
+      "source_excerpt": "The relation of the two works to one another is very well given:\n\n(1) by Aristotle in the Politics from the side of the Laws:—\n\n‘The same, or nearly the same, objections apply to",
+      "source_text_sha256": "ca4db5bbc711ec0352b8c2464629a4399e2edb5696952b8a4a369cdb8ff7cadc",
+      "quote_exact_against_section": true,
+      "citation": "Benjamin Jowett (editorial). In: Plato, 428? BCE-348? BCE. The Republic. Project Gutenberg #1497, full electronic edition; updated Oct 3, 2026; translator Jowett, Benjamin, 1817-1893. INTRODUCTION AND ANALYSIS., chars 51120–52822.",
+      "source_url": "https://www.gutenberg.org/ebooks/1497",
+      "judgment": "partial_related",
+      "textual_reason": "Includes a comparison of Laws/Republic explicitly quoted from Aristotle. Relevant to Jowett’s presentation, but a summary must preserve that nested source credit.",
+      "support_scope": "complete_question",
+      "source_voice_note": "Aristotle quoted inside Jowett’s editorial introduction; not an unattributed statement by Plato."
+    },
+    {
+      "passage_id": 226958,
+      "book_id": "pg1497-full",
+      "section_id": 13795,
+      "section_ordinal": 3,
+      "section_title": "INTRODUCTION AND ANALYSIS.",
+      "start": 54135,
+      "end": 55600,
+      "source_excerpt": "The comparatively short work called the Statesman or Politicus in its style and manner is more akin to the Laws, while in its idealism it rather resembles the Republic. As far as",
+      "source_text_sha256": "507f77f5fe3af07647af82e117cbe0e55c68d8e5f1dda4aa7a67a72626cfeea4",
+      "quote_exact_against_section": true,
+      "citation": "Benjamin Jowett (editorial). In: Plato, 428? BCE-348? BCE. The Republic. Project Gutenberg #1497, full electronic edition; updated Oct 3, 2026; translator Jowett, Benjamin, 1817-1893. INTRODUCTION AND ANALYSIS., chars 54135–55600.",
+      "source_url": "https://www.gutenberg.org/ebooks/1497",
+      "judgment": "sufficient_support",
+      "textual_reason": "Directly positions Statesman between Laws and Republic in style, idealism and politics/dialectic. With 226954 it supplies the named comparison and another dialogue.",
+      "support_scope": "Statesman_Laws_Republic_component",
+      "source_voice_note": "Benjamin Jowett editorial."
+    },
+    {
+      "passage_id": 226959,
+      "book_id": "pg1497-full",
+      "section_id": 13795,
+      "section_ordinal": 3,
+      "section_title": "INTRODUCTION AND ANALYSIS.",
+      "start": 55602,
+      "end": 56841,
+      "source_excerpt": "6. Others as well as Plato have chosen an ideal Republic to be the vehicle of thoughts which they could not definitely express, or which went beyond their own age. The classical",
+      "source_text_sha256": "97a392e524c8e707b03f5c10fbb9c61297f20301a5c844cd1c854e36363ea685",
+      "quote_exact_against_section": true,
+      "citation": "Benjamin Jowett (editorial). In: Plato, 428? BCE-348? BCE. The Republic. Project Gutenberg #1497, full electronic edition; updated Oct 3, 2026; translator Jowett, Benjamin, 1817-1893. INTRODUCTION AND ANALYSIS., chars 55602–56841.",
+      "source_url": "https://www.gutenberg.org/ebooks/1497",
+      "judgment": "partial_related",
+      "textual_reason": "Compares Cicero’s De Republica with Plato. The query asks about Laws and other Plato dialogues, so this is related but a different comparison target.",
+      "support_scope": "complete_question",
+      "source_voice_note": "Benjamin Jowett editorial."
+    },
+    {
+      "passage_id": 227331,
+      "book_id": "pg1497-full",
+      "section_id": 13803,
+      "section_ordinal": 11,
+      "section_title": "BOOK VII.",
+      "start": 10910,
+      "end": 12148,
+      "source_excerpt": "Very likely.\n\nYes, I said; and there is another thing which is likely, or rather a necessary inference from what has preceded, that neither the uneducated and uninformed of the",
+      "source_text_sha256": "6dd02a9ca63d0ad1205f7a0e913bc154bd34cbb3bb347839c2e6f5448aa1be59",
+      "quote_exact_against_section": true,
+      "citation": "Plato, 428? BCE-348? BCE. The Republic. Project Gutenberg #1497, full electronic edition; updated Oct 3, 2026; translator Jowett, Benjamin, 1817-1893. BOOK VII., chars 10910–12148.",
+      "source_url": "https://www.gutenberg.org/ebooks/1497",
+      "judgment": "partial_related",
+      "textual_reason": "Discusses educated rulers ascending to knowledge then returning to the prisoners. It mainly applies the allegory to political duty, rather than explaining the prisoners’ initial transition from shadows to understanding.",
+      "support_scope": "complete_question",
+      "source_voice_note": null
+    },
+    {
+      "passage_id": 227735,
+      "book_id": "pg3207-full",
+      "section_id": 13935,
+      "section_ordinal": 128,
+      "section_title": "Covenants Of Mutuall Trust, When Invalid",
+      "start": 0,
+      "end": 1457,
+      "source_excerpt": "If a Covenant be made, wherein neither of the parties performe presently, but trust one another; in the condition of meer Nature, (which is a condition of Warre of every man",
+      "source_text_sha256": "74ecf12a4d495c86e46a1465a6fad2d66187c7be38161401f3c38854cdf0ebd5",
+      "quote_exact_against_section": true,
+      "citation": "Hobbes, Thomas, 1588-1679. Leviathan. Project Gutenberg #3207, full electronic edition; updated Sep 17, 2025. Covenants Of Mutuall Trust, When Invalid, chars 0–1457.",
+      "source_url": "https://www.gutenberg.org/ebooks/3207",
+      "judgment": "partial_related",
+      "textual_reason": "Explains why covenants need coercive common power and fear to secure performance. Strong Hobbes-side evidence, but this one source cannot complete comparison with Machiavelli.",
+      "support_scope": "Hobbes_leg_only",
+      "source_voice_note": null
+    },
+    {
+      "passage_id": 228711,
+      "book_id": "pg4363-full",
+      "section_id": 14501,
+      "section_ordinal": 5,
+      "section_title": "CHAPTER III. THE RELIGIOUS MOOD",
+      "start": 12163,
+      "end": 13410,
+      "source_excerpt": "52. In the Jewish \"Old Testament,\" the book of divine justice, there are men, things, and sayings on such an immense scale, that Greek and Indian literature has nothing to compare",
+      "source_text_sha256": "f9da606c58211b86e6382585bfcaba6f2077410a2437aa04bfceb46d1223b57a",
+      "quote_exact_against_section": true,
+      "citation": "Nietzsche, Friedrich Wilhelm, 1844-1900. Beyond Good and Evil. Project Gutenberg #4363, full electronic edition; updated Oct 2, 2026; translator Zimmern, Helen, 1846-1934. CHAPTER III. THE RELIGIOUS MOOD, chars 12163–13410.",
+      "source_url": "https://www.gutenberg.org/ebooks/4363",
+      "judgment": "irrelevant",
+      "textual_reason": "Compares Old/New Testament taste and scale; it does not address becoming like one’s opponents.",
+      "support_scope": "complete_question",
+      "source_voice_note": null
+    },
+    {
+      "passage_id": 228771,
+      "book_id": "pg4363-full",
+      "section_id": 14503,
+      "section_ordinal": 7,
+      "section_title": "CHAPTER V. THE NATURAL HISTORY OF MORALS",
+      "start": 37694,
+      "end": 39446,
+      "source_excerpt": "Apparently in opposition to the peacefully industrious democrats and Revolution-ideologues, and still more so to the awkward philosophasters and fraternity-visionaries who call",
+      "source_text_sha256": "4dc49d478e928fdba1b1721baf0324e4e1bab7fbb90a59f7f24a20c0b932dc36",
+      "quote_exact_against_section": true,
+      "citation": "Nietzsche, Friedrich Wilhelm, 1844-1900. Beyond Good and Evil. Project Gutenberg #4363, full electronic edition; updated Oct 2, 2026; translator Zimmern, Helen, 1846-1934. CHAPTER V. THE NATURAL HISTORY OF MORALS, chars 37694–39446.",
+      "source_url": "https://www.gutenberg.org/ebooks/4363",
+      "judgment": "ambiguous",
+      "textual_reason": "Says apparently opposed political groups share herd values. This can suggest convergence, but does not explicitly argue a person becomes like an opponent; no acceptable anchor is proposed.",
+      "support_scope": "complete_question",
+      "source_voice_note": null
+    },
+    {
+      "passage_id": 228808,
+      "book_id": "pg4363-full",
+      "section_id": 14505,
+      "section_ordinal": 9,
+      "section_title": "CHAPTER VII. OUR VIRTUES",
+      "start": 6003,
+      "end": 7682,
+      "source_excerpt": "220. Now that the praise of the \"disinterested person\" is so popular one must—probably not without some danger—get an idea of WHAT people actually take an interest in, and what",
+      "source_text_sha256": "d795cd249fae1af03e0ee80e9814a042373f9a13836b3249f89ac82974ae96fc",
+      "quote_exact_against_section": true,
+      "citation": "Nietzsche, Friedrich Wilhelm, 1844-1900. Beyond Good and Evil. Project Gutenberg #4363, full electronic edition; updated Oct 2, 2026; translator Zimmern, Helen, 1846-1934. CHAPTER VII. OUR VIRTUES, chars 6003–7682.",
+      "source_url": "https://www.gutenberg.org/ebooks/4363",
+      "judgment": "irrelevant",
+      "textual_reason": "Analyzes interest/disinterest and sacrifice rather than imitation of opponents.",
+      "support_scope": "complete_question",
+      "source_voice_note": null
+    },
+    {
+      "passage_id": 228844,
+      "book_id": "pg4363-full",
+      "section_id": 14506,
+      "section_ordinal": 10,
+      "section_title": "CHAPTER VIII. PEOPLES AND COUNTRIES",
+      "start": 3490,
+      "end": 4919,
+      "source_excerpt": "It is the age of the masses: they lie on their belly before everything that is massive. And so also in politicis. A statesman who rears up for them a new Tower of Babel, some",
+      "source_text_sha256": "fc8d679863efc21be2968f48b9872f2d017fc3c8c10dc882f54ce32ad8f96c56",
+      "quote_exact_against_section": true,
+      "citation": "Nietzsche, Friedrich Wilhelm, 1844-1900. Beyond Good and Evil. Project Gutenberg #4363, full electronic edition; updated Oct 2, 2026; translator Zimmern, Helen, 1846-1934. CHAPTER VIII. PEOPLES AND COUNTRIES, chars 3490–4919.",
+      "source_url": "https://www.gutenberg.org/ebooks/4363",
+      "judgment": "partial_related",
+      "textual_reason": "Criticizes a statesman’s remaking a nation through high politics. The analogy to opponents is indirect and does not supply the requested advice/comparison.",
+      "support_scope": "complete_question",
+      "source_voice_note": null
+    },
+    {
+      "passage_id": 228901,
+      "book_id": "pg4363-full",
+      "section_id": 14507,
+      "section_ordinal": 11,
+      "section_title": "CHAPTER IX. WHAT IS NOBLE?",
+      "start": 30555,
+      "end": 31847,
+      "source_excerpt": "In all souls a like number of frequently recurring experiences have gained the upper hand over those occurring more rarely: about these matters people understand one another",
+      "source_text_sha256": "ef85f7a34614903734535544dcb4b005a70140400ac367b75f9e650d826ebb63",
+      "quote_exact_against_section": true,
+      "citation": "Nietzsche, Friedrich Wilhelm, 1844-1900. Beyond Good and Evil. Project Gutenberg #4363, full electronic edition; updated Oct 2, 2026; translator Zimmern, Helen, 1846-1934. CHAPTER IX. WHAT IS NOBLE?, chars 30555–31847.",
+      "source_url": "https://www.gutenberg.org/ebooks/4363",
+      "judgment": "irrelevant",
+      "textual_reason": "Explains shared experience/language and group values, not becoming like a moral opponent or Marcus’s view.",
+      "support_scope": "complete_question",
+      "source_voice_note": null
+    },
+    {
+      "passage_id": 228940,
+      "book_id": "pg5001-full",
+      "section_id": 14513,
+      "section_ordinal": 4,
+      "section_title": "III Space and Time in Classical Mechanics",
+      "start": 1920,
+      "end": 3049,
+      "source_excerpt": "In order to have a complete description of the motion, we must specify how the body alters its position with time; i.e. for every point on the trajectory it must be stated at what",
+      "source_text_sha256": "903c535695054c068244c73a4c8eef42443b3be42e5935623065af7a27f7dc66",
+      "quote_exact_against_section": true,
+      "citation": "Einstein, Albert, 1879-1955. Relativity : the Special and General Theory. Project Gutenberg #5001, full electronic edition; updated Jan 7, 2022; translator Lawson, Robert W. (Robert William). III Space and Time in Classical Mechanics, chars 1920–3049.",
+      "source_url": "https://www.gutenberg.org/ebooks/5001",
+      "judgment": "partial_related",
+      "textual_reason": "Continues the stone example with clocks/time coordinates, but the actual straight-line/parabola reference-body explanation is immediately before the returned span.",
+      "support_scope": "complete_question",
+      "source_voice_note": null
+    },
+    {
+      "passage_id": 228942,
+      "book_id": "pg5001-full",
+      "section_id": 14515,
+      "section_ordinal": 6,
+      "section_title": "V The Principle of Relativity in the Restricted Sense",
+      "start": 0,
+      "end": 1158,
+      "source_excerpt": "In order to attain the greatest possible clearness, let us return to our example of the railway carriage supposed to be travelling uniformly. We call its motion a uniform",
+      "source_text_sha256": "f39f2ec3abeee66199907f3e7e622a6cda89ca4246c199731c90ee1fe39290f0",
+      "quote_exact_against_section": true,
+      "citation": "Einstein, Albert, 1879-1955. Relativity : the Special and General Theory. Project Gutenberg #5001, full electronic edition; updated Jan 7, 2022; translator Lawson, Robert W. (Robert William). V The Principle of Relativity in the Restricted Sense, chars 0–1158.",
+      "source_url": "https://www.gutenberg.org/ebooks/5001",
+      "judgment": "partial_related",
+      "textual_reason": "Uses a uniformly flying raven to discuss relative velocities. It is relevant frame background but does not explain the dropped stone’s straight/parabolic trajectories.",
+      "support_scope": "complete_question",
+      "source_voice_note": null
+    },
+    {
+      "passage_id": 228945,
+      "book_id": "pg5001-full",
+      "section_id": 14515,
+      "section_ordinal": 6,
+      "section_title": "V The Principle of Relativity in the Restricted Sense",
+      "start": 3156,
+      "end": 4672,
+      "source_excerpt": "We now proceed to the second argument, to which, moreover, we shall return later. If the principle of relativity (in the restricted sense) does not hold, then the Galileian",
+      "source_text_sha256": "9066312026ffb726a441c1520f8d193b29498e33a8cdca0a2631be905ac8e86a",
+      "quote_exact_against_section": true,
+      "citation": "Einstein, Albert, 1879-1955. Relativity : the Special and General Theory. Project Gutenberg #5001, full electronic edition; updated Jan 7, 2022; translator Lawson, Robert W. (Robert William). V The Principle of Relativity in the Restricted Sense, chars 3156–4672.",
+      "source_url": "https://www.gutenberg.org/ebooks/5001",
+      "judgment": "irrelevant",
+      "textual_reason": "Discusses the hypothetical privileged reference frame and an organ pipe’s orientation, not why a dropped stone has different observed paths.",
+      "support_scope": "complete_question",
+      "source_voice_note": null
+    },
+    {
+      "passage_id": 228957,
+      "book_id": "pg5001-full",
+      "section_id": 14519,
+      "section_ordinal": 10,
+      "section_title": "IX The Relativity of Simultaneity",
+      "start": 960,
+      "end": 2300,
+      "source_excerpt": "When we say that the lightning strokes A and B are simultaneous with respect to be embankment, we mean: the rays of light emitted at the places A and B, where the lightning",
+      "source_text_sha256": "aa4f350904b35ec4ccdce210813ad06a672bad39e563ffd8b5cada2212c557c9",
+      "quote_exact_against_section": true,
+      "citation": "Einstein, Albert, 1879-1955. Relativity : the Special and General Theory. Project Gutenberg #5001, full electronic edition; updated Jan 7, 2022; translator Lawson, Robert W. (Robert William). IX The Relativity of Simultaneity, chars 960–2300.",
+      "source_url": "https://www.gutenberg.org/ebooks/5001",
+      "judgment": "sufficient_support",
+      "textual_reason": "Explains that the moving observer heads toward one light beam and away from the other, receiving B earlier and judging the events non-simultaneous. This is the actual requested explanation; the gold anchor is the earlier question.",
+      "support_scope": "complete_question",
+      "source_voice_note": null
+    },
+    {
+      "passage_id": 228959,
+      "book_id": "pg5001-full",
+      "section_id": 14520,
+      "section_ordinal": 11,
+      "section_title": "X On the Relativity of the Conception of Distance",
+      "start": 0,
+      "end": 1424,
+      "source_excerpt": "Let us consider two particular points on the train1 travelling along the embankment with the velocity v, and inquire as to their distance apart. We already know that it is",
+      "source_text_sha256": "3e652d9d9c4928efcaf6fe84e9a6d80e0fb600426996533b90aa0daa33ccfb02",
+      "quote_exact_against_section": true,
+      "citation": "Einstein, Albert, 1879-1955. Relativity : the Special and General Theory. Project Gutenberg #5001, full electronic edition; updated Jan 7, 2022; translator Lawson, Robert W. (Robert William). X On the Relativity of the Conception of Distance, chars 0–1424.",
+      "source_url": "https://www.gutenberg.org/ebooks/5001",
+      "judgment": "partial_related",
+      "textual_reason": "Explains reference bodies for distance measurements; it does not provide the stone-trajectory explanation requested.",
+      "support_scope": "complete_question",
+      "source_voice_note": null
+    },
+    {
+      "passage_id": 228992,
+      "book_id": "pg5001-full",
+      "section_id": 14528,
+      "section_ordinal": 19,
+      "section_title": "XVIII Special and General Principle of Relativity",
+      "start": 4786,
+      "end": 5792,
+      "source_excerpt": "If the motion of the carriage is now changed into a non-uniform motion, as for instance by a powerful application of the brakes, then the occupant of the carriage experiences a",
+      "source_text_sha256": "6d662e04ca33675885bb15aaedd42791c9a77a8d751ff1e4a3aa15287767d692",
+      "quote_exact_against_section": true,
+      "citation": "Einstein, Albert, 1879-1955. Relativity : the Special and General Theory. Project Gutenberg #5001, full electronic edition; updated Jan 7, 2022; translator Lawson, Robert W. (Robert William). XVIII Special and General Principle of Relativity, chars 4786–5792.",
+      "source_url": "https://www.gutenberg.org/ebooks/5001",
+      "judgment": "partial_related",
+      "textual_reason": "Discusses braking/non-uniform motion and a passenger’s jerk, rather than a stone dropped from a uniformly moving carriage.",
+      "support_scope": "complete_question",
+      "source_voice_note": null
+    },
+    {
+      "passage_id": 229082,
+      "book_id": "pg61-full",
+      "section_id": 14552,
+      "section_ordinal": 2,
+      "section_title": "I. BOURGEOIS AND PROLETARIANS",
+      "start": 11261,
+      "end": 12574,
+      "source_excerpt": "A similar movement is going on before our own eyes. Modern bourgeois society with its relations of production, of exchange and of property, a society that has conjured up such",
+      "source_text_sha256": "280c68edb212a7c690216525c0639cd3e7e350ac456d8655b597ceae6fd45d90",
+      "quote_exact_against_section": true,
+      "citation": "Marx, Karl, 1818-1883; Engels, Friedrich, 1820-1895. The Communist Manifesto. Project Gutenberg #61, full electronic edition; updated Mar 2, 2022. I. BOURGEOIS AND PROLETARIANS, chars 11261–12574.",
+      "source_url": "https://www.gutenberg.org/ebooks/61",
+      "judgment": "sufficient_support",
+      "textual_reason": "Describes recurring commercial crises, destruction of products/productive forces and the epidemic of over-production. This directly answers how the Manifesto describes such crises, before the labeled next-clause phrase.",
+      "support_scope": "complete_question",
+      "source_voice_note": null
+    },
+    {
+      "passage_id": 229140,
+      "book_id": "pg35-full",
+      "section_id": 14560,
+      "section_ordinal": 2,
+      "section_title": "II. The Machine",
+      "start": 1357,
+      "end": 2628,
+      "source_excerpt": "The Time Traveller looked at us, and then at the mechanism. “Well?” said the Psychologist.\n\n“This little affair,” said the Time Traveller, resting his elbows upon the table and",
+      "source_text_sha256": "e05a9d2309c693c82275918a7688eba6860120ed6149b9670163da5706e2fa4b",
+      "quote_exact_against_section": true,
+      "citation": "Wells, H. G. (Herbert George), 1866-1946. The Time Machine. Project Gutenberg #35, full electronic edition; updated Jun 16, 2026. II. The Machine, chars 1357–2628.",
+      "source_url": "https://www.gutenberg.org/ebooks/35",
+      "judgment": "irrelevant",
+      "textual_reason": "Demonstrates the time-machine model and its levers; no Morlock defense appears.",
+      "support_scope": "complete_question",
+      "source_voice_note": null
+    },
+    {
+      "passage_id": 229156,
+      "book_id": "pg35-full",
+      "section_id": 14562,
+      "section_ordinal": 4,
+      "section_title": "IV. Time Travelling",
+      "start": 2047,
+      "end": 3483,
+      "source_excerpt": "“I am afraid I cannot convey the peculiar sensations of time travelling. They are excessively unpleasant. There is a feeling exactly like that one has upon a switchback—of a",
+      "source_text_sha256": "a668090f1b90c42340cd13230a5d1b2e9500d260eadb6c4a08233394d6219569",
+      "quote_exact_against_section": true,
+      "citation": "Wells, H. G. (Herbert George), 1866-1946. The Time Machine. Project Gutenberg #35, full electronic edition; updated Jun 16, 2026. IV. Time Travelling, chars 2047–3483.",
+      "source_url": "https://www.gutenberg.org/ebooks/35",
+      "judgment": "irrelevant",
+      "textual_reason": "Describes day/night sensations while travelling through time, not defense against Morlocks.",
+      "support_scope": "complete_question",
+      "source_voice_note": null
+    },
+    {
+      "passage_id": 229161,
+      "book_id": "pg35-full",
+      "section_id": 14562,
+      "section_ordinal": 4,
+      "section_title": "IV. Time Travelling",
+      "start": 7803,
+      "end": 8770,
+      "source_excerpt": "“My sensations would be hard to describe. As the columns of hail grew thinner, I saw the white figure more distinctly. It was very large, for a silver birch-tree touched its",
+      "source_text_sha256": "900ffaf1926d1cf9224c867c71d66ce35f06752346ca5736e1cac60945694a6f",
+      "quote_exact_against_section": true,
+      "citation": "Wells, H. G. (Herbert George), 1866-1946. The Time Machine. Project Gutenberg #35, full electronic edition; updated Jun 16, 2026. IV. Time Travelling, chars 7803–8770.",
+      "source_url": "https://www.gutenberg.org/ebooks/35",
+      "judgment": "irrelevant",
+      "textual_reason": "Describes the White Sphinx and a hailstorm, not the match/light encounter.",
+      "support_scope": "complete_question",
+      "source_voice_note": null
+    },
+    {
+      "passage_id": 229209,
+      "book_id": "pg35-full",
+      "section_id": 14566,
+      "section_ordinal": 8,
+      "section_title": "VIII. Explanation",
+      "start": 17094,
+      "end": 18554,
+      "source_excerpt": "“Here was the new view. Plainly, this second species of Man was subterranean. There were three circumstances in particular which made me think that its rare emergence above ground",
+      "source_text_sha256": "a020a0481e9fcb196a698014b813af0f7f8ef3f8b0ea1a9f45b011ebeebabeff",
+      "quote_exact_against_section": true,
+      "citation": "Wells, H. G. (Herbert George), 1866-1946. The Time Machine. Project Gutenberg #35, full electronic edition; updated Jun 16, 2026. VIII. Explanation, chars 17094–18554.",
+      "source_url": "https://www.gutenberg.org/ebooks/35",
+      "judgment": "partial_related",
+      "textual_reason": "Infers the Morlocks’ underground habits and sensitive retinas; it supplies background, not the traveller’s match-light defense.",
+      "support_scope": "complete_question",
+      "source_voice_note": null
+    },
+    {
+      "passage_id": 229221,
+      "book_id": "pg35-full",
+      "section_id": 14567,
+      "section_ordinal": 9,
+      "section_title": "IX. The Morlocks",
+      "start": 8354,
+      "end": 10064,
+      "source_excerpt": "“I was afraid to push my way in among all this machinery in the dark, and it was only with my last glimpse of light I discovered that my store of matches had run low. It had never",
+      "source_text_sha256": "2b26ed1677a84a5f053756bcba4f3081156652b4d6dfcbafa63798595c4c3d5a",
+      "quote_exact_against_section": true,
+      "citation": "Wells, H. G. (Herbert George), 1866-1946. The Time Machine. Project Gutenberg #35, full electronic edition; updated Jun 16, 2026. IX. The Morlocks, chars 8354–10064.",
+      "source_url": "https://www.gutenberg.org/ebooks/35",
+      "judgment": "sufficient_support",
+      "textual_reason": "The traveller lights another match and escapes under its protective glare while Morlocks surround and pursue him. This is the requested defensive use of matches/light.",
+      "support_scope": "complete_question",
+      "source_voice_note": null
+    },
+    {
+      "passage_id": 229234,
+      "book_id": "pg35-full",
+      "section_id": 14568,
+      "section_ordinal": 10,
+      "section_title": "X. When Night Came",
+      "start": 12184,
+      "end": 13735,
+      "source_excerpt": "“Then I tried to preserve myself from the horror that was coming upon me, by regarding it as a rigorous punishment of human selfishness. Man had been content to live in ease and",
+      "source_text_sha256": "6670631911862bba2ed05db53cda2b6523d74300b75507a16003de4328839dce",
+      "quote_exact_against_section": true,
+      "citation": "Wells, H. G. (Herbert George), 1866-1946. The Time Machine. Project Gutenberg #35, full electronic edition; updated Jun 16, 2026. X. When Night Came, chars 12184–13735.",
+      "source_url": "https://www.gutenberg.org/ebooks/35",
+      "judgment": "partial_related",
+      "textual_reason": "Plans to obtain fire as a weapon against Morlocks. It is relevant preparation, not the enacted match escape requested.",
+      "support_scope": "complete_question",
+      "source_voice_note": null
+    }
+  ],
+  "additional_reference_proposals": [
+    {
+      "query_id": "expanded-10",
+      "book_id": "pg1661-full",
+      "passage_id": 222264,
+      "section_id": 13214,
+      "section_title": "VIII. THE ADVENTURE OF THE SPECKLED BAND",
+      "anchor": "the rope was there as a bridge",
+      "anchor_start_in_section": 50512,
+      "anchor_end_in_section": 50542,
+      "proposal_scope": "alternative_reference_passage",
+      "already_in_frozen_labels": false,
+      "reason": "Explicit causal mechanism for the remembered story.",
+      "citation": "Doyle, Arthur Conan, 1859-1930. The Adventures of Sherlock Holmes. Project Gutenberg #1661, full electronic edition; updated Oct 10, 2023. VIII. THE ADVENTURE OF THE SPECKLED BAND, chars 49635–50806.",
+      "source_url": "https://www.gutenberg.org/ebooks/1661",
+      "status": "proposal_only_not_applied"
+    },
+    {
+      "query_id": "expanded-10",
+      "book_id": "pg1661-full",
+      "passage_id": 222265,
+      "section_id": 13214,
+      "section_title": "VIII. THE ADVENTURE OF THE SPECKLED BAND",
+      "anchor": "He would put it through this ventilator",
+      "anchor_start_in_section": 51478,
+      "anchor_end_in_section": 51517,
+      "proposal_scope": "alternative_reference_passage",
+      "already_in_frozen_labels": false,
+      "reason": "Explicit snake route to the rope and bed in the same passage.",
+      "citation": "Doyle, Arthur Conan, 1859-1930. The Adventures of Sherlock Holmes. Project Gutenberg #1661, full electronic edition; updated Oct 10, 2023. VIII. THE ADVENTURE OF THE SPECKLED BAND, chars 50807–51759.",
+      "source_url": "https://www.gutenberg.org/ebooks/1661",
+      "status": "proposal_only_not_applied"
+    },
+    {
+      "query_id": "expanded-cross-04",
+      "book_id": "pg3300-full",
+      "passage_id": 220635,
+      "section_id": 13171,
+      "section_title": "PART III. Of the Expense of public Works and public Institutions.",
+      "anchor": "They have little time to spare for education",
+      "anchor_start_in_section": 143539,
+      "anchor_end_in_section": 143583,
+      "proposal_scope": "alternative_reference_passage",
+      "already_in_frozen_labels": false,
+      "reason": "The same passage supplies ordinary workers’ constraints and public basic-education response.",
+      "citation": "Smith, Adam, 1723-1790. An Inquiry into the Nature and Causes of the Wealth of Nations. Project Gutenberg #3300, full electronic edition; updated Jul 3, 2025. PART III. Of the Expense of public Works and public Institutions., chars 143499–144639.",
+      "source_url": "https://www.gutenberg.org/ebooks/3300",
+      "status": "proposal_only_not_applied"
+    },
+    {
+      "query_id": "expanded-cross-05",
+      "book_id": "pg84-full",
+      "passage_id": 222644,
+      "section_id": 13241,
+      "section_title": "Chapter 17",
+      "anchor": "I demand a creature of another sex, but as hideous as myself",
+      "anchor_start_in_section": 2657,
+      "anchor_end_in_section": 2717,
+      "proposal_scope": "alternative_reference_passage",
+      "already_in_frozen_labels": false,
+      "reason": "The creature directly explains the need for sympathy and companionship.",
+      "citation": "Shelley, Mary Wollstonecraft, 1797-1851. Frankenstein; or, The modern Prometheus. Project Gutenberg #84, full electronic edition; updated Feb 10, 2026. Chapter 17, chars 2257–3567.",
+      "source_url": "https://www.gutenberg.org/ebooks/84",
+      "status": "proposal_only_not_applied"
+    },
+    {
+      "query_id": "expanded-cross-12",
+      "book_id": "pg35-full",
+      "passage_id": 229221,
+      "section_id": 14567,
+      "section_title": "IX. The Morlocks",
+      "anchor": "escape under the protection of its glare",
+      "anchor_start_in_section": 9711,
+      "anchor_end_in_section": 9751,
+      "proposal_scope": "alternative_reference_passage",
+      "already_in_frozen_labels": false,
+      "reason": "The traveller actually lights a match and retreats, rather than merely discussing light.",
+      "citation": "Wells, H. G. (Herbert George), 1866-1946. The Time Machine. Project Gutenberg #35, full electronic edition; updated Jun 16, 2026. IX. The Morlocks, chars 8354–10064.",
+      "source_url": "https://www.gutenberg.org/ebooks/35",
+      "status": "proposal_only_not_applied"
+    },
+    {
+      "query_id": "expanded-role-01",
+      "book_id": "pg1497-full",
+      "passage_id": 226954,
+      "section_id": 13795,
+      "section_title": "INTRODUCTION AND ANALYSIS.",
+      "anchor": "The Republic is full of hope and aspiration: the Laws bear the stamp of failure and disappointment",
+      "anchor_start_in_section": 49367,
+      "anchor_end_in_section": 49465,
+      "proposal_scope": "Jowett_Laws_comparison_component",
+      "already_in_frozen_labels": false,
+      "reason": "Actual Jowett comparison in the explicitly credited editorial section.",
+      "citation": "Benjamin Jowett (editorial). In: Plato, 428? BCE-348? BCE. The Republic. Project Gutenberg #1497, full electronic edition; updated Oct 3, 2026; translator Jowett, Benjamin, 1817-1893. INTRODUCTION AND ANALYSIS., chars 48755–49939.",
+      "source_url": "https://www.gutenberg.org/ebooks/1497",
+      "status": "proposal_only_not_applied"
+    },
+    {
+      "query_id": "expanded-role-01",
+      "book_id": "pg1497-full",
+      "passage_id": 226958,
+      "section_id": 13795,
+      "section_title": "INTRODUCTION AND ANALYSIS.",
+      "anchor": "in its style and manner is more akin to the Laws, while in its idealism it rather resembles the Republic",
+      "anchor_start_in_section": 54198,
+      "anchor_end_in_section": 54302,
+      "proposal_scope": "Jowett_other_dialogue_component",
+      "already_in_frozen_labels": false,
+      "reason": "Actual Jowett comparison with Statesman, preserving source voice.",
+      "citation": "Benjamin Jowett (editorial). In: Plato, 428? BCE-348? BCE. The Republic. Project Gutenberg #1497, full electronic edition; updated Oct 3, 2026; translator Jowett, Benjamin, 1817-1893. INTRODUCTION AND ANALYSIS., chars 54135–55600.",
+      "source_url": "https://www.gutenberg.org/ebooks/1497",
+      "status": "proposal_only_not_applied"
+    },
+    {
+      "query_id": "expanded-cross-03",
+      "book_id": "pg1228-full",
+      "passage_id": 218533,
+      "section_id": 13060,
+      "section_title": "CHAPTER XIII. MUTUAL AFFINITIES OF ORGANIC BEINGS: MORPHOLOGY: EMBRYOLOGY: RUDIMENTARY ORGANS.",
+      "anchor": "the principle of inheritance at corresponding ages will reproduce the organ in its reduced state",
+      "anchor_start_in_section": 81873,
+      "anchor_end_in_section": 81969,
+      "proposal_scope": "alternative_reference_passage",
+      "already_in_frozen_labels": false,
+      "reason": "Direct mechanism explains the asked disuse/inheritance relationship.",
+      "citation": "Darwin, Charles, 1809-1882. On the Origin of Species By Means of Natural Selection Or, the Preservation of Favoured Races in the Struggle for Life. Project Gutenberg #1228, full electronic edition; updated Oct 6, 2026; 1859 first edition. CHAPTER XIII. MUTUAL AFFINITIES OF ORGANIC BEINGS: MORPHOLOGY: EMBRYOLOGY: RUDIMENTARY ORGANS., chars 81261–82768.",
+      "source_url": "https://www.gutenberg.org/ebooks/1228",
+      "status": "proposal_only_not_applied"
+    },
+    {
+      "query_id": "expanded-cross-10",
+      "book_id": "pg5001-full",
+      "passage_id": 228957,
+      "section_id": 14519,
+      "section_title": "IX The Relativity of Simultaneity",
+      "anchor": "he is hastening towards the beam of light coming from B",
+      "anchor_start_in_section": 1859,
+      "anchor_end_in_section": 1914,
+      "proposal_scope": "alternative_reference_passage",
+      "already_in_frozen_labels": false,
+      "reason": "The same passage explains the moving observer receiving one flash earlier.",
+      "citation": "Einstein, Albert, 1879-1955. Relativity : the Special and General Theory. Project Gutenberg #5001, full electronic edition; updated Jan 7, 2022; translator Lawson, Robert W. (Robert William). IX The Relativity of Simultaneity, chars 960–2300.",
+      "source_url": "https://www.gutenberg.org/ebooks/5001",
+      "status": "proposal_only_not_applied"
+    },
+    {
+      "query_id": "expanded-cross-11",
+      "book_id": "pg61-full",
+      "passage_id": 229082,
+      "section_id": 14552,
+      "section_title": "I. BOURGEOIS AND PROLETARIANS",
+      "anchor": "the epidemic of over-production",
+      "anchor_start_in_section": 12301,
+      "anchor_end_in_section": 12332,
+      "proposal_scope": "alternative_reference_passage",
+      "already_in_frozen_labels": false,
+      "reason": "The passage describes recurring commercial crises and destruction; the query asks how they are described.",
+      "citation": "Marx, Karl, 1818-1883; Engels, Friedrich, 1820-1895. The Communist Manifesto. Project Gutenberg #61, full electronic edition; updated Mar 2, 2022. I. BOURGEOIS AND PROLETARIANS, chars 11261–12574.",
+      "source_url": "https://www.gutenberg.org/ebooks/61",
+      "status": "proposal_only_not_applied"
+    },
+    {
+      "query_id": "expanded-03",
+      "book_id": "pg2009-full",
+      "passage_id": 221898,
+      "section_id": 13199,
+      "section_title": "CHAPTER XV. RECAPITULATION AND CONCLUSION.",
+      "anchor": "There is grandeur in this view of life",
+      "anchor_start_in_section": 68515,
+      "anchor_end_in_section": 68553,
+      "proposal_scope": "conditional_other_edition_for_unscoped_literal_quote",
+      "already_in_frozen_labels": false,
+      "reason": "The literal phrase is exact in another edition of the same work. Only acceptable if the query is intended to allow any edition; never cite this as the 1859 passage.",
+      "citation": "Darwin, Charles, 1809-1882. The Origin of Species by Means of Natural Selection Or, the Preservation of Favoured Races in the Struggle for Life, 6th Edition. Project Gutenberg #2009, full electronic edition; updated Oct 7, 2026; sixth edition. CHAPTER XV. RECAPITULATION AND CONCLUSION., chars 67532–68854.",
+      "source_url": "https://www.gutenberg.org/ebooks/2009",
+      "status": "proposal_only_not_applied"
+    },
+    {
+      "query_id": "expanded-compare-01",
+      "book_id": "pg3300-full",
+      "passage_id": 219233,
+      "section_id": 13127,
+      "section_title": "CHAPTER I. OF THE DIVISION OF LABOUR.",
+      "anchor": "necessarily increases very much the dexterity of the workman",
+      "anchor_start_in_section": 9156,
+      "anchor_end_in_section": 9216,
+      "proposal_scope": "Smith_leg_only",
+      "already_in_frozen_labels": false,
+      "reason": "Valid Smith-side effect of narrow repetitive work; cannot complete the comparison without Marx.",
+      "citation": "Smith, Adam, 1723-1790. An Inquiry into the Nature and Causes of the Wealth of Nations. Project Gutenberg #3300, full electronic edition; updated Jul 3, 2025. CHAPTER I. OF THE DIVISION OF LABOUR., chars 8884–10650.",
+      "source_url": "https://www.gutenberg.org/ebooks/3300",
+      "status": "proposal_only_not_applied"
+    },
+    {
+      "query_id": "expanded-compare-02",
+      "book_id": "pg3207-full",
+      "passage_id": 227735,
+      "section_id": 13935,
+      "section_title": "Covenants Of Mutuall Trust, When Invalid",
+      "anchor": "the bonds of words are too weak to bridle mens ambition",
+      "anchor_start_in_section": 447,
+      "anchor_end_in_section": 502,
+      "proposal_scope": "Hobbes_leg_only",
+      "already_in_frozen_labels": false,
+      "reason": "Valid Hobbes-side argument for coercive common power; Machiavelli remains separately required.",
+      "citation": "Hobbes, Thomas, 1588-1679. Leviathan. Project Gutenberg #3207, full electronic edition; updated Sep 17, 2025. Covenants Of Mutuall Trust, When Invalid, chars 0–1457.",
+      "source_url": "https://www.gutenberg.org/ebooks/3207",
+      "status": "proposal_only_not_applied"
+    },
+    {
+      "query_id": "expanded-18",
+      "book_id": "pg5001-full",
+      "passage_id": 228939,
+      "section_id": 14513,
+      "section_title": "III Space and Time in Classical Mechanics",
+      "anchor": "there is no such thing as an independently existing trajectory",
+      "anchor_start_in_section": 1768,
+      "anchor_end_in_section": 1830,
+      "proposal_scope": "preceding_neighbor_context",
+      "already_in_frozen_labels": false,
+      "reason": "The previous passage directly explains body-relative straight/parabolic trajectories.",
+      "citation": "Einstein, Albert, 1879-1955. Relativity : the Special and General Theory. Project Gutenberg #5001, full electronic edition; updated Jan 7, 2022; translator Lawson, Robert W. (Robert William). III Space and Time in Classical Mechanics, chars 0–1918.",
+      "source_url": "https://www.gutenberg.org/ebooks/5001",
+      "status": "proposal_only_not_applied"
+    },
+    {
+      "query_id": "expanded-13",
+      "book_id": "pg2600-full",
+      "passage_id": 224348,
+      "section_id": 13457,
+      "section_title": "CHAPTER XIX",
+      "anchor": "Napoleon seemed to him such a small, insignificant creature",
+      "anchor_start_in_section": 2342,
+      "anchor_end_in_section": 2401,
+      "proposal_scope": "following_neighbor_context",
+      "already_in_frozen_labels": false,
+      "reason": "The next passage links the lofty sky to Andrew’s changed valuation of Napoleon.",
+      "citation": "Tolstoy, Leo, graf, 1828-1910. War and Peace. Project Gutenberg #2600, full electronic edition; updated Jun 14, 2022; translator Maude, Aylmer, 1858-1938, Maude, Louise, 1855-1939. CHAPTER XIX, chars 1228–2968.",
+      "source_url": "https://www.gutenberg.org/ebooks/2600",
+      "status": "proposal_only_not_applied"
+    },
+    {
+      "query_id": "expanded-cross-06",
+      "book_id": "pg2701-full",
+      "passage_id": 223673,
+      "section_id": 13380,
+      "section_title": "CHAPTER 128. The Pequod Meets The Rachel.",
+      "anchor": "Captain Gardiner, I will not do it. Even now I lose time.",
+      "anchor_start_in_section": 6501,
+      "anchor_end_in_section": 6558,
+      "proposal_scope": "following_neighbor_context",
+      "already_in_frozen_labels": true,
+      "reason": "The next passage supplies the actual refusal and stated urgency; this anchor is already labeled.",
+      "citation": "Melville, Herman, 1819-1891. Moby Dick; Or, The Whale. Project Gutenberg #2701, full electronic edition; updated Oct 11, 2026. CHAPTER 128. The Pequod Meets The Rachel., chars 5901–7814.",
+      "source_url": "https://www.gutenberg.org/ebooks/2701",
+      "status": "proposal_only_not_applied"
+    }
+  ],
+  "limitations": [
+    "Agent judgments are provisional and non-independent of the development work; do not advertise human annotation.",
+    "No retrieval metrics were recomputed or replaced by review counts; selected-case counts are not population quality estimates.",
+    "A sufficient comparison component is not a complete multi-author answer.",
+    "A conditional alternative edition is not permission to blend or miscite edition-specific text.",
+    "Bounded context improvements do not justify searching an entire book until any support is found.",
+    "Future benchmark revisions need explicit adjudication/versioning and a new untouched final-test set."
+  ]
+}

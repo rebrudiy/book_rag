@@ -12,6 +12,7 @@ import json
 import os
 import re
 import shutil
+import sqlite3
 import time
 import uuid
 from collections.abc import Generator, Iterator
@@ -29,6 +30,7 @@ from book_rag.embedding_profiles import (
     profile_for_model,
     profile_from_metadata,
 )
+from book_rag.vector_reuse import KEYMAP, MAX_BATCH, RECEIPT, SCHEMA_VERSION, GenerationReuse, KeyMapWriter, ModelSpace
 
 if TYPE_CHECKING:
     from book_rag.library import Library
@@ -256,8 +258,89 @@ def _new_arrays(folder: Path, descriptor: dict[str, Any]) -> tuple[Any, Any, Any
     return vectors, ids, hashlib.sha256(), hashlib.sha256()
 
 
+DISK_RESERVE_BYTES = 4 * 1024**3
+KEYMAP_BYTES_PER_VECTOR = 256
+
+
+def _require_disk_space(directory: Path, remaining: int, dimensions: int) -> None:
+    # Conservative per-window SQLite allowance, two NPY headers and fixed reserve.
+    required = DISK_RESERVE_BYTES + remaining * (4 * dimensions + 8 + KEYMAP_BYTES_PER_VECTOR) + 8192
+    available = shutil.disk_usage(directory).free
+    if available < required:
+        raise OSError(
+            f"Insufficient free disk for embedding checkpoint: need {required} bytes including "
+            f"4 GiB reserve, available {available}; completed work and active index retained"
+        )
+
+
+def _reuse_source(directory: Path, space: ModelSpace, warnings: list[str]) -> GenerationReuse | None:
+    active = directory / "active.json"
+    if not active.exists():
+        return None
+    try:
+        metadata = json.loads(active.read_text())
+        if not isinstance(metadata, dict):
+            raise ValueError("Active metadata must be an object")
+        generation = metadata.get("generation")
+        if not isinstance(generation, str) or not re.fullmatch(r"gen-[A-Za-z0-9_.-]+", generation):
+            raise ValueError("Invalid active generation name")
+        if ModelSpace.from_metadata(metadata, normalized=True) != space:
+            return None
+        folder = directory / generation
+        if not (folder / RECEIPT).exists():
+            warnings.append("Active generation has no finalized exact-input key map; encoding fresh windows")
+            return None
+        return GenerationReuse.open(folder, space)
+    except (ValueError, OSError, KeyError, TypeError, sqlite3.Error) as exc:
+        warnings.append(f"Exact-vector reuse unavailable; encoding fresh windows: {exc}")
+        return None
+
+
+def _ready_metadata(folder: Path, descriptor: dict[str, Any], cursor: dict[str, int] | None) -> dict[str, Any]:
+    saved = _read_checkpoint(folder)
+    if saved.get("completed_vectors") != descriptor["vectors"]:
+        raise ValueError("Ready generation is incomplete")
+    arrays = _resume_arrays(folder, saved, descriptor, cursor)
+    for array in arrays[:2]:
+        array._mmap.close()
+    metadata = json.loads((folder / "metadata.json").read_text())
+    if not isinstance(metadata, dict):
+        raise ValueError("Ready metadata must be an object")
+    if metadata.get("generation") != folder.name or any(metadata.get(k) != v for k, v in descriptor.items()):
+        raise ValueError("Ready generation metadata differs from requested build")
+    # A new builder never activates a renamed but unsealed key map. Legacy query
+    # indexes remain supported independently of this stricter build recovery.
+    with GenerationReuse.open(folder, ModelSpace.from_metadata(descriptor, normalized=True)):
+        pass
+    return metadata
+
+
+def _promote_sealed_staging(
+    staging: Path, descriptor: dict[str, Any], cursor: dict[str, int] | None, warnings: list[str]
+) -> None:
+    """Recover a crash after receipt creation but before the immutable rename."""
+    if not (staging / RECEIPT).exists():
+        return
+    try:
+        metadata = json.loads((staging / "metadata.json").read_text())
+        if not isinstance(metadata, dict):
+            raise ValueError("Sealed staging metadata must be an object")
+        generation = metadata.get("generation")
+        if not isinstance(generation, str) or not re.fullmatch(r"gen-[A-Za-z0-9_.-]+", generation):
+            raise ValueError("Invalid sealed generation name")
+        if any(metadata.get(k) != v for k, v in descriptor.items()):
+            raise ValueError("Sealed generation descriptor mismatch")
+        arrays = _resume_arrays(staging, _read_checkpoint(staging), descriptor, cursor)
+        for array in arrays[:2]:
+            array._mmap.close()
+        staging.rename(staging.parent / generation)
+    except (ValueError, OSError, KeyError, TypeError):
+        # Rejected staging data can be rebuilt; never repair an immutable source.
+        warnings.append("Sealed staging recovery failed; validating or rebuilding before activation")
+
+
 def build_index(library: Library, model_name: str | None = None, batch_size: int = 32) -> dict[str, Any]:
-    """Build or resume durable batches, activating only a complete current index."""
+    """Build durable exact-key batches, reusing only a validated immutable source."""
     if not 1 <= batch_size <= 512:
         raise ValueError("batch_size must be between 1 and 512")
     started = time.perf_counter()
@@ -271,141 +354,227 @@ def build_index(library: Library, model_name: str | None = None, batch_size: int
         raise ValueError("Model embedding dimension must be a positive integer")
     directory = library.data_dir / "vectors"
     directory.mkdir(exist_ok=True)
+    warnings: list[str] = []
     with _exclusive_build(directory):
         fingerprint = corpus_fingerprint(library)
-        identity_fields = {
+        identity_fields: dict[str, Any] = {
             "model": name,
             "model_revision": revision,
             "corpus_fingerprint": fingerprint,
             **_STRATEGY,
             "embedding_profile": profile.metadata(revision),
             "strategy": profile.strategy,
+            "vector_reuse_schema": SCHEMA_VERSION,
         }
         identity_fields.update(model_max_tokens=model.max_seq_length, dimensions=model.get_embedding_dimension())
+        space = ModelSpace.from_metadata(identity_fields, normalized=True)
         identity = hashlib.sha256(json.dumps(identity_fields, sort_keys=True).encode()).hexdigest()
         staging = directory / ("staging-" + identity)
         checkpoint = _read_checkpoint(staging)
         completed = checkpoint.get("completed_vectors", 0)
         if type(completed) is not int or completed < 0:
             completed = 0
-        with library.connect() as conn:
-            conn.execute("BEGIN")
-            count, passages, cursor, final_cursor = _count_windows(conn, model, completed, profile)
-            if not count:
-                raise ValueError("Import books before building an embedding index")
-            descriptor = {**identity_fields, "vectors": count, "passages": passages, "build_identity": identity}
-            if corpus_fingerprint(library) != fingerprint:
-                raise RuntimeError("Corpus changed during embedding planning; retry after ingestion finishes")
+        vectors: Any = None
+        ids: Any = None
+        keys, source = None, None
+        try:
+            with library.connect() as conn:
+                conn.execute("BEGIN")
+                count, passages, cursor, final_cursor = _count_windows(conn, model, completed, profile)
+                if not count:
+                    raise ValueError("Import books before building an embedding index")
+                descriptor: dict[str, Any] = {
+                    **identity_fields,
+                    "vectors": count,
+                    "passages": passages,
+                    "build_identity": identity,
+                }
+                if corpus_fingerprint(library) != fingerprint:
+                    raise RuntimeError("Corpus changed during embedding planning; retry after ingestion finishes")
 
-            # Recover a completed rename if interruption happened just before activation.
-            for ready in sorted(directory.glob("gen-" + identity + "-*")):
-                saved = _read_checkpoint(ready)
-                try:
-                    if saved.get("completed_vectors") != count:
-                        continue
-                    ready_arrays = _resume_arrays(ready, saved, descriptor, final_cursor)
-                    for array in ready_arrays[:2]:
-                        array._mmap.close()
-                    metadata = json.loads((ready / "metadata.json").read_text())
-                    if metadata.get("generation") != ready.name or any(
-                        metadata.get(k) != v for k, v in descriptor.items()
-                    ):
+                _promote_sealed_staging(staging, descriptor, final_cursor, warnings)
+                for ready in sorted(directory.glob("gen-" + identity + "-*")):
+                    try:
+                        metadata = _ready_metadata(ready, descriptor, final_cursor)
+                    except (ValueError, OSError, KeyError, TypeError, sqlite3.Error) as exc:
+                        warnings.append(f"Ready generation rejected before activation: {exc}")
                         continue
                     if corpus_fingerprint(library) != fingerprint:
                         raise RuntimeError("Corpus changed during index reuse; retry after ingestion finishes")
                     _atomic_json(directory / "active.json", metadata)
-                    return metadata | {"reused_active": True, "resumed_vectors": count}
-                except (ValueError, OSError, KeyError):
-                    continue
+                    return metadata | {
+                        "reused_active": True,
+                        "resumed_vectors": count,
+                        "encoded_vectors": 0,
+                        "reused_vectors": 0,
+                        "warnings": warnings,
+                    }
 
-            resumed = 0
-            try:
-                vectors, ids, vector_hash, id_hash = _resume_arrays(staging, checkpoint, descriptor, cursor)
-                resumed = completed
-            except (ValueError, OSError, KeyError, TypeError):
-                vectors, ids, vector_hash, id_hash = _new_arrays(staging, descriptor)
-                completed, cursor = 0, None
-            offset = completed
+                resumed = 0
+                try:
+                    vectors, ids, vector_hash, id_hash = _resume_arrays(staging, checkpoint, descriptor, cursor)
+                    if not (staging / KEYMAP).exists():
+                        raise ValueError("Checkpoint has no durable exact-input key map")
+                    keys = KeyMapWriter(staging, space, count, resume=True)
+                    if keys.rows_written < completed or (keys.finalized and completed != count):
+                        raise ValueError("Key-map prefix is behind its vector checkpoint")
+                    if not keys.finalized:
+                        keys.truncate_to(completed)
+                    if keys.checksum != checkpoint.get("key_checksum"):
+                        raise ValueError("Key-map prefix differs from vector checkpoint checksum")
+                    resumed = completed
+                except (ValueError, OSError, KeyError, TypeError, sqlite3.Error):
+                    if keys is not None:
+                        keys.close()
+                        keys = None
+                    for array in (vectors, ids):
+                        if array is not None:
+                            array._mmap.close()
+                    vectors, ids = None, None
+                    # Space errors are outside checkpoint rejection: do not delete
+                    # otherwise recoverable data when a rebuild cannot fit.
+                    _require_disk_space(directory, count, descriptor["dimensions"])
+                    vectors, ids, vector_hash, id_hash = _new_arrays(staging, descriptor)
+                    keys = KeyMapWriter(staging, space, count)
+                    completed, cursor = 0, None
+                _require_disk_space(directory, count - completed, descriptor["dimensions"])
+                offset = completed
+                encoded, reused = 0, 0
+                source = _reuse_source(directory, space, warnings)
+                source_generation = source.folder.name if source is not None else None
 
-            def save_checkpoint(last_cursor: dict[str, int] | None) -> None:
-                vectors.flush()
-                ids.flush()
-                for filename in ("embeddings.npy", "ids.npy"):
-                    with (staging / filename).open("rb") as stream:
-                        os.fsync(stream.fileno())
-                _atomic_json(
-                    staging / "checkpoint.json",
-                    {
-                        "version": 1,
-                        "descriptor": descriptor,
-                        "completed_vectors": offset,
-                        "cursor": last_cursor,
-                        "vector_checksum": vector_hash.hexdigest(),
-                        "id_checksum": id_hash.hexdigest(),
-                    },
+                def save_checkpoint(last_cursor: dict[str, int] | None) -> None:
+                    if keys is None or keys.rows_written != offset:
+                        raise RuntimeError("Durable key prefix must precede vector checkpoint")
+                    assert vectors is not None and ids is not None
+                    vectors.flush()
+                    ids.flush()
+                    for filename in ("embeddings.npy", "ids.npy"):
+                        with (staging / filename).open("rb") as stream:
+                            os.fsync(stream.fileno())
+                    _atomic_json(
+                        staging / "checkpoint.json",
+                        {
+                            "version": 1,
+                            "descriptor": descriptor,
+                            "completed_vectors": offset,
+                            "cursor": last_cursor,
+                            "vector_checksum": vector_hash.hexdigest(),
+                            "id_checksum": id_hash.hexdigest(),
+                            "key_checksum": keys.checksum,
+                        },
+                    )
+
+                # Preserve sealed metadata/checkpoint bytes until receipt recovery.
+                if not keys.finalized:
+                    save_checkpoint(cursor)
+                pending: list[str] = []
+                pending_ids: list[int] = []
+                last_cursor = cursor
+
+                def flush() -> None:
+                    nonlocal offset, encoded, reused, source
+                    assert vectors is not None and ids is not None
+                    _require_disk_space(directory, count - offset, descriptor["dimensions"])
+                    hits: list[Any] = [None] * len(pending)
+                    if source is not None:
+                        try:
+                            hits = []
+                            for start in range(0, len(pending), MAX_BATCH):
+                                hits.extend(source.lookup(pending[start : start + MAX_BATCH]))
+                        except (ValueError, OSError, sqlite3.Error) as exc:
+                            warnings.append(f"Exact-vector source rejected during lookup; encoding fresh: {exc}")
+                            source.close()
+                            source = None
+                            hits = [None] * len(pending)
+                    missing = [index for index, hit in enumerate(hits) if hit is None]
+                    batch = np.empty((len(pending), descriptor["dimensions"]), dtype="float32")
+                    for index, hit in enumerate(hits):
+                        if hit is not None:
+                            batch[index] = hit
+                    if missing:
+                        fresh = np.asarray(
+                            model.encode(
+                                [pending[index] for index in missing],
+                                batch_size=batch_size,
+                                normalize_embeddings=True,
+                                convert_to_numpy=True,
+                                show_progress_bar=False,
+                            ),
+                            dtype="float32",
+                        )
+                        if fresh.shape != (len(missing), descriptor["dimensions"]) or not np.isfinite(fresh).all():
+                            raise ValueError("Model returned invalid embedding dimensions or nonfinite values")
+                        batch[missing] = fresh
+                    batch_ids = np.asarray(pending_ids, dtype="int64")
+                    vectors[offset : offset + len(pending)] = batch
+                    ids[offset : offset + len(pending)] = batch_ids
+                    # Each key transaction is durable before the atomic vector
+                    # checkpoint; an interrupted leading key suffix is truncated.
+                    assert keys is not None
+                    for start in range(0, len(pending), MAX_BATCH):
+                        keys.add_batch(pending[start : start + MAX_BATCH], start_row=offset + start)
+                    vector_hash.update(batch.tobytes(order="C"))
+                    id_hash.update(batch_ids.tobytes(order="C"))
+                    offset += len(pending)
+                    save_checkpoint(last_cursor)
+                    encoded += len(missing)
+                    reused += len(pending) - len(missing)
+                    pending.clear()
+                    pending_ids.clear()
+
+                sql = _SQL + (" AND p.id>=?" if cursor else "") + " ORDER BY p.id"
+                parameters = (cursor["passage_id"],) if cursor else ()
+                for row in conn.execute(sql, parameters):
+                    skip = cursor["window_index"] + 1 if cursor and row["id"] == cursor["passage_id"] else 0
+                    for index, window in enumerate(_profile_windows(model, row, profile)):
+                        if index < skip:
+                            continue
+                        pending.append(window)
+                        pending_ids.append(row["id"])
+                        last_cursor = {"passage_id": row["id"], "window_index": index}
+                        if len(pending) >= batch_size:
+                            flush()
+                if pending:
+                    flush()
+                if offset != count:
+                    raise RuntimeError("Embedding window count changed; incomplete generation retained")
+            if corpus_fingerprint(library) != fingerprint:
+                raise RuntimeError(
+                    "Corpus changed during embedding; checkpoint retained, retry after ingestion finishes"
                 )
-
-            save_checkpoint(cursor)
-            pending: list[str] = []
-            pending_ids: list[int] = []
-            last_cursor = cursor
-
-            def flush() -> None:
-                nonlocal offset
-                batch = np.asarray(
-                    model.encode(
-                        pending,
-                        batch_size=batch_size,
-                        normalize_embeddings=True,
-                        convert_to_numpy=True,
-                        show_progress_bar=False,
-                    ),
-                    dtype="float32",
-                )
-                if batch.shape != (len(pending), descriptor["dimensions"]) or not np.isfinite(batch).all():
-                    raise ValueError("Model returned invalid embedding dimensions or nonfinite values")
-                batch_ids = np.asarray(pending_ids, dtype="int64")
-                vectors[offset : offset + len(pending)] = batch
-                ids[offset : offset + len(pending)] = batch_ids
-                vector_hash.update(batch.tobytes(order="C"))
-                id_hash.update(batch_ids.tobytes(order="C"))
-                offset += len(pending)
-                save_checkpoint(last_cursor)
-                pending.clear()
-                pending_ids.clear()
-
-            sql = _SQL + (" AND p.id>=?" if cursor else "") + " ORDER BY p.id"
-            parameters = (cursor["passage_id"],) if cursor else ()
-            for row in conn.execute(sql, parameters):
-                skip = cursor["window_index"] + 1 if cursor and row["id"] == cursor["passage_id"] else 0
-                for index, window in enumerate(_profile_windows(model, row, profile)):
-                    if index < skip:
-                        continue
-                    pending.append(window)
-                    pending_ids.append(row["id"])
-                    last_cursor = {"passage_id": row["id"], "window_index": index}
-                    if len(pending) >= batch_size:
-                        flush()
-            if pending:
-                flush()
-            if offset != count:
-                raise RuntimeError("Embedding window count changed; incomplete generation retained")
-        if corpus_fingerprint(library) != fingerprint:
-            raise RuntimeError("Corpus changed during embedding; checkpoint retained, retry after ingestion finishes")
-        generation = "gen-" + identity + "-" + uuid.uuid4().hex[:12]
-        metadata = {
-            **descriptor,
-            "generation": generation,
-            "seconds": round(time.perf_counter() - started, 3),
-            "resumed_vectors": resumed,
-            "requested_revision": requested_revision,
-        }
-        _atomic_json(staging / "metadata.json", metadata)
-        vectors._mmap.close()
-        ids._mmap.close()
-        staging.rename(directory / generation)
-        _atomic_json(directory / "active.json", metadata)
-        return metadata
+            _require_disk_space(directory, 0, descriptor["dimensions"])
+            generation = "gen-" + identity + "-" + uuid.uuid4().hex[:12]
+            metadata = {
+                **descriptor,
+                "generation": generation,
+                "seconds": round(time.perf_counter() - started, 3),
+                "resumed_vectors": resumed,
+                "encoded_vectors": encoded,
+                "reused_vectors": reused,
+                "reuse_source_generation": source_generation,
+                "disk_reserve_bytes": DISK_RESERVE_BYTES,
+                "estimated_bytes_per_vector": 4 * descriptor["dimensions"] + 8 + KEYMAP_BYTES_PER_VECTOR,
+                "requested_revision": requested_revision,
+                "warnings": warnings,
+            }
+            _atomic_json(staging / "metadata.json", metadata)
+            keys.finalize()
+            keys = None
+            vectors._mmap.close()
+            ids._mmap.close()
+            vectors, ids = None, None
+            staging.rename(directory / generation)
+            _atomic_json(directory / "active.json", metadata)
+            return metadata
+        finally:
+            if keys is not None:
+                keys.close()
+            if source is not None:
+                source.close()
+            for array in (vectors, ids):
+                if array is not None:
+                    array._mmap.close()
 
 
 # A retrieval pool is independent of the number of results displayed. These

@@ -3,7 +3,9 @@
 Canonical section text uses Unicode NFC and LF newlines. Horizontal whitespace is
 collapsed, wrapped lines join with a space, and paragraphs are separated by two
 LF characters. Quotation offsets refer to this canonical text, not source bytes.
-Images, styling and layout are not retained. Footnotes remain readable text.
+Images and styling are not retained. Tables retain logical row/cell order with
+TAB cell separators and blank-line row separators; complex layout is linearized.
+Footnotes remain readable text. Explicit code/preformatted whitespace is preserved.
 """
 
 from __future__ import annotations
@@ -20,7 +22,7 @@ from urllib.parse import unquote
 from xml.etree.ElementTree import Element
 from zipfile import ZipFile
 
-from bs4 import BeautifulSoup, Tag
+from bs4 import BeautifulSoup, Comment, NavigableString, PageElement, Tag
 from defusedxml import ElementTree as ET
 from pypdf import PdfReader
 
@@ -94,6 +96,122 @@ def _block_text(node: Tag) -> str:
     return re.sub(r"\n{3,}", "\n\n", "\n".join(lines)).strip()
 
 
+def _table_cell_text(cell: Tag, depth: int = 0) -> str:
+    """Keep cell blocks once, explicit BR lines and preformatted source verbatim."""
+    parts: list[str] = []
+    flow: list[str | None] = []
+
+    def flush() -> None:
+        lines: list[str] = []
+        current: list[str] = []
+        for token in flow:
+            if token is None:
+                lines.append(normalize_text("".join(current)))
+                current.clear()
+            else:
+                current.append(token)
+        lines.append(normalize_text("".join(current)))
+        value = "\n".join(lines).strip()
+        if value:
+            parts.append(value)
+        flow.clear()
+
+    # Iterative traversal keeps deeply nested ordinary layout tags off the
+    # Python call stack. Only nested tables recurse, with a bounded fallback.
+    stack: list[PageElement | None] = list(reversed(cell.contents))
+    blocks = {"p", "li", "div", "blockquote", "dt", "dd", "h1", "h2", "h3", "h4", "h5", "h6", "tr"}
+    while stack:
+        node = stack.pop()
+        if node is None:
+            flow.append("\n\n")
+        elif isinstance(node, Comment):
+            continue
+        elif isinstance(node, NavigableString):
+            flow.append(str(node))
+        elif not isinstance(node, Tag):
+            continue
+        elif node.name == "br":
+            flow.append(None)
+        elif node.name == "pre":
+            flush()
+            value = _verbatim_text(node.get_text())
+            if value.strip():
+                parts.append(value)
+        elif node.name == "table":
+            flush()
+            value = _table_text(node, depth + 1) if depth < 16 else _block_text(node)
+            if value.strip():
+                parts.append(value)
+        else:
+            if node.name in blocks:
+                flow.append("\n\n")
+                stack.append(None)
+            stack.extend(reversed(node.contents))
+    flush()
+    return "\n\n".join(parts)
+
+
+def _table_span(cell: Tag, name: str) -> int:
+    try:
+        return min(100, max(1, int(str(cell.get(name, "1")))))
+    except ValueError:
+        return 1
+
+
+def _table_text(table: Tag, depth: int = 0) -> str:
+    """Linearize logical rows/cells without invented labels or repeated text.
+
+    Tabs delimit cells, blank lines delimit rows, and explicit cell line breaks
+    remain LF. Span placeholders retain basic column position. Complex visual
+    layout is not a facsimile or a machine-interpreted scientific data model.
+    """
+    rows: list[str] = []
+    for caption in table.find_all("caption"):
+        if caption.find_parent("table") is table:
+            value = _table_cell_text(caption, depth)
+            if value.strip():
+                rows.append(value)
+    spans: dict[int, int] = {}
+    for row in table.find_all("tr"):
+        if row.find_parent("table") is not table:
+            continue
+        cells: list[str] = []
+        next_spans = {column: remaining - 1 for column, remaining in spans.items() if remaining > 1}
+        for cell in row.find_all(["td", "th"]):
+            if cell.find_parent("tr") is not row or cell.find_parent("table") is not table:
+                continue
+            while len(cells) in spans:
+                cells.append("")
+            column = len(cells)
+            width = _table_span(cell, "colspan")
+            cells.append(_table_cell_text(cell, depth))
+            cells.extend([""] * (width - 1))
+            height = _table_span(cell, "rowspan")
+            if height > 1:
+                next_spans.update(dict.fromkeys(range(column, column + width), height - 1))
+        spans = next_spans
+        value = "\t".join(cells)
+        if value.strip():
+            rows.append(value)
+    return "\n\n".join(rows) if rows else _table_cell_text(table, depth)
+
+
+def _styled_table_heading(node: Tag) -> bool:
+    """Recognize the audited Gutenberg poetry title, not generic layout divs."""
+    classes = node.get("class") or []
+    if isinstance(classes, str):
+        classes = classes.split()
+    if node.name != "div" or not {"style1", "xhtml_div_align"}.issubset(classes):
+        return False
+    value = _text(node)
+    if not value or len(value) > 160 or not value.isupper() or node.find(["table", "p", "pre", "div", "img"]):
+        return False
+    for following in node.find_all_next(["table", "p", "pre", "h1", "h2", "h3", "h4", "h5", "h6"], limit=8):
+        if _text(following):
+            return following.name == "table"
+    return False
+
+
 def _html(data: bytes | str, fallback: str) -> ParsedBook:
     soup = BeautifulSoup(data, "html.parser")
     title = _text(soup.title) if soup.title else fallback
@@ -104,33 +222,68 @@ def _html(data: bytes | str, fallback: str) -> ParsedBook:
         unwanted.decompose()
     sections: list[Section] = []
     heading, paragraphs = "Text", []
+    pending_headings: list[str] = []
     root = soup.body or soup
-    for node in root.find_all(["h1", "h2", "h3", "h4", "h5", "h6", "p", "li", "pre", "blockquote", "dt", "dd", "div"]):
-        if node.name == "div" and not _verse_container(node):
+    owned: set[int] = set()
+    for node in root.find_all(
+        ["h1", "h2", "h3", "h4", "h5", "h6", "p", "li", "pre", "blockquote", "dt", "dd", "div", "table"]
+    ):
+        if any(id(parent) in owned for parent in node.parents):
             continue
-        if _verse_container(node) and node.find(class_=lambda value: value == "stanza"):
+        is_heading = node.name.startswith("h") or _styled_table_heading(node)
+        if node.name == "div" and not _verse_container(node) and not is_heading:
+            # Inline-only DIVs often contain contributor bylines or signatures.
+            # Layout containers with block descendants are visited through those
+            # descendants instead, so the same words are never emitted twice.
+            if node.find(
+                ["h1", "h2", "h3", "h4", "h5", "h6", "p", "li", "pre", "blockquote", "dt", "dd", "div", "table"]
+            ):
+                continue
+        if _verse_container(node) and (node.find(class_=lambda value: value == "stanza") or node.find("table")):
             continue
         if any(
-            _verse_container(parent) and not parent.find(class_=lambda value: value == "stanza")
+            _verse_container(parent)
+            and not parent.find(class_=lambda value: value == "stanza")
+            and not parent.find("table")
             for parent in node.parents
             if isinstance(parent, Tag)
         ):
             continue
-        if node.name in {"p", "li", "blockquote", "dd", "pre"} and node.find(["p", "li", "pre", "blockquote"]):
+        owns_table = node.name in {"p", "li", "blockquote", "dd"} and bool(node.find("table"))
+        if (
+            node.name in {"p", "li", "blockquote", "dd", "pre"}
+            and not owns_table
+            and node.find(["p", "li", "pre", "blockquote"])
+        ):
             continue
         # Do not duplicate a paragraph nested in a list/quotation that is emitted itself.
-        value = _text(node) if node.name.startswith("h") else _block_text(node)
-        if not value:
+        if node.name == "table":
+            value = _table_text(node)
+            owned.add(id(node))
+        elif owns_table:
+            value = _table_cell_text(node)
+            owned.add(id(node))
+        else:
+            value = _text(node) if is_heading else _block_text(node)
+            if node.name == "pre":
+                owned.add(id(node))
+        if not value.strip():
             continue
-        if node.name.startswith("h"):
+        if is_heading:
             if paragraphs:
                 sections.append(Section(heading, "\n\n".join(paragraphs)))
                 paragraphs = []
-            heading = value
+                pending_headings.clear()
+            pending_headings.append(value)
+            heading = "\n".join(pending_headings)
         else:
             paragraphs.append(value)
+            pending_headings.clear()
     if paragraphs:
         sections.append(Section(heading, "\n\n".join(paragraphs)))
+    elif pending_headings and sections:
+        # A final heading-only fragment still belongs to the original text.
+        sections[-1].text += "\n\n" + "\n".join(pending_headings)
     if not sections:
         value = normalize_text(root.get_text("\n\n", strip=True))
         if value:
@@ -210,9 +363,30 @@ def _epub(path: Path) -> ParsedBook:
                 continue
             name = _safe_member(posixpath.dirname(package_name), item.attrib["href"])
             parsed = _html(archive.read(name), name)
-            for section in parsed.sections:
+            for ordinal, section in enumerate(parsed.sections):
                 if section.title == "Text":
-                    section.title = parsed.title if parsed.title != name else name
+                    # Gutenberg sometimes puts a chapter's final footnote before
+                    # the next heading in a document whose HTML title names the
+                    # removed license footer. That title is not a book heading.
+                    boilerplate_title = re.fullmatch(
+                        r"THE FULL PROJECT GUTENBERG[™®]? LICENSE", parsed.title, flags=re.IGNORECASE
+                    )
+                    # Some EPUB generators split a chapter mid-paragraph and
+                    # label the new XHTML document with its next heading. Its
+                    # leading fragment still belongs to the preceding chapter.
+                    # Require an actual subsequent heading matching that title;
+                    # a standalone title-only chapter keeps its own label.
+                    next_heading = parsed.sections[1].title if len(parsed.sections) > 1 else None
+                    if (
+                        ordinal == 0
+                        and sections
+                        and next_heading is not None
+                        and (normalize_text(parsed.title) == normalize_text(next_heading) or boilerplate_title)
+                    ):
+                        sections[-1].text += "\n\n" + section.text
+                        continue
+                    if not boilerplate_title:
+                        section.title = parsed.title if parsed.title != name else name
                 sections.append(section)
         return ParsedBook(field("title", path.stem), field("creator"), field("language", "und"), sections)
 
@@ -287,15 +461,16 @@ def _fb2(path: Path) -> ParsedBook:
     return ParsedBook(field("book-title") or path.stem, "; ".join(authors), field("lang") or "und", sections)
 
 
-def parse_book(path: Path) -> ParsedBook:
+def parse_book(path: Path, fallback_title: str | None = None) -> ParsedBook:
     """Read TXT, HTML, EPUB, FB2 or text-bearing PDF without extracting files."""
     if path.stat().st_size > MAX_FILE_BYTES:
         raise ValueError("Book exceeds the 100 MiB source size limit")
+    original_fallback = fallback_title or path.stem
     match path.suffix.lower():
         case ".txt" | ".md":
-            parsed = _plain(path.read_bytes(), path.stem)
+            parsed = _plain(path.read_bytes(), original_fallback)
         case ".html" | ".htm" | ".xhtml":
-            parsed = _html(path.read_bytes(), path.stem)
+            parsed = _html(path.read_bytes(), original_fallback)
         case ".epub":
             parsed = _epub(path)
         case ".fb2":
@@ -317,6 +492,8 @@ def parse_book(path: Path) -> ParsedBook:
             )
         case _:
             raise ValueError(f"Unsupported book format: {path.suffix}")
+    if fallback_title and parsed.title == path.stem:
+        parsed.title = fallback_title
     parsed.sections = [s for s in parsed.sections if s.text.strip()]
     if not parsed.sections:
         raise ValueError("No extractable text; scanned books require OCR before import")

@@ -11,7 +11,9 @@ def prepare(tmp_path: Path) -> tuple[Library, Path]:
     source = tmp_path / "book.txt"
     source.write_text("Exact evidence 🌍.\n\nAnother paragraph.")
     library.import_book(source, {"id": "book", "title": "Title", "author": "Author"})
-    return library, source
+    book = library.get_book("book")
+    assert book is not None
+    return library, Path(book["local_path"])
 
 
 def test_complete_audit_and_missing_original_are_distinct(tmp_path: Path) -> None:

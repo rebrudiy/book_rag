@@ -46,7 +46,9 @@ uv run bookrag import /path/to/book.epub --metadata /path/to/metadata.json
 
 Metadata JSON requires a stable `id` and should include `title`, `author`, `language`, `work_id`, `edition`, `source_url`, `rights` and `rights_url` (see the demo manifest). Share a `work_id` across translations/editions. Work identity is currently curated; automated fuzzy matching is not implemented.
 
-Imports register the entire manifest as discovered, then process books independently. Rerun the same command after interruption. Failed entries keep an error and can be retried. Unchanged indexed files are skipped; canonical exact duplicates are recorded separately. Downloaded does not mean searchable: only successful transactional indexes count toward searchable books.
+Imports register the entire manifest as discovered, then process books independently. Rerun the same command after interruption. Failed entries keep an error and can be retried. Unchanged indexed files are skipped; canonical exact duplicates are recorded separately. Downloaded does not mean searchable: only successful transactional indexes count toward searchable books. A failed refresh preserves the last successfully indexed edition; [attempt state and current availability](docs/PIPELINE.md) are recorded separately.
+
+Imports preserve the exact acquired bytes in a [content-addressed original archive](docs/ARTIFACTS.md). Reader and saved-fragment source links can download the verified original; older saved fragments retain their original artifact after an edition is replaced. Chapters, code blocks, verse and table rows are retained during extraction. This does not establish the correctness of the provider's transcription.
 
 ## Optional multilingual retrieval
 
@@ -57,6 +59,8 @@ uv run bookrag search 'девочка следует за белым кроли�
 ```
 
 Uses a local Sentence Transformers multilingual MiniLM model (first run downloads weights, no paid API). Model, cache and vectors live beneath the configured data directory. Embedding construction streams batches into a memory-mapped matrix; generation activation is atomic. A corpus fingerprint prevents stale vector use. The initial exact cosine index is for experiments; 10–50k full books will require an ANN backend and measured capacity planning. Long passages are covered by overlapping tokenizer windows; optional reranking can still truncate long query/passage pairs. See [architecture](docs/ARCHITECTURE.md).
+
+Interrupted builds resume from durable batch checkpoints. Later builds can [reuse exact unchanged embedding inputs](docs/VECTOR_REUSE.md) from a validated generation with the same pinned model and profile. Share model weights across separate live and experimental libraries with `BOOKRAG_MODEL_CACHE=./data/models`.
 
 ## Verify
 
@@ -106,6 +110,8 @@ BOOKRAG_DATA_DIR=./data/full uv run bookrag acquire-modern --index
 
 # Plan languages and subject areas from the same offline rights-checked catalog
 uv run bookrag plan-balanced data/catalog/rdf-files.tar.bz2 --output data/catalog/balanced.json
+# Prefer bounded text-only editions when illustrations are not needed
+uv run bookrag plan-balanced data/catalog/rdf-files.tar.bz2 --text-only --per-language 1000 --output data/catalog/text3000.json
 
 # A consistent SQLite online backup, optionally a manifest-filtered experimental subset
 BOOKRAG_DATA_DIR=./data/full uv run bookrag snapshot data/snapshots/curated20 --manifest corpus/manifest.json --no-include-saved
@@ -117,6 +123,8 @@ BOOKRAG_DATA_DIR=./data/full uv run bookrag verify --artifacts --output data/int
 Snapshots never overwrite an existing destination; originals/model weights remain outside them. See [modern-source provenance](docs/MODERN_SOURCES.md), [resumable vector builds](docs/SEMANTIC_INDEX.md), [balanced corpus planning](docs/CORPUS_BALANCE.md) and [expanded evaluation](docs/EXPANDED_EVALUATION.md). The evaluated 20-edition snapshot is frozen separately from the live expanding corpus.
 
 The catalog fetches bounded pages; title/author filters query the server rather than a preloaded first page. Search scope and research selections remain selected when their matching suggestions change. Partial source selections are explicitly labeled.
+
+Work groups inferred from catalog records remain provisional. [Authority-link proposals](docs/WORK_IDENTITY.md) retain evidence and ambiguity without changing counts automatically; only explicitly curated identities support links between editions and translations. A validated [alternative source format](docs/SOURCE_VARIANTS.md) can recover an oversized illustrated edition while retaining the same provider identity and declaring omitted illustrations.
 
 
 Five complete Russian originals can also be acquired with captured page revisions and explicit rights records:

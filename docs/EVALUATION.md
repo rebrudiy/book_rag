@@ -4,6 +4,60 @@
 
 Run the `bookrag evaluate` command against a local index, select the dataset and search mode, and save JSON under `experiments/`. Compare the lexical baseline and any candidate on exactly the same corpus snapshot, fixture digest and `k`. Runtime reports include the fixture SHA-256 and library counts. Model identity and index revision must accompany semantic experiments. Run each mode in a fresh process for meaningful memory comparisons.
 
+## Preserve frozen input bytes
+
+`bookrag evaluate` opens an owned temporary evaluation copy. It does not construct
+`Library` over the source directory: that constructor applies current schema
+migrations, which would otherwise change a published SQLite byte hash even for
+a read-only evaluation. Use a new report filename outside the source library:
+
+```sh
+BOOKRAG_DATA_DIR=data/snapshots/curated20-v3 \
+BOOKRAG_MODEL_CACHE="$PWD/data/models" uv run bookrag evaluate \
+  --dataset evals/dev-expanded.json --mode hybrid \
+  --output experiments/expanded-hybrid-new-run.json
+```
+
+The evaluator copies only the SQLite main file and an existing WAL, without
+opening either input through SQLite. It checks file identities around capture;
+SQLite reconstructs shared memory and runs migrations only in the temporary
+directory. Subsequent evaluation connections are read-only. A changing input
+database, active vector selection or selected generation rejects the run. Use a
+stable snapshot rather than an ongoing ingestion/build directory.
+
+The selected `active.json` is captured as owned bytes. Its ready generation is
+reused through a local reference; existing semantic retrieval opens arrays with
+`mmap_mode='r'`. Arrays are neither rebuilt nor physically copied. The model
+cache gets owned metadata and references to completed files larger than 1 MiB,
+so existing weights are reused while loader metadata writes stay in the
+temporary cache. `BOOKRAG_MODEL_CACHE` is restored when the context exits. The
+temporary database, metadata and links are removed on success or failure; source
+artifacts are not copied because quote checks use canonical SQLite sections.
+
+New reports include `evaluation_input`: original SQLite main/WAL SHA-256 values,
+active metadata SHA-256, generation identity and reuse strategy. A nonempty WAL
+is part of the captured source; the main-file digest alone does not identify its
+committed contents. Generation changes are checked by file identities without
+an extra full read of large arrays. Tests independently hash all fixture input
+files before/after, including vectors, models and SQLite sidecars.
+
+Python callers can use `evaluate(Path("data/snapshots/curated20-v3"), dataset,
+mode="hybrid")` or `with evaluation_library(path) as library:`. Passing an
+already constructed `Library` still supports existing callers, but cannot undo
+schema writes that happened before the evaluator received it. Never create that
+object directly over a published frozen input. Evaluation contexts serialize
+their model-cache environment routing within the process; use fresh dedicated
+processes for independent experiments.
+
+```sh
+uv run pytest tests/test_evaluation_isolation.py tests/test_evaluation.py
+```
+
+These checks include a pre-migration database, a committed nonempty WAL,
+semantic retrieval with read-only memory maps, CLI and calibration execution,
+cache metadata isolation, byte-hash preservation and cleanup after failure.
+Historical reports, dataset labels and frozen source files are not rewritten.
+
 Dataset version 1 contains `split`, a list of `queries`, and optional descriptive fields. Each query has `id`, `query`, explicit `answerable`, `language`, `type`, and `relevant_work_ids` or `relevant_book_ids`. `evidence_contains` optionally requires one of the listed source phrases in a relevant passage. A correct work alone is insufficient for a scene or exact-quote hit when this condition is present. Optional `filters` select a book or language. Empty results constitute the non-generative search baseline's abstention signal.
 
 The evaluator records:

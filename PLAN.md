@@ -1,10 +1,10 @@
 # Plan
 
-Active goal until verified weekly Codex remainder <=3%, user stop, or actual environment limit.
+Active goal: continue until verified weekly Codex remainder <=3%, user stop, or an actual environment limit. Never substitute token counts for the weekly quota.
 
-1. Finish balanced305-edition ingestion after successful initial1,000 queue. Import5Russian originals only after complete-body/epigraph/revision audit passes; corpus expansion remains priority after user hour-status request.
-2. Integrate fixed semantic candidate pool with batch evidence reads; evaluate prefix consistency and new dev54 scores against immutable old controls. No default E5 promotion or universal confidence threshold.
-3. Publish iteration3: modern sources, code/math fidelity, snapshots/integrity, bounded catalog/typeahead, resumable pinned-profile vectors, expanded evaluation, audits and CI browser job. Recheck remoteCI.
-4. Freeze larger corpus after parser/metadata refresh, then full multilingual vector build in background with checkpoints. Keep live ingestion and frozen experiments separate, share model weights.
-5. Independently review actual passage relevance vs incomplete single-anchor labels before further ranking changes; new sealed final split before release tuning. Investigate incremental vector reuse/ANN/disk cost once measured larger index needs it.
-6. Continue work identity/translation/near-duplicate experiments and precise editorial attribution; counts of provisional catalog groups must never be presented as verified unique works.
+1. Continue the serial, resumable 2,679-edition text-only expansion; prioritize verified standalone English translations of the five Russian originals. Keep provider pacing and the 4 GiB disk floor.
+2. Complete the frozen 1,308-edition multilingual MiniLM build in the background, retaining durable checkpoints and exact-input reuse. Measure actual build size, throughput, memory and query latency before selecting ANN or other scale changes.
+3. Publish iteration 4 after checks: immutable source archives, PRE/table fidelity, source-attempt availability, exact vector reuse, text-only source recovery, guarded work identity, reader edition navigation and UI warnings.
+4. Keep frozen evaluation sources byte-identical through owned evaluation copies. Preserve old development/held-out results and labels; do not promote E5 or a universal confidence threshold on current evidence.
+5. Improve source context and retrieval using actual relevance review, chapter context and explicit contributor identity. Create a new sealed final split before new release-quality claims.
+6. Continue work/translation identity resolution and permitted non-English corpus expansion. Always distinguish indexed editions, provisional catalog groups, verified complete-work lower bounds and partial works.

@@ -37,7 +37,15 @@ The 54-query expanded development fixture is partitioned by a deterministic SHA-
 
 A threshold is selected only on training examples and evaluated once unchanged on internal validation. A separate full-data table is clearly labeled `in_sample_diagnostic`; it is optimistic, not independent evidence. The validation output must not be used to search seeds or tune the chosen floor. This split is internal to a development set that has already informed retrieval work, so it is not a final generalization test.
 
-The runner opens the SQLite snapshot read-only, checks its exact required edition subset, records database/corpus/dataset digests and active index metadata, and rejects a changed database or vector generation. It preserves raw per-query scores, source snippets/locations, independent source checks, model revisions, upstream candidate settings, truncation warnings and timing. Frozen corpus and evaluation inputs remain unchanged.
+The runner uses an owned temporary SQLite copy with read-only query connections,
+so current schema migrations never touch the frozen source. It checks the exact
+required edition subset, records original database/corpus/dataset digests and
+active index metadata, and rejects a changed database or vector generation.
+Ready vectors and large completed weights are reused without physical copying;
+cache metadata is owned. See [evaluation isolation](EVALUATION.md#preserve-frozen-input-bytes).
+It preserves raw per-query scores, source snippets/locations, independent source
+checks, model revisions, upstream candidate settings, truncation warnings and
+timing. Frozen corpus and evaluation inputs remain unchanged.
 
 ## Recorded results
 

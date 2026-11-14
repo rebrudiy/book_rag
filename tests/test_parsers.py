@@ -86,6 +86,59 @@ def test_epub_uses_spine_order_and_package_metadata(tmp_path: Path) -> None:
     assert [s.title for s in parsed.sections] == ["First", "Second"]
 
 
+def test_epub_footer_document_title_does_not_label_remaining_book_text(tmp_path: Path) -> None:
+    path = tmp_path / "footnote.epub"
+    make_epub(path)
+    with ZipFile(path) as source:
+        files = {name: source.read(name) for name in source.namelist()}
+    files["OPS/text/ch2.xhtml"] = (
+        "<html><head><title>THE FULL PROJECT GUTENBERG™ LICENSE</title></head><body>"
+        '<div class="footnote"><p>[1] The earlier chapter note.</p></div>'
+        "<h2>XXVIII</h2><p>The final chapter is still part of the book.</p>"
+        '<div id="pg-footer"><h2>THE FULL PROJECT GUTENBERG™ LICENSE</h2><p>License text.</p></div>'
+        "</body></html>"
+    ).encode()
+    with ZipFile(path, "w") as target:
+        for name, data in files.items():
+            target.writestr(name, data)
+    parsed = parse_book(path)
+    assert [s.title for s in parsed.sections] == ["First", "XXVIII"]
+    assert parsed.sections[0].text == "First paragraph.\n\n[1] The earlier chapter note."
+    assert parsed.sections[1].text == "The final chapter is still part of the book."
+
+
+def test_epub_generated_next_heading_title_does_not_move_continuation(tmp_path: Path) -> None:
+    path = tmp_path / "continuation.epub"
+    make_epub(path)
+    with ZipFile(path) as source:
+        files = {name: source.read(name) for name in source.namelist()}
+    files["OPS/text/ch2.xhtml"] = (
+        b"<html><head><title>Second</title></head><body><p>Still the first chapter.</p>"
+        b"<h1>Second</h1><p>The second chapter.</p></body></html>"
+    )
+    with ZipFile(path, "w") as target:
+        for name, data in files.items():
+            target.writestr(name, data)
+    parsed = parse_book(path)
+    assert [(s.title, s.text) for s in parsed.sections] == [
+        ("First", "First paragraph.\n\nStill the first chapter."),
+        ("Second", "The second chapter."),
+    ]
+
+
+def test_html_inline_only_div_bylines_are_preserved_once(tmp_path: Path) -> None:
+    path = tmp_path / "bylines.html"
+    path.write_text(
+        "<html><body><h1>Criticism</h1><div>By <em>Named Critic</em></div>"
+        "<div><p>The critical essay.</p><div><span>Signed Critic</span></div></div>"
+        '<div id="pg-footer"><div>Provider license.</div></div></body></html>'
+    )
+    parsed = parse_book(path)
+    assert [(s.title, s.text) for s in parsed.sections] == [
+        ("Criticism", "By Named Critic\n\nThe critical essay.\n\nSigned Critic")
+    ]
+
+
 @pytest.mark.parametrize("href", ["../../outside.xhtml", "https://example.com/book.xhtml", "/absolute", "..\\evil"])
 def test_epub_rejects_nonlocal_paths(tmp_path: Path, href: str) -> None:
     path = tmp_path / "book.epub"
@@ -230,3 +283,176 @@ def test_html_pre_preserves_indentation_tabs_and_string_spaces(tmp_path: Path) -
     path = tmp_path / "code.html"
     path.write_text("<html><body><pre><code>" + escape(code) + "</code></pre></body></html>")
     assert parse_book(path).sections[0].text == code
+
+
+def test_table_poetry_survives_whitespace_only_pre_without_fallback_loss(tmp_path: Path) -> None:
+    path = tmp_path / "table-poetry.html"
+    path.write_text(
+        "<h1>The Infant's Delight</h1><pre> \n\t&#160; </pre>"
+        "<table><tr><td>When the win-ter winds are blow-ing,<br>"
+        " And we ga-ther glad and gay,<br>Where the fire its light is throw-ing,"
+        "</td></tr></table><h2>The Dead Robin</h2><table><tr><td>Another verse.</td></tr></table>"
+    )
+    parsed = parse_book(path)
+    assert [section.title for section in parsed.sections] == ["The Infant's Delight", "The Dead Robin"]
+    assert parsed.sections[0].text == (
+        "When the win-ter winds are blow-ing,\nAnd we ga-ther glad and gay,\nWhere the fire its light is throw-ing,"
+    )
+    assert parsed.sections[1].text == "Another verse."
+    assert all(section.text.strip() for section in parsed.sections)
+
+
+def test_whitespace_only_pre_does_not_disable_generic_text_fallback(tmp_path: Path) -> None:
+    path = tmp_path / "blank-pre.html"
+    path.write_text("<pre>\n\t&#160;</pre><div>Actual previously hidden text.</div>")
+    assert parse_book(path).sections[0].text == "Actual previously hidden text."
+
+
+def test_scientific_table_preserves_caption_headers_rows_and_column_association(tmp_path: Path) -> None:
+    path = tmp_path / "science-table.html"
+    path.write_text(
+        "<h1>Measurements</h1><table><caption>Water samples</caption>"
+        "<thead><tr><th>Temperature (°C)</th><th>Density (kg/m³)</th></tr></thead>"
+        "<tbody><tr><td><p>4</p></td><td>1000</td></tr>"
+        "<tr><td>20</td><td><p>998.2</p></td></tr></tbody></table><p>End of experiment.</p>"
+    )
+    parsed = parse_book(path)
+    assert len(parsed.sections) == 1
+    assert parsed.sections[0].title == "Measurements"
+    assert parsed.sections[0].text == (
+        "Water samples\n\nTemperature (°C)\tDensity (kg/m³)\n\n4\t1000\n\n20\t998.2\n\nEnd of experiment."
+    )
+
+
+def test_nested_layout_tables_do_not_repeat_paragraphs_lists_or_nested_cells(tmp_path: Path) -> None:
+    path = tmp_path / "nested-tables.html"
+    path.write_text(
+        "<h1>Layout</h1><table><tr><td><p>Before nested table.</p>"
+        "<table><tr><td><p>Nested <em>cell</em>.</p></td><td>Nested value.</td></tr></table>"
+        "<p>After nested table.</p></td><td><ul><li>List item one.</li>"
+        "<li><p>List item two.</p></li></ul></td></tr></table>"
+    )
+    text = parse_book(path).sections[0].text
+    for phrase in (
+        "Before nested table.",
+        "Nested cell.",
+        "Nested value.",
+        "After nested table.",
+        "List item one.",
+        "List item two.",
+    ):
+        assert text.count(phrase) == 1
+    assert text.index("Before nested table.") < text.index("Nested cell.") < text.index("After nested table.")
+    assert "Nested cell.\tNested value." in text
+    assert text.count("List item") == 2
+
+
+def test_table_in_quotation_retains_sibling_text_and_is_emitted_once(tmp_path: Path) -> None:
+    path = tmp_path / "quoted-table.html"
+    path.write_text(
+        "<h1>Quotation</h1><blockquote>Before quotation table.<table><tr><td><p>Cell text.</p></td>"
+        "<td>Cell value.</td></tr></table>After quotation table.</blockquote><p>Following paragraph.</p>"
+    )
+    text = parse_book(path).sections[0].text
+    for phrase in (
+        "Before quotation table.",
+        "Cell text.",
+        "Cell value.",
+        "After quotation table.",
+        "Following paragraph.",
+    ):
+        assert text.count(phrase) == 1
+    assert text.index("Before quotation table.") < text.index("Cell text.") < text.index("After quotation table.")
+
+
+def test_table_cell_pre_keeps_code_whitespace_and_string_literals(tmp_path: Path) -> None:
+    from html import escape
+
+    code = '\tif True:\n    message = "a  b"\n    print(message)\n'
+    path = tmp_path / "table-code.html"
+    path.write_text(
+        "<h1>Code</h1><table><tr><td><p>Code example</p><pre><code>"
+        + escape(code)
+        + "</code></pre><p>Explanation.</p></td><td>Python</td></tr></table>"
+    )
+    text = parse_book(path).sections[0].text
+    assert code in text
+    assert text.count('message = "a  b"') == 1
+    assert text.count("Explanation.") == 1
+    assert "\tPython" in text
+
+
+def test_table_spans_keep_empty_column_positions_without_repeating_text(tmp_path: Path) -> None:
+    path = tmp_path / "spans.html"
+    path.write_text(
+        '<h1>Groups</h1><table><tr><th rowspan="2">Group</th><th colspan="2">Measurements</th></tr>'
+        "<tr><th>First</th><th>Second</th></tr><tr><td>A</td><td>1</td><td>2</td></tr></table>"
+    )
+    text = parse_book(path).sections[0].text
+    assert text == "Group\tMeasurements\t\n\n\tFirst\tSecond\n\nA\t1\t2"
+    assert text.count("Group") == 1
+    assert text.count("Measurements") == 1
+
+
+def test_consecutive_poem_title_and_epigraph_headings_both_survive_once(tmp_path: Path) -> None:
+    path = tmp_path / "poem-epigraph.html"
+    path.write_text(
+        '<h2>ALL THINGS OBEY GOD.</h2><h2>"He saith to the snow, Be thou on the earth."</h2>'
+        "<pre> &#160; </pre><table><tr><td>First source line.<br>Second source line.</td></tr></table>"
+    )
+    parsed = parse_book(path)
+    assert len(parsed.sections) == 1
+    section = parsed.sections[0]
+    assert section.title == 'ALL THINGS OBEY GOD.\n"He saith to the snow, Be thou on the earth."'
+    assert section.text == "First source line.\nSecond source line."
+    combined = section.title + "\n" + section.text
+    assert combined.count("ALL THINGS OBEY GOD.") == 1
+    assert combined.count('"He saith to the snow, Be thou on the earth."') == 1
+
+
+def test_ordinary_h1_h2_chapters_keep_heading_order_and_unchanged_prose(tmp_path: Path) -> None:
+    path = tmp_path / "chapters.html"
+    path.write_text(
+        "<h1>Book title</h1><h2>Chapter I</h2><p>Original first prose.</p>"
+        "<p>Next first paragraph.</p><h2>Chapter II</h2><p>Original second prose.</p>"
+    )
+    parsed = parse_book(path)
+    assert [section.title for section in parsed.sections] == ["Book title\nChapter I", "Chapter II"]
+    assert [section.text for section in parsed.sections] == [
+        "Original first prose.\n\nNext first paragraph.",
+        "Original second prose.",
+    ]
+
+
+def test_audited_styled_div_poem_title_is_retained_before_its_table(tmp_path: Path) -> None:
+    path = tmp_path / "styled-poem.html"
+    path.write_text(
+        '<div class="style1 xhtml_div_align">BLIND MAN\'S BUFF.</div><div><br></div>'
+        "<table><tr><td>When the win-ter winds are blow-ing,<br>Another line.</td></tr></table>"
+    )
+    section = parse_book(path).sections[0]
+    assert section.title == "BLIND MAN'S BUFF."
+    assert section.text == "When the win-ter winds are blow-ing,\nAnother line."
+
+
+def test_styled_div_gate_does_not_promote_generic_layout_or_cross_another_heading(tmp_path: Path) -> None:
+    path = tmp_path / "layout-gate.html"
+    path.write_text(
+        '<div class="xhtml_div_align">GENERIC LAYOUT</div>'
+        '<div class="style1 xhtml_div_align">NOT A TABLE TITLE</div>'
+        "<h2>Actual heading</h2><p>Original prose.</p><table><tr><td>Table data.</td></tr></table>"
+    )
+    parsed = parse_book(path)
+    assert parsed.sections[0].title == "Text"
+    assert parsed.sections[0].text == "GENERIC LAYOUT\n\nNOT A TABLE TITLE"
+    section = parsed.sections[1]
+    assert section.title == "Actual heading"
+    assert section.text == "Original prose.\n\nTable data."
+
+
+def test_trailing_heading_without_body_is_not_silently_lost_or_empty_section(tmp_path: Path) -> None:
+    path = tmp_path / "trailing-heading.html"
+    path.write_text("<h1>Main</h1><p>Body text.</p><h2>Original ending heading</h2>")
+    parsed = parse_book(path)
+    assert len(parsed.sections) == 1
+    assert parsed.sections[0].text == "Body text.\n\nOriginal ending heading"

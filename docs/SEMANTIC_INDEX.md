@@ -56,9 +56,10 @@ memory-mapped `float32` vectors and `int64` passage IDs. Each completed batch:
 
 1. Writes vectors and IDs at the next uncommitted offset.
 2. Updates two incremental SHA256 digests over the committed vector/ID prefixes.
-3. Flushes and fsyncs both arrays.
-4. Atomically replaces `checkpoint.json` with the committed count, last passage
-   and window cursor, model/source descriptor and prefix digests.
+3. Commits exact-input keys and their incremental digest in the staging SQLite map.
+4. Flushes and fsyncs both arrays.
+5. Atomically replaces `checkpoint.json` with the committed count, last passage
+   and window cursor, model/source descriptor and vector/ID/key digests.
 
 The checkpoint is constant size. Prefixes are never rehashed after every batch.
 On resume each completed prefix is checked once in bounded blocks; reconstructed
@@ -74,8 +75,8 @@ copy to be rebuilt. A different corpus or model produces a different staging
 identity; unrelated interrupted work is retained. Interrupted batches remain on
 disk and the same command resumes them after restart.
 
-Only a complete index with a still-matching corpus fingerprint is renamed into
-an immutable `gen-<identity>-<suffix>` directory. Metadata is persisted before
+Only a complete index with a still-matching corpus fingerprint and a finalized
+key-map receipt is renamed into an immutable `gen-<identity>-<suffix>` directory. Metadata is persisted before
 `active.json` is atomically replaced. Existing active arrays are never edited by
 a new build. If interruption occurs after the completed rename but before the
 pointer replacement, the next run validates and activates that ready generation
@@ -84,7 +85,8 @@ on subsequent invocations.
 
 Metadata includes source fingerprint, resolved model revision, dimensions,
 passage/window counts, exact strategy parameters, generation and resumed-vector
-count. A change to the corpus during planning or encoding prevents activation;
+count, separately encoded and exactly reused vectors, reuse source and disk
+budget. A change to the corpus during planning or encoding prevents activation;
 retry after ingestion finishes. Query-time fingerprint checks still reject
 stale active indexes and expose the existing lexical fallback.
 
@@ -98,7 +100,10 @@ Tests use deterministic fake encoders/tokenizers, avoiding model downloads in CI
 They cover exact token-window coverage, durable interruption/resume with a
 changed batch size, corruption/truncation rejection, stale source separation,
 active-index preservation after a failed alternative-model build, recovery of
-interrupted activation and shared model-cache use in builds and queries.
+interrupted activation and shared model-cache use in builds and queries. Reuse
+tests additionally cover append, reordered passage IDs, changed source/header,
+model/revision/profile separation, corruption, durable keys ahead of checkpoint,
+interrupted sealing, 512-input batches and disk exhaustion before/mid build.
 
 Resume planning still tokenizes the source once to verify window count; it does
 not repeat completed model inference. A completed-index reuse also validates
@@ -107,6 +112,83 @@ number of windows. Retained stale staging directories and old generations are
 not automatically deleted: remove only inactive generations/checkpoints when
 no builder is running, preserving the directory named in `active.json` and any
 interrupted work you intend to resume.
+
+## Reusing exact encoder inputs
+
+New generations carry `vector_reuse_schema=2` and an on-disk
+`window-keys.sqlite3` map. A SHA256 key binds the exact text passed to the
+encoder, including its decoded metadata header, newline, document prefix and
+Unicode/whitespace, to a frozen model/revision/dimension/token-limit/profile/
+normalization identity. The map contains a key and the first matching vector
+row only; source windows and a second copy of vectors are not stored in it.
+
+On a changed corpus the builder considers the previous active generation as a
+reuse source. It requires a complete receipt, compatible explicit model space,
+valid metadata/checkpoint/map checksums, correct array length/shape/dtype,
+finite normalized vectors and in-range rows. Source validation streams bounded
+blocks once per build. At most 500 keys are looked up at a time; returned vectors
+are copied into the new generation's own array and current passage IDs. Only
+missing inputs reach the encoder. A corrupt/unavailable source is rejected with
+an explicit warning, then fresh encoding continues. Changes to the source files
+after opening also reject subsequent lookups.
+
+Existing active indexes without a key map or explicit profile still support
+queries. They are never silently seeded or assigned a guessed profile. A new
+build writes its own keys; subsequent compatible builds can reuse them. The
+build identity includes the key-map schema, separating new checkpoints from
+older builder formats. A rejected ready generation with a missing receipt is
+left untouched and rebuilt. A finalized staging receipt interrupted before
+rename is promoted and validated; a sealed map interrupted before receipt
+creation finishes its receipt without repeating encoder calls.
+
+Key transactions are durable before the vector checkpoint is replaced. On
+resume a leading uncommitted key suffix is truncated to the committed vector
+offset. A SHA256 digest over each unique key and its first row is maintained
+incrementally, stored in SQLite and checkpointed with the vectors. Resume checks
+it once, rejecting plausible-looking but altered key bytes as well as malformed
+SQLite. Key prefixes are not rescanned on every batch. Duplicate detection is
+bounded to the current batch plus indexed SQLite lookups; no corpus-size set of
+raw window strings is held in RAM. Finalization adds checksums over the finished
+map, metadata, checkpoint and vector payload before activation.
+
+Returned `encoded_vectors` and `reused_vectors` count committed rows handled in
+this invocation. `resumed_vectors` is the already committed prefix at startup;
+the three sum to `vectors`. Recovering a complete generation reports zero newly
+encoded/reused rows and the whole count as resumed. Persisted generation metadata
+records the invocation that created it. These counters describe computation
+reuse, not retrieval quality or number of distinct works.
+
+Before creating arrays, on resume and before every batch, the builder requires
+free disk of at least `4 GiB + remaining_vectors * (4 * dimensions + 8 + 256) +
+8192 bytes`. The 256-byte per-vector SQLite allowance is conservative for this
+schema; model downloads, other applications and retained generations can still
+consume additional disk. A completed prefix reduces the remaining estimate.
+Insufficient space raises a diagnostic error without replacing the active
+pointer or discarding its valid checkpoint. The check cannot reserve disk
+against another process consuming it between checks; write failures still leave
+the previous atomic checkpoint available.
+
+An isolated local MiniLM run on the eight licensed demo excerpts and one declared
+CC0 synthetic test fixture verified actual inference reuse on `mps:0`:
+
+| Build | Windows | Encoded | Reused | Seconds |
+| --- | ---: | ---: | ---: | ---: |
+| Initial eight excerpts / 45 passages | 183 | 183 | 0 | 0.846 |
+| Append fixture / 47 passages | 190 | 7 | 183 | 0.093 |
+| Fresh nine-source control | 190 | 190 | 0 | 0.678 |
+
+The appended build called the encoder once with seven inputs. Its vectors and
+passage IDs were exactly equal to the fresh control (maximum absolute vector
+difference 0); three quote/idea/Russian hybrid queries preserved their top-five
+passage IDs and all returned citations verified. The 183-row original vector
+array occupied 281,216 bytes; its SQLite map occupied 32,768 bytes. Local ignored
+receipts and the reproducible runner are in `data/reuse-experiment/`. Timings
+exclude the shared model's initial load and come from one small, warm local run;
+this does not measure corpus-wide retrieval quality or establish 10,000-book
+capacity. No existing frozen/full library or previous index was seeded or edited.
+
+See [the reuse helper contract](VECTOR_REUSE.md) for independent validation and
+storage details.
 
 ## A fixed query candidate pool
 

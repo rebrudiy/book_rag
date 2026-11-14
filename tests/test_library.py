@@ -278,5 +278,53 @@ def test_batch_passages_keep_order_and_verify_without_full_chapters(library: Lib
     with library.connect() as conn:
         conn.execute("UPDATE passages SET sha256='corrupt' WHERE id=?", (ids[0],))
     assert not library.passages([ids[0]])[0]["verified"]
-    library.stage("test", "failed", "Controlled import error")
+    # Explicitly invalidate the edition: an ordinary failed refresh preserves it.
+    with library.connect() as conn:
+        conn.execute("UPDATE books SET status='failed' WHERE id='test'")
     assert library.passages(ids) == []
+
+
+def test_original_artifacts_survive_local_edits_and_keep_filename_title(tmp_path: Path) -> None:
+    from book_rag.artifacts import locate_artifact
+
+    library = Library(tmp_path / "library")
+    source = tmp_path / "Untitled Notes.txt"
+    original = "Original words in a local notebook."
+    source.write_text(original)
+    library.import_book(source, {"id": "local"})
+    first = library.get_book("local")
+    assert first is not None and first["title"] == "Untitled Notes"
+    first_hash = first["artifact_sha256"]
+    assert Path(first["local_path"]) != source and "artifacts" in Path(first["local_path"]).parts
+    hit = library.search("notebook")["results"][0]
+    saved = library.save({"kind": "passage", "title": "Old quote", "passage_id": hit["id"]})
+    source.write_text("Replacement local text.")
+    library.import_book(source, {"id": "local"})
+    archived = locate_artifact(library.data_dir, first_hash)
+    assert archived is not None and archived.read_text() == original
+    assert saved["provenance"]["artifact_sha256"] == first_hash
+    with TestClient(create_app(library.data_dir)) as client:
+        response = client.get(f"/api/artifacts/{first_hash}")
+        assert response.content.decode() == original
+        assert response.headers["content-disposition"].startswith("attachment;")
+        assert response.headers["content-type"] == "application/octet-stream"
+        assert client.get("/api/artifacts/not-a-digest").status_code == 400
+
+
+def test_concurrent_imports_deduplicate_one_canonical_work(tmp_path: Path) -> None:
+    from concurrent.futures import ThreadPoolExecutor
+
+    library = Library(tmp_path / "concurrent")
+    first = tmp_path / "first.txt"
+    second = tmp_path / "second.txt"
+    first.write_text("Identical original work for a concurrency regression.")
+    second.write_bytes(first.read_bytes())
+    with ThreadPoolExecutor(max_workers=2) as workers:
+        results = list(
+            workers.map(
+                lambda pair: library.import_book(pair[0], {"id": pair[1], "title": pair[1]}),
+                [(first, "first"), (second, "second")],
+            )
+        )
+    assert sorted(result["status"] for result in results) == ["duplicate", "indexed"]
+    assert library.stats()["books"] == 1 and library.stats()["status_counts"]["duplicate"] == 1

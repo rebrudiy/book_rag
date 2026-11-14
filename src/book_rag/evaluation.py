@@ -8,16 +8,203 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import platform
+import re
 import resource
+import shutil
+import sqlite3
 import sys
+import tempfile
+import threading
 import time
 from collections import Counter
-from collections.abc import Mapping
+from collections.abc import Generator, Mapping
+from contextlib import contextmanager
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, Protocol
 from urllib.parse import parse_qs, urlparse
+
+from book_rag.library import Library
+
+_EVALUATION_ENV_LOCK = threading.RLock()
+_CACHE_COPY_LIMIT = 1024 * 1024
+
+
+def _file_identity(path: Path) -> tuple[int, int, int, int, int]:
+    info = path.stat()
+    return info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns, info.st_ctime_ns
+
+
+def _database_files(directory: Path) -> dict[str, tuple[int, int, int, int, int]]:
+    names = ("library.sqlite3", "library.sqlite3-wal")
+    return {name: _file_identity(directory / name) for name in names if (directory / name).exists()}
+
+
+def _capture_database(
+    source: Path, destination: Path
+) -> tuple[dict[str, str], dict[str, tuple[int, int, int, int, int]]]:
+    """Copy a stable SQLite main/WAL pair without opening the source in SQLite.
+
+    SQLite reconstructs its shared-memory file only inside the owned directory.
+    A live writer changing either input during capture makes the run fail closed.
+    """
+    before = _database_files(source)
+    if "library.sqlite3" not in before:
+        raise FileNotFoundError(source / "library.sqlite3")
+    hashes = {}
+    for name in before:
+        digest = hashlib.sha256()
+        with (source / name).open("rb") as original, (destination / name).open("xb") as copied:
+            while block := original.read(1024 * 1024):
+                digest.update(block)
+                copied.write(block)
+        hashes[name] = digest.hexdigest()
+    if _database_files(source) != before:
+        raise RuntimeError("Source SQLite changed during evaluation capture; use a stable snapshot")
+    return hashes, before
+
+
+def _generation_identity(directory: Path) -> dict[str, tuple[int, int, int, int, int]]:
+    return {
+        str(path.relative_to(directory)): _file_identity(path)
+        for path in sorted(directory.rglob("*"))
+        if path.is_file()
+    }
+
+
+def _copy_model_cache(source: Path, destination: Path) -> dict[str, int]:
+    """Own mutable cache metadata while reusing large, completed weight files."""
+    reused = {"linked_files": 0, "linked_bytes": 0, "copied_files": 0, "copied_bytes": 0}
+    if not source.is_dir():
+        destination.mkdir()
+        return reused
+
+    def copy_file(original: str, copied: str) -> str:
+        path = Path(original)
+        size = path.stat().st_size
+        if size > _CACHE_COPY_LIMIT:
+            Path(copied).symlink_to(path.resolve())
+            reused["linked_files"] += 1
+            reused["linked_bytes"] += size
+        else:
+            shutil.copyfile(path, copied)
+            reused["copied_files"] += 1
+            reused["copied_bytes"] += size
+        return copied
+
+    shutil.copytree(
+        source,
+        destination,
+        symlinks=False,
+        ignore_dangling_symlinks=True,
+        copy_function=copy_file,
+        ignore=shutil.ignore_patterns(".locks", "*.lock", "*.incomplete"),
+    )
+    # Source directory permissions do not make this process's cache metadata readonly.
+    for directory, _, _ in os.walk(destination):
+        Path(directory).chmod(0o700)
+    return reused
+
+
+class EvaluationLibrary(Library):
+    """An owned migrated database, read-only query connections and frozen vectors.
+
+    Construct through ``evaluation_library``; the original database is never
+    passed to ``Library.__init__``. Large arrays are consumed by semantic search's
+    existing ``np.load(..., mmap_mode='r')`` path, without copying or rebuilding.
+    """
+
+    def __init__(self, directory: Path, input_provenance: dict[str, Any]) -> None:
+        migrated = Library(directory)
+        self.data_dir = migrated.data_dir
+        self.db_path = migrated.db_path
+        self.input_provenance = input_provenance
+
+    @contextmanager
+    def connect(self) -> Generator[sqlite3.Connection]:
+        connection = sqlite3.connect(self.db_path.resolve().as_uri() + "?mode=ro", uri=True, timeout=30)
+        connection.row_factory = sqlite3.Row
+        connection.create_function("casefold", 1, lambda value: str(value or "").casefold(), deterministic=True)
+        connection.execute("PRAGMA query_only=ON")
+        try:
+            yield connection
+        finally:
+            connection.close()
+
+
+@contextmanager
+def evaluation_library(directory: Path, *, model_cache: Path | None = None) -> Generator[EvaluationLibrary]:
+    """Isolate schema/cache writes and reuse the selected immutable generation.
+
+    Temporary files are owned and removed by this context. Input SQLite bytes
+    are copied once; large vector/weight bytes are never copied. Environment
+    cache routing is restored on exit and contexts are serialized in-process.
+    """
+    source = directory.expanduser().resolve()
+    with _EVALUATION_ENV_LOCK, tempfile.TemporaryDirectory(prefix="bookrag-evaluation-") as temporary:
+        preparation_started = time.perf_counter()
+        working = Path(temporary).resolve()
+        database_hashes, database_identity = _capture_database(source, working)
+        original_cache = os.environ.get("BOOKRAG_MODEL_CACHE")
+        cache_source = (model_cache or Path(original_cache or source / "models")).expanduser().resolve()
+        cache_reuse = _copy_model_cache(cache_source, working / "models")
+        active = source / "vectors" / "active.json"
+        active_bytes = active.read_bytes() if active.is_file() else None
+        generation = None
+        generation_path = None
+        generation_identity = None
+        if active_bytes is not None:
+            metadata = json.loads(active_bytes)
+            generation = metadata.get("generation")
+            if generation is not None and (
+                not isinstance(generation, str) or not re.fullmatch(r"gen-[A-Za-z0-9_.-]+", generation)
+            ):
+                raise ValueError("Invalid evaluation vector generation name")
+            vectors = working / "vectors"
+            vectors.mkdir()
+            (vectors / "active.json").write_bytes(active_bytes)
+            if generation is not None:
+                candidate = (active.parent / generation).resolve()
+                if not candidate.is_relative_to(active.parent.resolve()):
+                    raise ValueError("Evaluation vector generation is outside its source directory")
+                if candidate.is_dir():
+                    generation_path = candidate
+                    generation_identity = _generation_identity(generation_path)
+                    (vectors / generation).symlink_to(generation_path, target_is_directory=True)
+        provenance = {
+            "source_directory": str(source),
+            "source_database_sha256": database_hashes["library.sqlite3"],
+            "source_sqlite_files_sha256": database_hashes,
+            "copied_database_bytes": sum(identity[2] for identity in database_identity.values()),
+            "database_access": "owned migrated copy; read-only evaluation connections",
+            "vector_generation": generation,
+            "active_metadata_sha256": hashlib.sha256(active_bytes).hexdigest() if active_bytes is not None else None,
+            "vector_access": "selected generation reused without copying; mmap_mode=r"
+            if generation_path is not None
+            else "no ready selected generation",
+            "reused_vector_bytes": sum(identity[2] for identity in (generation_identity or {}).values()),
+            "model_cache_access": "owned metadata cache; large completed files reused by reference",
+            "model_cache_reuse": cache_reuse,
+        }
+        library = EvaluationLibrary(working, provenance)
+        provenance["preparation_seconds"] = round(time.perf_counter() - preparation_started, 6)
+        os.environ["BOOKRAG_MODEL_CACHE"] = str(working / "models")
+        try:
+            yield library
+            if _database_files(source) != database_identity:
+                raise RuntimeError("Source SQLite changed during evaluation; discard this run")
+            current_active = active.read_bytes() if active.is_file() else None
+            if current_active != active_bytes:
+                raise RuntimeError("Source vector selection changed during evaluation; discard this run")
+            if generation_path is not None and _generation_identity(generation_path) != generation_identity:
+                raise RuntimeError("Source vector generation changed during evaluation; discard this run")
+        finally:
+            if original_cache is None:
+                os.environ.pop("BOOKRAG_MODEL_CACHE", None)
+            else:
+                os.environ["BOOKRAG_MODEL_CACHE"] = original_cache
 
 
 class SearchLibrary(Protocol):
@@ -128,13 +315,18 @@ def load_dataset(path: Path) -> dict[str, Any]:
     return dataset
 
 
-def evaluate(library: SearchLibrary, dataset: Path, mode: str = "lexical", limit: int = 5) -> dict[str, Any]:
+def evaluate(library: SearchLibrary | Path, dataset: Path, mode: str = "lexical", limit: int = 5) -> dict[str, Any]:
     """Evaluate retrieval, work coverage, source anchors, abstention and latency.
 
     Reads both books and sections independently of the search response. An empty
     result is the retrieval baseline's abstention signal. This does not measure
     correctness of a generated answer or treat semantic similarity as evidence.
+    Pass a data-directory Path to isolate a frozen input automatically. Existing
+    SearchLibrary callers remain supported, including in-memory test doubles.
     """
+    if isinstance(library, Path):
+        with evaluation_library(library) as isolated:
+            return evaluate(isolated, dataset, mode, limit)
     if not 1 <= limit <= 50:
         raise ValueError("limit must be between 1 and 50")
     fixture = load_dataset(dataset)
@@ -240,6 +432,7 @@ def evaluate(library: SearchLibrary, dataset: Path, mode: str = "lexical", limit
     peak_rss_mib = peak_rss / (1024 * 1024 if sys.platform == "darwin" else 1024)
     return {
         "schema_version": 1,
+        **({"evaluation_input": library.input_provenance} if isinstance(library, EvaluationLibrary) else {}),
         "created_at": datetime.now(UTC).isoformat(),
         "dataset": dataset.name,
         "dataset_sha256": hashlib.sha256(dataset.read_bytes()).hexdigest(),

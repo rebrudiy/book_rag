@@ -3,6 +3,8 @@
 The UI is served by the local FastAPI app at `/`. It uses no CDN, web fonts,
 client framework, paid API or build step. All book text and annotations are
 inserted as DOM text nodes. External source links accept only HTTP(S).
+Archived-original download links accept only same-origin `/api/artifacts/<sha256>`
+locators supplied by the API.
 
 Primary workflows:
 
@@ -21,6 +23,70 @@ Primary workflows:
   verified agreement/disagreement between authors.
 - Inspect the library pipeline and filter its catalog. Demo excerpts are marked
   on book cards to distinguish an extract from a complete text.
+
+When an acquired file is archived, the reader's source details offer
+**Скачать зафиксированный оригинал**. The provider page and rights links remain
+separate. The attachment retains its SHA-256 filename and actual format suffix.
+Saved fragments use the saved snapshot's `artifact_url`, so their download stays
+with the captured edition even after the same book is imported again. A missing
+archive locator produces no download link. The archive fixes acquired file bytes;
+it does not establish that the provider's transcription matches a printed edition.
+
+Verify the two-edition lifecycle without changing a live library or its notes:
+
+```sh
+uv run python scripts/browser_archive.py
+```
+
+This script creates original CC0 HTML fixtures and a real isolated API on an
+OS-assigned loopback port. Chromium finds a quotation, opens and saves it, then
+the script replaces only its own mutable source in place and reimports it. The
+saved attachment must still match the first bytes and SHA-256, while the current
+reader downloads the replacement. It also checks attachment headers and format,
+provider/rights separation, absent-archive behavior and a 390 px source panel.
+It uses no API mocks, removes its own temporary library and server, and writes
+three screenshots plus `report.json` to `artifacts/archive-browser/`.
+
+The library distinguishes **Доступность изданий** from **Загрузка и обработка ·
+последняя попытка**. Availability uses `searchable_books`/`status_counts`; the
+second group uses `ingestion_status_counts`, one latest state per edition rather
+than a history total. A failed refresh can therefore count as searchable and
+have a failed latest attempt. Counts are global snapshots with a visible capture
+time and refresh button; catalog totals follow the selected filters separately.
+Availability and latest-attempt filters can be combined, for example indexed
+editions whose refresh failed. A failed first acquisition stays unavailable.
+
+Cards, search evidence and the reader use actual `ingestion_*` fields to explain
+failed/deferred or ongoing refreshes. They identify the available previous
+edition; quotations, metadata and downloads continue to refer to that edition.
+The reader exposes the latest attempt's timestamp and a collapsible error reason.
+The separate `ingestion_local_path` field is not rendered. A successful retry removes the notice.
+Missing optional ingestion fields preserve the existing reader behavior.
+See [the backend contract](PIPELINE.md) for transaction and migration details.
+
+When the API supplies curated `related_editions`, the reader offers **Другие
+издания и переводы**, showing each edition's language, edition label and optional
+translator/partial-coverage label. Selecting a link opens that edition's first
+section; chapters and quotations are not assumed to align. The bounded list is
+collapsed initially on mobile and reports when additional linked editions exist.
+The explicit `confirmed_full_works_lower_bound`, when supplied, is displayed as
+a lower bound separately from provisional catalog work groups.
+
+Run the real isolated availability lifecycle and optional GET-only live checks:
+
+```sh
+uv run python scripts/browser_pipeline.py \
+  --live-base-url http://127.0.0.1:8000 \
+  --live-base-url http://127.0.0.1:8001
+```
+
+The temporary original CC0 fixture checks failed and deferred refreshes, exact
+old quotations and downloads, separate counters/filters, an unavailable first
+acquisition, successful retry, mobile layout and curated translation navigation.
+It uses no API mocks. The live checks compare each captured stats response with
+the visible counters, follow an indexed card into its reader, check mobile width
+and assert that all browser requests use GET. No live annotation or corpus writes
+are made. Reports/screenshots are saved to `artifacts/pipeline-browser/`.
 
 `/` focuses search with the slash key. All navigation and actions work with a
 keyboard, dialogs use native focus handling, status changes are announced, and
@@ -141,3 +207,60 @@ uv run python tests/browser_smoke.py --semantic \
 
 The full-catalog check needs more than 48 indexed editions. It follows an actual
 metadata result into the reader and locates it through the scope typeahead.
+
+
+## Russian source journeys and explicit source constraints
+
+`scripts/browser_russian.py` checks the actual Russian pilot through the local
+browser without mocks or corpus/annotation writes. It finds each work by title
+and Cyrillic author name, selects it through the bounded scope lookup, follows
+an exact quotation into the reader, independently checks canonical offsets and
+navigates neighboring sections. It also verifies the retained Nekrasov epigraph
+in Dostoevsky, Turgenev's dedication, source rights and pinned revision links.
+A 65,088-character Gogol section was checked at a 390 px viewport without
+horizontal overflow or JavaScript errors.
+
+The reader exposes `coverage_scope=original_work_only` as an explicit scope
+label: original work without later editorial apparatus. This does not claim a
+complete critical edition. Rights text and the rights link come from the source
+metadata. A recorded source-bundle hash and a collapsible list of permanent
+chapter/page revision links make the captured Wikisource version inspectable.
+
+Current pilot links (start the full-corpus server on port 8001):
+
+| Work | Local reader | Original source |
+| --- | --- | --- |
+| Записки из подполья | [wsru-underground-4d592d8e2fd1](http://127.0.0.1:8001/?book=wsru-underground-4d592d8e2fd1) | [Wikisource](https://ru.wikisource.org/wiki/%D0%97%D0%B0%D0%BF%D0%B8%D1%81%D0%BA%D0%B8_%D0%B8%D0%B7_%D0%BF%D0%BE%D0%B4%D0%BF%D0%BE%D0%BB%D1%8C%D1%8F_(%D0%94%D0%BE%D1%81%D1%82%D0%BE%D0%B5%D0%B2%D1%81%D0%BA%D0%B8%D0%B9)) |
+| Отцы и дети | [wsru-fathers-and-sons-492401072288](http://127.0.0.1:8001/?book=wsru-fathers-and-sons-492401072288) | [Wikisource](https://ru.wikisource.org/wiki/%D0%9E%D1%82%D1%86%D1%8B_%D0%B8_%D0%B4%D0%B5%D1%82%D0%B8_(%D0%A2%D1%83%D1%80%D0%B3%D0%B5%D0%BD%D0%B5%D0%B2)) |
+| Палата № 6 | [wsru-ward-six-740d89bd5ddc](http://127.0.0.1:8001/?book=wsru-ward-six-740d89bd5ddc) | [Wikisource](https://ru.wikisource.org/wiki/%D0%9F%D0%B0%D0%BB%D0%B0%D1%82%D0%B0_%E2%84%96_6_(%D0%A7%D0%B5%D1%85%D0%BE%D0%B2)) |
+| Смерть Ивана Ильича | [wsru-ivan-ilyich-f20f7ddf97c0](http://127.0.0.1:8001/?book=wsru-ivan-ilyich-f20f7ddf97c0) | [Wikisource](https://ru.wikisource.org/wiki/%D0%A1%D0%BC%D0%B5%D1%80%D1%82%D1%8C_%D0%98%D0%B2%D0%B0%D0%BD%D0%B0_%D0%98%D0%BB%D1%8C%D0%B8%D1%87%D0%B0_(%D0%A2%D0%BE%D0%BB%D1%81%D1%82%D0%BE%D0%B9)) |
+| Шинель | [wsru-overcoat-4efb1fb3e2e1](http://127.0.0.1:8001/?book=wsru-overcoat-4efb1fb3e2e1) | [Wikisource](https://ru.wikisource.org/wiki/%D0%A8%D0%B8%D0%BD%D0%B5%D0%BB%D1%8C_(%D0%93%D0%BE%D0%B3%D0%BE%D0%BB%D1%8C)/%D0%9F%D0%A1%D0%A1_1938_(%D0%A1%D0%9E)) |
+
+```sh
+uv run python scripts/browser_russian.py --base-url http://127.0.0.1:8001
+```
+
+The script writes a report and bounded viewport/element screenshots in the
+ignored `artifacts/russian-browser/` directory. Source IDs include the captured
+revision bundle; a later acquisition may create another edition ID.
+
+A source-variant notice appears only when actual metadata explicitly records
+`illustrations_included=false` (at the book or its source-variant level). It says:
+«В этой копии нет иллюстраций; оригинал доступен по ссылке источника».
+No absent-image notice is inferred from a file format, a failed download or a
+missing flag. When catalog metadata carries the flag, the card also labels the
+copy as **Без иллюстраций**. To check an actually recovered, indexed variant:
+
+```sh
+uv run python scripts/browser_russian.py --base-url http://127.0.0.1:8001 \
+  --illustration-book pg63371-full
+```
+
+The optional check requires the real indexed edition and its explicit flag; it
+does not synthesize a source or quietly mark a failed book as verified.
+
+The real `pg63371-full` text-only recovery was subsequently checked with that
+option: the indexed source metadata recorded omitted illustrations, the reader
+showed the notice, and the source link remained available. The same browser run
+confirmed that all five Russian editions without such a flag displayed no
+illustration notice. The JSON report records these actual-source checks.

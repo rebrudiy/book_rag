@@ -1,0 +1,2 @@
+# Unified-diff artifacts require literal spaces on blank context lines.
+*.patch -whitespace

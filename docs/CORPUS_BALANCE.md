@@ -157,3 +157,132 @@ Tests cover explicit rights gates, periodical exclusion, allowed formats,
 metadata-grounded classification, provisional work identities, language
 shortages, scarce multilingual assignment, unique source IDs, subject spillover,
 ordering determinism, bounded reservoir retention and absence of HTTP access.
+
+## Resource-aware text-only expansion
+
+`plan_balanced_corpus(..., text_only=True)` adds a separate format policy for
+larger local acquisition queues. The default remains `False`: the existing
+EPUB/UTF-8 TXT choice, stable priorities, quotas and output entry metadata are
+preserved. A real default-mode rerun of the previous 305-edition plan took
+58.344 seconds and reproduced its manifest **byte for byte**, SHA-256
+`d060171c0b7cbd1218296788c2dc4fb603c708bc53e4e17a8cf0705d1cdc54fc`.
+The compatibility output is separate at `data/catalog/balanced-default-compat.json`;
+the live `balanced.json` queue was not rewritten.
+
+```python
+report = plan_balanced_corpus(
+    Path("data/catalog/rdf-files.tar.bz2"),
+    Path("data/catalog/balanced-text3000.json"),
+    per_language=1000,
+    languages=["en", "ru", "fr", "de"],
+    text_only=True,
+)
+```
+
+The text-only order is explicit no-image EPUB, explicitly UTF-8 TXT, then textual
+HTML. Image EPUBs, PDF/scans, unknown plain-text encodings, other hosts, HTTP,
+wrong Gutenberg numbers, traversal paths, credentials, ports and query strings
+are excluded. A source still needs the same explicit rights, type, subject and
+language gates. HTML fallback can add a few eligible records that the default
+EPUB/TXT-only mode excludes; the report exposes the resulting availability.
+An image-only record is skipped rather than silently chosen when no text
+alternative exists.
+
+This mode requires original RDF metadata or an RDF archive, rather than the CSV
+fallback, to retain exact per-record evidence. It streams each raw RDF member,
+computes its SHA-256 and discards its XML after candidate processing. It does not
+extract archive paths. Bounded reservoirs and language/subject assignment are
+unchanged. Runtime grows with the catalog; retained metadata grows with quotas,
+not the total record count.
+
+Every selected entry records:
+
+- `illustrations_included: false` and
+  `coverage_scope: text_only_without_illustrations`;
+- `source_variant.format_family`, exact `catalog_format_url`, media type,
+  catalog/member SHA-256, same Gutenberg ID and source rights;
+- the original image-EPUB format URL where the RDF lists one, and an explicit
+  omission list covering illustrations, image-embedded text/labels, visual
+  equations and diagrams;
+- a proposed status requiring download, parsing and textual citation checks.
+
+Direct format links are used exactly as listed in RDF. The sole generated URL
+exception is Gutenberg's existing verified `/ebooks/N.epub.noimages` alias
+mapping to `/cache/epub/N/pgN.epub`, already implemented in `catalog._download_format`.
+The exact RDF alias remains in `catalog_format_url`; `url_resolution` identifies
+this mapping. No other download URL is guessed, and no provider request is made
+to discover formats. This avoids an extra redirect request for each generated
+EPUB while retaining its catalog provenance.
+
+`coverage: full` here describes the planned complete **textual edition**, subject
+to later acquisition/parse validation and the explicit omission scope. It does
+not promise a facsimile, illustrations, or complete mathematical information
+contained only in images. Scientific and technical interpretation can depend on
+those missing figures or visual formulas. EPUB preserves available textual
+chapter/footnote structure; TXT offers less structure, and external HTML images
+are not acquired. No OCR or automatic visual replacement is performed.
+
+### Measured 3,005-edition plan
+
+On 2026-11-14, the same official RDF snapshot produced the following separate
+queue in **70.911 seconds**, with **203.73 MiB** peak process RSS. That peak covers
+the sequential compatibility and text-only planning process; it is not an
+indexing or download memory measurement. The planner retained **10,893 candidate
+slots** against a **32,000-slot bound**.
+
+| Language | Eligible text-only catalog records | Selected editions | Unfilled quota |
+| --- | ---: | ---: | ---: |
+| English | 57,996 | 1,000 | 0 |
+| Russian | 5 | 5 | 995 |
+| French | 3,929 | 1,000 | 0 |
+| German | 2,371 | 1,000 | 0 |
+
+The format distribution is **2,997 no-image EPUBs and 8 explicitly UTF-8 TXT
+files**; no HTML file won selection. All 2,997 EPUBs use the documented generated
+alias mapping; the eight TXT URLs are direct `/files/N/N-0.txt` links from RDF.
+All 3,005 entries have exact raw RDF record hashes. The mode admits 64,265
+eligible catalog records versus 64,261 previously; four additional English
+HTML-eligible records account for the difference.
+
+| Primary area | English | Russian | French | German |
+| --- | ---: | ---: | ---: | ---: |
+| Fiction | 125 | 2 | 254 | 341 |
+| Philosophy | 125 | 0 | 42 | 51 |
+| History | 125 | 0 | 253 | 129 |
+| Science | 125 | 1 | 38 | 54 |
+| Economics | 125 | 0 | 21 | 10 |
+| Biography | 125 | 0 | 139 | 71 |
+| Technical | 125 | 0 | 0 | 4 |
+| Other | 125 | 2 | 253 | 340 |
+
+Scarce subject pools spill over within the same language. These catalog labels
+still describe explicit metadata, not independently verified subject expertise.
+The Russian shortfall persists and is not hidden by expanding English quotas.
+The separately acquired Wikisource works remain outside these Gutenberg counts.
+
+All **305 IDs** from the previous balanced plan recur, with **2,700 additional
+IDs**. Reusing an ID does not prove that its older image EPUB cache is the same
+artifact as the new no-image URL. Keep a valid existing searchable edition unless
+an explicit migration is wanted; preserve manual contributor/edition curation
+when merging queues. If changing a source URL, use the provenance-aware download
+cache and reindex the corresponding text instead of relabeling an old artifact.
+The planner does not perform that merge or alter the live library.
+
+Artifacts under ignored `data/catalog/`:
+
+- `balanced-text3000.json`: the separate acquisition manifest;
+- `balanced-text3000.report.json`: availability, quotas, subject/format counts,
+  filtering reasons and catalog provenance;
+- `balanced-text3000.measurement.json`: elapsed time, process RSS and overlap
+  with the earlier plan.
+
+No books were downloaded or indexed during this experiment. Source-file sizes,
+aggregate download size and index disk requirements are **unknown**;
+`artifact_sizes.estimated_bytes` is null. Choosing formats without illustrations
+reduces one known oversize-file cause but cannot guarantee that every artifact
+fits the existing unchanged size cap or available disk.
+
+The planner now has **40 offline tests**, including no-image preference,
+TXT/HTML fallback, image-only exclusion, strict same-record/provider URL checks,
+rights/type/language gates, explicit omission flags, raw streamed RDF hashes,
+unchanged default behavior and deterministic selection. Ruff and ty pass.

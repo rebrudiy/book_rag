@@ -11,11 +11,15 @@ import hashlib
 import heapq
 import json
 import re
+import tarfile
 from collections import Counter
+from collections.abc import Iterator
 from pathlib import Path
 from typing import Any
+from urllib.parse import urlparse
 
-from book_rag.catalog import CURATED_WORK_IDS, _download_format, _rows, _work_type
+from book_rag.catalog import CURATED_WORK_IDS, MAX_METADATA_BYTES, _download_format, _parse_rdf, _rows, _work_type
+from book_rag.source_variants import _kind, _safe_format_url
 
 SUBJECT_AREAS = ("fiction", "philosophy", "history", "science", "economics", "biography", "technical", "other")
 # Primary-label priority resolves overlapping explicit subjects consistently. It
@@ -61,6 +65,75 @@ def classify_subjects(subjects: list[str]) -> dict[str, Any]:
     }
 
 
+def _text_rows(path: Path) -> Iterator[dict[str, Any]]:
+    """Stream exact RDF bytes once to retain a raw record hash per candidate."""
+
+    def parsed(data: bytes, member: str) -> Iterator[dict[str, Any]]:
+        if len(data) > MAX_METADATA_BYTES:
+            raise ValueError("Individual RDF metadata exceeds 2 MiB")
+        digest = hashlib.sha256(data).hexdigest()
+        for value in _parse_rdf(data):
+            yield {**value, "catalog_record_sha256": digest, "catalog_member": member}
+
+    if path.suffix.lower() in {".rdf", ".xml"}:
+        if path.stat().st_size > MAX_METADATA_BYTES:
+            raise ValueError("Individual RDF metadata exceeds 2 MiB")
+        yield from parsed(path.read_bytes(), path.name)
+    elif path.name.endswith((".tar.bz2", ".tar.gz", ".tar", ".tgz")):
+        with tarfile.open(path, "r|*") as archive:
+            for member in archive:
+                if not member.isfile() or not member.name.endswith(".rdf"):
+                    continue
+                if member.size > MAX_METADATA_BYTES:
+                    raise ValueError("Individual RDF metadata exceeds 2 MiB")
+                stream = archive.extractfile(member)
+                if stream is not None:
+                    with stream:
+                        yield from parsed(stream.read(MAX_METADATA_BYTES + 1), member.name)
+    else:
+        raise ValueError("Text-only planning requires official RDF metadata or an RDF catalog archive")
+
+
+def _text_download(row: dict[str, Any]) -> dict[str, Any] | None:
+    """Choose a same-record, explicit text artifact; never choose image EPUB."""
+    number = row["number"]
+    candidates = []
+    images = []
+    for url, media in row["formats"]:
+        if not _safe_format_url(url, number):
+            continue
+        path = urlparse(url).path
+        if media.lower() == "application/epub+zip" and re.search(
+            r"(?:\.epub3?\.images|-images(?:-3)?\.epub)$", path, re.I
+        ):
+            images.append({"catalog_url": url, "media_type": media})
+        classified = _kind(url, media, number)
+        if classified is None:
+            continue
+        family, kind, priority = classified
+        route_priority = 2 if path.startswith("/ebooks/") else 0 if path.startswith("/cache/") else 1
+        candidates.append((priority, route_priority, url, family, kind, media))
+    if not candidates:
+        return None
+    _, _, catalog_url, family, kind, media = min(candidates)
+    download_url = catalog_url
+    resolution = "exact_catalog_url"
+    if urlparse(catalog_url).path == f"/ebooks/{number}.epub.noimages":
+        # Same generated-format alias already handled by catalog._download_format.
+        # Keep the RDF URL as evidence; this direct cache route avoids redirects.
+        download_url = f"https://www.gutenberg.org/cache/epub/{number}/pg{number}.epub"
+        resolution = "existing_gutenberg_generated_epub_noimages_alias_mapping"
+    return {
+        "download_url": download_url,
+        "format": kind,
+        "format_family": family,
+        "catalog_format_url": catalog_url,
+        "catalog_media_type": media,
+        "url_resolution": resolution,
+        "original_image_format": min(images, key=lambda item: item["catalog_url"]) if images else None,
+    }
+
+
 def _entry(row: dict[str, Any], download: tuple[str, str], classification: dict[str, Any], sha: str) -> dict[str, Any]:
     number = row["number"]
     url, kind = download
@@ -95,6 +168,7 @@ def plan_balanced_corpus(
     output: Path,
     per_language: int = 100,
     languages: list[str] | None = None,
+    text_only: bool = False,
 ) -> dict[str, Any]:
     """Select a deterministic bounded queue, with honest language shortages.
 
@@ -103,6 +177,8 @@ def plan_balanced_corpus(
     scarce languages first and fills available subjects round-robin, ensuring
     a source ID occurs only once. Counts are catalog editions, not a verified
     count of unique works. Existing output is deterministically replaced.
+    With text_only=True, prefer no-image EPUB, then UTF-8 TXT and HTML,
+    retaining exact RDF evidence and explicit illustration omissions.
     """
     if per_language < 1:
         raise ValueError("per_language must be positive")
@@ -124,6 +200,7 @@ def plan_balanced_corpus(
         "output": str(output),
         "catalog_sha256": catalog_sha,
         "per_language": per_language,
+        "text_only": text_only,
         "requested_languages": requested,
         "records_scanned": 0,
         "eligible_records": 0,
@@ -134,7 +211,7 @@ def plan_balanced_corpus(
         "skipped_language": 0,
         "skipped_format": 0,
     }
-    for row in _rows(catalog_path):
+    for row in _text_rows(catalog_path) if text_only else _rows(catalog_path):
         report["records_scanned"] += 1
         if not re.fullmatch(r"[1-9][0-9]{0,8}", row["number"]) or not row["title"].strip():
             report["skipped_invalid"] += 1
@@ -152,12 +229,17 @@ def plan_balanced_corpus(
         if not matched_languages:
             report["skipped_language"] += 1
             continue
-        # Restrict the common format selector to EPUB/UTF-8 TXT: an HTML
-        # alternative cannot accidentally win against a usable text candidate.
-        formats = [
-            (url, media) for url, media in row["formats"] if "application/epub+zip" in media or "text/plain" in media
-        ]
-        download = _download_format({**row, "formats": formats})
+        variant = _text_download(row) if text_only else None
+        if text_only:
+            download = (variant["download_url"], variant["format"]) if variant else None
+        else:
+            # Preserve the original EPUB/UTF-8 TXT selector and queue exactly.
+            formats = [
+                (url, media)
+                for url, media in row["formats"]
+                if "application/epub+zip" in media or "text/plain" in media
+            ]
+            download = _download_format({**row, "formats": formats})
         if download is None:
             report["skipped_format"] += 1
             continue
@@ -165,6 +247,23 @@ def plan_balanced_corpus(
         classification = classify_subjects(row["subjects"])
         area = classification["primary"]
         entry = _entry(row, download, classification, catalog_sha)
+        if variant is not None:
+            entry.update(illustrations_included=False, coverage_scope="text_only_without_illustrations")
+            entry["source_variant"] = {
+                "status": "proposed",
+                "reason": "resource_aware_text_only_acquisition",
+                **variant,
+                "same_gutenberg_id": row["number"],
+                "catalog_sha256": catalog_sha,
+                "catalog_record": row.get("catalog_member", f"pg{row['number']}.rdf"),
+                "catalog_record_sha256": row.get("catalog_record_sha256"),
+                "catalog_rights": row["rights"],
+                "illustrations_included": False,
+                "omitted_content": ["illustrations", "image-embedded text and labels", "visual equations and diagrams"],
+                "validation_required": (
+                    "Download, parse and verify textual chapter/citation integrity; no facsimile claim."
+                ),
+            }
         identity = entry["id"]
         priority = int.from_bytes(hashlib.sha256(("bookrag-balanced-v1:" + identity).encode()).digest(), "big")
         for lang in matched_languages:
@@ -225,6 +324,20 @@ def plan_balanced_corpus(
             "selected_by_language_and_subject": {lang: dict(selected_counts[lang]) for lang in requested},
             "language_shortages": {
                 lang: max(0, per_language - sum(selected_counts[lang].values())) for lang in requested
+            },
+            "selected_by_format": dict(sorted(Counter(entry["format"] for entry in selected).items())),
+            "selected_by_format_family": dict(
+                sorted(
+                    Counter(
+                        entry.get("source_variant", {}).get("format_family", "default_format_selection")
+                        for entry in selected
+                    ).items()
+                )
+            ),
+            "artifact_sizes": {
+                "known": False,
+                "estimated_bytes": None,
+                "note": "RDF format selection does not establish download size or index disk requirements.",
             },
             "classification_method": "explicit_subject_keyword_rules_v1; unmatched subjects remain other",
             "selection_method": (

@@ -1,0 +1,39 @@
+{
+  "model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+  "revision": "e8f8c211226b894fcb81acc59f3b34ba3efd5f42",
+  "device": "mps:0",
+  "results": [
+    {
+      "batch": 32,
+      "windows": 256,
+      "seconds": 0.8819120423868299,
+      "windows_per_second": 290.2783811718399,
+      "max_abs_diff_from_32": 0.0
+    },
+    {
+      "batch": 64,
+      "windows": 256,
+      "seconds": 2.004987500142306,
+      "windows_per_second": 127.68159401583807,
+      "max_abs_diff_from_32": 0.0
+    },
+    {
+      "batch": 128,
+      "windows": 256,
+      "seconds": 0.8772797090932727,
+      "windows_per_second": 291.8111491084105,
+      "max_abs_diff_from_32": 0.0
+    },
+    {
+      "batch": 256,
+      "windows": 256,
+      "seconds": 0.9213335830718279,
+      "windows_per_second": 277.8581012389321,
+      "max_abs_diff_from_32": 0.0
+    }
+  ],
+  "limitations": [
+    "One bounded warmed sample, not a full-corpus or statistical benchmark.",
+    "Other local workloads were active; retain real build throughput separately."
+  ]
+}

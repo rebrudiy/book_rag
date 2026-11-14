@@ -10,37 +10,13 @@ import argparse
 import hashlib
 import json
 import os
-import sqlite3
 import time
-from collections.abc import Generator
-from contextlib import contextmanager
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
 from book_rag.calibration import calibrate, evaluate_threshold
-from book_rag.evaluation import load_dataset, verify_result
-from book_rag.library import Library
-
-
-class ReadOnlyLibrary(Library):
-    """Reuse retrieval methods without schema creation or writable connections."""
-
-    def __init__(self, directory: Path) -> None:
-        self.data_dir = directory
-        self.db_path = directory / "library.sqlite3"
-        if not self.db_path.is_file():
-            raise FileNotFoundError(self.db_path)
-
-    @contextmanager
-    def connect(self) -> Generator[sqlite3.Connection]:
-        connection = sqlite3.connect(self.db_path.resolve().as_uri() + "?mode=ro", uri=True, timeout=30)
-        connection.row_factory = sqlite3.Row
-        connection.create_function("casefold", 1, lambda value: str(value or "").casefold(), deterministic=True)
-        try:
-            yield connection
-        finally:
-            connection.close()
+from book_rag.evaluation import EvaluationLibrary, evaluation_library, load_dataset, verify_result
 
 
 def _digest(path: Path) -> str:
@@ -65,8 +41,12 @@ def collect(args: argparse.Namespace) -> dict[str, Any]:
     fixture = load_dataset(args.dataset)
     if fixture["split"] != "dev":
         raise ValueError("This exploratory runner accepts development fixtures only")
-    library = ReadOnlyLibrary(args.data_dir)
-    active_path = args.data_dir / "vectors" / "active.json"
+    with evaluation_library(args.data_dir, model_cache=args.cache_dir) as library:
+        return _collect(args, library, fixture)
+
+
+def _collect(args: argparse.Namespace, library: EvaluationLibrary, fixture: dict[str, Any]) -> dict[str, Any]:
+    active_path = library.data_dir / "vectors" / "active.json"
     metadata_bytes = active_path.read_bytes()
     index_metadata = json.loads(metadata_bytes)
     before = _digest(library.db_path)
@@ -114,7 +94,7 @@ def collect(args: argparse.Namespace) -> dict[str, Any]:
             if args.kind == "logit" and results:
                 from book_rag.reranking import rerank
 
-                ranked = rerank(case["query"], results, args.cache_dir, limit=1)
+                ranked = rerank(case["query"], results, library.data_dir / "models", limit=1)
                 if ranked["available"] is not True:
                     raise RuntimeError("Reranker unavailable: " + str(ranked["warnings"]))
                 results = ranked["results"]
@@ -206,8 +186,9 @@ def collect(args: argparse.Namespace) -> dict[str, Any]:
         "dataset": str(args.dataset),
         "dataset_sha256": _digest(args.dataset),
         "split": "dev",
-        "source_database": str(library.db_path),
-        "source_database_sha256": before,
+        "source_database": str(args.data_dir / "library.sqlite3"),
+        "source_database_sha256": library.input_provenance["source_database_sha256"],
+        "evaluation_input": library.input_provenance,
         "corpus": library.stats(),
         "source_snapshot": source_snapshot,
         "corpus_sha256": hashlib.sha256(
@@ -258,6 +239,8 @@ def main() -> None:
     parser.add_argument("--candidate-depth", type=int, choices=range(1, 51), default=50)
     parser.add_argument("--upstream-floor", type=float, default=0.3)
     args = parser.parse_args()
+    if args.output.resolve().is_relative_to(args.data_dir.expanduser().resolve()):
+        parser.error("Write calibration reports outside the source library directory")
     if not -1 <= args.upstream_floor <= 1:
         parser.error("--upstream-floor must be in [-1, 1]")
     report = collect(args)

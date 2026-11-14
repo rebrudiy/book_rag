@@ -135,10 +135,13 @@ def serve(host: str | None = None, port: int | None = None) -> None:
 def evaluate(
     dataset: Path = Path("evals/dev.json"), mode: str = "lexical", output: Path = Path("experiments/latest.json")
 ) -> None:
-    """Measure retrieval and evidence integrity, storing a reproducible report."""
+    """Measure retrieval on an isolated copy, preserving the source library."""
     from book_rag.evaluation import evaluate as run_evaluation
 
-    result = run_evaluation(Library(data_dir()), dataset, mode=mode)
+    source = data_dir()
+    if output.resolve().is_relative_to(source):
+        raise typer.BadParameter("Write evaluation reports outside the source library directory", param_hint="output")
+    result = run_evaluation(source, dataset, mode=mode)
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n")
     emit(result)
@@ -219,11 +222,12 @@ def plan_balanced(
     output: Path = Path("data/catalog/balanced.json"),
     per_language: Annotated[int, typer.Option(min=1)] = 100,
     language: Annotated[list[str] | None, typer.Option()] = None,
+    text_only: bool = False,
 ) -> None:
     """Plan a rights-checked language/subject-balanced queue from offline metadata."""
     from book_rag.corpus_planning import plan_balanced_corpus
 
-    emit(plan_balanced_corpus(catalog, output, per_language, language))
+    emit(plan_balanced_corpus(catalog, output, per_language, language, text_only))
 
 
 @app.command("acquire-russian")
@@ -239,3 +243,26 @@ def acquire_russian(
     emit({key: str(value) if isinstance(value, Path) else value for key, value in result.items()})
     if index:
         emit(ingest_manifest(result["manifest"]))
+
+
+@app.command("propose-work-links")
+def propose_work_links(
+    manifest: Path,
+    output: Path = Path("data/identity/proposals.json"),
+    limit: Annotated[int, typer.Option(min=1, max=50)] = 50,
+    cache: Path = Path("data/identity/cache"),
+) -> None:
+    """Collect bounded public authority evidence without changing work groups."""
+    from book_rag.sources import load_manifest
+    from book_rag.work_identity import propose_work_links as propose
+
+    result = propose(load_manifest(manifest)[:limit], cache)
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n")
+    emit(
+        {
+            "output": str(output),
+            "identity_count_promotion_allowed": False,
+            "proposals": len(result.get("proposals", [])),
+        }
+    )

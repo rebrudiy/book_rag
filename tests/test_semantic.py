@@ -542,3 +542,456 @@ def test_corpus_change_during_query_has_explicit_current_lexical_fallback(
     assert result["mode"] == "lexical"
     assert any("Corpus changed during semantic search" in warning for warning in result["warnings"])
     assert all(item["verified"] for item in result["results"])
+
+
+def _encoder_inputs(library: Library, model: FakeModel) -> list[str]:
+    from book_rag import semantic
+    from book_rag.embedding_profiles import MINILM_PROFILE
+
+    with library.connect() as connection:
+        return [
+            text
+            for row in connection.execute(semantic._SQL + " ORDER BY p.id")
+            for text in semantic._profile_windows(model, row, MINILM_PROFILE)
+        ]
+
+
+def _assert_fresh_vectors(library: Library, report: dict) -> None:
+    actual = np.load(library.data_dir / "vectors" / report["generation"] / "embeddings.npy")
+    np.testing.assert_array_equal(actual, FakeModel().encode(_encoder_inputs(library, FakeModel())))
+    assert report["encoded_vectors"] + report["reused_vectors"] + report["resumed_vectors"] == report["vectors"]
+
+
+def _append_book(library: Library, tmp_path: Path, words: int = 100) -> None:
+    source = tmp_path / "appended.txt"
+    source.write_text(" ".join(f"new{number:04d}" for number in range(words)))
+    library.import_book(source, {"id": "append", "title": "Additional source", "author": "Another author"})
+
+
+def test_next_generation_reuses_exact_inputs_after_append(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    from book_rag import semantic
+    from book_rag.vector_reuse import RECEIPT
+
+    library = embedding_library(tmp_path)
+    original_model = FakeModel()
+    use_model(monkeypatch, original_model)
+    original = semantic.build_index(library, batch_size=3)
+    assert original["encoded_vectors"] == original["vectors"] == len(original_model.encoded)
+    assert original["reused_vectors"] == original["resumed_vectors"] == 0
+    assert (library.data_dir / "vectors" / original["generation"] / RECEIPT).is_file()
+    _append_book(library, tmp_path)
+    model = FakeModel()
+    use_model(monkeypatch, model)
+    report = semantic.build_index(library, batch_size=5)
+    assert report["reused_vectors"] == original["vectors"]
+    assert report["encoded_vectors"] == len(model.encoded) == report["vectors"] - original["vectors"]
+    assert report["reuse_source_generation"] == original["generation"]
+    assert model.calls == 1, "Only the missing appended inputs are sent to the encoder"
+    _assert_fresh_vectors(library, report)
+
+
+def test_reordered_passage_ids_reuse_vectors_in_new_order(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    from book_rag import semantic
+
+    library = embedding_library(tmp_path)
+    use_model(monkeypatch, FakeModel())
+    original = semantic.build_index(library, batch_size=3)
+    with library.connect() as connection:
+        # Reorder canonical rows without modifying encoder headers or source text.
+        connection.execute("UPDATE passages SET id=-id")
+        connection.execute("UPDATE passages SET id=100000+id")
+    model = FakeModel()
+    use_model(monkeypatch, model)
+    report = semantic.build_index(library, batch_size=2)
+    assert report["corpus_fingerprint"] != original["corpus_fingerprint"]
+    assert report["reused_vectors"] == report["vectors"]
+    assert report["encoded_vectors"] == 0 and model.calls == 0
+    _assert_fresh_vectors(library, report)
+    with library.connect() as connection:
+        expected_ids = [
+            row["id"]
+            for row in connection.execute(semantic._SQL + " ORDER BY p.id")
+            for _ in semantic._windows(model, row)
+        ]
+    ids = np.load(library.data_dir / "vectors" / report["generation"] / "ids.npy")
+    np.testing.assert_array_equal(ids, expected_ids)
+
+
+@pytest.mark.parametrize("change", ["text", "header"])
+def test_changed_source_only_encodes_changed_exact_windows(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, change: str
+) -> None:
+    from book_rag import semantic
+
+    library = embedding_library(tmp_path)
+    _append_book(library, tmp_path)
+    use_model(monkeypatch, FakeModel())
+    semantic.build_index(library, batch_size=3)
+    before = set(_encoder_inputs(library, FakeModel()))
+    source = tmp_path / "appended.txt"
+    metadata = {"id": "append", "title": "Additional source", "author": "Another author"}
+    if change == "text":
+        source.write_text(source.read_text().replace("new0050", "changed0050"))
+    else:
+        metadata["title"] = "A corrected title"
+    library.import_book(source, metadata)
+    expected_missing = [text for text in _encoder_inputs(library, FakeModel()) if text not in before]
+    assert expected_missing
+    model = FakeModel()
+    use_model(monkeypatch, model)
+    report = semantic.build_index(library, batch_size=3)
+    assert model.encoded == expected_missing
+    assert report["encoded_vectors"] == len(expected_missing)
+    assert report["reused_vectors"] > 0
+    _assert_fresh_vectors(library, report)
+
+
+@pytest.mark.parametrize("change", ["model", "profile", "revision"])
+def test_completed_model_space_change_never_reuses_old_vectors(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, change: str
+) -> None:
+    from dataclasses import replace
+
+    from book_rag import semantic
+    from book_rag.embedding_profiles import MINILM_PROFILE, PROFILES
+
+    library = embedding_library(tmp_path)
+    use_model(monkeypatch, FakeModel())
+    original = semantic.build_index(library, batch_size=3)
+    model_name = None
+    if change == "model":
+        model_name = "test/alternative"
+        monkeypatch.setenv("BOOKRAG_EMBEDDING_REVISION", "b" * 40)
+    else:
+        variant = replace(
+            MINILM_PROFILE,
+            name="test-variant",
+            **({"query_prefix": "changed query: "} if change == "profile" else {"revision": "b" * 40}),
+        )
+        monkeypatch.setitem(PROFILES, variant.name, variant)
+        monkeypatch.setenv("BOOKRAG_EMBEDDING_PROFILE", variant.name)
+    model = FakeModel()
+    use_model(monkeypatch, model)
+    report = semantic.build_index(library, model_name=model_name, batch_size=3)
+    assert report["build_identity"] != original["build_identity"]
+    assert report["reused_vectors"] == 0
+    assert report["encoded_vectors"] == report["vectors"] == len(model.encoded)
+
+
+def test_interrupted_mixed_reuse_resumes_without_double_encoding(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    import json
+
+    from book_rag import semantic
+
+    library = embedding_library(tmp_path)
+    use_model(monkeypatch, FakeModel())
+    original = semantic.build_index(library, batch_size=3)
+    _append_book(library, tmp_path, words=700)
+    first = FakeModel(fail_after=1)
+    use_model(monkeypatch, first)
+    with pytest.raises(KeyboardInterrupt):
+        semantic.build_index(library, batch_size=3)
+    folder = next((library.data_dir / "vectors").glob("staging-*"))
+    completed = json.loads((folder / "checkpoint.json").read_text())["completed_vectors"]
+    second = FakeModel()
+    use_model(monkeypatch, second)
+    report = semantic.build_index(library, batch_size=2)
+    assert report["resumed_vectors"] == completed
+    assert len(first.encoded) + len(second.encoded) == report["vectors"] - original["vectors"]
+    _assert_fresh_vectors(library, report)
+
+
+def test_key_map_ahead_of_atomic_checkpoint_is_truncated_on_resume(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    import json
+    import sqlite3
+
+    from book_rag import semantic
+    from book_rag.vector_reuse import KEYMAP
+
+    library = embedding_library(tmp_path)
+    original_atomic = semantic._atomic_json
+
+    def fail_checkpoint(path: Path, data: dict) -> None:
+        if path.name == "checkpoint.json" and data["completed_vectors"] > 0:
+            raise RuntimeError("Simulated interruption after durable keys, before atomic vector checkpoint")
+        original_atomic(path, data)
+
+    monkeypatch.setattr(semantic, "_atomic_json", fail_checkpoint)
+    use_model(monkeypatch, FakeModel())
+    with pytest.raises(RuntimeError, match="durable keys"):
+        semantic.build_index(library, batch_size=3)
+    folder = next((library.data_dir / "vectors").glob("staging-*"))
+    assert json.loads((folder / "checkpoint.json").read_text())["completed_vectors"] == 0
+    with sqlite3.connect(folder / KEYMAP) as connection:
+        assert connection.execute("SELECT rows_written FROM build_state").fetchone()[0] == 3
+    monkeypatch.setattr(semantic, "_atomic_json", original_atomic)
+    model = FakeModel()
+    use_model(monkeypatch, model)
+    report = semantic.build_index(library, batch_size=2)
+    assert report["resumed_vectors"] == 0 and len(model.encoded) == report["vectors"]
+    _assert_fresh_vectors(library, report)
+
+
+@pytest.mark.parametrize("damage", ["receipt", "keys", "vectors"])
+def test_corrupt_reuse_source_falls_back_to_fresh_exact_vectors(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, damage: str
+) -> None:
+    from book_rag import semantic
+    from book_rag.vector_reuse import KEYMAP, RECEIPT
+
+    library = embedding_library(tmp_path)
+    use_model(monkeypatch, FakeModel())
+    original = semantic.build_index(library, batch_size=3)
+    folder = library.data_dir / "vectors" / original["generation"]
+    if damage == "receipt":
+        (folder / RECEIPT).write_text("{broken receipt")
+    elif damage == "keys":
+        (folder / KEYMAP).write_bytes(b"bad sqlite")
+    else:
+        array = np.load(folder / "embeddings.npy", mmap_mode="r+")
+        array[0, 0] += 0.1
+        array.flush()
+        array._mmap.close()
+    before = {name: (folder / name).read_bytes() for name in (KEYMAP, RECEIPT, "embeddings.npy")}
+    _append_book(library, tmp_path)
+    model = FakeModel()
+    use_model(monkeypatch, model)
+    report = semantic.build_index(library, batch_size=3)
+    assert report["reused_vectors"] == 0
+    assert report["encoded_vectors"] == len(model.encoded) == report["vectors"]
+    assert any("reuse unavailable" in warning for warning in report["warnings"])
+    assert before == {name: (folder / name).read_bytes() for name in before}
+    _assert_fresh_vectors(library, report)
+
+
+def test_missing_legacy_keys_remain_query_usable_but_are_not_seeded(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    from book_rag import semantic
+    from book_rag.vector_reuse import KEYMAP, RECEIPT
+
+    library = embedding_library(tmp_path)
+    use_model(monkeypatch, FakeModel())
+    original = semantic.build_index(library, batch_size=3)
+    folder = library.data_dir / "vectors" / original["generation"]
+    (folder / RECEIPT).unlink()
+    (folder / KEYMAP).unlink()
+    assert library.search("word0000", mode="semantic")["mode"] == "semantic"
+    _append_book(library, tmp_path)
+    model = FakeModel()
+    use_model(monkeypatch, model)
+    report = semantic.build_index(library, batch_size=3)
+    assert report["encoded_vectors"] == report["vectors"] and report["reused_vectors"] == 0
+    assert any("no finalized" in warning for warning in report["warnings"])
+    assert not (folder / KEYMAP).exists() and not (folder / RECEIPT).exists()
+
+
+def test_new_ready_generation_without_receipt_is_not_activated(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    from book_rag import semantic
+    from book_rag.vector_reuse import RECEIPT
+
+    library = embedding_library(tmp_path)
+    original_atomic = semantic._atomic_json
+
+    def fail_activation(path: Path, data: dict) -> None:
+        if path.name == "active.json":
+            raise OSError("Activation interrupted")
+        original_atomic(path, data)
+
+    monkeypatch.setattr(semantic, "_atomic_json", fail_activation)
+    use_model(monkeypatch, FakeModel())
+    with pytest.raises(OSError):
+        semantic.build_index(library, batch_size=3)
+    old = next((library.data_dir / "vectors").glob("gen-*"))
+    (old / RECEIPT).unlink()
+    monkeypatch.setattr(semantic, "_atomic_json", original_atomic)
+    model = FakeModel()
+    use_model(monkeypatch, model)
+    report = semantic.build_index(library, batch_size=3)
+    assert report["generation"] != old.name
+    assert report["encoded_vectors"] == report["vectors"] == len(model.encoded)
+    assert any("Ready generation rejected" in warning for warning in report["warnings"])
+    assert not (old / RECEIPT).exists(), "Do not repair an immutable generation implicitly"
+
+
+@pytest.mark.parametrize("after_receipt", [False, True])
+def test_staging_seal_interruption_recovers_without_encoding(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, after_receipt: bool
+) -> None:
+    from book_rag import semantic
+    from book_rag.vector_reuse import RECEIPT, KeyMapWriter
+
+    library = embedding_library(tmp_path)
+    original_finalize = KeyMapWriter.finalize
+    original_replace = Path.replace
+
+    def interrupt_finalize(self: KeyMapWriter) -> dict:
+        original_finalize(self)
+        raise RuntimeError("Interruption after final receipt")
+
+    def interrupt_receipt(path: Path, target: Path) -> Path:
+        if Path(target).name == RECEIPT:
+            raise RuntimeError("Interruption before final receipt")
+        return original_replace(path, target)
+
+    if after_receipt:
+        monkeypatch.setattr(KeyMapWriter, "finalize", interrupt_finalize)
+    else:
+        monkeypatch.setattr(Path, "replace", interrupt_receipt)
+    use_model(monkeypatch, FakeModel())
+    with pytest.raises(RuntimeError, match="Interruption"):
+        semantic.build_index(library, batch_size=3)
+    monkeypatch.setattr(KeyMapWriter, "finalize", original_finalize)
+    monkeypatch.setattr(Path, "replace", original_replace)
+    model = FakeModel()
+    use_model(monkeypatch, model)
+    report = semantic.build_index(library, batch_size=3)
+    assert model.calls == report["encoded_vectors"] == report["reused_vectors"] == 0
+    assert report["resumed_vectors"] == report["vectors"]
+    assert (library.data_dir / "vectors" / report["generation"] / RECEIPT).is_file()
+
+
+def test_disk_preflight_preserves_old_active_and_does_not_allocate_staging(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    from types import SimpleNamespace
+
+    from book_rag import semantic
+
+    library = embedding_library(tmp_path)
+    use_model(monkeypatch, FakeModel())
+    semantic.build_index(library, batch_size=3)
+    active = library.data_dir / "vectors" / "active.json"
+    before = active.read_bytes()
+    _append_book(library, tmp_path)
+    model = FakeModel()
+    use_model(monkeypatch, model)
+    monkeypatch.setattr(semantic.shutil, "disk_usage", lambda directory: SimpleNamespace(free=0))
+    with pytest.raises(OSError, match="4 GiB reserve"):
+        semantic.build_index(library, batch_size=3)
+    assert active.read_bytes() == before
+    assert not list(active.parent.glob("staging-*"))
+    assert not model.encoded
+
+
+def test_mid_build_disk_full_retains_checkpoint_and_active_then_resumes(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    import json
+    from types import SimpleNamespace
+
+    from book_rag import semantic
+
+    library = embedding_library(tmp_path)
+    use_model(monkeypatch, FakeModel())
+    semantic.build_index(library, batch_size=3)
+    active = library.data_dir / "vectors" / "active.json"
+    before = active.read_bytes()
+    _append_book(library, tmp_path, words=700)
+    actual_disk_usage = semantic.shutil.disk_usage
+
+    def disk_usage(directory: Path) -> object:
+        for folder in directory.glob("staging-*"):
+            checkpoint = semantic._read_checkpoint(folder)
+            if checkpoint.get("completed_vectors", 0) >= 3:
+                return SimpleNamespace(free=0)
+        return actual_disk_usage(directory)
+
+    monkeypatch.setattr(semantic.shutil, "disk_usage", disk_usage)
+    model = FakeModel()
+    use_model(monkeypatch, model)
+    with pytest.raises(OSError, match="completed work and active index retained"):
+        semantic.build_index(library, batch_size=3)
+    assert active.read_bytes() == before
+    folder = next(active.parent.glob("staging-*"))
+    assert json.loads((folder / "checkpoint.json").read_text())["completed_vectors"] == 3
+    checkpoint_bytes = (folder / "checkpoint.json").read_bytes()
+    with pytest.raises(OSError):
+        semantic.build_index(library, batch_size=3)
+    assert (folder / "checkpoint.json").read_bytes() == checkpoint_bytes
+    monkeypatch.setattr(semantic.shutil, "disk_usage", actual_disk_usage)
+    report = semantic.build_index(library, batch_size=2)
+    assert report["resumed_vectors"] == 3
+    _assert_fresh_vectors(library, report)
+
+
+def test_disk_budget_credits_only_completed_prefix(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    from types import SimpleNamespace
+
+    from book_rag import semantic
+
+    dimensions, remaining = 384, 7
+    available = semantic.DISK_RESERVE_BYTES + remaining * (4 * dimensions + 8 + semantic.KEYMAP_BYTES_PER_VECTOR) + 8192
+    monkeypatch.setattr(semantic.shutil, "disk_usage", lambda directory: SimpleNamespace(free=available))
+    semantic._require_disk_space(tmp_path, remaining, dimensions)
+    with pytest.raises(OSError):
+        semantic._require_disk_space(tmp_path, remaining + 1, dimensions)
+
+
+def test_durable_key_corruption_cannot_be_published_after_resume(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    import sqlite3
+
+    from book_rag import semantic
+    from book_rag.vector_reuse import KEYMAP
+
+    library = embedding_library(tmp_path)
+    use_model(monkeypatch, FakeModel(fail_after=1))
+    with pytest.raises(KeyboardInterrupt):
+        semantic.build_index(library, batch_size=3)
+    folder = next((library.data_dir / "vectors").glob("staging-*"))
+    with sqlite3.connect(folder / KEYMAP) as connection:
+        connection.execute("UPDATE window_keys SET key=? WHERE row_index=0", (b"x" * 32,))
+    model = FakeModel()
+    use_model(monkeypatch, model)
+    report = semantic.build_index(library, batch_size=3)
+    assert report["resumed_vectors"] == 0
+    assert report["encoded_vectors"] == len(model.encoded) == report["vectors"]
+    _assert_fresh_vectors(library, report)
+
+
+def test_source_lookup_rejection_encodes_complete_batch_fresh(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    from book_rag import semantic
+    from book_rag.vector_reuse import GenerationReuse
+
+    library = embedding_library(tmp_path)
+    use_model(monkeypatch, FakeModel())
+    semantic.build_index(library, batch_size=3)
+    _append_book(library, tmp_path)
+
+    def reject(self: GenerationReuse, texts: list[str]) -> list:
+        raise ValueError("Source changed after validation")
+
+    monkeypatch.setattr(GenerationReuse, "lookup", reject)
+    model = FakeModel()
+    use_model(monkeypatch, model)
+    report = semantic.build_index(library, batch_size=3)
+    assert report["encoded_vectors"] == report["vectors"] and report["reused_vectors"] == 0
+    assert any("rejected during lookup" in warning for warning in report["warnings"])
+    _assert_fresh_vectors(library, report)
+
+
+def test_largest_encoder_batch_is_split_only_for_key_lookup(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    from book_rag import semantic
+
+    library = Library(tmp_path / "many-windows")
+    source = tmp_path / "long.txt"
+    source.write_text(" ".join(f"word{index}" for index in range(23000)))
+    library.import_book(source, {"id": "long", "title": "A long source", "author": "Author"})
+    first = FakeModel()
+    use_model(monkeypatch, first)
+    original = semantic.build_index(library, batch_size=512)
+    assert original["vectors"] > 512
+    assert first.calls == (original["vectors"] + 511) // 512
+    _append_book(library, tmp_path)
+    model = FakeModel()
+    use_model(monkeypatch, model)
+    report = semantic.build_index(library, batch_size=512)
+    assert report["reused_vectors"] == original["vectors"]
+    assert len(model.encoded) == report["encoded_vectors"] == report["vectors"] - original["vectors"]
+    _assert_fresh_vectors(library, report)

@@ -257,8 +257,9 @@
         "author": "Unidentified editorial contributor",
         "role": "editorial",
         "source_url": "https://www.gutenberg.org/ebooks/1661",
-        "evidence": "The title section contains digital edition navigation and a contents list. The rule does not match any of Doyle’s story sections.",
-        "source_artifact_sha256": "310ddf29f2b98b870b0e970061d236c9ce7c65163e0e172c254a1db3d070d3f4"
+        "evidence": "The explicit provider illustrated-edition notice is editorial; the recovered contents table is excluded by the body-text selector.",
+        "source_artifact_sha256": "310ddf29f2b98b870b0e970061d236c9ce7c65163e0e172c254a1db3d070d3f4",
+        "text_contains": "THERE IS AN ILLUSTRATED EDITION OF THIS TITLE"
       }
     ]
   },

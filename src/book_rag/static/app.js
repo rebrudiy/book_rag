@@ -13,7 +13,8 @@
     compareBooks: [], compareTotal: 0, compareLoaded: false, compareRequest: 0, researchSelection: new Map(),
   };
   const languageNames = { ru: 'Русский', en: 'English', fr: 'Français', de: 'Deutsch', es: 'Español', it: 'Italiano', zh: '中文', ja: '日本語', la: 'Latina', el: 'Ελληνικά', pt: 'Português', uk: 'Українська', ar: 'العربية' };
-  const statusNames = { discovered: 'Найдены', downloaded: 'Скачаны', processed: 'Обработаны', indexed: 'В поиске', searchable: 'В поиске', failed: 'Требуют внимания', error: 'Требуют внимания', duplicate: 'Дубли' };
+  const statusNames = { discovered: 'Найдены', downloaded: 'Скачаны', processed: 'Обработаны', indexed: 'В поиске', searchable: 'В поиске', failed: 'Пока недоступны · ошибка', deferred: 'Пока недоступны · отложены', error: 'Требуют внимания', duplicate: 'Дубли' };
+  const ingestionNames = { discovered: 'Ожидают загрузки', downloaded: 'Файл получен', processed: 'Текст извлечён', indexed: 'Завершены', failed: 'Не удались', deferred: 'Отложены', duplicate: 'Дубли' };
 
   function node(tag, className, value) {
     const el = document.createElement(tag);
@@ -63,6 +64,18 @@
     try {
       const url = new URL(value, location.origin);
       return ['https:', 'http:'].includes(url.protocol) ? url.href : null;
+    } catch { return null; }
+  }
+  function artifactDownload(value) {
+    if (typeof value !== 'string' || !value.trim()) return null;
+    try {
+      const url = new URL(value, location.origin);
+      if (url.origin !== location.origin || url.username || url.password || url.search || url.hash || !/^\/api\/artifacts\/[a-f0-9]{64}$/.test(url.pathname)) return null;
+      const link = node('a', 'text-button artifact-download', 'Скачать зафиксированный оригинал');
+      link.href = url.pathname;
+      // The verified attachment response supplies the digest and real format filename.
+      link.download = '';
+      return link;
     } catch { return null; }
   }
   function loading(target, message) { target.replaceChildren(node('div', 'loading-state', message)); }
@@ -134,6 +147,34 @@
   }
 
   function coverageType(book) { return book?.coverage || book?.source_metadata?.coverage || ''; }
+  function withoutIllustrations(book) {
+    const metadata = book?.source_metadata || {};
+    return book?.illustrations_included === false || metadata.illustrations_included === false ||
+      book?.source_variant?.illustrations_included === false || metadata.source_variant?.illustrations_included === false;
+  }
+  function ingestionNotice(item, compact = false) {
+    const status = item?.ingestion_status;
+    const available = bookSearchable(item) || item?.verified === true;
+    let message = '';
+    if (status === 'failed') message = available ? 'Обновление не удалось · прежнее издание доступно' : 'Загрузка не удалась · текст пока недоступен';
+    else if (status === 'deferred') message = available ? 'Обновление отложено · прежнее издание доступно' : 'Загрузка отложена · текст пока недоступен';
+    else if (available && ['discovered', 'downloaded', 'processed'].includes(status)) message = 'Источник обновляется · прежнее издание доступно';
+    else if (typeof item?.ingestion_warning === 'string') message = item.ingestion_warning;
+    if (!message) return null;
+    const notice = node('div', compact ? 'ingestion-notice ingestion-compact' : 'ingestion-notice');
+    notice.dataset.stage = status || '';
+    notice.append(node('p', 'ingestion-message', message));
+    if (!compact) {
+      if (available) notice.append(node('p', 'ingestion-explanation', 'Текст и цитаты относятся к последнему успешно проиндексированному изданию.'));
+      if (item.ingestion_updated_at) {
+        const value = String(item.ingestion_updated_at);
+        const date = new Date(/(?:Z|[+-]\d\d:\d\d)$/.test(value) ? value : value.replace(' ', 'T') + 'Z');
+        if (!Number.isNaN(date.getTime())) notice.append(node('p', 'ingestion-date', `Последняя попытка: ${date.toLocaleString('ru-RU')}`));
+      }
+      if (item.ingestion_error) { const details = node('details', 'ingestion-error'); details.append(node('summary', '', 'Причина последней попытки'), node('p', '', item.ingestion_error)); notice.append(details); }
+    }
+    return notice;
+  }
   function createBookCard(book, index) {
     const card = node('article', 'book-card');
     const cover = node('div', `book-cover cover-${index % 6}`);
@@ -147,6 +188,9 @@
     const excerpt = coverageType(book) === 'excerpt' || /extract|excerpt|отрывок|фрагмент/i.test(book.edition || '');
     if (selectedChapters) info.append(node('p', 'book-excerpt-label', 'Выбранные главы'));
     else if (excerpt) info.append(node('p', 'book-excerpt-label', 'Отрывок произведения'));
+    if (withoutIllustrations(book)) info.append(node('p', 'book-excerpt-label', 'Без иллюстраций'));
+    const attempt = ingestionNotice(book, true);
+    if (attempt) info.append(attempt);
     const footer = node('div', 'book-card-footer');
     footer.append(node('span', '', bookSearchable(book) ? `Разделов: ${formatNumber(bookSectionsCount(book))} · ${labelLanguage(book.language)}` : 'Текст ещё не индексирован'));
     const open = button(selectedChapters ? 'Читать главы ↗' : excerpt ? 'Читать отрывок ↗' : 'Читать ↗', () => openBook(book.id), 'book-open');
@@ -229,12 +273,13 @@
   function renderStats() {
     const stats = state.stats || {};
     const counts = stats.status_counts || {};
-    $('stat-books').textContent = formatNumber(stats.books);
+    $('stat-books').textContent = formatNumber(stats.searchable_books ?? stats.books);
     $('stat-works').textContent = formatNumber(stats.works);
     const provisional = stats.work_count_is_provisional !== false;
-    const scope = provisional
+    let scope = provisional
       ? `Группировка изданий предварительная: ${formatNumber(stats.works)} групп пока не подтверждают число уникальных произведений. Проверено групп: ${formatNumber(stats.curated_work_groups)}. Периодических выпусков: ${formatNumber(stats.periodical_editions)}.`
       : `Связанные издания объединены в ${formatNumber(stats.works)} групп произведений по проверенным метаданным. Периодических выпусков: ${formatNumber(stats.periodical_editions)}.`;
+    if (Number.isInteger(stats.confirmed_full_works_lower_bound)) scope += ` Подтверждённых полных произведений — не менее ${formatNumber(stats.confirmed_full_works_lower_bound)}.`;
     for (const id of ['corpus-scope', 'library-scope']) {
       $(id).textContent = scope;
       $(id).classList.remove('hidden');
@@ -246,19 +291,43 @@
     populateSelect($('language-filter'), options, 'Все языки');
     populateSelect($('library-language'), options, 'Все языки');
     $('stat-languages').textContent = formatNumber(Array.isArray(languages) ? languages.length : typeof languages === 'object' && languages ? Object.keys(languages).length : languages || 0);
-    const items = Object.entries(counts);
-    $('pipeline-stats').replaceChildren(...items.map(([status, count]) => {
-      const box = node('div', 'pipeline-stat'); box.append(node('b', '', formatNumber(count)), node('span', '', statusNames[status] || status)); return box;
+    const availability = node('section', 'pipeline-group'); availability.setAttribute('aria-label', 'Доступность изданий');
+    availability.append(node('h2', '', 'Доступность изданий'));
+    const availabilityCounts = node('div', 'pipeline-counts');
+    const available = node('div', 'pipeline-stat pipeline-available'); available.dataset.status = 'indexed';
+    available.append(node('b', '', formatNumber(stats.searchable_books ?? stats.books)), node('span', '', 'Доступны в поиске'));
+    availabilityCounts.append(available);
+    Object.entries(counts).filter(([status]) => !['indexed', 'searchable'].includes(status)).forEach(([status, count]) => {
+      const box = node('div', 'pipeline-stat'); box.dataset.status = status;
+      box.append(node('b', '', formatNumber(count)), node('span', '', statusNames[status] || status)); availabilityCounts.append(box);
+    });
+    availability.append(availabilityCounts);
+    const attempts = node('section', 'pipeline-group'); attempts.setAttribute('aria-label', 'Последние попытки получения источников');
+    attempts.append(node('h2', '', 'Загрузка и обработка · последняя попытка'));
+    if (stats.ingestion_status_counts && typeof stats.ingestion_status_counts === 'object') {
+      const attemptCounts = node('div', 'pipeline-counts');
+      Object.entries(stats.ingestion_status_counts).forEach(([status, count]) => {
+        const box = node('div', 'pipeline-stat'); box.dataset.ingestionStatus = status;
+        box.append(node('b', '', formatNumber(count)), node('span', '', ingestionNames[status] || status)); attemptCounts.append(box);
+      });
+      if (!attemptCounts.childElementCount) { const box = node('div', 'pipeline-stat'); box.append(node('b', '', '0'), node('span', '', 'Записей о попытках')); attemptCounts.append(box); }
+      attempts.append(attemptCounts, node('p', 'pipeline-explanation', 'Учтена одна последняя попытка на издание. Ошибка обновления сохраняет доступность прежнего издания.'));
+    } else attempts.append(node('p', 'pipeline-explanation', 'Сведения о последних попытках пока недоступны.'));
+    const refresh = node('div', 'pipeline-refresh');
+    refresh.append(node('span', '', `Состояние на ${new Date().toLocaleTimeString('ru-RU')}`), button('Обновить счётчики', async (event) => {
+      const trigger = event.currentTarget; trigger.disabled = true;
+      try { await refreshLibrary(); if (state.view === 'library') await loadLibrary(); }
+      finally { trigger.disabled = false; }
     }));
-    if (!items.length) {
-      const box = node('div', 'pipeline-stat'); box.append(node('b', '', formatNumber(stats.books)), node('span', '', 'Доступно в поиске')); $('pipeline-stats').append(box);
-    }
+    $('pipeline-stats').replaceChildren(availability, attempts, refresh);
+    $('library-ingestion-status').classList.toggle('hidden', !stats.ingestion_status_counts);
   }
   async function loadLibrary(offset = state.libraryOffset) {
     const request = ++state.libraryRequest;
     const params = new URLSearchParams({ q: $('library-query').value.trim(), offset: String(offset), limit: '48' });
     if ($('library-language').value) params.set('language', $('library-language').value);
     if ($('library-status').value) params.set('status', $('library-status').value);
+    if ($('library-ingestion-status').value) params.set('ingestion_status', $('library-ingestion-status').value);
     loading($('library-books'), 'Загружаем страницу каталога');
     $('library-prev').disabled = true; $('library-next').disabled = true; $('library-count').textContent = 'Загружаем…';
     try {
@@ -311,6 +380,8 @@
     const contributor = contributorLabel(passage, passage.book_author || passage.author);
     card.append(top);
     if (contributor) card.append(node('p', 'contributor-label', contributor));
+    const attempt = ingestionNotice(passage, true);
+    if (attempt) card.append(attempt);
     card.append(quote, citation, actions); return card;
   }
   async function search(push = true) {
@@ -374,6 +445,8 @@
     $('reader-section-title').textContent = '';
     $('reader-citation').classList.add('hidden');
     $('reader-contributor').classList.add('hidden');
+    $('reader-ingestion-warning').classList.add('hidden');
+    $('reader-related-editions').classList.add('hidden');
     try {
       const [book, passage] = await Promise.all([api(`/api/books/${encodeURIComponent(bookId)}`), passageId ? api(`/api/passages/${encodeURIComponent(passageId)}`) : Promise.resolve(null)]);
       if (request !== state.readerSequence) return;
@@ -402,8 +475,11 @@
     const sections = sectionList(book);
     $('reader-sidebar-title').textContent = book.title || '';
     $('reader-book-meta').textContent = `${book.author || ''} · ${book.title || ''} · ${book.edition || ''}`;
+    const attempt = ingestionNotice(book);
+    $('reader-ingestion-warning').replaceChildren(...(attempt ? [attempt] : []));
+    $('reader-ingestion-warning').classList.toggle('hidden', !attempt);
     const coverage = coverageType(book);
-    $('reader-coverage').textContent = coverage === 'selected_chapters' ? 'Выбранные главы · частичный текст произведения' : coverage === 'excerpt' || /extract|excerpt|отрывок/i.test(book.edition || '') ? 'Отрывок произведения · частичный текст' : '';
+    $('reader-coverage').textContent = coverage === 'selected_chapters' ? 'Выбранные главы · частичный текст произведения' : coverage === 'excerpt' || /extract|excerpt|отрывок/i.test(book.edition || '') ? 'Отрывок произведения · частичный текст' : book.source_metadata?.coverage_scope === 'original_work_only' ? 'Оригинальное произведение · без позднего редакционного аппарата' : '';
     $('reader-coverage').classList.toggle('hidden', !$('reader-coverage').textContent);
     document.title = `${book.title} — Атлас книг`;
     $('reader-toc').replaceChildren(...sections.map((item) => {
@@ -415,6 +491,51 @@
     source.append(node('p', '', book.edition || 'Издание не указано'), node('p', '', book.rights || 'Условия использования не указаны'));
     const sourceURL = safeURL(book.source_url);
     if (sourceURL) { const link = node('a', '', 'Открыть первоисточник ↗'); link.href = sourceURL; link.target = '_blank'; link.rel = 'noopener noreferrer'; const p = node('p'); p.append(link); source.append(p); }
+    const archivedOriginal = artifactDownload(book.artifact_url);
+    if (archivedOriginal) { const paragraph = node('p', 'source-artifact'); paragraph.append(archivedOriginal, node('span', 'artifact-description', 'Копия файла, полученного при загрузке этого издания.')); source.append(paragraph); }
+    if (withoutIllustrations(book)) source.append(node('p', 'source-variant-note', 'В этой копии нет иллюстраций; оригинал доступен по ссылке источника'));
+    const rightsURL = safeURL(book.rights_url || book.source_metadata?.rights_url);
+    if (rightsURL) { const link = node('a', '', 'Условия использования источника ↗'); link.href = rightsURL; link.target = '_blank'; link.rel = 'noopener noreferrer'; const paragraph = node('p'); paragraph.append(link); source.append(paragraph); }
+    const bundle = book.source_metadata?.source_bundle_sha256;
+    if (typeof bundle === 'string' && /^[0-9a-f]{64}$/i.test(bundle)) source.append(node('p', 'source-revision-bundle', `Снимок версий источника: ${bundle.slice(0, 16)}…`));
+    const revisions = book.source_metadata?.chapter_sources;
+    if (Array.isArray(revisions) && revisions.length) {
+      const details = node('details', 'source-revisions');
+      details.append(node('summary', '', `Зафиксированные версии страниц (${revisions.length})`));
+      const list = node('ol');
+      revisions.forEach((revision) => {
+        if (!revision || typeof revision !== 'object') return;
+        const url = safeURL(revision.permanent_url);
+        if (!url) return;
+        const item = node('li'); const link = node('a', '', revision.title || `Версия ${revision.revision_id || ''}`);
+        link.href = url; link.target = '_blank'; link.rel = 'noopener noreferrer';
+        item.append(link);
+        if (revision.revision_id) item.append(node('span', '', `Версия ${revision.revision_id}${revision.revision_timestamp ? ' · ' + String(revision.revision_timestamp).slice(0, 10) : ''}`));
+        list.append(item);
+      });
+      details.append(list); source.append(details);
+    }
+    const related = Array.isArray(book.related_editions) ? book.related_editions.filter((edition) => edition && edition.id && asID(edition.id) !== asID(book.id)).slice(0, 20) : [];
+    $('reader-related-editions').replaceChildren();
+    $('reader-related-editions').classList.toggle('hidden', !related.length);
+    if (related.length) {
+      const summary = node('summary'); summary.append(node('h3', '', 'Другие издания и переводы'));
+      $('reader-related-editions').append(summary, node('p', 'related-edition-hint', 'Откроется начало выбранного издания.'));
+      const editions = node('ul');
+      related.forEach((edition) => {
+        const item = node('li'); const link = node('a', '', edition.title || 'Открыть издание');
+        link.href = '/?' + new URLSearchParams({ book: edition.id });
+        link.addEventListener('click', (event) => { if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return; event.preventDefault(); openBook(edition.id); });
+        item.append(link, node('p', '', [labelLanguage(edition.language), edition.edition].filter(Boolean).join(' · ')));
+        if (typeof edition.translator === 'string' && edition.translator.trim()) item.append(node('p', '', `Перевод: ${edition.translator}`));
+        if (coverageType(edition) === 'selected_chapters') item.append(node('p', '', 'Выбранные главы'));
+        else if (coverageType(edition) === 'excerpt') item.append(node('p', '', 'Отрывок произведения'));
+        editions.append(item);
+      });
+      $('reader-related-editions').append(editions);
+      if (Number(book.related_editions_total) > related.length) $('reader-related-editions').append(node('p', 'related-edition-hint', `Показано ${related.length} из ${formatNumber(book.related_editions_total)} связанных изданий.`));
+    }
+
     if (!section) { empty($('reader-text'), 'Нет доступных глав', 'Эта книга ещё не обработана. Проверьте состояние корпуса в библиотеке.'); return; }
     $('reader-section-title').textContent = section.title || 'Текст книги';
     const contributor = contributorLabel(section, book.author);
@@ -611,6 +732,8 @@
       if (item.citation) card.append(node('p', 'passage-citation', item.citation));
       if (item.note) card.append(node('p', 'saved-note', item.note));
       const actions = node('div', 'saved-actions');
+      const archivedOriginal = artifactDownload(item.artifact_url);
+      if (archivedOriginal) actions.append(archivedOriginal);
       if (item.kind === 'query') actions.append(button('Продолжить поиск ↗', () => { showView('search'); $('query').value = item.query || item.title; search(); }));
       else if (item.passage_id) actions.append(button('Открыть в контексте ↗', async () => {
         try { const passage = await api(`/api/passages/${encodeURIComponent(item.passage_id)}`); await openBook(passage.book_id, passage.section_id, passage.id); }
@@ -658,6 +781,21 @@
     if (params.has('q')) { $('query').value = params.get('q'); await search(false); }
   }
 
+  // Keep availability and the latest source attempt independently selectable.
+  const attemptFilter = node('select', 'hidden'); attemptFilter.id = 'library-ingestion-status';
+  attemptFilter.setAttribute('aria-label', 'Последняя попытка получения источника');
+  populateSelect(attemptFilter, Object.entries(ingestionNames).map(([value, label]) => ({ value, label: `Попытка: ${label.toLocaleLowerCase('ru-RU')}` })), 'Все последние попытки');
+  $('library-count').before(attemptFilter);
+  $('library-status').setAttribute('aria-label', 'Доступность издания');
+  $('library-status').querySelector('option[value="failed"]').textContent = 'Недоступны · ошибка загрузки';
+  if (!$('library-status').querySelector('option[value="deferred"]')) { const option = node('option', '', 'Недоступны · отложены'); option.value = 'deferred'; $('library-status').append(option); }
+  const readerAttempt = node('div', 'hidden'); readerAttempt.id = 'reader-ingestion-warning'; readerAttempt.setAttribute('role', 'status');
+  $('reader-citation').before(readerAttempt);
+  const readerRelated = node('details', 'reader-related-editions hidden'); readerRelated.id = 'reader-related-editions'; readerRelated.setAttribute('aria-label', 'Другие издания и переводы');
+  const wideReader = matchMedia('(min-width: 761px)'); readerRelated.open = wideReader.matches;
+  wideReader.addEventListener('change', (event) => { readerRelated.open = event.matches; });
+  $('reader-source').closest('details').after(readerRelated);
+
   $('search-form').addEventListener('submit', (event) => { event.preventDefault(); search(); });
   document.querySelectorAll('[data-mode]').forEach((el) => el.addEventListener('click', () => { setMode(el.dataset.mode); if (state.query) search(); }));
   document.querySelectorAll('[data-query]').forEach((el) => el.addEventListener('click', () => { $('query').value = el.dataset.query; search(); }));
@@ -686,6 +824,7 @@
   $('library-query').addEventListener('input', debounce(() => loadLibrary(0)));
   $('library-language').addEventListener('change', () => loadLibrary(0));
   $('library-status').addEventListener('change', () => loadLibrary(0));
+  $('library-ingestion-status').addEventListener('change', () => loadLibrary(0));
   $('library-prev').addEventListener('click', () => loadLibrary(Math.max(0, state.libraryOffset - 48)));
   $('library-next').addEventListener('click', () => loadLibrary(state.libraryOffset + 48));
   $('reload-library').addEventListener('click', refreshLibrary);

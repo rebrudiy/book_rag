@@ -1,0 +1,126 @@
+{
+  "status": "passed",
+  "scope": "Three audited translation editions; exact canonical slices, hashes and raw artifacts, not all live corpus",
+  "books": [
+    {
+      "book_id": "pg600-full",
+      "sections": 24,
+      "passages_verified": 195,
+      "artifact_verified": true,
+      "roles": [
+        {
+          "ordinal": 0,
+          "title": "Notes from the Underground\nby Fyodor Dostoyevsky\nContents",
+          "section_author": "Unidentified contents compiler",
+          "section_role": "editorial"
+        },
+        {
+          "ordinal": 1,
+          "title": "NOTES FROM THE UNDERGROUND[*] A NOVEL",
+          "section_author": "Dostoyevsky, Fyodor",
+          "section_role": "main_text"
+        },
+        {
+          "ordinal": 13,
+          "title": "PART II À Propos of the Wet Snow",
+          "section_author": "Nekrassov",
+          "section_role": "main_text"
+        }
+      ]
+    },
+    {
+      "book_id": "pg47935-full",
+      "sections": 29,
+      "passages_verified": 366,
+      "artifact_verified": true,
+      "roles": [
+        {
+          "ordinal": 0,
+          "title": "FATHERS AND SONS\nBY\nIVAN S. TURGENEV\nTranslated from the Russian by C.J. Hogarth\nLONDON & TORONTO\nPUBLISHED BY J.M. DENT & SONS LTD & IN NEW YORK\nBY E.P. DUTTON & CO\n1921\nINTRODUCTION",
+          "section_author": "E. R. (signed introduction; bibliography unattributed)",
+          "section_role": "editorial"
+        }
+      ]
+    },
+    {
+      "book_id": "pg30723-full",
+      "sections": 40,
+      "passages_verified": 354,
+      "artifact_verified": true,
+      "roles": [
+        {
+          "ordinal": 0,
+          "title": "E-text prepared by Ron Swanson from page images generously made available by Internet Archive/American Libraries ( http://www.archive.org/details/americana )",
+          "section_author": "Project Gutenberg production note (writer unidentified)",
+          "section_role": "editorial"
+        },
+        {
+          "ordinal": 1,
+          "title": "THE HARVARD CLASSICS SHELF OF FICTION [From Vol. 19]",
+          "section_author": "Title-page material (selection credited Charles W. Eliot)",
+          "section_role": "editorial"
+        },
+        {
+          "ordinal": 2,
+          "title": "FATHERS AND CHILDREN",
+          "section_author": "Unidentified title-page contributor",
+          "section_role": "editorial"
+        },
+        {
+          "ordinal": 3,
+          "title": "IVAN TURGENEV",
+          "section_author": "Publisher title-page material",
+          "section_role": "editorial"
+        },
+        {
+          "ordinal": 4,
+          "title": "CONTENTS",
+          "section_author": "Unidentified contents compiler",
+          "section_role": "editorial"
+        },
+        {
+          "ordinal": 5,
+          "title": "BIOGRAPHICAL NOTE",
+          "section_author": "William Allan Neilson",
+          "section_role": "editorial"
+        },
+        {
+          "ordinal": 6,
+          "title": "CRITICISMS AND INTERPRETATIONS\nI",
+          "section_author": "Emile Melchior, Vicomte de Vogüé (as credited)",
+          "section_role": "editorial"
+        },
+        {
+          "ordinal": 7,
+          "title": "II",
+          "section_author": "William Dean Howells",
+          "section_role": "editorial"
+        },
+        {
+          "ordinal": 8,
+          "title": "III",
+          "section_author": "K. Waliszewski",
+          "section_role": "editorial"
+        },
+        {
+          "ordinal": 9,
+          "title": "IV",
+          "section_author": "Richard H. P. Curle",
+          "section_role": "editorial"
+        },
+        {
+          "ordinal": 10,
+          "title": "V",
+          "section_author": "Maurice Baring",
+          "section_role": "editorial"
+        },
+        {
+          "ordinal": 11,
+          "title": "LIST OF CHARACTERS",
+          "section_author": "Unidentified editorial contributor (list of characters)",
+          "section_role": "editorial"
+        }
+      ]
+    }
+  ]
+}

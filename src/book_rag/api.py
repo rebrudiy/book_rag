@@ -33,6 +33,23 @@ def create_app(directory: Path | None = None) -> FastAPI:
     app.state.library = library
     static = Path(__file__).parent / "static"
 
+    @app.get("/api/artifacts/{sha256}")
+    def artifact(sha256: str) -> FileResponse:
+        from book_rag.artifacts import locate_artifact
+
+        try:
+            path = locate_artifact(library.data_dir, sha256)
+        except ValueError as exc:
+            raise HTTPException(400, "Invalid or corrupt artifact digest") from exc
+        if path is None:
+            raise HTTPException(404, "Archived original not found")
+        return FileResponse(
+            path,
+            media_type="application/octet-stream",
+            filename=path.name,
+            headers={"X-Content-Type-Options": "nosniff", "Content-Security-Policy": "sandbox; default-src 'none'"},
+        )
+
     @app.get("/api/health")
     def health() -> dict[str, str]:
         return {"status": "ok"}
@@ -55,8 +72,10 @@ def create_app(directory: Path | None = None) -> FastAPI:
         | None = None,
         offset: int = Query(default=0, ge=0),
         limit: int = Query(default=100, ge=1, le=500),
+        ingestion_status: Literal["indexed", "discovered", "downloaded", "processed", "failed", "duplicate", "deferred"]
+        | None = None,
     ) -> dict[str, Any]:
-        return library.book_page(language, q, status, offset, limit)
+        return library.book_page(language, q, status, offset, limit, ingestion_status)
 
     @app.get("/api/books/{book_id}")
     def book(book_id: str) -> dict[str, Any]:

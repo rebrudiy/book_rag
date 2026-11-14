@@ -30,6 +30,11 @@ CREATE TABLE IF NOT EXISTS books (
 );
 CREATE INDEX IF NOT EXISTS books_work ON books(work_id);
 CREATE INDEX IF NOT EXISTS books_content ON books(content_sha256);
+CREATE TABLE IF NOT EXISTS source_pipeline (
+ book_id TEXT PRIMARY KEY REFERENCES books(id) ON DELETE CASCADE,
+ stage TEXT NOT NULL, local_path TEXT, error TEXT,
+ updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
 CREATE TABLE IF NOT EXISTS index_versions (
  book_id TEXT PRIMARY KEY REFERENCES books(id) ON DELETE CASCADE, fingerprint TEXT NOT NULL
 );
@@ -119,6 +124,11 @@ class Library:
         self.db_path = data_dir / "library.sqlite3"
         with self.connect() as conn:
             conn.executescript(SCHEMA)
+            # Legacy failed rows are intentionally not inferred to be searchable.
+            conn.execute(
+                "INSERT OR IGNORE INTO source_pipeline(book_id,stage,local_path,error,updated_at) "
+                "SELECT id,status,local_path,error,COALESCE(indexed_at,created_at) FROM books"
+            )
 
     @contextmanager
     def connect(self) -> Generator[sqlite3.Connection]:
@@ -149,34 +159,62 @@ class Library:
                 "INSERT OR IGNORE INTO book_metadata(book_id,metadata) VALUES (?,?)",
                 (book_id, json.dumps(metadata, ensure_ascii=False, sort_keys=True)),
             )
+            conn.execute(
+                "INSERT OR IGNORE INTO source_pipeline(book_id,stage,local_path,error) "
+                "SELECT id,status,local_path,error FROM books WHERE id=?",
+                (book_id,),
+            )
         return book_id
 
+    @staticmethod
+    def _pipeline_stage(
+        conn: sqlite3.Connection, book_id: str, stage: str, error: str | None, local_path: str | None
+    ) -> None:
+        conn.execute(
+            "INSERT INTO source_pipeline(book_id,stage,error,local_path) "
+            "SELECT id,?,?,? FROM books WHERE id=? "
+            "ON CONFLICT(book_id) DO UPDATE SET stage=excluded.stage,error=excluded.error,"
+            "local_path=COALESCE(excluded.local_path,source_pipeline.local_path),updated_at=CURRENT_TIMESTAMP",
+            (stage, error, local_path, book_id),
+        )
+
     def stage(self, book_id: str, stage: str, detail: str = "", local_path: str | None = None) -> None:
+        """Track the latest attempt without withdrawing a successfully indexed edition."""
         with self.connect() as conn:
+            error = detail if stage in ("failed", "deferred") else None
+            self._pipeline_stage(conn, book_id, stage, error, local_path)
             conn.execute(
-                "UPDATE books SET status=?,error=?,local_path=COALESCE(?,local_path) WHERE id=?",
-                (stage, detail if stage in ("failed", "deferred") else None, local_path, book_id),
+                "UPDATE books SET status=?,error=?,local_path=COALESCE(?,local_path) WHERE id=? AND status!='indexed'",
+                (stage, error, local_path, book_id),
             )
             conn.execute("INSERT INTO events(book_id,stage,detail) VALUES (?,?,?)", (book_id, stage, detail))
 
     def import_book(self, path: Path, metadata: dict[str, Any]) -> dict[str, Any]:
         """Index atomically, deduplicate normalized editions, resume safely after failure."""
+        from book_rag.artifacts import archive_artifact
         from book_rag.attribution import section_attribution
         from book_rag.parsers import PARSER_FINGERPRINT, parse_book
 
-        indexer_version = digest(
-            PARSER_FINGERPRINT
-            + CHUNKER_VERSION
-            + "explicit-contributors-v1"
-            + json.dumps(metadata.get("section_attributions", []), ensure_ascii=False, sort_keys=True)
-        )
-
-        book_id = self.register(metadata)
+        book_id = str(metadata["id"]) if metadata.get("id") else None
         fields = ("title", "author", "language", "work_id", "edition", "source_url", "rights", "rights_url")
+        attempt_path = str(path.absolute())
         try:
-            with path.open("rb") as artifact:
-                artifact_hash = hashlib.file_digest(artifact, "sha256").hexdigest()
+            book_id = self.register(metadata)
+            self.stage(book_id, "downloaded", local_path=attempt_path)
+            indexer_version = digest(
+                PARSER_FINGERPRINT
+                + CHUNKER_VERSION
+                + "explicit-contributors-v1"
+                + json.dumps(metadata.get("section_attributions", []), ensure_ascii=False, sort_keys=True)
+            )
+            original_filename = str(metadata.get("original_filename") or path.name)
+            metadata = metadata | {"original_filename": original_filename}
+            archived = archive_artifact(path, self.data_dir)
+            artifact_hash = archived["sha256"]
+            path = archived["path"]
+            attempt_path = str(path.resolve())
             with self.connect() as conn:
+                conn.execute("BEGIN IMMEDIATE")
                 old = conn.execute("SELECT * FROM books WHERE id=?", (book_id,)).fetchone()
                 version = conn.execute("SELECT fingerprint FROM index_versions WHERE book_id=?", (book_id,)).fetchone()
                 changed = any(str(metadata[k] or "") != old[k] for k in fields if k in metadata) if old else True
@@ -193,14 +231,18 @@ class Library:
                         "ON CONFLICT(book_id) DO UPDATE SET metadata=excluded.metadata",
                         (book_id, json.dumps(metadata, ensure_ascii=False, sort_keys=True)),
                     )
+                    conn.execute("UPDATE books SET local_path=? WHERE id=?", (str(path.resolve()), book_id))
+                    self._pipeline_stage(conn, book_id, "indexed", None, attempt_path)
+                    conn.execute("INSERT INTO events(book_id,stage) VALUES (?,'indexed')", (book_id,))
                     return {"id": book_id, "status": "indexed", "skipped": True}
-            self.stage(book_id, "downloaded", local_path=str(path.resolve()))
-            parsed = parse_book(path)
+            parsed = parse_book(path, fallback_title=Path(original_filename).stem)
             if not parsed.sections or not any(s.text.strip() for s in parsed.sections):
                 raise ValueError("No extractable text; scanned PDFs require OCR before import")
-            self.stage(book_id, "processed")
+            self.stage(book_id, "processed", local_path=attempt_path)
             content_hash = digest("\n\n".join(s.text for s in parsed.sections))
             with self.connect() as conn:
+                conn.execute("BEGIN IMMEDIATE")
+                current = conn.execute("SELECT * FROM books WHERE id=?", (book_id,)).fetchone()
                 duplicate = conn.execute(
                     "SELECT id FROM books WHERE content_sha256=? AND status='indexed' AND id!=?",
                     (content_hash, book_id),
@@ -209,7 +251,7 @@ class Library:
                 title = metadata.get("title") or parsed.title or path.stem
                 author = metadata.get("author") or parsed.author or "Unknown"
                 language = metadata.get("language") or parsed.language or "und"
-                effective = {key: str(metadata[key] or "") if key in metadata else old[key] for key in fields}
+                effective = {key: str(metadata[key] or "") if key in metadata else current[key] for key in fields}
                 effective.update(title=title, author=author, language=language)
                 conn.execute(
                     "UPDATE books SET " + ",".join(f"{key}=?" for key in fields) + " WHERE id=?",
@@ -222,8 +264,14 @@ class Library:
                 )
                 if duplicate:
                     conn.execute(
-                        "UPDATE books SET status='duplicate',content_sha256=?,artifact_sha256=?,error=? WHERE id=?",
-                        (content_hash, artifact_hash, f"duplicate_of:{duplicate['id']}", book_id),
+                        "UPDATE books SET status='duplicate',content_sha256=?,artifact_sha256=?,local_path=?,error=? "
+                        "WHERE id=?",
+                        (content_hash, artifact_hash, attempt_path, f"duplicate_of:{duplicate['id']}", book_id),
+                    )
+                    self._pipeline_stage(conn, book_id, "duplicate", None, attempt_path)
+                    conn.execute(
+                        "INSERT INTO events(book_id,stage,detail) VALUES (?,'duplicate',?)",
+                        (book_id, f"duplicate_of:{duplicate['id']}"),
                     )
                     return {"id": book_id, "status": "duplicate", "duplicate_of": duplicate["id"]}
                 for ordinal, section in enumerate(parsed.sections):
@@ -233,7 +281,14 @@ class Library:
                     )
                     section_id = cursor.lastrowid
                     attribution = section_attribution(
-                        section.title, metadata | {"author": author, "_artifact_sha256": artifact_hash}
+                        section.title,
+                        metadata
+                        | {
+                            "author": author,
+                            "_artifact_sha256": artifact_hash,
+                            "_section_text": section.text,
+                            "_section_ordinal": ordinal,
+                        },
                     )
                     conn.execute(
                         "INSERT INTO section_roles(section_id,section_author,section_role,attribution_basis) "
@@ -254,20 +309,21 @@ class Library:
                             (cursor.lastrowid, text, title, indexed_author, section.title),
                         )
                 conn.execute(
-                    "UPDATE books SET title=?,author=?,language=?,artifact_sha256=?,content_sha256=?,"
+                    "UPDATE books SET title=?,author=?,language=?,artifact_sha256=?,content_sha256=?,local_path=?,"
                     "status='indexed',error=NULL,indexed_at=CURRENT_TIMESTAMP WHERE id=?",
-                    (title, author, language, artifact_hash, content_hash, book_id),
+                    (title, author, language, artifact_hash, content_hash, attempt_path, book_id),
                 )
                 conn.execute(
                     "INSERT INTO index_versions(book_id,fingerprint) VALUES (?,?) "
                     "ON CONFLICT(book_id) DO UPDATE SET fingerprint=excluded.fingerprint",
                     (book_id, indexer_version),
                 )
+                self._pipeline_stage(conn, book_id, "indexed", None, attempt_path)
                 conn.execute("INSERT INTO events(book_id,stage) VALUES (?,'indexed')", (book_id,))
             return {"id": book_id, "status": "indexed", "skipped": False}
         except Exception as exc:
-            # Existing index remains searchable only once a successful import restores indexed state.
-            self.stage(book_id, "failed", str(exc)[:1000])
+            if book_id is not None:
+                self.stage(book_id, "failed", str(exc)[:1000], local_path=attempt_path)
             raise
 
     def _remove_index(self, conn: sqlite3.Connection, book_id: str) -> None:
@@ -295,14 +351,23 @@ class Library:
 
     def stats(self) -> dict[str, Any]:
         with self.connect() as conn:
+            conn.execute("BEGIN")
             counts = {r["status"]: r["n"] for r in conn.execute("SELECT status,COUNT(*) n FROM books GROUP BY status")}
             return {
                 "books": counts.get("indexed", 0),
+                "searchable_books": counts.get("indexed", 0),
                 "works": conn.execute("SELECT COUNT(DISTINCT work_id) FROM books WHERE status='indexed'").fetchone()[0],
                 "passages": conn.execute(
                     "SELECT COUNT(*) FROM passages p JOIN books b ON b.id=p.book_id WHERE b.status='indexed'"
                 ).fetchone()[0],
                 "status_counts": counts,
+                "ingestion_status_counts": {
+                    r["stage"]: r["n"]
+                    for r in conn.execute(
+                        "SELECT COALESCE(i.stage,b.status) stage,COUNT(*) n FROM books b "
+                        "LEFT JOIN source_pipeline i ON i.book_id=b.id GROUP BY COALESCE(i.stage,b.status)"
+                    )
+                },
                 "work_count_is_provisional": bool(
                     conn.execute(
                         "SELECT COUNT(*) FROM books b LEFT JOIN book_metadata m ON m.book_id=b.id "
@@ -314,6 +379,11 @@ class Library:
                 "curated_work_groups": conn.execute(
                     "SELECT COUNT(DISTINCT b.work_id) FROM books b JOIN book_metadata m ON m.book_id=b.id "
                     "WHERE b.status='indexed' AND json_extract(m.metadata,'$.work_identity_status')='curated'"
+                ).fetchone()[0],
+                "confirmed_full_works_lower_bound": conn.execute(
+                    "SELECT COUNT(DISTINCT b.work_id) FROM books b JOIN book_metadata m ON m.book_id=b.id "
+                    "WHERE b.status='indexed' AND json_extract(m.metadata,'$.work_identity_status')='curated' "
+                    "AND json_extract(m.metadata,'$.coverage')='full'"
                 ).fetchone()[0],
                 "periodical_editions": conn.execute(
                     "SELECT COUNT(*) FROM books b JOIN book_metadata m ON m.book_id=b.id "
@@ -338,6 +408,7 @@ class Library:
         status: str | None = None,
         offset: int = 0,
         limit: int | None = 100,
+        ingestion_status: str | None = None,
     ) -> dict[str, Any]:
         """Fetch a bounded catalog page and consistent total without loading all books."""
         if offset < 0 or (limit is not None and not 1 <= limit <= 500):
@@ -345,19 +416,23 @@ class Library:
         where = (
             "WHERE (? IS NULL OR b.language=?) AND (?='' OR instr(casefold(b.title),casefold(?))>0 "
             "OR instr(casefold(b.author),casefold(?))>0) AND (? IS NULL OR b.status=?)"
+            " AND (? IS NULL OR COALESCE(i.stage,b.status)=?)"
         )
-        params = (language, language, q, q, q, status, status)
+        params = (language, language, q, q, q, status, status, ingestion_status, ingestion_status)
         with self.connect() as conn:
             conn.execute("BEGIN")
-            total = conn.execute("SELECT COUNT(*) FROM books b " + where, params).fetchone()[0]
+            total = conn.execute(
+                "SELECT COUNT(*) FROM books b LEFT JOIN source_pipeline i ON i.book_id=b.id " + where, params
+            ).fetchone()[0]
             rows = conn.execute(
                 "SELECT b.*, (SELECT COUNT(*) FROM sections s WHERE s.book_id=b.id) sections,"
                 "(SELECT COUNT(*) FROM passages p WHERE p.book_id=b.id) passages,"
                 "json_extract(m.metadata,'$.coverage') coverage,json_extract(m.metadata,'$.work_type') work_type,"
-                "json_extract(m.metadata,'$.work_identity_status') work_identity_status "
+                "json_extract(m.metadata,'$.work_identity_status') work_identity_status,"
+                "COALESCE(i.stage,b.status) ingestion_status,i.error ingestion_error,"
+                "i.local_path ingestion_local_path,i.updated_at ingestion_updated_at "
                 "FROM books b LEFT JOIN book_metadata m ON m.book_id=b.id "
-                + where
-                + " ORDER BY b.title,b.id LIMIT ? OFFSET ?",
+                "LEFT JOIN source_pipeline i ON i.book_id=b.id " + where + " ORDER BY b.title,b.id LIMIT ? OFFSET ?",
                 (*params, limit if limit is not None else -1, offset),
             ).fetchall()
         return {
@@ -370,12 +445,43 @@ class Library:
 
     def get_book(self, book_id: str) -> dict[str, Any] | None:
         with self.connect() as conn:
-            row = conn.execute("SELECT * FROM books WHERE id=?", (book_id,)).fetchone()
+            conn.execute("BEGIN")
+            row = conn.execute(
+                "SELECT b.*,COALESCE(i.stage,b.status) ingestion_status,i.error ingestion_error,"
+                "i.local_path ingestion_local_path,i.updated_at ingestion_updated_at "
+                "FROM books b LEFT JOIN source_pipeline i ON i.book_id=b.id WHERE b.id=?",
+                (book_id,),
+            ).fetchone()
             if not row:
                 return None
             book = dict(row)
             metadata = conn.execute("SELECT metadata FROM book_metadata WHERE book_id=?", (book_id,)).fetchone()
             book["source_metadata"] = json.loads(metadata[0]) if metadata else {}
+            book["artifact_url"] = self.artifact_url(book.get("artifact_sha256"))
+            # A shared provisional catalogue ID is not proof of work identity.
+            # Offer edition navigation only for links explicitly curated on both sides.
+            book["related_editions"] = []
+            book["related_editions_total"] = 0
+            if book["status"] == "indexed" and book["source_metadata"].get("work_identity_status") == "curated":
+                related_where = (
+                    "FROM books b JOIN book_metadata m ON m.book_id=b.id "
+                    "WHERE b.work_id=? AND b.id!=? AND b.status='indexed' "
+                    "AND json_extract(m.metadata,'$.work_identity_status')='curated'"
+                )
+                book["related_editions_total"] = conn.execute(
+                    "SELECT COUNT(*) " + related_where, (book["work_id"], book_id)
+                ).fetchone()[0]
+                book["related_editions"] = [
+                    dict(item)
+                    for item in conn.execute(
+                        "SELECT b.id,b.title,b.author,b.language,b.edition,b.work_id,b.source_url,"
+                        "json_extract(m.metadata,'$.translator') translator,"
+                        "json_extract(m.metadata,'$.coverage') coverage "
+                        + related_where
+                        + " ORDER BY b.language,b.edition,b.id LIMIT 20",
+                        (book["work_id"], book_id),
+                    )
+                ]
             book["sections"] = [
                 dict(r)
                 for r in conn.execute(
@@ -400,6 +506,10 @@ class Library:
         )
         r.pop("sha256")
         r["verified"] = valid
+        if r.get("ingestion_status") in ("failed", "deferred"):
+            r["ingestion_warning"] = (
+                "Последняя попытка обновления не завершена; показано последнее успешно проиндексированное издание."
+            )
         r["citation"] = (
             f"{r['author']}. {r['title']}. {r['edition']}. {r['section_title']}, chars {r['start']}–{r['end']}."
         )
@@ -427,8 +537,10 @@ class Library:
                 "SELECT p.*,b.title,b.author,b.language,b.edition,b.work_id,b.source_url,b.rights,"
                 "b.rights_url,b.artifact_sha256,b.content_sha256,s.title section_title,"
                 "substr(s.text,p.start+1,p.end-p.start) section_quote,"
-                "a.section_author,a.section_role,a.attribution_basis,0.0 score "
+                "a.section_author,a.section_role,a.attribution_basis,0.0 score,"
+                "COALESCE(i.stage,b.status) ingestion_status,i.error ingestion_error "
                 "FROM passages p JOIN books b ON b.id=p.book_id JOIN sections s ON s.id=p.section_id "
+                "LEFT JOIN source_pipeline i ON i.book_id=b.id "
                 "LEFT JOIN section_roles a ON a.section_id=s.id "
                 f"WHERE b.status='indexed' AND p.id IN ({placeholders})",
                 unique,
@@ -442,8 +554,9 @@ class Library:
                 "SELECT p.*,b.title,b.author,b.language,b.edition,b.work_id,b.source_url,b.rights,"
                 "b.rights_url,b.artifact_sha256,b.content_sha256,"
                 "s.title section_title,s.text section_text,a.section_author,a.section_role,a.attribution_basis,"
-                "0.0 score FROM passages p "
+                "0.0 score,COALESCE(i.stage,b.status) ingestion_status,i.error ingestion_error FROM passages p "
                 "JOIN books b ON p.book_id=b.id JOIN sections s ON p.section_id=s.id "
+                "LEFT JOIN source_pipeline i ON i.book_id=b.id "
                 "LEFT JOIN section_roles a ON a.section_id=s.id WHERE p.id=?",
                 (passage_id,),
             ).fetchone()
@@ -492,7 +605,7 @@ class Library:
         if mode in ("hybrid", "semantic"):
             from book_rag.semantic import semantic_search
 
-            return semantic_search(self, query, mode, book_id, language, limit)
+            return self._ingestion_warnings(semantic_search(self, query, mode, book_id, language, limit))
         tokens = re.findall(r"[^\W_]+", unicodedata.normalize("NFKC", query), re.UNICODE)[:40]
         from book_rag.retrieval import prepare_query, rerank_results
 
@@ -509,8 +622,10 @@ class Library:
                     "b.rights_url,b.artifact_sha256,b.content_sha256,"
                     "s.title section_title,substr(s.text,p.start+1,p.end-p.start) section_quote,"
                     "a.section_author,a.section_role,a.attribution_basis,"
-                    "bm25(passage_fts,1.0,2.0,1.5,1.2) score "
+                    "bm25(passage_fts,1.0,2.0,1.5,1.2) score,"
+                    "COALESCE(i.stage,b.status) ingestion_status,i.error ingestion_error "
                     "FROM passage_fts JOIN passages p ON p.id=passage_fts.rowid JOIN books b ON b.id=p.book_id "
+                    "LEFT JOIN source_pipeline i ON i.book_id=b.id "
                     "JOIN sections s ON s.id=p.section_id LEFT JOIN section_roles a ON a.section_id=s.id "
                     "WHERE passage_fts MATCH ? AND b.status='indexed' "
                     "AND (? IS NULL OR b.id=?) AND (? IS NULL OR b.language=?) ORDER BY score,p.id LIMIT ?",
@@ -522,13 +637,24 @@ class Library:
                     results = [r for r in results if r["verified"]]
                 if mode == "lexical":
                     results = rerank_results(plan, results, limit=limit)
-        return {
-            "query": query,
-            "mode": mode,
-            "results": results,
-            "elapsed_ms": round((time.perf_counter() - started) * 1000, 2),
-            "warnings": warnings,
-        }
+        return self._ingestion_warnings(
+            {
+                "query": query,
+                "mode": mode,
+                "results": results,
+                "elapsed_ms": round((time.perf_counter() - started) * 1000, 2),
+                "warnings": warnings,
+            }
+        )
+
+    @staticmethod
+    def _ingestion_warnings(response: dict[str, Any]) -> dict[str, Any]:
+        warnings = response.setdefault("warnings", [])
+        for result in response.get("results", []):
+            warning = result.get("ingestion_warning")
+            if warning and warning not in warnings:
+                warnings.append(warning)
+        return response
 
     def research(self, query: str, book_ids: list[str] | None = None, limit: int = 8) -> dict[str, Any]:
         """Produce a transparent extractive research board, never fabricated prose."""
@@ -572,6 +698,7 @@ class Library:
                     "SELECT metadata FROM saved_provenance WHERE item_id=?", (row["id"],)
                 ).fetchone()
             row["provenance"] = json.loads(provenance[0]) if provenance else {}
+            row["artifact_url"] = self.artifact_url(row["provenance"].get("artifact_sha256"))
             if row["passage_id"] is not None:
                 current = self.passage(row["passage_id"])
                 if (
@@ -656,3 +783,17 @@ class Library:
                 "SELECT retry_at FROM source_deferrals WHERE host=?", (urlparse(url).netloc.casefold(),)
             ).fetchone()
         return float(row[0]) if row and row[0] > time.time() else None
+
+    def artifact_url(self, sha256: str | None) -> str | None:
+        """Expose an available archive locator; downloads independently verify bytes."""
+        from book_rag.artifacts import SUPPORTED_SUFFIXES
+
+        if not isinstance(sha256, str) or not re.fullmatch(r"[a-f0-9]{64}", sha256):
+            return None
+        shard = self.data_dir / "artifacts" / sha256[:2]
+        if any(
+            (shard / f"{sha256}{suffix}").is_file() and not (shard / f"{sha256}{suffix}").is_symlink()
+            for suffix in SUPPORTED_SUFFIXES
+        ):
+            return f"/api/artifacts/{sha256}"
+        return None
