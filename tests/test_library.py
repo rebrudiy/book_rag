@@ -250,3 +250,33 @@ def test_reranker_unavailable_fallback_is_labeled(
     result = library.search("curiosity", mode="reranked")
     assert result["mode"] == "lexical" and result["results"]
     assert "Reranker unavailable" in result["warnings"]
+
+
+def test_catalog_paging_filters_and_unicode_literal_query(library: Library, tmp_path: Path) -> None:
+    for n in range(5):
+        import_text(library, tmp_path, f"Text number {n}.", f"book{n}")
+    library.register({"id": "pending", "title": "Awaiting download", "author": "Тестовый Автор"})
+    first = library.book_page(status="indexed", limit=2)
+    second = library.book_page(status="indexed", offset=2, limit=2)
+    last = library.book_page(status="indexed", offset=4, limit=2)
+    assert first["total"] == 5 and first["has_more"] and second["has_more"]
+    assert not last["has_more"] and len(last["books"]) == 1
+    assert {b["id"] for b in first["books"]}.isdisjoint(b["id"] for b in second["books"])
+    assert len(library.books()) == 6  # Internal complete-corpus consumers remain complete.
+    assert library.book_page(q="тестовый автор")["total"] == 1
+    assert library.book_page(q="%_", status="indexed")["total"] == 0
+    assert library.book_page(status="discovered")["books"][0]["id"] == "pending"
+
+
+def test_batch_passages_keep_order_and_verify_without_full_chapters(library: Library, tmp_path: Path) -> None:
+    import_text(library, tmp_path, "First curiosity.\n\n" * 200)
+    hits = library.search("curiosity", limit=3)["results"]
+    ids = [h["id"] for h in hits]
+    batch = library.passages(list(reversed(ids)) + [9999999, ids[0]])
+    assert [h["id"] for h in batch] == list(reversed(ids)) + [ids[0]]
+    assert all(h["verified"] and "context" not in h and "section_text" not in h for h in batch)
+    with library.connect() as conn:
+        conn.execute("UPDATE passages SET sha256='corrupt' WHERE id=?", (ids[0],))
+    assert not library.passages([ids[0]])[0]["verified"]
+    library.stage("test", "failed", "Controlled import error")
+    assert library.passages(ids) == []

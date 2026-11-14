@@ -12,7 +12,7 @@ import json
 import re
 from pathlib import Path
 
-from playwright.sync_api import Page, expect, sync_playwright
+from playwright.sync_api import Page, Route, expect, sync_playwright
 
 
 def check_workflows(page: Page, base_url: str, artifacts: Path, *, semantic: bool = False) -> dict[str, object]:
@@ -25,6 +25,8 @@ def check_workflows(page: Page, base_url: str, artifacts: Path, *, semantic: boo
     page.goto(base_url, wait_until="networkidle")
     expect(page.locator("#featured-books .book-card").first).to_be_visible()
     expect(page.locator("#stat-books")).not_to_have_text("—")
+    expect(page.locator('[data-mode="hybrid"]')).to_have_attribute("aria-pressed", "true")
+    expect(page.locator('#search-extra-mode option[value="reranked"]')).to_have_text("С переоценкой · медленнее")
     page.screenshot(path=str(artifacts / "desktop-home.png"), full_page=True)
     stats = page.request.get(f"{base_url}/api/stats").json()
     expect(page.locator("#stat-works")).to_have_text(str(stats["works"]))
@@ -91,6 +93,7 @@ def check_workflows(page: Page, base_url: str, artifacts: Path, *, semantic: boo
     expect(page.locator("#fragments-panel").get_by_role("heading", name="Точного следа пока нет")).to_be_visible()
     page.get_by_role("navigation", name="Основная навигация").get_by_role("link", name="Библиотека").click()
     page.locator("#library-language").select_option("ru")
+    expect(page.locator("#library-books .book-card").first).to_be_visible()
     assert page.locator("#library-books .book-card").count() >= 1
     expect(page.locator("#library-books .book-language").first).to_contain_text("Русский")
 
@@ -216,12 +219,208 @@ def check_workflows(page: Page, base_url: str, artifacts: Path, *, semantic: boo
     }
 
 
+def check_catalog_pagination(page: Page, base_url: str) -> dict[str, object]:
+    """Verify a 205-record catalog without changing the user's real library."""
+    from urllib.parse import parse_qs, urlsplit
+
+    records = [
+        {
+            "id": f"fixture-{index:03}",
+            "title": f"Catalog {index:03}",
+            "author": f"Author {index:03}",
+            "language": "ru" if index % 10 == 0 else "en",
+            "work_id": f"fixture-work-{index}",
+            "edition": "Browser pagination fixture",
+            "status": "indexed" if index < 200 else "discovered",
+            "sections": 1,
+            "passages": 1 if index < 200 else 0,
+        }
+        for index in range(205)
+    ]
+    target = records[198]
+    target.update(title="Дальняя книга", author="Автор за пределами первой страницы", coverage="selected_chapters")
+    requests: list[dict] = []
+    errors: list[str] = []
+    research_bodies: list[dict] = []
+    page.on("pageerror", lambda error: errors.append(str(error)))
+
+    def catalog(route: Route) -> None:
+        values = parse_qs(urlsplit(route.request.url).query)
+        query = values.get("q", [""])[0].casefold()
+        language, status = values.get("language", [""])[0], values.get("status", [""])[0]
+        offset, limit = int(values.get("offset", ["0"])[0]), int(values.get("limit", ["100"])[0])
+        matches = [
+            book
+            for book in records
+            if (not query or query in f"{book['title']} {book['author']}".casefold())
+            and (not language or book["language"] == language)
+            and (not status or book["status"] == status)
+        ]
+        matches.sort(key=lambda book: str(book["title"]))
+        requests.append({"limit": limit, "offset": offset, "q": query, "status": status})
+        route.fulfill(
+            json={
+                "books": matches[offset : offset + limit],
+                "total": len(matches),
+                "offset": offset,
+                "limit": limit,
+                "has_more": offset + limit < len(matches),
+            }
+        )
+
+    def research(route: Route) -> None:
+        research_bodies.append(route.request.post_data_json or {})
+        route.fulfill(
+            json={
+                "query": "Fixture",
+                "answer": "Fixture: no evidence",
+                "results": [],
+                "abstained": True,
+                "method": "extractive",
+            }
+        )
+
+    page.route("**/api/books?**", catalog)
+    page.route("**/api/research", research)
+    page.route(
+        "**/api/search?**",
+        lambda route: route.fulfill(
+            json={"query": "fixture", "results": [], "mode": "lexical", "warnings": [], "elapsed_ms": 0}
+        ),
+    )
+    page.route(
+        "**/api/stats",
+        lambda route: route.fulfill(
+            json={
+                "books": 200,
+                "works": 200,
+                "passages": 200,
+                "status_counts": {"indexed": 200, "discovered": 5},
+                "work_count_is_provisional": True,
+                "curated_work_groups": 0,
+                "periodical_editions": 0,
+                "languages": [{"language": "en"}, {"language": "ru"}],
+            }
+        ),
+    )
+    page.route(
+        "**/api/books/fixture-198",
+        lambda route: route.fulfill(
+            json=target
+            | {"sections": [{"id": 1, "ordinal": 0, "title": "Selected chapter", "text": "Exact partial source text."}]}
+        ),
+    )
+    page.goto(base_url, wait_until="networkidle")
+    assert requests == [{"limit": 6, "offset": 0, "q": "", "status": "indexed"}], "Landing must not preload catalog"
+    page.get_by_role("navigation", name="Основная навигация").get_by_role("link", name="Библиотека").click()
+    expect(page.locator("#library-books .book-card")).to_have_count(48)
+    expect(page.locator("#library-count")).to_contain_text("1–48 из 200")
+    page.locator("#library-next").click()
+    expect(page.locator("#library-count")).to_contain_text("49–96 из 200")
+    assert page.locator("#library-books .book-card").count() == 48
+    page.locator("#library-prev").click()
+    expect(page.locator("#library-count")).to_contain_text("1–48 из 200")
+    page.locator("#library-status").select_option("")
+    expect(page.locator("#library-count")).to_contain_text("из 205")
+    page.locator("#library-status").select_option("discovered")
+    expect(page.locator("#library-books .book-card")).to_have_count(5)
+    assert all(page.locator("#library-books .book-open").nth(index).is_disabled() for index in range(5))
+    page.locator("#library-status").select_option("indexed")
+    page.locator("#library-query").fill("ДАЛЬНЯЯ")
+    expect(page.locator("#library-books .book-card")).to_have_count(1)
+    expect(page.locator("#library-books .book-excerpt-label")).to_have_text("Выбранные главы")
+    page.locator("#library-books .book-open").click()
+    expect(page.locator("#reader-coverage")).to_have_text("Выбранные главы · частичный текст произведения")
+    expect(page.locator("#reader-text")).to_have_text("Exact partial source text.")
+
+    page.get_by_role("navigation", name="Основная навигация").get_by_role("link", name="Поиск", exact=True).click()
+    page.locator('[data-mode="lexical"]').click()
+    page.locator("#query").fill("fixture")
+    page.locator("#search-form").get_by_role("button", name="Найти").click()
+    page.locator("#book-scope-query").fill("Дальняя")
+    expect(page.locator('#book-filter option[value="fixture-198"]')).to_have_count(1)
+    page.locator("#book-filter").select_option("fixture-198")
+    expect(page.locator("#book-scope-selection")).to_contain_text("Дальняя книга")
+    page.locator("#book-scope-query").fill("Catalog 000")
+    expect(page.locator('#book-filter option[value="fixture-000"]')).to_have_count(1)
+    expect(page.locator("#book-filter")).to_have_value("fixture-198")
+    expect(page.locator("#book-scope-selection")).to_be_visible()
+    assert page.locator("#book-filter option").count() <= 52
+    page.locator("#book-filter").select_option("")
+    expect(page.locator("#book-scope-selection")).not_to_be_visible()
+    expect(page.locator("#book-filter")).to_have_value("")
+    page.locator("#research-tab").click()
+    page.locator("#research-panel details summary").click()
+    page.locator("#compare-query").fill("Дальняя")
+    expect(page.locator('#compare-books input[value="fixture-198"]')).to_have_count(1)
+    page.locator('#compare-books input[value="fixture-198"]').check()
+    page.locator("#compare-query").fill("Catalog 000")
+    expect(page.locator('#compare-books input[value="fixture-000"]')).to_have_count(1)
+    expect(page.locator("#compare-selected")).to_contain_text("Дальняя книга")
+    page.locator("#run-research").click()
+    expect(page.locator("#research-output .research-method")).to_be_visible()
+    assert research_bodies[-1]["book_ids"] == ["fixture-198"]
+    assert all(request["limit"] <= 50 for request in requests)
+    assert not errors, errors
+    return {
+        "result": "passed",
+        "records": 205,
+        "page_size": 48,
+        "largest_request": max(x["limit"] for x in requests),
+        "selected_book_retained": True,
+        "partial_coverage_visible": True,
+        "browser_errors": errors,
+    }
+
+
+def check_full_catalog(page: Page, base_url: str) -> dict[str, object]:
+    """Reach an actual indexed edition beyond the first 48 via server-side filters."""
+    response = page.request.get(f"{base_url}/api/books", params={"status": "indexed", "offset": 96, "limit": 1}).json()
+    if not response["books"]:
+        response = page.request.get(
+            f"{base_url}/api/books", params={"status": "indexed", "offset": 48, "limit": 1}
+        ).json()
+    assert response["books"], "Full-corpus verification requires more than 48 indexed editions"
+    target = response["books"][0]
+    errors: list[str] = []
+    page.on("pageerror", lambda error: errors.append(str(error)))
+    page.goto(base_url + "/?view=library", wait_until="networkidle")
+    expect(page.locator("#library-books .book-card")).to_have_count(48)
+    assert not page.locator("#library-books").get_by_role("heading", name=target["title"], exact=True).count()
+    page.locator("#library-query").fill(target["title"][:150])
+    expect(page.locator("#library-books").get_by_role("heading", name=target["title"], exact=True)).to_be_visible()
+    page.locator("#library-books .book-card").filter(
+        has=page.get_by_role("heading", name=target["title"], exact=True)
+    ).locator(".book-open").click()
+    expect(page.locator("#reader-sidebar-title")).to_have_text(target["title"])
+    page.get_by_role("navigation", name="Основная навигация").get_by_role("link", name="Поиск", exact=True).click()
+    page.locator('[data-mode="lexical"]').click()
+    page.locator("#query").fill("research")
+    page.locator("#search-form").get_by_role("button", name="Найти").click()
+    page.locator("#book-scope-query").fill(target["title"][:150])
+    expect(page.locator(f'#book-filter option[value="{target["id"]}"]')).to_have_count(1)
+    page.locator("#book-filter").select_option(target["id"])
+    expect(page.locator("#book-scope-selection")).to_contain_text(target["title"])
+    expect(page.locator("#book-filter")).to_have_value(target["id"])
+    assert not errors, errors
+    return {
+        "result": "passed",
+        "book_id": target["id"],
+        "title": target["title"],
+        "beyond_first_page": True,
+        "server_filter_and_reader": True,
+        "typeahead_scope": True,
+        "browser_errors": errors,
+    }
+
+
 def main() -> None:
     """Launch Chromium and execute browser acceptance workflows."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--base-url", default="http://127.0.0.1:8000")
     parser.add_argument("--artifacts", type=Path, default=Path("artifacts/browser"))
     parser.add_argument("--semantic", action="store_true", help="Require the local multilingual model and index")
+    parser.add_argument("--full-catalog-base-url", help="Also check a real corpus with more than 48 indexed editions")
     args = parser.parse_args()
     expect.set_options(timeout=30000)
     args.artifacts.mkdir(parents=True, exist_ok=True)
@@ -229,6 +428,13 @@ def main() -> None:
         browser = playwright.chromium.launch()
         page = browser.new_page(viewport={"width": 1440, "height": 1000}, device_scale_factor=1)
         result = check_workflows(page, args.base_url.rstrip("/"), args.artifacts, semantic=args.semantic)
+        fixture_page = browser.new_page(viewport={"width": 1440, "height": 1000})
+        result["large_catalog_fixture"] = check_catalog_pagination(fixture_page, args.base_url.rstrip("/"))
+        fixture_page.close()
+        if args.full_catalog_base_url:
+            full_page = browser.new_page(viewport={"width": 1440, "height": 1000})
+            result["full_catalog"] = check_full_catalog(full_page, args.full_catalog_base_url.rstrip("/"))
+            full_page.close()
         browser.close()
     print(json.dumps(result, ensure_ascii=False, indent=2))
 

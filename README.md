@@ -56,7 +56,7 @@ uv run bookrag embed
 uv run bookrag search 'девочка следует за белым кроликом' --mode hybrid
 ```
 
-Uses a local Sentence Transformers multilingual MiniLM model (first run downloads weights, no paid API). Model, cache and vectors live beneath the configured data directory. Embedding construction streams batches into a memory-mapped matrix; generation activation is atomic. A corpus fingerprint prevents stale vector use. The initial exact cosine index is for experiments; 10–50k full books will require an ANN backend and measured capacity planning. Long passages may be truncated by the model; see [architecture](docs/ARCHITECTURE.md).
+Uses a local Sentence Transformers multilingual MiniLM model (first run downloads weights, no paid API). Model, cache and vectors live beneath the configured data directory. Embedding construction streams batches into a memory-mapped matrix; generation activation is atomic. A corpus fingerprint prevents stale vector use. The initial exact cosine index is for experiments; 10–50k full books will require an ANN backend and measured capacity planning. Long passages are covered by overlapping tokenizer windows; optional reranking can still truncate long query/passage pairs. See [architecture](docs/ARCHITECTURE.md).
 
 ## Verify
 
@@ -97,3 +97,32 @@ The theme map shows shared vocabulary and lexical similarity within a language. 
 For an optional, slower local cross-encoder ordering pass, use `uv run bookrag search 'your research query' --mode reranked`. The model is revision-pinned and downloaded locally on first use. [Paired development measurements](docs/RERANKING.md) show a small ranking gain with higher memory/latency and an observed regression; this is an explicit option, not the default.
 
 Contributor attribution can be supplied through audited `section_attributions` metadata rules. The curated Republic marks Jowett's introduction as editorial rather than attributing its prose to Plato. Unclassified sections retain catalog authorship as context, without claiming verified section authorship.
+
+## Modern texts, frozen experiments and integrity
+
+```sh
+# Pinned CC BY-SA D2L selection; originals, licenses, code/math and source hashes retained
+BOOKRAG_DATA_DIR=./data/full uv run bookrag acquire-modern --index
+
+# Plan languages and subject areas from the same offline rights-checked catalog
+uv run bookrag plan-balanced data/catalog/rdf-files.tar.bz2 --output data/catalog/balanced.json
+
+# A consistent SQLite online backup, optionally a manifest-filtered experimental subset
+BOOKRAG_DATA_DIR=./data/full uv run bookrag snapshot data/snapshots/curated20 --manifest corpus/manifest.json --no-include-saved
+
+# Verify every indexed source slice and rehash the original artifacts
+BOOKRAG_DATA_DIR=./data/full uv run bookrag verify --artifacts --output data/integrity.json
+```
+
+Snapshots never overwrite an existing destination; originals/model weights remain outside them. See [modern-source provenance](docs/MODERN_SOURCES.md), [resumable vector builds](docs/SEMANTIC_INDEX.md), [balanced corpus planning](docs/CORPUS_BALANCE.md) and [expanded evaluation](docs/EXPANDED_EVALUATION.md). The evaluated 20-edition snapshot is frozen separately from the live expanding corpus.
+
+The catalog fetches bounded pages; title/author filters query the server rather than a preloaded first page. Search scope and research selections remain selected when their matching suggestions change. Partial source selections are explicitly labeled.
+
+
+Five complete Russian originals can also be acquired with captured page revisions and explicit rights records:
+
+```sh
+BOOKRAG_DATA_DIR=./data/full uv run bookrag acquire-russian --index
+```
+
+[Russian source documentation](docs/RUSSIAN_SOURCES.md) records original-body coverage, retained author notes, excluded unverified editorial annotations and the provider's access policy. This bounded connector handles five audited works; it does not crawl arbitrary Wikisource pages.

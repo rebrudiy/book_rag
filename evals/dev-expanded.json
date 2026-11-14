@@ -1,0 +1,1316 @@
+{
+  "version": 1,
+  "split": "dev",
+  "description": "Expanded manually grounded development queries over exactly20 curated full Project Gutenberg editions (19works). Not a heldout benchmark.",
+  "corpus_manifest": "corpus/manifest.json",
+  "corpus_manifest_sha256": "a0916d1a489e9e99f54aca90f2f98348a46b03e5a8ffbfae42fea363ced82c4a",
+  "source_snapshot_sha256": "efe0ac3153dfd9d685535013ef32a6b787b1d3041d6ed6a526acf24198ffbeb6",
+  "required_book_ids": [
+    "pg11-full",
+    "pg1228-full",
+    "pg1232-full",
+    "pg1342-full",
+    "pg1497-full",
+    "pg1661-full",
+    "pg2009-full",
+    "pg22367-full",
+    "pg2600-full",
+    "pg2680-full",
+    "pg2701-full",
+    "pg3207-full",
+    "pg3300-full",
+    "pg35-full",
+    "pg4363-full",
+    "pg4650-full",
+    "pg5001-full",
+    "pg5316-full",
+    "pg61-full",
+    "pg84-full"
+  ],
+  "unsupported_automatic_checks": [
+    "expected_evidence.expected_section_role and expected_section_author are manual probes; current evaluator does not score contributor roles or require a particular section."
+  ],
+  "queries": [
+    {
+      "id": "expanded-01",
+      "query": "\"Sentence first—verdict afterwards\"",
+      "type": "exact_quote",
+      "language": "en",
+      "answerable": true,
+      "relevant_book_ids": [
+        "pg11-full"
+      ],
+      "evidence_contains": [
+        "Sentence first—verdict afterwards."
+      ],
+      "expected_evidence": [
+        {
+          "book_id": "pg11-full",
+          "work_id": "pg11-alice",
+          "section_ordinal": 12,
+          "section_title": "CHAPTER XII. Alice’s Evidence",
+          "text": "Sentence first—verdict afterwards."
+        }
+      ],
+      "relevance_unit": "passage"
+    },
+    {
+      "id": "expanded-02",
+      "query": "\"My affections and wishes are unchanged\"",
+      "type": "exact_quote",
+      "language": "en",
+      "answerable": true,
+      "relevant_book_ids": [
+        "pg1342-full"
+      ],
+      "evidence_contains": [
+        "My affections and wishes are unchanged"
+      ],
+      "expected_evidence": [
+        {
+          "book_id": "pg1342-full",
+          "work_id": "pg1342-pride",
+          "section_ordinal": 64,
+          "section_title": "“The efforts of his aunt.” CHAPTER LVIII.",
+          "text": "My affections and wishes are unchanged"
+        }
+      ],
+      "relevance_unit": "passage"
+    },
+    {
+      "id": "expanded-03",
+      "query": "\"There is grandeur in this view of life\"",
+      "type": "exact_quote",
+      "language": "en",
+      "answerable": true,
+      "relevant_book_ids": [
+        "pg1228-full"
+      ],
+      "evidence_contains": [
+        "There is grandeur in this view of life"
+      ],
+      "expected_evidence": [
+        {
+          "book_id": "pg1228-full",
+          "work_id": "pg1228-origin",
+          "section_ordinal": 17,
+          "section_title": "CHAPTER XIV. RECAPITULATION AND CONCLUSION.",
+          "text": "There is grandeur in this view of life"
+        }
+      ],
+      "relevance_unit": "passage"
+    },
+    {
+      "id": "expanded-04",
+      "query": "How does Marcus Aurelius compare accepting death with leaving a play after three acts?",
+      "type": "idea",
+      "language": "en",
+      "answerable": true,
+      "relevant_book_ids": [
+        "pg2680-full"
+      ],
+      "evidence_contains": [
+        "in matter of life, three acts is the whole play"
+      ],
+      "expected_evidence": [
+        {
+          "book_id": "pg2680-full",
+          "work_id": "pg2680-meditations",
+          "section_ordinal": 14,
+          "section_title": "THE TWELFTH BOOK",
+          "text": "in matter of life, three acts is the whole play"
+        }
+      ],
+      "relevance_unit": "passage",
+      "filters": {
+        "book_id": "pg2680-full"
+      }
+    },
+    {
+      "id": "expanded-05",
+      "query": "Pourquoi le travail protège-t-il de l’ennui, du vice et du besoin à la fin de Candide?",
+      "type": "argument",
+      "language": "fr",
+      "answerable": true,
+      "relevant_book_ids": [
+        "pg4650-full"
+      ],
+      "evidence_contains": [
+        "le travail éloigne de nous trois grands maux, l’ennui, le vice, et le besoin."
+      ],
+      "expected_evidence": [
+        {
+          "book_id": "pg4650-full",
+          "work_id": "pg4650-candide",
+          "section_ordinal": 36,
+          "section_title": "CHAPITRE XXX. Conclusion.",
+          "text": "le travail éloigne de nous trois grands maux, l’ennui, le vice, et le besoin."
+        }
+      ],
+      "relevance_unit": "passage",
+      "filters": {
+        "book_id": "pg4650-full"
+      }
+    },
+    {
+      "id": "expanded-06",
+      "query": "Wie verletzt Gregors Vater ihn mit einem Apfel?",
+      "type": "scene",
+      "language": "de",
+      "answerable": true,
+      "relevant_book_ids": [
+        "pg22367-full"
+      ],
+      "evidence_contains": [
+        "Ein ihm sofort nachfliegender drang dagegen förmlich in Gregors Rücken ein"
+      ],
+      "expected_evidence": [
+        {
+          "book_id": "pg22367-full",
+          "work_id": "pg22367-metamorphosis",
+          "section_ordinal": 2,
+          "section_title": "II.",
+          "text": "Ein ihm sofort nachfliegender drang dagegen förmlich in Gregors Rücken ein"
+        }
+      ],
+      "relevance_unit": "passage",
+      "filters": {
+        "book_id": "pg22367-full"
+      }
+    },
+    {
+      "id": "expanded-07",
+      "query": "Найди стихотворение, в котором влюблённый мечтает превратиться в табак и попасть в табакерку красавицы.",
+      "type": "approx_book_description",
+      "language": "ru",
+      "answerable": true,
+      "relevant_book_ids": [
+        "pg5316-full"
+      ],
+      "expected_evidence": [
+        {
+          "book_id": "pg5316-full",
+          "work_id": "pg5316-pushkin",
+          "section_ordinal": 0,
+          "section_title": "Красавице, которая нюхала",
+          "text": "Ах, отчего я не табак!"
+        }
+      ],
+      "relevance_unit": "book"
+    },
+    {
+      "id": "expanded-08",
+      "query": "Why does Adam Smith worry that repeating a few simple tasks makes workers ignorant?",
+      "type": "argument",
+      "language": "en",
+      "answerable": true,
+      "relevant_book_ids": [
+        "pg3300-full"
+      ],
+      "evidence_contains": [
+        "generally becomes as stupid and ignorant as it is possible for a human creature to become"
+      ],
+      "expected_evidence": [
+        {
+          "book_id": "pg3300-full",
+          "work_id": "pg3300-wealth",
+          "section_ordinal": 47,
+          "section_title": "PART III. Of the Expense of public Works and public Institutions.",
+          "text": "generally becomes as stupid and ignorant as it is possible for a human creature to become"
+        }
+      ],
+      "relevance_unit": "passage",
+      "filters": {
+        "book_id": "pg3300-full"
+      }
+    },
+    {
+      "id": "expanded-09",
+      "query": "In the sixth edition, how does Darwin argue that a complex eye can arise through useful intermediate stages?",
+      "type": "explanation",
+      "language": "en",
+      "answerable": true,
+      "relevant_book_ids": [
+        "pg2009-full"
+      ],
+      "evidence_contains": [
+        "numerous gradations from a simple and imperfect eye to one complex and perfect"
+      ],
+      "expected_evidence": [
+        {
+          "book_id": "pg2009-full",
+          "work_id": "pg1228-origin",
+          "section_ordinal": 11,
+          "section_title": "CHAPTER VI. DIFFICULTIES OF THE THEORY.",
+          "text": "numerous gradations from a simple and imperfect eye to one complex and perfect"
+        }
+      ],
+      "relevance_unit": "passage",
+      "filters": {
+        "book_id": "pg2009-full"
+      }
+    },
+    {
+      "id": "expanded-10",
+      "query": "Find the detective story where a bell rope and a ventilator allow a snake to enter a bedroom.",
+      "type": "scene",
+      "language": "en",
+      "answerable": true,
+      "relevant_book_ids": [
+        "pg1661-full"
+      ],
+      "evidence_contains": [
+        "It is a swamp adder!"
+      ],
+      "expected_evidence": [
+        {
+          "book_id": "pg1661-full",
+          "work_id": "pg1661",
+          "section_ordinal": 10,
+          "section_title": "VIII. THE ADVENTURE OF THE SPECKLED BAND",
+          "text": "It is a swamp adder!"
+        }
+      ],
+      "relevance_unit": "passage"
+    },
+    {
+      "id": "expanded-11",
+      "query": "Why does Frankenstein’s creature say he should have been Adam rather than a fallen angel?",
+      "type": "idea",
+      "language": "en",
+      "answerable": true,
+      "relevant_book_ids": [
+        "pg84-full"
+      ],
+      "evidence_contains": [
+        "I ought to be thy Adam, but I am rather the fallen angel"
+      ],
+      "expected_evidence": [
+        {
+          "book_id": "pg84-full",
+          "work_id": "pg84",
+          "section_ordinal": 15,
+          "section_title": "Chapter 10",
+          "text": "I ought to be thy Adam, but I am rather the fallen angel"
+        }
+      ],
+      "relevance_unit": "passage",
+      "filters": {
+        "book_id": "pg84-full"
+      }
+    },
+    {
+      "id": "expanded-12",
+      "query": "\"from hell’s heart I stab at thee\"",
+      "type": "exact_quote",
+      "language": "en",
+      "answerable": true,
+      "relevant_book_ids": [
+        "pg2701-full"
+      ],
+      "evidence_contains": [
+        "from hell’s heart I stab at thee"
+      ],
+      "expected_evidence": [
+        {
+          "book_id": "pg2701-full",
+          "work_id": "pg2701",
+          "section_ordinal": 138,
+          "section_title": "CHAPTER 135. The Chase.—Third Day.",
+          "text": "from hell’s heart I stab at thee"
+        }
+      ],
+      "relevance_unit": "passage"
+    },
+    {
+      "id": "expanded-13",
+      "query": "Where does the wounded Prince Andrew see the lofty sky and rethink the importance of the battle?",
+      "type": "scene",
+      "language": "en",
+      "answerable": true,
+      "relevant_book_ids": [
+        "pg2600-full"
+      ],
+      "evidence_contains": [
+        "How quiet, peaceful, and solemn"
+      ],
+      "expected_evidence": [
+        {
+          "book_id": "pg2600-full",
+          "work_id": "pg2600",
+          "section_ordinal": 65,
+          "section_title": "CHAPTER XVI",
+          "text": "How quiet, peaceful, and solemn"
+        }
+      ],
+      "relevance_unit": "passage"
+    },
+    {
+      "id": "expanded-14",
+      "query": "Why does Machiavelli say a ruler is safer being feared than loved if both are impossible?",
+      "type": "argument",
+      "language": "en",
+      "answerable": true,
+      "relevant_book_ids": [
+        "pg1232-full"
+      ],
+      "evidence_contains": [
+        "it is much safer to be feared than loved"
+      ],
+      "expected_evidence": [
+        {
+          "book_id": "pg1232-full",
+          "work_id": "pg1232",
+          "section_ordinal": 24,
+          "section_title": "CHAPTER XVII. CONCERNING CRUELTY AND CLEMENCY, AND WHETHER IT IS BETTER TO BE LOVED THAN FEARED",
+          "text": "it is much safer to be feared than loved"
+        }
+      ],
+      "relevance_unit": "passage",
+      "filters": {
+        "book_id": "pg1232-full"
+      }
+    },
+    {
+      "id": "expanded-15",
+      "query": "How does the cave image describe people unable to turn their heads toward the light?",
+      "type": "explanation",
+      "language": "en",
+      "answerable": true,
+      "relevant_book_ids": [
+        "pg1497-full"
+      ],
+      "evidence_contains": [
+        "being prevented by the chains from turning round their heads"
+      ],
+      "expected_evidence": [
+        {
+          "book_id": "pg1497-full",
+          "work_id": "pg1497",
+          "section_ordinal": 11,
+          "section_title": "BOOK VII.",
+          "text": "being prevented by the chains from turning round their heads",
+          "expected_section_author": "Plato, 428? BCE-348? BCE"
+        }
+      ],
+      "relevance_unit": "passage",
+      "filters": {
+        "book_id": "pg1497-full"
+      }
+    },
+    {
+      "id": "expanded-16",
+      "query": "\"solitary, poore, nasty, brutish, and short\"",
+      "type": "exact_quote",
+      "language": "en",
+      "answerable": true,
+      "relevant_book_ids": [
+        "pg3207-full"
+      ],
+      "evidence_contains": [
+        "solitary, poore, nasty, brutish, and short"
+      ],
+      "expected_evidence": [
+        {
+          "book_id": "pg3207-full",
+          "work_id": "pg3207",
+          "section_ordinal": 109,
+          "section_title": "The Incommodities Of Such A War",
+          "text": "solitary, poore, nasty, brutish, and short"
+        }
+      ],
+      "relevance_unit": "passage"
+    },
+    {
+      "id": "expanded-17",
+      "query": "What is Nietzsche warning about when a person fights monsters or gazes into an abyss?",
+      "type": "idea",
+      "language": "en",
+      "answerable": true,
+      "relevant_book_ids": [
+        "pg4363-full"
+      ],
+      "evidence_contains": [
+        "He who fights with monsters should be careful lest he thereby become a monster"
+      ],
+      "expected_evidence": [
+        {
+          "book_id": "pg4363-full",
+          "work_id": "pg4363",
+          "section_ordinal": 6,
+          "section_title": "CHAPTER IV. APOPHTHEGMS AND INTERLUDES",
+          "text": "He who fights with monsters should be careful lest he thereby become a monster"
+        }
+      ],
+      "relevance_unit": "passage",
+      "filters": {
+        "book_id": "pg4363-full"
+      }
+    },
+    {
+      "id": "expanded-18",
+      "query": "Why does a stone dropped from a moving railway carriage follow different paths for different observers?",
+      "type": "explanation",
+      "language": "en",
+      "answerable": true,
+      "relevant_book_ids": [
+        "pg5001-full"
+      ],
+      "evidence_contains": [
+        "the stone falls to earth in a parabolic curve"
+      ],
+      "expected_evidence": [
+        {
+          "book_id": "pg5001-full",
+          "work_id": "pg5001",
+          "section_ordinal": 4,
+          "section_title": "III Space and Time in Classical Mechanics",
+          "text": "the stone falls to earth in a parabolic curve"
+        }
+      ],
+      "relevance_unit": "passage",
+      "filters": {
+        "book_id": "pg5001-full"
+      }
+    },
+    {
+      "id": "expanded-19",
+      "query": "Why does the Communist Manifesto describe over-production as an epidemic rather than a shortage?",
+      "type": "argument",
+      "language": "en",
+      "answerable": true,
+      "relevant_book_ids": [
+        "pg61-full"
+      ],
+      "evidence_contains": [
+        "the epidemic of over-production"
+      ],
+      "expected_evidence": [
+        {
+          "book_id": "pg61-full",
+          "work_id": "pg61",
+          "section_ordinal": 2,
+          "section_title": "I. BOURGEOIS AND PROLETARIANS",
+          "text": "the epidemic of over-production"
+        }
+      ],
+      "relevance_unit": "passage",
+      "filters": {
+        "book_id": "pg61-full"
+      }
+    },
+    {
+      "id": "expanded-20",
+      "query": "Find the time-travel novel where future humanity has split into the Eloi and the underground Morlocks.",
+      "type": "approx_book_description",
+      "language": "en",
+      "answerable": true,
+      "relevant_book_ids": [
+        "pg35-full"
+      ],
+      "expected_evidence": [
+        {
+          "book_id": "pg35-full",
+          "work_id": "pg35",
+          "section_ordinal": 8,
+          "section_title": "VIII. Explanation",
+          "text": "the sole descendants of our generation"
+        }
+      ],
+      "relevance_unit": "book"
+    },
+    {
+      "id": "expanded-cross-01",
+      "query": "Где девочка играет в крокет живыми фламинго вместо молотков и ежами вместо шаров?",
+      "type": "cross_language",
+      "language": "ru",
+      "answerable": true,
+      "relevant_book_ids": [
+        "pg11-full"
+      ],
+      "evidence_contains": [
+        "the balls were live hedgehogs, the mallets live flamingoes"
+      ],
+      "expected_evidence": [
+        {
+          "book_id": "pg11-full",
+          "work_id": "pg11-alice",
+          "section_ordinal": 8,
+          "section_title": "CHAPTER VIII. The Queen’s Croquet-Ground",
+          "text": "the balls were live hedgehogs, the mallets live flamingoes"
+        }
+      ],
+      "relevance_unit": "passage"
+    },
+    {
+      "id": "expanded-cross-02",
+      "query": "Dans quelle lettre Darcy révèle-t-il que Wickham convoitait la fortune de sa sœur?",
+      "type": "cross_language",
+      "language": "fr",
+      "answerable": true,
+      "relevant_book_ids": [
+        "pg1342-full"
+      ],
+      "evidence_contains": [
+        "my sister’s fortune, which is thirty thousand pounds"
+      ],
+      "expected_evidence": [
+        {
+          "book_id": "pg1342-full",
+          "work_id": "pg1342-pride",
+          "section_ordinal": 39,
+          "section_title": "“Hearing herself called.” CHAPTER XXXV.",
+          "text": "my sister’s fortune, which is thirty thousand pounds"
+        }
+      ],
+      "relevance_unit": "passage"
+    },
+    {
+      "id": "expanded-cross-03",
+      "query": "Wie erklärt Darwin verkümmerte Organe durch Vererbung und Nichtgebrauch?",
+      "type": "cross_language",
+      "language": "de",
+      "answerable": true,
+      "relevant_book_ids": [
+        "pg1228-full"
+      ],
+      "evidence_contains": [
+        "when organs are reduced in size, either from disuse or selection"
+      ],
+      "expected_evidence": [
+        {
+          "book_id": "pg1228-full",
+          "work_id": "pg1228-origin",
+          "section_ordinal": 16,
+          "section_title": "CHAPTER XIII. MUTUAL AFFINITIES OF ORGANIC BEINGS: MORPHOLOGY: EMBRYOLOGY: RUDIMENTARY ORGANS.",
+          "text": "when organs are reduced in size, either from disuse or selection"
+        }
+      ],
+      "relevance_unit": "passage",
+      "filters": {
+        "book_id": "pg1228-full"
+      }
+    },
+    {
+      "id": "expanded-cross-04",
+      "query": "Почему Смит считает общественное образование особенно важным для простых людей?",
+      "type": "cross_language",
+      "language": "ru",
+      "answerable": true,
+      "relevant_book_ids": [
+        "pg3300-full"
+      ],
+      "evidence_contains": [
+        "The education of the common people requires"
+      ],
+      "expected_evidence": [
+        {
+          "book_id": "pg3300-full",
+          "work_id": "pg3300-wealth",
+          "section_ordinal": 47,
+          "section_title": "PART III. Of the Expense of public Works and public Institutions.",
+          "text": "The education of the common people requires"
+        }
+      ],
+      "relevance_unit": "passage",
+      "filters": {
+        "book_id": "pg3300-full"
+      }
+    },
+    {
+      "id": "expanded-cross-05",
+      "query": "Pourquoi la créature exige-t-elle que Frankenstein lui crée une compagne?",
+      "type": "cross_language",
+      "language": "fr",
+      "answerable": true,
+      "relevant_book_ids": [
+        "pg84-full"
+      ],
+      "evidence_contains": [
+        "You must create a female for me"
+      ],
+      "expected_evidence": [
+        {
+          "book_id": "pg84-full",
+          "work_id": "pg84",
+          "section_ordinal": 22,
+          "section_title": "Chapter 17",
+          "text": "You must create a female for me"
+        }
+      ],
+      "relevance_unit": "passage",
+      "filters": {
+        "book_id": "pg84-full"
+      }
+    },
+    {
+      "id": "expanded-cross-06",
+      "query": "Warum weigert sich Ahab, der Rachel bei der Suche nach dem vermissten Sohn des Kapitäns zu helfen?",
+      "type": "cross_language",
+      "language": "de",
+      "answerable": true,
+      "relevant_book_ids": [
+        "pg2701-full"
+      ],
+      "evidence_contains": [
+        "Captain Gardiner, I will not do it. Even now I lose time."
+      ],
+      "expected_evidence": [
+        {
+          "book_id": "pg2701-full",
+          "work_id": "pg2701",
+          "section_ordinal": 131,
+          "section_title": "CHAPTER 128. The Pequod Meets The Rachel.",
+          "text": "Captain Gardiner, I will not do it. Even now I lose time."
+        }
+      ],
+      "relevance_unit": "passage",
+      "filters": {
+        "book_id": "pg2701-full"
+      }
+    },
+    {
+      "id": "expanded-cross-07",
+      "query": "Как взгляд на высокое небо меняет отношение раненого Андрея к славе Наполеона?",
+      "type": "cross_language",
+      "language": "ru",
+      "answerable": true,
+      "relevant_book_ids": [
+        "pg2600-full"
+      ],
+      "evidence_contains": [
+        "Prince Andrew thought of the insignificance of greatness"
+      ],
+      "expected_evidence": [
+        {
+          "book_id": "pg2600-full",
+          "work_id": "pg2600",
+          "section_ordinal": 68,
+          "section_title": "CHAPTER XIX",
+          "text": "Prince Andrew thought of the insignificance of greatness"
+        }
+      ],
+      "relevance_unit": "passage",
+      "filters": {
+        "book_id": "pg2600-full"
+      }
+    },
+    {
+      "id": "expanded-cross-08",
+      "query": "Pourquoi le prince doit-il savoir être à la fois renard et lion?",
+      "type": "cross_language",
+      "language": "fr",
+      "answerable": true,
+      "relevant_book_ids": [
+        "pg1232-full"
+      ],
+      "evidence_contains": [
+        "a fox to discover the snares and a lion to terrify the wolves"
+      ],
+      "expected_evidence": [
+        {
+          "book_id": "pg1232-full",
+          "work_id": "pg1232",
+          "section_ordinal": 25,
+          "section_title": "CHAPTER XVIII. [1] CONCERNING THE WAY IN WHICH PRINCES SHOULD KEEP FAITH",
+          "text": "a fox to discover the snares and a lion to terrify the wolves"
+        }
+      ],
+      "relevance_unit": "passage",
+      "filters": {
+        "book_id": "pg1232-full"
+      }
+    },
+    {
+      "id": "expanded-cross-09",
+      "query": "Wie veranschaulichen die Gefangenen in der Höhle den Übergang von Unwissenheit zu Erkenntnis?",
+      "type": "cross_language",
+      "language": "de",
+      "answerable": true,
+      "relevant_book_ids": [
+        "pg1497-full"
+      ],
+      "evidence_contains": [
+        "human beings living in a underground den"
+      ],
+      "expected_evidence": [
+        {
+          "book_id": "pg1497-full",
+          "work_id": "pg1497",
+          "section_ordinal": 11,
+          "section_title": "BOOK VII.",
+          "text": "human beings living in a underground den",
+          "expected_section_author": "Plato, 428? BCE-348? BCE"
+        }
+      ],
+      "relevance_unit": "passage",
+      "filters": {
+        "book_id": "pg1497-full"
+      }
+    },
+    {
+      "id": "expanded-cross-10",
+      "query": "Почему два удара молнии могут быть одновременными для насыпи, но не для движущегося поезда?",
+      "type": "cross_language",
+      "language": "ru",
+      "answerable": true,
+      "relevant_book_ids": [
+        "pg5001-full"
+      ],
+      "evidence_contains": [
+        "which are simultaneous with reference to the railway embankment also simultaneous relatively to the train?"
+      ],
+      "expected_evidence": [
+        {
+          "book_id": "pg5001-full",
+          "work_id": "pg5001",
+          "section_ordinal": 10,
+          "section_title": "IX The Relativity of Simultaneity",
+          "text": "which are simultaneous with reference to the railway embankment also simultaneous relatively to the train?"
+        }
+      ],
+      "relevance_unit": "passage",
+      "filters": {
+        "book_id": "pg5001-full"
+      }
+    },
+    {
+      "id": "expanded-cross-11",
+      "query": "Comment le manifeste décrit-il les crises dans lesquelles la société produit trop de marchandises?",
+      "type": "cross_language",
+      "language": "fr",
+      "answerable": true,
+      "relevant_book_ids": [
+        "pg61-full"
+      ],
+      "evidence_contains": [
+        "Because there is too much civilisation, too much means of subsistence"
+      ],
+      "expected_evidence": [
+        {
+          "book_id": "pg61-full",
+          "work_id": "pg61",
+          "section_ordinal": 2,
+          "section_title": "I. BOURGEOIS AND PROLETARIANS",
+          "text": "Because there is too much civilisation, too much means of subsistence"
+        }
+      ],
+      "relevance_unit": "passage",
+      "filters": {
+        "book_id": "pg61-full"
+      }
+    },
+    {
+      "id": "expanded-cross-12",
+      "query": "Wie hält der Zeitreisende die Morlocks mit Streichhölzern und Licht auf Abstand?",
+      "type": "cross_language",
+      "language": "de",
+      "answerable": true,
+      "relevant_book_ids": [
+        "pg35-full"
+      ],
+      "evidence_contains": [
+        "I struck another light, and waved it in their dazzled faces"
+      ],
+      "expected_evidence": [
+        {
+          "book_id": "pg35-full",
+          "work_id": "pg35",
+          "section_ordinal": 9,
+          "section_title": "IX. The Morlocks",
+          "text": "I struck another light, and waved it in their dazzled faces"
+        }
+      ],
+      "relevance_unit": "passage",
+      "filters": {
+        "book_id": "pg35-full"
+      }
+    },
+    {
+      "id": "expanded-note-01",
+      "query": "Which footnote identifies Cardinal Rouen as Georges d’Amboise and gives his dates?",
+      "type": "footnote",
+      "language": "en",
+      "answerable": true,
+      "relevant_book_ids": [
+        "pg1232-full"
+      ],
+      "evidence_contains": [
+        "He was Georges d’Amboise, created a cardinal by Alexander VI. Born 1460, died 1510."
+      ],
+      "expected_evidence": [
+        {
+          "book_id": "pg1232-full",
+          "work_id": "pg1232",
+          "section_ordinal": 10,
+          "section_title": "CHAPTER III. CONCERNING MIXED PRINCIPALITIES",
+          "text": "He was Georges d’Amboise, created a cardinal by Alexander VI. Born 1460, died 1510."
+        }
+      ],
+      "relevance_unit": "passage",
+      "filters": {
+        "book_id": "pg1232-full"
+      }
+    },
+    {
+      "id": "expanded-note-02",
+      "query": "Find the note quoting Burd on why chapter XVIII gave greater offence than other parts of The Prince.",
+      "type": "footnote",
+      "language": "en",
+      "answerable": true,
+      "relevant_book_ids": [
+        "pg1232-full"
+      ],
+      "evidence_contains": [
+        "The present chapter has given greater offence than any other portion of Machiavelli’s writings."
+      ],
+      "expected_evidence": [
+        {
+          "book_id": "pg1232-full",
+          "work_id": "pg1232",
+          "section_ordinal": 25,
+          "section_title": "CHAPTER XVIII. [1] CONCERNING THE WAY IN WHICH PRINCES SHOULD KEEP FAITH",
+          "text": "The present chapter has given greater offence than any other portion of Machiavelli’s writings."
+        }
+      ],
+      "relevance_unit": "passage",
+      "filters": {
+        "book_id": "pg1232-full"
+      }
+    },
+    {
+      "id": "expanded-role-01",
+      "query": "How does Benjamin Jowett’s introduction compare the Republic with Plato’s Laws and other dialogues?",
+      "type": "source_role",
+      "language": "en",
+      "answerable": true,
+      "relevant_book_ids": [
+        "pg1497-full"
+      ],
+      "evidence_contains": [
+        "The Republic of Plato is the longest of his works with the exception of the Laws"
+      ],
+      "expected_evidence": [
+        {
+          "book_id": "pg1497-full",
+          "work_id": "pg1497",
+          "section_ordinal": 1,
+          "section_title": "INTRODUCTION AND ANALYSIS.",
+          "text": "The Republic of Plato is the longest of his works with the exception of the Laws",
+          "expected_section_role": "editorial",
+          "expected_section_author": "Benjamin Jowett"
+        }
+      ],
+      "relevance_unit": "passage",
+      "filters": {
+        "book_id": "pg1497-full"
+      }
+    },
+    {
+      "id": "expanded-role-02",
+      "query": "Which editorial note explains why Casaubon’s own notes were omitted from this edition?",
+      "type": "source_role",
+      "language": "en",
+      "answerable": true,
+      "relevant_book_ids": [
+        "pg2680-full"
+      ],
+      "evidence_contains": [
+        "Casaubon's own notes have been omitted"
+      ],
+      "expected_evidence": [
+        {
+          "book_id": "pg2680-full",
+          "work_id": "pg2680-meditations",
+          "section_ordinal": 16,
+          "section_title": "NOTES",
+          "text": "Casaubon's own notes have been omitted",
+          "expected_section_role": "editorial"
+        }
+      ],
+      "relevance_unit": "passage",
+      "filters": {
+        "book_id": "pg2680-full"
+      }
+    },
+    {
+      "id": "expanded-late-01",
+      "query": "How does the philosophy-of-history discussion propose to define freedom and necessity from observed events?",
+      "type": "argument",
+      "language": "en",
+      "answerable": true,
+      "relevant_book_ids": [
+        "pg2600-full"
+      ],
+      "evidence_contains": [
+        "history should deduce a definition of the conception of freedom and inevitability"
+      ],
+      "expected_evidence": [
+        {
+          "book_id": "pg2600-full",
+          "work_id": "pg2600",
+          "section_ordinal": 362,
+          "section_title": "CHAPTER IX",
+          "text": "history should deduce a definition of the conception of freedom and inevitability"
+        }
+      ],
+      "relevance_unit": "passage",
+      "filters": {
+        "book_id": "pg2600-full"
+      }
+    },
+    {
+      "id": "expanded-late-02",
+      "query": "Why is a total solar eclipse useful for testing the predicted deflection of starlight?",
+      "type": "explanation",
+      "language": "en",
+      "answerable": true,
+      "relevant_book_ids": [
+        "pg5001-full"
+      ],
+      "evidence_contains": [
+        "photographic registration of stars during a total eclipse of the sun"
+      ],
+      "expected_evidence": [
+        {
+          "book_id": "pg5001-full",
+          "work_id": "pg5001",
+          "section_ordinal": 38,
+          "section_title": "( b ) Deflection of Light by a Gravitational Field",
+          "text": "photographic registration of stars during a total eclipse of the sun"
+        }
+      ],
+      "relevance_unit": "passage",
+      "filters": {
+        "book_id": "pg5001-full"
+      }
+    },
+    {
+      "id": "expanded-late-03",
+      "query": "How does a coffin keep the surviving narrator afloat after the Pequod sinks?",
+      "type": "scene",
+      "language": "en",
+      "answerable": true,
+      "relevant_book_ids": [
+        "pg2701-full"
+      ],
+      "evidence_contains": [
+        "Buoyed up by that coffin"
+      ],
+      "expected_evidence": [
+        {
+          "book_id": "pg2701-full",
+          "work_id": "pg2701",
+          "section_ordinal": 139,
+          "section_title": "“AND I ONLY AM ESCAPED ALONE TO TELL THEE” Job.",
+          "text": "Buoyed up by that coffin"
+        }
+      ],
+      "relevance_unit": "passage",
+      "filters": {
+        "book_id": "pg2701-full"
+      }
+    },
+    {
+      "id": "expanded-late-04",
+      "query": "What photograph does Holmes request as his reward after Irene Adler outwits him?",
+      "type": "scene",
+      "language": "en",
+      "answerable": true,
+      "relevant_book_ids": [
+        "pg1661-full"
+      ],
+      "evidence_contains": [
+        "Irene’s photograph!"
+      ],
+      "expected_evidence": [
+        {
+          "book_id": "pg1661-full",
+          "work_id": "pg1661",
+          "section_ordinal": 3,
+          "section_title": "III.",
+          "text": "Irene’s photograph!"
+        }
+      ],
+      "relevance_unit": "passage",
+      "filters": {
+        "book_id": "pg1661-full"
+      }
+    },
+    {
+      "id": "expanded-compare-01",
+      "query": "Compare Adam Smith and Marx on how narrow repetitive factory work changes the worker.",
+      "type": "compare",
+      "language": "en",
+      "answerable": true,
+      "relevant_book_ids": [
+        "pg3300-full",
+        "pg61-full"
+      ],
+      "evidence_contains": [
+        "generally becomes as stupid and ignorant as it is possible for a human creature to become",
+        "He becomes an appendage of the machine"
+      ],
+      "expected_evidence": [
+        {
+          "book_id": "pg3300-full",
+          "work_id": "pg3300-wealth",
+          "section_ordinal": 47,
+          "section_title": "PART III. Of the Expense of public Works and public Institutions.",
+          "text": "generally becomes as stupid and ignorant as it is possible for a human creature to become"
+        },
+        {
+          "book_id": "pg61-full",
+          "work_id": "pg61",
+          "section_ordinal": 2,
+          "section_title": "I. BOURGEOIS AND PROLETARIANS",
+          "text": "He becomes an appendage of the machine"
+        }
+      ],
+      "relevance_unit": "multi_book_passages"
+    },
+    {
+      "id": "expanded-compare-02",
+      "query": "Compare Machiavelli and Hobbes on fear, security and the force behind political order.",
+      "type": "compare",
+      "language": "en",
+      "answerable": true,
+      "relevant_book_ids": [
+        "pg1232-full",
+        "pg3207-full"
+      ],
+      "evidence_contains": [
+        "it is much safer to be feared than loved",
+        "Covenants, without the Sword, are but Words"
+      ],
+      "expected_evidence": [
+        {
+          "book_id": "pg1232-full",
+          "work_id": "pg1232",
+          "section_ordinal": 24,
+          "section_title": "CHAPTER XVII. CONCERNING CRUELTY AND CLEMENCY, AND WHETHER IT IS BETTER TO BE LOVED THAN FEARED",
+          "text": "it is much safer to be feared than loved"
+        },
+        {
+          "book_id": "pg3207-full",
+          "work_id": "pg3207",
+          "section_ordinal": 187,
+          "section_title": "Which Is Not To Be Had From The Law Of Nature:",
+          "text": "Covenants, without the Sword, are but Words"
+        }
+      ],
+      "relevance_unit": "multi_book_passages"
+    },
+    {
+      "id": "expanded-compare-03",
+      "query": "Compare Marcus Aurelius and Nietzsche on the danger of becoming like the people one opposes.",
+      "type": "compare",
+      "language": "en",
+      "answerable": true,
+      "relevant_book_ids": [
+        "pg2680-full",
+        "pg4363-full"
+      ],
+      "evidence_contains": [
+        "The best kind of revenge is, not to become like unto them.",
+        "He who fights with monsters should be careful lest he thereby become a monster"
+      ],
+      "expected_evidence": [
+        {
+          "book_id": "pg2680-full",
+          "work_id": "pg2680-meditations",
+          "section_ordinal": 8,
+          "section_title": "THE SIXTH BOOK",
+          "text": "The best kind of revenge is, not to become like unto them."
+        },
+        {
+          "book_id": "pg4363-full",
+          "work_id": "pg4363",
+          "section_ordinal": 6,
+          "section_title": "CHAPTER IV. APOPHTHEGMS AND INTERLUDES",
+          "text": "He who fights with monsters should be careful lest he thereby become a monster"
+        }
+      ],
+      "relevance_unit": "multi_book_passages"
+    },
+    {
+      "id": "expanded-compare-04",
+      "query": "Compare how the 1859 and sixth editions of Origin of Species explain the evolution of a complex eye.",
+      "type": "compare",
+      "language": "en",
+      "answerable": true,
+      "relevant_book_ids": [
+        "pg1228-full",
+        "pg2009-full"
+      ],
+      "evidence_contains": [
+        "numerous gradations from a perfect and complex eye to one very imperfect and simple",
+        "numerous gradations from a simple and imperfect eye to one complex and perfect"
+      ],
+      "expected_evidence": [
+        {
+          "book_id": "pg1228-full",
+          "work_id": "pg1228-origin",
+          "section_ordinal": 9,
+          "section_title": "CHAPTER VI. DIFFICULTIES ON THEORY.",
+          "text": "numerous gradations from a perfect and complex eye to one very imperfect and simple"
+        },
+        {
+          "book_id": "pg2009-full",
+          "work_id": "pg1228-origin",
+          "section_ordinal": 11,
+          "section_title": "CHAPTER VI. DIFFICULTIES OF THE THEORY.",
+          "text": "numerous gradations from a simple and imperfect eye to one complex and perfect"
+        }
+      ],
+      "relevance_unit": "multi_book_passages"
+    },
+    {
+      "id": "expanded-negative-01",
+      "query": "How does the captain use a gold doubloon to motivate his crew?",
+      "type": "negative",
+      "language": "en",
+      "answerable": false,
+      "filters": {
+        "book_id": "pg1661-full"
+      },
+      "scope_rationale": "The selected full book does not contain the named situation/argument; this is an incorrect-book-scope query, not a claim about the rest of the library.",
+      "absent_distinguishing_terms": [
+        "doubloon"
+      ]
+    },
+    {
+      "id": "expanded-negative-02",
+      "query": "Что письмо Дарси раскрывает о намерении Уикхема жениться на его сестре ради денег?",
+      "type": "negative",
+      "language": "ru",
+      "answerable": false,
+      "filters": {
+        "book_id": "pg35-full"
+      },
+      "scope_rationale": "The selected full book does not contain the named situation/argument; this is an incorrect-book-scope query, not a claim about the rest of the library.",
+      "absent_distinguishing_terms": [
+        "Darcy",
+        "Elizabeth"
+      ]
+    },
+    {
+      "id": "expanded-negative-03",
+      "query": "Why do covenants need a sword behind them to keep people secure?",
+      "type": "negative",
+      "language": "en",
+      "answerable": false,
+      "filters": {
+        "book_id": "pg5001-full"
+      },
+      "scope_rationale": "The selected full book does not contain the named situation/argument; this is an incorrect-book-scope query, not a claim about the rest of the library.",
+      "absent_distinguishing_terms": [
+        "covenants",
+        "sword"
+      ]
+    },
+    {
+      "id": "expanded-negative-04",
+      "query": "Почему Адам Смит опасается, что однообразный труд делает рабочих невежественными?",
+      "type": "negative",
+      "language": "ru",
+      "answerable": false,
+      "filters": {
+        "book_id": "pg1342-full"
+      },
+      "scope_rationale": "The selected full book does not contain the named situation/argument; this is an incorrect-book-scope query, not a claim about the rest of the library.",
+      "absent_distinguishing_terms": [
+        "Adam Smith"
+      ]
+    },
+    {
+      "id": "expanded-negative-05",
+      "query": "Comment la créature apprend-elle à parler en observant la famille De Lacey?",
+      "type": "negative",
+      "language": "fr",
+      "answerable": false,
+      "filters": {
+        "book_id": "pg2701-full"
+      },
+      "scope_rationale": "The selected full book does not contain the named situation/argument; this is an incorrect-book-scope query, not a claim about the rest of the library.",
+      "absent_distinguishing_terms": [
+        "De Lacey"
+      ]
+    },
+    {
+      "id": "expanded-negative-06",
+      "query": "Warum sind zwei Blitze am Bahndamm nicht gleichzeitig für einen fahrenden Zug?",
+      "type": "negative",
+      "language": "de",
+      "answerable": false,
+      "filters": {
+        "book_id": "pg1232-full"
+      },
+      "scope_rationale": "The selected full book does not contain the named situation/argument; this is an incorrect-book-scope query, not a claim about the rest of the library.",
+      "absent_distinguishing_terms": [
+        "lightning",
+        "simultaneity"
+      ]
+    },
+    {
+      "id": "expanded-negative-07",
+      "query": "How do the Morlocks keep the Eloi as a source of food?",
+      "type": "negative",
+      "language": "en",
+      "answerable": false,
+      "filters": {
+        "book_id": "pg2009-full"
+      },
+      "scope_rationale": "The selected full book does not contain the named situation/argument; this is an incorrect-book-scope query, not a claim about the rest of the library.",
+      "absent_distinguishing_terms": [
+        "Morlocks",
+        "Eloi"
+      ]
+    },
+    {
+      "id": "expanded-negative-08",
+      "query": "How does the detective solve the mystery of the speckled band?",
+      "type": "negative",
+      "language": "en",
+      "answerable": false,
+      "filters": {
+        "book_id": "pg11-full"
+      },
+      "scope_rationale": "The selected full book does not contain the named situation/argument; this is an incorrect-book-scope query, not a claim about the rest of the library.",
+      "absent_distinguishing_terms": [
+        "speckled",
+        "detective"
+      ]
+    },
+    {
+      "id": "expanded-negative-09",
+      "query": "Как отец Грегора ранит его яблоком, застрявшим в спине?",
+      "type": "negative",
+      "language": "ru",
+      "answerable": false,
+      "filters": {
+        "book_id": "pg2600-full"
+      },
+      "scope_rationale": "The selected full book does not contain the named situation/argument; this is an incorrect-book-scope query, not a claim about the rest of the library.",
+      "absent_distinguishing_terms": [
+        "Gregor Samsa"
+      ]
+    },
+    {
+      "id": "expanded-negative-10",
+      "query": "What does the allegory of prisoners chained in a cave say about education?",
+      "type": "negative",
+      "language": "en",
+      "answerable": false,
+      "filters": {
+        "book_id": "pg5316-full"
+      },
+      "scope_rationale": "The selected full book does not contain the named situation/argument; this is an incorrect-book-scope query, not a claim about the rest of the library.",
+      "absent_distinguishing_terms": [
+        "prisoners",
+        "cave",
+        "education"
+      ]
+    }
+  ]
+}

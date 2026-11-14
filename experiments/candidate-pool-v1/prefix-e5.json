@@ -1,0 +1,122 @@
+[
+  {
+    "query": "struggle for existence",
+    "mode": "semantic",
+    "limits": [
+      5,
+      20,
+      50
+    ],
+    "prefix_consistent": true,
+    "counts": [
+      5,
+      20,
+      50
+    ],
+    "candidate_pool": {
+      "window_limit": 2000,
+      "passage_limit": 100,
+      "ranked_windows": 2000,
+      "unique_passages": 100,
+      "verified_passages": 100,
+      "lexical_limit": 0
+    },
+    "top_ids": [
+      217957,
+      221098,
+      218549,
+      221860,
+      217958
+    ]
+  },
+  {
+    "query": "struggle for existence",
+    "mode": "hybrid",
+    "limits": [
+      5,
+      20,
+      50
+    ],
+    "prefix_consistent": true,
+    "counts": [
+      5,
+      20,
+      50
+    ],
+    "candidate_pool": {
+      "window_limit": 2000,
+      "passage_limit": 100,
+      "ranked_windows": 2000,
+      "unique_passages": 100,
+      "verified_passages": 100,
+      "lexical_limit": 50
+    },
+    "top_ids": [
+      217957,
+      221098,
+      217958,
+      221099,
+      218549
+    ]
+  },
+  {
+    "query": "девочка следует за белым кроликом",
+    "mode": "semantic",
+    "limits": [
+      5,
+      20,
+      50
+    ],
+    "prefix_consistent": true,
+    "counts": [
+      5,
+      20,
+      50
+    ],
+    "candidate_pool": {
+      "window_limit": 2000,
+      "passage_limit": 100,
+      "ranked_windows": 2000,
+      "unique_passages": 100,
+      "verified_passages": 100,
+      "lexical_limit": 0
+    },
+    "top_ids": [
+      219217,
+      217219,
+      223116,
+      217227,
+      218556
+    ]
+  },
+  {
+    "query": "девочка следует за белым кроликом",
+    "mode": "hybrid",
+    "limits": [
+      5,
+      20,
+      50
+    ],
+    "prefix_consistent": true,
+    "counts": [
+      5,
+      20,
+      50
+    ],
+    "candidate_pool": {
+      "window_limit": 2000,
+      "passage_limit": 100,
+      "ranked_windows": 2000,
+      "unique_passages": 100,
+      "verified_passages": 100,
+      "lexical_limit": 50
+    },
+    "top_ids": [
+      219217,
+      217219,
+      223116,
+      217227,
+      218556
+    ]
+  }
+]

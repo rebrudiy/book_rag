@@ -73,8 +73,15 @@ def _verse_container(node: Tag) -> bool:
     return node.name == "div" and bool(set(classes) & {"poem", "stanza", "verse"})
 
 
+def _verbatim_text(text: str) -> str:
+    """Canonicalize Unicode/newlines while preserving code whitespace exactly."""
+    return unicodedata.normalize("NFC", text.replace("\r\n", "\n").replace("\r", "\n"))
+
+
 def _block_text(node: Tag) -> str:
     """Preserve explicit verse/preformatted line breaks, not HTML source wrapping."""
+    if node.name == "pre":
+        return _verbatim_text(node.get_text())
     has_lines = node.name == "pre" or bool(node.find("br")) or _verse_container(node)
     if not has_lines:
         return normalize_text(node.get_text())
@@ -241,6 +248,23 @@ def _fb2(path: Path) -> ParsedBook:
             if name == "section":
                 flush()
                 visit(child, title)
+            elif name == "code" and child.get("{http://www.w3.org/XML/1998/namespace}space") == "preserve":
+                value = _verbatim_text("".join(child.itertext()))
+                if value:
+                    paragraphs.append(value)
+            elif (
+                name == "p"
+                and len(child) == 1
+                and child[0].tag.rsplit("}", 1)[-1] == "code"
+                and (
+                    child[0].get("{http://www.w3.org/XML/1998/namespace}space") == "preserve"
+                    and not (child.text or "").strip()
+                    and not (child[0].tail or "").strip()
+                )
+            ):
+                value = _verbatim_text("".join(child[0].itertext()))
+                if value:
+                    paragraphs.append(value)
             elif name == "poem":
                 stanza_texts = []
                 for stanza in child.findall("{*}stanza"):

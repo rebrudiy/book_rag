@@ -48,8 +48,15 @@ def create_app(directory: Path | None = None) -> FastAPI:
         return build_map(library)
 
     @app.get("/api/books")
-    def books(language: str | None = None, q: str = Query(default="", max_length=500)) -> dict[str, Any]:
-        return {"books": library.books(language, q)}
+    def books(
+        language: str | None = None,
+        q: str = Query(default="", max_length=500),
+        status: Literal["indexed", "discovered", "downloaded", "processed", "failed", "duplicate", "deferred"]
+        | None = None,
+        offset: int = Query(default=0, ge=0),
+        limit: int = Query(default=100, ge=1, le=500),
+    ) -> dict[str, Any]:
+        return library.book_page(language, q, status, offset, limit)
 
     @app.get("/api/books/{book_id}")
     def book(book_id: str) -> dict[str, Any]:

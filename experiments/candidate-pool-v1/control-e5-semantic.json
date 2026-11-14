@@ -1,0 +1,1558 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-11-14T12:34:47.289323+00:00",
+  "dataset": "dev-expanded.json",
+  "dataset_sha256": "8955a6cf471318fa70d24f518c3a08f410865f9a9f4a751f47d29de3a94deb44",
+  "split": "dev",
+  "mode": "semantic",
+  "actual_search_modes": {
+    "semantic": 54
+  },
+  "embedding_models": [
+    "intfloat/multilingual-e5-small"
+  ],
+  "environment": {
+    "python": "3.12.12",
+    "platform": "macOS-26.6.2-arm64-arm-64bit"
+  },
+  "implementation_sha256": {
+    "__init__.py": "75f47d5ed1cd9a5bbcae9f15abdf4122ce48bd6ca996d1a795c26ecc5a82ea96",
+    "api.py": "fcdbaa6301aad6169f75b2d607a8514d6ef8e429644a7c1efcf8af53352abcd8",
+    "attribution.py": "c7519619137637dfd82649dff28d62ecee4c91125943c1158f219e9a315704d2",
+    "calibration.py": "77fe2569e5c449d3e758686440e6a205de617df77a5d467b9fd62039424e9a0f",
+    "catalog.py": "96a84adadb383abcdba667e4329f3adf1ba71aa4ef38a6c152b467d188eb823b",
+    "cli.py": "1431c95c35f454d88d03b5ca5ceaf60717be060bbd89e0a9da56869c62dbb1fa",
+    "config.py": "913d11f0397cd2ba78ac518890dd39aa8256feb092bba168fd0aa464136f7144",
+    "corpus_planning.py": "390a74e328618bb295d1fda6c64b335f6310a5787dd6b52c4cd2b2ef45e8415e",
+    "embedding_profiles.py": "f12a8d92767f3ca0b7dba8181c231db612d341ef11fc734a348fb56d228b9e0d",
+    "evaluation.py": "8300a15a8ebb54b19e639b3a14a1b443ff591705f6384dd7af5a2a4a5ae90294",
+    "explore.py": "bfb81e64786c6ba4b41f6231acf01da70002768831a462c401aaf7d72d381ba5",
+    "exporting.py": "ce3d753f5a54f0d564a727dfac1ed76f88468f614491668241918f63f5a378ae",
+    "integrity.py": "d2d4c22be60276078373b8e2bdbb9c18ed4991cc79a96d10796848a752c908f4",
+    "library.py": "d7358e48abf571bcecda9d048795df91ec134476b61c84c3dd88fe92a68d002f",
+    "modern_sources.py": "0ac2b7c24127907e3de287717a373147fea16567c91739f7d97a2185bdf5c26b",
+    "parsers.py": "0abdaebe406853c8437dcd4dbfdb576c4e4a660fbcc2e5e74f38c087eb14c18d",
+    "reranking.py": "8584e76239d4cc4b84349cef360ec805c179ac5eab4fa9fda6f00fb459724873",
+    "retrieval.py": "bc65b445a6d8d85c72c3c9c956d91e132a58161c7ea5afae42ea120793afa24a",
+    "russian_sources.py": "a9d2507b0555aa87037b2fadeac89d732d713da19a5eecfd6c3769759a75ea57",
+    "semantic.py": "6dd2717dff2cb28b478d79cb59c60a2161087686f7de65de5aaf8d0f353d01a1",
+    "snapshots.py": "c51a51a600e6d878b94e16989cf5a1f131b77160968476406adecb612b8e26e0",
+    "sources.py": "432e4309ff98c5deb6becec728e332e4ef2d02a55bb5edf2668f348900fbb63e"
+  },
+  "k": 5,
+  "corpus": {
+    "books": 20,
+    "works": 19,
+    "passages": 12108,
+    "status_counts": {
+      "indexed": 20
+    },
+    "work_count_is_provisional": false,
+    "curated_work_groups": 19,
+    "periodical_editions": 0,
+    "languages": [
+      {
+        "language": "de",
+        "count": 1
+      },
+      {
+        "language": "en",
+        "count": 17
+      },
+      {
+        "language": "fr",
+        "count": 1
+      },
+      {
+        "language": "ru",
+        "count": 1
+      }
+    ]
+  },
+  "corpus_sha256": "efe0ac3153dfd9d685535013ef32a6b787b1d3041d6ed6a526acf24198ffbeb6",
+  "corpus_snapshot": [
+    {
+      "id": "pg11-full",
+      "work_id": "pg11-alice",
+      "title": "Alice's Adventures in Wonderland",
+      "author": "Carroll, Lewis, 1832-1898",
+      "language": "en",
+      "edition": "Project Gutenberg #11, full electronic edition; updated Jun 26, 2025",
+      "status": "indexed",
+      "artifact_sha256": "4f81245d31380ac1d6eafb9a321e3691369bc70985736ae4bccf849a4f784036",
+      "content_sha256": "696306f122e0307f124a07b63bde1ff3b3eb31f992b777368555d8eb4425b291",
+      "source_url": "https://www.gutenberg.org/ebooks/11",
+      "rights": "Public domain in the USA. Project Gutenberg trademark license applies; check local law outside the USA.",
+      "rights_url": "https://www.gutenberg.org/policy/license.html"
+    },
+    {
+      "id": "pg1228-full",
+      "work_id": "pg1228-origin",
+      "title": "On the Origin of Species By Means of Natural Selection Or, the Preservation of Favoured Races in the Struggle for Life",
+      "author": "Darwin, Charles, 1809-1882",
+      "language": "en",
+      "edition": "Project Gutenberg #1228, full electronic edition; updated Oct 6, 2026; 1859 first edition",
+      "status": "indexed",
+      "artifact_sha256": "49bb913c0d267c786846805ce8b90a2e92bc4b2ee7cc0ab9492821bd85c6819b",
+      "content_sha256": "8868ecc91f9c788d49c1e0d8c26381848f20eb2825fbb8a12116280b7e5664ee",
+      "source_url": "https://www.gutenberg.org/ebooks/1228",
+      "rights": "Public domain in the USA. Project Gutenberg trademark license applies; check local law outside the USA.",
+      "rights_url": "https://www.gutenberg.org/policy/license.html"
+    },
+    {
+      "id": "pg1232-full",
+      "work_id": "pg1232",
+      "title": "The Prince",
+      "author": "Machiavelli, Niccolò, 1469-1527",
+      "language": "en",
+      "edition": "Project Gutenberg #1232, full electronic edition; updated Jul 24, 2026; translator Marriott, W. K. (William Kenaz), -1927",
+      "status": "indexed",
+      "artifact_sha256": "0260d6165a1558ee2e94eb37d7f1ff0cf4e30b41e094d6ff1afb094950b1be88",
+      "content_sha256": "ca2db4a1725a0c9f60f19cf50792f870219df76ae0b5021f5d70afeaf66c3dc0",
+      "source_url": "https://www.gutenberg.org/ebooks/1232",
+      "rights": "Public domain in the USA. Project Gutenberg trademark license applies; check local law outside the USA.",
+      "rights_url": "https://www.gutenberg.org/policy/license.html"
+    },
+    {
+      "id": "pg1342-full",
+      "work_id": "pg1342-pride",
+      "title": "Pride and Prejudice",
+      "author": "Austen, Jane, 1775-1817",
+      "language": "en",
+      "edition": "Project Gutenberg #1342, full electronic edition; updated Sep 29, 2026",
+      "status": "indexed",
+      "artifact_sha256": "fd519471687295a8b2492d9e413bc24bee21ade9808d8af29899a16e8599064e",
+      "content_sha256": "116e94fd0ba2f26de1d5d2914ecf5831d530354dce327e3e82eb1d55fbbd6f31",
+      "source_url": "https://www.gutenberg.org/ebooks/1342",
+      "rights": "Public domain in the USA. Project Gutenberg trademark license applies; check local law outside the USA.",
+      "rights_url": "https://www.gutenberg.org/policy/license.html"
+    },
+    {
+      "id": "pg1497-full",
+      "work_id": "pg1497",
+      "title": "The Republic",
+      "author": "Plato, 428? BCE-348? BCE",
+      "language": "en",
+      "edition": "Project Gutenberg #1497, full electronic edition; updated Oct 3, 2026; translator Jowett, Benjamin, 1817-1893",
+      "status": "indexed",
+      "artifact_sha256": "8c8bf2ed9bff65aaf226bf5db3879eb378a26e72489bd28666abc01c02f2a0c2",
+      "content_sha256": "7811a9e6a6c9901a264f440112eac27d23eba24142b571b441308bec3d69b9f6",
+      "source_url": "https://www.gutenberg.org/ebooks/1497",
+      "rights": "Public domain in the USA. Project Gutenberg trademark license applies; check local law outside the USA.",
+      "rights_url": "https://www.gutenberg.org/policy/license.html"
+    },
+    {
+      "id": "pg1661-full",
+      "work_id": "pg1661",
+      "title": "The Adventures of Sherlock Holmes",
+      "author": "Doyle, Arthur Conan, 1859-1930",
+      "language": "en",
+      "edition": "Project Gutenberg #1661, full electronic edition; updated Oct 10, 2023",
+      "status": "indexed",
+      "artifact_sha256": "310ddf29f2b98b870b0e970061d236c9ce7c65163e0e172c254a1db3d070d3f4",
+      "content_sha256": "ed72f8cdd665e5c55802e39300e4642ec3516fcf9ec7faca82fef2eb8e994dc7",
+      "source_url": "https://www.gutenberg.org/ebooks/1661",
+      "rights": "Public domain in the USA. Project Gutenberg trademark license applies; check local law outside the USA.",
+      "rights_url": "https://www.gutenberg.org/policy/license.html"
+    },
+    {
+      "id": "pg2009-full",
+      "work_id": "pg1228-origin",
+      "title": "The Origin of Species by Means of Natural Selection Or, the Preservation of Favoured Races in the Struggle for Life, 6th Edition",
+      "author": "Darwin, Charles, 1809-1882",
+      "language": "en",
+      "edition": "Project Gutenberg #2009, full electronic edition; updated Oct 7, 2026; sixth edition",
+      "status": "indexed",
+      "artifact_sha256": "734ab06f61101728b42982d6032a440eb79c051f02d4a8456bbe34ea6cb293d0",
+      "content_sha256": "a65632da80ac1e6184eb088e79275a148f53a87608489a5e574d48f5d9eae1bf",
+      "source_url": "https://www.gutenberg.org/ebooks/2009",
+      "rights": "Public domain in the USA. Project Gutenberg trademark license applies; check local law outside the USA.",
+      "rights_url": "https://www.gutenberg.org/policy/license.html"
+    },
+    {
+      "id": "pg22367-full",
+      "work_id": "pg22367-metamorphosis",
+      "title": "Die Verwandlung",
+      "author": "Kafka, Franz, 1883-1924",
+      "language": "de",
+      "edition": "Project Gutenberg #22367, full electronic edition; updated Dec 29, 2017",
+      "status": "indexed",
+      "artifact_sha256": "9fc9a802421caf591d674ffafa6d17eaf08b2e3d54849c081c9276a5174ee60e",
+      "content_sha256": "5c8ca21e3bca39960600a35febfd00df08c39206304977b2c67bf70c57ab61d7",
+      "source_url": "https://www.gutenberg.org/ebooks/22367",
+      "rights": "Public domain in the USA. Project Gutenberg trademark license applies; check local law outside the USA.",
+      "rights_url": "https://www.gutenberg.org/policy/license.html"
+    },
+    {
+      "id": "pg2600-full",
+      "work_id": "pg2600",
+      "title": "War and Peace",
+      "author": "Tolstoy, Leo, graf, 1828-1910",
+      "language": "en",
+      "edition": "Project Gutenberg #2600, full electronic edition; updated Jun 14, 2022; translator Maude, Aylmer, 1858-1938, Maude, Louise, 1855-1939",
+      "status": "indexed",
+      "artifact_sha256": "c856e9e16693084763aa3fd68f1b1b6dbc41123db6c1e5bb48af78302f2f921e",
+      "content_sha256": "4aec066b8aa7272bde30c5d555d2251862357a940eba009a7364d7071223e459",
+      "source_url": "https://www.gutenberg.org/ebooks/2600",
+      "rights": "Public domain in the USA. Project Gutenberg trademark license applies; check local law outside the USA.",
+      "rights_url": "https://www.gutenberg.org/policy/license.html"
+    },
+    {
+      "id": "pg2680-full",
+      "work_id": "pg2680-meditations",
+      "title": "Meditations",
+      "author": "Marcus Aurelius, Emperor of Rome, 121-180",
+      "language": "en",
+      "edition": "Project Gutenberg #2680, full electronic edition; updated Jul 13, 2026; Meric Casaubon translation",
+      "status": "indexed",
+      "artifact_sha256": "62c71326bea242893ce8c3ce54bdf5fad3989a827a1462ec03f7dadf8bf5bc89",
+      "content_sha256": "e44ec0f4d2d13b28dc815556979513d5e55c75a0c0e4d4857caa4ee80319561a",
+      "source_url": "https://www.gutenberg.org/ebooks/2680",
+      "rights": "Public domain in the USA. Project Gutenberg trademark license applies; check local law outside the USA.",
+      "rights_url": "https://www.gutenberg.org/policy/license.html"
+    },
+    {
+      "id": "pg2701-full",
+      "work_id": "pg2701",
+      "title": "Moby Dick; Or, The Whale",
+      "author": "Melville, Herman, 1819-1891",
+      "language": "en",
+      "edition": "Project Gutenberg #2701, full electronic edition; updated Oct 11, 2026",
+      "status": "indexed",
+      "artifact_sha256": "e247676589c02a65bc80ff7bf7aaaf146d7c69eadfcfb96633c5f606a08602db",
+      "content_sha256": "59a62bc8dad23f63d9eac06b5e43abd2b995bd071f5b1ca80aaf0aa58c39c684",
+      "source_url": "https://www.gutenberg.org/ebooks/2701",
+      "rights": "Public domain in the USA. Project Gutenberg trademark license applies; check local law outside the USA.",
+      "rights_url": "https://www.gutenberg.org/policy/license.html"
+    },
+    {
+      "id": "pg3207-full",
+      "work_id": "pg3207",
+      "title": "Leviathan",
+      "author": "Hobbes, Thomas, 1588-1679",
+      "language": "en",
+      "edition": "Project Gutenberg #3207, full electronic edition; updated Sep 17, 2025",
+      "status": "indexed",
+      "artifact_sha256": "a6ccaf6bea85d46d118a5e05b0b741746027b42ec1d8c703286cecde920fa219",
+      "content_sha256": "b5b88950aa3b573a38444211f11f30b270f102ddcfcdd1fb55008e23f5902afe",
+      "source_url": "https://www.gutenberg.org/ebooks/3207",
+      "rights": "Public domain in the USA. Project Gutenberg trademark license applies; check local law outside the USA.",
+      "rights_url": "https://www.gutenberg.org/policy/license.html"
+    },
+    {
+      "id": "pg3300-full",
+      "work_id": "pg3300-wealth",
+      "title": "An Inquiry into the Nature and Causes of the Wealth of Nations",
+      "author": "Smith, Adam, 1723-1790",
+      "language": "en",
+      "edition": "Project Gutenberg #3300, full electronic edition; updated Jul 3, 2025",
+      "status": "indexed",
+      "artifact_sha256": "52c8c5b9cc2b18d1edc87a326b76f0d8aee568932995d407083b394aaa9165ab",
+      "content_sha256": "ad673dc1d34b88121e35ffdc0f77faca2fc2ecb561e0e12ff84e94079d5e1be8",
+      "source_url": "https://www.gutenberg.org/ebooks/3300",
+      "rights": "Public domain in the USA. Project Gutenberg trademark license applies; check local law outside the USA.",
+      "rights_url": "https://www.gutenberg.org/policy/license.html"
+    },
+    {
+      "id": "pg35-full",
+      "work_id": "pg35",
+      "title": "The Time Machine",
+      "author": "Wells, H. G. (Herbert George), 1866-1946",
+      "language": "en",
+      "edition": "Project Gutenberg #35, full electronic edition; updated Jun 16, 2026",
+      "status": "indexed",
+      "artifact_sha256": "f52cfd0c629d87db3ef91ced77ef5fd7e8fc8f3a997c73aede05e67091d14eec",
+      "content_sha256": "30a6cd34d1dcbee8bb718c24d2fe1891550c92577d32889628e447f6a4ad022e",
+      "source_url": "https://www.gutenberg.org/ebooks/35",
+      "rights": "Public domain in the USA. Project Gutenberg trademark license applies; check local law outside the USA.",
+      "rights_url": "https://www.gutenberg.org/policy/license.html"
+    },
+    {
+      "id": "pg4363-full",
+      "work_id": "pg4363",
+      "title": "Beyond Good and Evil",
+      "author": "Nietzsche, Friedrich Wilhelm, 1844-1900",
+      "language": "en",
+      "edition": "Project Gutenberg #4363, full electronic edition; updated Oct 2, 2026; translator Zimmern, Helen, 1846-1934",
+      "status": "indexed",
+      "artifact_sha256": "5be9a122841a88130130999da60ce5949f277ce603c9977081cc91a56ea53290",
+      "content_sha256": "de2eb44e49856fb8886e8965949dddbde45d2a0a2c301acbab2763efee622d54",
+      "source_url": "https://www.gutenberg.org/ebooks/4363",
+      "rights": "Public domain in the USA. Project Gutenberg trademark license applies; check local law outside the USA.",
+      "rights_url": "https://www.gutenberg.org/policy/license.html"
+    },
+    {
+      "id": "pg4650-full",
+      "work_id": "pg4650-candide",
+      "title": "Candide, ou l'optimisme",
+      "author": "Voltaire, 1694-1778",
+      "language": "fr",
+      "edition": "Project Gutenberg #4650, full electronic edition; updated Nov 17, 2022",
+      "status": "indexed",
+      "artifact_sha256": "52f706dea0bad8e08913b254333901f3f6dfb1b472a90a8802b97b9604986d59",
+      "content_sha256": "4f0ad0c1c33c42972509db417f1b6245485d53b8e2d411d9e5ac868424ad3929",
+      "source_url": "https://www.gutenberg.org/ebooks/4650",
+      "rights": "Public domain in the USA. Project Gutenberg trademark license applies; check local law outside the USA.",
+      "rights_url": "https://www.gutenberg.org/policy/license.html"
+    },
+    {
+      "id": "pg5001-full",
+      "work_id": "pg5001",
+      "title": "Relativity : the Special and General Theory",
+      "author": "Einstein, Albert, 1879-1955",
+      "language": "en",
+      "edition": "Project Gutenberg #5001, full electronic edition; updated Jan 7, 2022; translator Lawson, Robert W. (Robert William)",
+      "status": "indexed",
+      "artifact_sha256": "d72163123dab44b5c2d90fd17ac251b4b76de71ae3ebb04b3f3b5caa1334577f",
+      "content_sha256": "a6103c300da20c871f61c1df2488fc342511e9ecc981b7b60ad876485c8e4121",
+      "source_url": "https://www.gutenberg.org/ebooks/5001",
+      "rights": "Public domain in the USA. Project Gutenberg trademark license applies; check local law outside the USA.",
+      "rights_url": "https://www.gutenberg.org/policy/license.html"
+    },
+    {
+      "id": "pg5316-full",
+      "work_id": "pg5316-pushkin",
+      "title": "Красавице, которая нюхала табак",
+      "author": "Pushkin, Aleksandr Sergeevich, 1799-1837",
+      "language": "ru",
+      "edition": "Project Gutenberg #5316, full electronic edition; updated Dec 28, 2020",
+      "status": "indexed",
+      "artifact_sha256": "b6c36094b7fc62254974a265e05aa0b17c3a4b8cc68b4c50462cf8eb0eb1e482",
+      "content_sha256": "8a7aa7908207cf37a14670b1971b3bec002d476837b01d2e0c5c81cf8c287f26",
+      "source_url": "https://www.gutenberg.org/ebooks/5316",
+      "rights": "Public domain in the USA. Project Gutenberg trademark license applies; check local law outside the USA.",
+      "rights_url": "https://www.gutenberg.org/policy/license.html"
+    },
+    {
+      "id": "pg61-full",
+      "work_id": "pg61",
+      "title": "The Communist Manifesto",
+      "author": "Marx, Karl, 1818-1883; Engels, Friedrich, 1820-1895",
+      "language": "en",
+      "edition": "Project Gutenberg #61, full electronic edition; updated Mar 2, 2022",
+      "status": "indexed",
+      "artifact_sha256": "eb9d882661805128f3f476818a9eee328b77778b0d5ef7415fe08fcd76ecd763",
+      "content_sha256": "172aa700dd37b5116fc041faf9313a7fca85c18ce6d61726878aa71ed2d67d75",
+      "source_url": "https://www.gutenberg.org/ebooks/61",
+      "rights": "Public domain in the USA. Project Gutenberg trademark license applies; check local law outside the USA.",
+      "rights_url": "https://www.gutenberg.org/policy/license.html"
+    },
+    {
+      "id": "pg84-full",
+      "work_id": "pg84",
+      "title": "Frankenstein; or, The modern Prometheus",
+      "author": "Shelley, Mary Wollstonecraft, 1797-1851",
+      "language": "en",
+      "edition": "Project Gutenberg #84, full electronic edition; updated Feb 10, 2026",
+      "status": "indexed",
+      "artifact_sha256": "0bfcc8cacdc72e132272844ed465c6198f1049a8d2b9e3f16806d02beee452e3",
+      "content_sha256": "5844ca1e8cd7f90e3361c6737a298bb2c01b38b6de93e4ad83e6d2277b2440a3",
+      "source_url": "https://www.gutenberg.org/ebooks/84",
+      "rights": "Public domain in the USA. Project Gutenberg trademark license applies; check local law outside the USA.",
+      "rights_url": "https://www.gutenberg.org/policy/license.html"
+    }
+  ],
+  "queries": 54,
+  "answerable_queries": 44,
+  "negative_queries": 10,
+  "metrics": {
+    "mrr_at_k": 0.571590909090909,
+    "hit_at_k": 0.6818181818181818,
+    "work_recall_at_k": 0.9318181818181818,
+    "precision_at_k": 0.1590909090909091,
+    "negative_abstention_accuracy": 0.0,
+    "quote_exact_rate": 1.0,
+    "metadata_exact_rate": 1.0,
+    "reader_anchor_exact_rate": 1.0,
+    "returned_passages": 244,
+    "latency_p50_ms": 46.601,
+    "latency_p95_ms": 67.874,
+    "elapsed_seconds": 5.35,
+    "process_peak_rss_mib": 1345.69
+  },
+  "by_type": {
+    "approx_book_description": {
+      "queries": 2,
+      "mrr_at_k": 1.0,
+      "hit_at_k": 1.0
+    },
+    "argument": {
+      "queries": 5,
+      "mrr_at_k": 0.5,
+      "hit_at_k": 0.6
+    },
+    "compare": {
+      "queries": 4,
+      "mrr_at_k": 0.5,
+      "hit_at_k": 0.5
+    },
+    "cross_language": {
+      "queries": 12,
+      "mrr_at_k": 0.3958333333333333,
+      "hit_at_k": 0.5
+    },
+    "exact_quote": {
+      "queries": 5,
+      "mrr_at_k": 0.6,
+      "hit_at_k": 0.6
+    },
+    "explanation": {
+      "queries": 4,
+      "mrr_at_k": 0.675,
+      "hit_at_k": 1.0
+    },
+    "footnote": {
+      "queries": 2,
+      "mrr_at_k": 0.75,
+      "hit_at_k": 1.0
+    },
+    "idea": {
+      "queries": 3,
+      "mrr_at_k": 0.8333333333333334,
+      "hit_at_k": 1.0
+    },
+    "scene": {
+      "queries": 5,
+      "mrr_at_k": 0.6,
+      "hit_at_k": 0.6
+    },
+    "source_role": {
+      "queries": 2,
+      "mrr_at_k": 0.6,
+      "hit_at_k": 1.0
+    }
+  },
+  "by_language": {
+    "de": {
+      "queries": 5,
+      "mrr_at_k": 0.4
+    },
+    "en": {
+      "queries": 29,
+      "mrr_at_k": 0.6344827586206896
+    },
+    "fr": {
+      "queries": 5,
+      "mrr_at_k": 0.5
+    },
+    "ru": {
+      "queries": 5,
+      "mrr_at_k": 0.45
+    }
+  },
+  "cases": [
+    {
+      "id": "expanded-01",
+      "query": "\"Sentence first—verdict afterwards\"",
+      "type": "exact_quote",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 1.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        217286
+      ],
+      "elapsed_ms": 2797.644,
+      "warnings": []
+    },
+    {
+      "id": "expanded-02",
+      "query": "\"My affections and wishes are unchanged\"",
+      "type": "exact_quote",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 1.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        217828
+      ],
+      "elapsed_ms": 74.783,
+      "warnings": []
+    },
+    {
+      "id": "expanded-03",
+      "query": "\"There is grandeur in this view of life\"",
+      "type": "exact_quote",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 0.0,
+      "work_recall_at_k": 0.0,
+      "hit_at_k": false,
+      "precision_at_k": 0.0,
+      "correct_abstention": null,
+      "results": [],
+      "elapsed_ms": 70.596,
+      "warnings": []
+    },
+    {
+      "id": "expanded-04",
+      "query": "How does Marcus Aurelius compare accepting death with leaving a play after three acts?",
+      "type": "idea",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 0.5,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        218700,
+        218886,
+        218848,
+        218793,
+        218803
+      ],
+      "elapsed_ms": 50.364,
+      "warnings": []
+    },
+    {
+      "id": "expanded-05",
+      "query": "Pourquoi le travail protège-t-il de l’ennui, du vice et du besoin à la fin de Candide?",
+      "type": "argument",
+      "language": "fr",
+      "answerable": true,
+      "reciprocal_rank": 0.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": false,
+      "precision_at_k": 0.0,
+      "correct_abstention": null,
+      "results": [
+        219049,
+        219051,
+        219021,
+        219059,
+        218978
+      ],
+      "elapsed_ms": 51.051,
+      "warnings": []
+    },
+    {
+      "id": "expanded-06",
+      "query": "Wie verletzt Gregors Vater ihn mit einem Apfel?",
+      "type": "scene",
+      "language": "de",
+      "answerable": true,
+      "reciprocal_rank": 1.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        219183,
+        219205,
+        219162,
+        219184,
+        219208
+      ],
+      "elapsed_ms": 48.079,
+      "warnings": []
+    },
+    {
+      "id": "expanded-07",
+      "query": "Найди стихотворение, в котором влюблённый мечтает превратиться в табак и попасть в табакерку красавицы.",
+      "type": "approx_book_description",
+      "language": "ru",
+      "answerable": true,
+      "reciprocal_rank": 1.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        219217,
+        227291,
+        222464,
+        222882,
+        222796
+      ],
+      "elapsed_ms": 52.333,
+      "warnings": []
+    },
+    {
+      "id": "expanded-08",
+      "query": "Why does Adam Smith worry that repeating a few simple tasks makes workers ignorant?",
+      "type": "argument",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 0.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": false,
+      "precision_at_k": 0.0,
+      "correct_abstention": null,
+      "results": [
+        219806,
+        219451,
+        219234,
+        220040,
+        219860
+      ],
+      "elapsed_ms": 54.486,
+      "warnings": []
+    },
+    {
+      "id": "expanded-09",
+      "query": "In the sixth edition, how does Darwin argue that a complex eye can arise through useful intermediate stages?",
+      "type": "explanation",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 0.2,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        221304,
+        221345,
+        221389,
+        221811,
+        221300
+      ],
+      "elapsed_ms": 50.704,
+      "warnings": []
+    },
+    {
+      "id": "expanded-10",
+      "query": "Find the detective story where a bell rope and a ventilator allow a snake to enter a bedroom.",
+      "type": "scene",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 0.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": false,
+      "precision_at_k": 0.0,
+      "correct_abstention": null,
+      "results": [
+        222251,
+        222264,
+        222256,
+        222252,
+        222266
+      ],
+      "elapsed_ms": 50.151,
+      "warnings": []
+    },
+    {
+      "id": "expanded-11",
+      "query": "Why does Frankenstein’s creature say he should have been Adam rather than a fallen angel?",
+      "type": "idea",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 1.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        222567,
+        222760,
+        222643,
+        222679,
+        222768
+      ],
+      "elapsed_ms": 47.461,
+      "warnings": []
+    },
+    {
+      "id": "expanded-12",
+      "query": "\"from hell’s heart I stab at thee\"",
+      "type": "exact_quote",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 1.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        223742
+      ],
+      "elapsed_ms": 60.485,
+      "warnings": []
+    },
+    {
+      "id": "expanded-13",
+      "query": "Where does the wounded Prince Andrew see the lofty sky and rethink the importance of the battle?",
+      "type": "scene",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 1.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        224325,
+        224549,
+        224347,
+        225060,
+        225225
+      ],
+      "elapsed_ms": 46.739,
+      "warnings": []
+    },
+    {
+      "id": "expanded-14",
+      "query": "Why does Machiavelli say a ruler is safer being feared than loved if both are impossible?",
+      "type": "argument",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 1.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        226433,
+        226443,
+        226444,
+        226470,
+        226484
+      ],
+      "elapsed_ms": 44.632,
+      "warnings": []
+    },
+    {
+      "id": "expanded-15",
+      "query": "How does the cave image describe people unable to turn their heads toward the light?",
+      "type": "explanation",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 1.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        227322,
+        227323,
+        227329,
+        227356,
+        226740
+      ],
+      "elapsed_ms": 47.408,
+      "warnings": []
+    },
+    {
+      "id": "expanded-16",
+      "query": "\"solitary, poore, nasty, brutish, and short\"",
+      "type": "exact_quote",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 0.0,
+      "work_recall_at_k": 0.0,
+      "hit_at_k": false,
+      "precision_at_k": 0.0,
+      "correct_abstention": null,
+      "results": [],
+      "elapsed_ms": 66.408,
+      "warnings": []
+    },
+    {
+      "id": "expanded-17",
+      "query": "What is Nietzsche warning about when a person fights monsters or gazes into an abyss?",
+      "type": "idea",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 1.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        228736,
+        228818,
+        228810,
+        228759,
+        228733
+      ],
+      "elapsed_ms": 47.644,
+      "warnings": []
+    },
+    {
+      "id": "expanded-18",
+      "query": "Why does a stone dropped from a moving railway carriage follow different paths for different observers?",
+      "type": "explanation",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 0.5,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        228992,
+        228939,
+        229001,
+        228996,
+        228993
+      ],
+      "elapsed_ms": 44.194,
+      "warnings": []
+    },
+    {
+      "id": "expanded-19",
+      "query": "Why does the Communist Manifesto describe over-production as an epidemic rather than a shortage?",
+      "type": "argument",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 1.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        229082,
+        229116,
+        229084,
+        229101,
+        229083
+      ],
+      "elapsed_ms": 43.709,
+      "warnings": []
+    },
+    {
+      "id": "expanded-20",
+      "query": "Find the time-travel novel where future humanity has split into the Eloi and the underground Morlocks.",
+      "type": "approx_book_description",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 1.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 1.0,
+      "correct_abstention": null,
+      "results": [
+        229224,
+        229212,
+        229222,
+        229279,
+        229225
+      ],
+      "elapsed_ms": 44.996,
+      "warnings": []
+    },
+    {
+      "id": "expanded-cross-01",
+      "query": "Где девочка играет в крокет живыми фламинго вместо молотков и ежами вместо шаров?",
+      "type": "cross_language",
+      "language": "ru",
+      "answerable": true,
+      "reciprocal_rank": 0.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": false,
+      "precision_at_k": 0.0,
+      "correct_abstention": null,
+      "results": [
+        219217,
+        223821,
+        217288,
+        223640,
+        217249
+      ],
+      "elapsed_ms": 42.914,
+      "warnings": []
+    },
+    {
+      "id": "expanded-cross-02",
+      "query": "Dans quelle lettre Darcy révèle-t-il que Wickham convoitait la fortune de sa sœur?",
+      "type": "cross_language",
+      "language": "fr",
+      "answerable": true,
+      "reciprocal_rank": 0.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": false,
+      "precision_at_k": 0.0,
+      "correct_abstention": null,
+      "results": [
+        217855,
+        217441,
+        217697,
+        217594,
+        217443
+      ],
+      "elapsed_ms": 46.451,
+      "warnings": []
+    },
+    {
+      "id": "expanded-cross-03",
+      "query": "Wie erklärt Darwin verkümmerte Organe durch Vererbung und Nichtgebrauch?",
+      "type": "cross_language",
+      "language": "de",
+      "answerable": true,
+      "reciprocal_rank": 0.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": false,
+      "precision_at_k": 0.0,
+      "correct_abstention": null,
+      "results": [
+        218534,
+        218533,
+        218155,
+        218086,
+        218087
+      ],
+      "elapsed_ms": 51.113,
+      "warnings": []
+    },
+    {
+      "id": "expanded-cross-04",
+      "query": "Почему Смит считает общественное образование особенно важным для простых людей?",
+      "type": "cross_language",
+      "language": "ru",
+      "answerable": true,
+      "reciprocal_rank": 1.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        220634,
+        220635,
+        220636,
+        220603,
+        220616
+      ],
+      "elapsed_ms": 49.552,
+      "warnings": []
+    },
+    {
+      "id": "expanded-cross-05",
+      "query": "Pourquoi la créature exige-t-elle que Frankenstein lui crée une compagne?",
+      "type": "cross_language",
+      "language": "fr",
+      "answerable": true,
+      "reciprocal_rank": 1.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        222642,
+        222567,
+        222643,
+        222449,
+        222760
+      ],
+      "elapsed_ms": 43.461,
+      "warnings": []
+    },
+    {
+      "id": "expanded-cross-06",
+      "query": "Warum weigert sich Ahab, der Rachel bei der Suche nach dem vermissten Sohn des Kapitäns zu helfen?",
+      "type": "cross_language",
+      "language": "de",
+      "answerable": true,
+      "reciprocal_rank": 0.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": false,
+      "precision_at_k": 0.0,
+      "correct_abstention": null,
+      "results": [
+        223672,
+        223671,
+        222925,
+        223689,
+        223037
+      ],
+      "elapsed_ms": 59.293,
+      "warnings": []
+    },
+    {
+      "id": "expanded-cross-07",
+      "query": "Как взгляд на высокое небо меняет отношение раненого Андрея к славе Наполеона?",
+      "type": "cross_language",
+      "language": "ru",
+      "answerable": true,
+      "reciprocal_rank": 0.25,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        224633,
+        225472,
+        224353,
+        224351,
+        225094
+      ],
+      "elapsed_ms": 48.822,
+      "warnings": []
+    },
+    {
+      "id": "expanded-cross-08",
+      "query": "Pourquoi le prince doit-il savoir être à la fois renard et lion?",
+      "type": "cross_language",
+      "language": "fr",
+      "answerable": true,
+      "reciprocal_rank": 1.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        226438,
+        226437,
+        226365,
+        226462,
+        226470
+      ],
+      "elapsed_ms": 45.64,
+      "warnings": []
+    },
+    {
+      "id": "expanded-cross-09",
+      "query": "Wie veranschaulichen die Gefangenen in der Höhle den Übergang von Unwissenheit zu Erkenntnis?",
+      "type": "cross_language",
+      "language": "de",
+      "answerable": true,
+      "reciprocal_rank": 1.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        227322,
+        227046,
+        226740,
+        226738,
+        227503
+      ],
+      "elapsed_ms": 48.941,
+      "warnings": []
+    },
+    {
+      "id": "expanded-cross-10",
+      "query": "Почему два удара молнии могут быть одновременными для насыпи, но не для движущегося поезда?",
+      "type": "cross_language",
+      "language": "ru",
+      "answerable": true,
+      "reciprocal_rank": 0.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": false,
+      "precision_at_k": 0.0,
+      "correct_abstention": null,
+      "results": [
+        228958,
+        228961,
+        228992,
+        228952,
+        228953
+      ],
+      "elapsed_ms": 44.935,
+      "warnings": []
+    },
+    {
+      "id": "expanded-cross-11",
+      "query": "Comment le manifeste décrit-il les crises dans lesquelles la société produit trop de marchandises?",
+      "type": "cross_language",
+      "language": "fr",
+      "answerable": true,
+      "reciprocal_rank": 0.5,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        229116,
+        229083,
+        229082,
+        229084,
+        229094
+      ],
+      "elapsed_ms": 47.642,
+      "warnings": []
+    },
+    {
+      "id": "expanded-cross-12",
+      "query": "Wie hält der Zeitreisende die Morlocks mit Streichhölzern und Licht auf Abstand?",
+      "type": "cross_language",
+      "language": "de",
+      "answerable": true,
+      "reciprocal_rank": 0.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": false,
+      "precision_at_k": 0.0,
+      "correct_abstention": null,
+      "results": [
+        229255,
+        229253,
+        229233,
+        229226,
+        229254
+      ],
+      "elapsed_ms": 48.261,
+      "warnings": []
+    },
+    {
+      "id": "expanded-note-01",
+      "query": "Which footnote identifies Cardinal Rouen as Georges d’Amboise and gives his dates?",
+      "type": "footnote",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 1.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        226363,
+        226387,
+        226417,
+        226426,
+        226422
+      ],
+      "elapsed_ms": 41.771,
+      "warnings": []
+    },
+    {
+      "id": "expanded-note-02",
+      "query": "Find the note quoting Burd on why chapter XVIII gave greater offence than other parts of The Prince.",
+      "type": "footnote",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 0.5,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        226441,
+        226437,
+        226447,
+        226433,
+        226444
+      ],
+      "elapsed_ms": 43.636,
+      "warnings": []
+    },
+    {
+      "id": "expanded-role-01",
+      "query": "How does Benjamin Jowett’s introduction compare the Republic with Plato’s Laws and other dialogues?",
+      "type": "source_role",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 0.2,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        226547,
+        227386,
+        226873,
+        227093,
+        226548
+      ],
+      "elapsed_ms": 48.282,
+      "warnings": []
+    },
+    {
+      "id": "expanded-role-02",
+      "query": "Which editorial note explains why Casaubon’s own notes were omitted from this edition?",
+      "type": "source_role",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 1.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        218914,
+        218918,
+        218917,
+        218867,
+        218924
+      ],
+      "elapsed_ms": 42.573,
+      "warnings": []
+    },
+    {
+      "id": "expanded-late-01",
+      "query": "How does the philosophy-of-history discussion propose to define freedom and necessity from observed events?",
+      "type": "argument",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 0.5,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        226300,
+        226301,
+        226319,
+        226292,
+        226293
+      ],
+      "elapsed_ms": 41.835,
+      "warnings": []
+    },
+    {
+      "id": "expanded-late-02",
+      "query": "Why is a total solar eclipse useful for testing the predicted deflection of starlight?",
+      "type": "explanation",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 1.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        229062,
+        228977,
+        229038,
+        229063,
+        229040
+      ],
+      "elapsed_ms": 47.039,
+      "warnings": []
+    },
+    {
+      "id": "expanded-late-03",
+      "query": "How does a coffin keep the surviving narrator afloat after the Pequod sinks?",
+      "type": "scene",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 0.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": false,
+      "precision_at_k": 0.0,
+      "correct_abstention": null,
+      "results": [
+        223685,
+        223667,
+        223668,
+        223343,
+        223317
+      ],
+      "elapsed_ms": 46.818,
+      "warnings": []
+    },
+    {
+      "id": "expanded-late-04",
+      "query": "What photograph does Holmes request as his reward after Irene Adler outwits him?",
+      "type": "scene",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 1.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        222000,
+        221976,
+        221990,
+        222062,
+        222222
+      ],
+      "elapsed_ms": 41.214,
+      "warnings": []
+    },
+    {
+      "id": "expanded-compare-01",
+      "query": "Compare Adam Smith and Marx on how narrow repetitive factory work changes the worker.",
+      "type": "compare",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 0.0,
+      "work_recall_at_k": 0.5,
+      "hit_at_k": false,
+      "precision_at_k": 0.0,
+      "correct_abstention": null,
+      "results": [
+        219230,
+        219398,
+        219451,
+        219689,
+        219671
+      ],
+      "elapsed_ms": 45.293,
+      "warnings": []
+    },
+    {
+      "id": "expanded-compare-02",
+      "query": "Compare Machiavelli and Hobbes on fear, security and the force behind political order.",
+      "type": "compare",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 1.0,
+      "work_recall_at_k": 0.5,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        226433,
+        226478,
+        226447,
+        226357,
+        226423
+      ],
+      "elapsed_ms": 39.975,
+      "warnings": []
+    },
+    {
+      "id": "expanded-compare-03",
+      "query": "Compare Marcus Aurelius and Nietzsche on the danger of becoming like the people one opposes.",
+      "type": "compare",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 0.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": false,
+      "precision_at_k": 0.0,
+      "correct_abstention": null,
+      "results": [
+        218763,
+        228735,
+        218845,
+        218651,
+        218791
+      ],
+      "elapsed_ms": 45.059,
+      "warnings": []
+    },
+    {
+      "id": "expanded-compare-04",
+      "query": "Compare how the 1859 and sixth editions of Origin of Species explain the evolution of a complex eye.",
+      "type": "compare",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 1.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.4,
+      "correct_abstention": null,
+      "results": [
+        221300,
+        218144,
+        221389,
+        221318,
+        220986
+      ],
+      "elapsed_ms": 42.552,
+      "warnings": []
+    },
+    {
+      "id": "expanded-negative-01",
+      "query": "How does the captain use a gold doubloon to motivate his crew?",
+      "type": "negative",
+      "language": "en",
+      "answerable": false,
+      "reciprocal_rank": 0.0,
+      "work_recall_at_k": null,
+      "hit_at_k": false,
+      "precision_at_k": 0.0,
+      "correct_abstention": false,
+      "results": [
+        221986,
+        222033,
+        222143,
+        221977,
+        222316
+      ],
+      "elapsed_ms": 42.175,
+      "warnings": []
+    },
+    {
+      "id": "expanded-negative-02",
+      "query": "Что письмо Дарси раскрывает о намерении Уикхема жениться на его сестре ради денег?",
+      "type": "negative",
+      "language": "ru",
+      "answerable": false,
+      "reciprocal_rank": 0.0,
+      "work_recall_at_k": null,
+      "hit_at_k": false,
+      "precision_at_k": 0.0,
+      "correct_abstention": false,
+      "results": [
+        229279,
+        229198,
+        229246,
+        229259,
+        229207
+      ],
+      "elapsed_ms": 40.995,
+      "warnings": []
+    },
+    {
+      "id": "expanded-negative-03",
+      "query": "Why do covenants need a sword behind them to keep people secure?",
+      "type": "negative",
+      "language": "en",
+      "answerable": false,
+      "reciprocal_rank": 0.0,
+      "work_recall_at_k": null,
+      "hit_at_k": false,
+      "precision_at_k": 0.0,
+      "correct_abstention": false,
+      "results": [
+        228937,
+        228958,
+        229041,
+        229020,
+        229017
+      ],
+      "elapsed_ms": 43.354,
+      "warnings": []
+    },
+    {
+      "id": "expanded-negative-04",
+      "query": "Почему Адам Смит опасается, что однообразный труд делает рабочих невежественными?",
+      "type": "negative",
+      "language": "ru",
+      "answerable": false,
+      "reciprocal_rank": 0.0,
+      "work_recall_at_k": null,
+      "hit_at_k": false,
+      "precision_at_k": 0.0,
+      "correct_abstention": false,
+      "results": [
+        217298,
+        217470,
+        217500,
+        217374,
+        217625
+      ],
+      "elapsed_ms": 45.636,
+      "warnings": []
+    },
+    {
+      "id": "expanded-negative-05",
+      "query": "Comment la créature apprend-elle à parler en observant la famille De Lacey?",
+      "type": "negative",
+      "language": "fr",
+      "answerable": false,
+      "reciprocal_rank": 0.0,
+      "work_recall_at_k": null,
+      "hit_at_k": false,
+      "precision_at_k": 0.0,
+      "correct_abstention": false,
+      "results": [
+        223546,
+        223302,
+        223109,
+        223354,
+        223469
+      ],
+      "elapsed_ms": 46.475,
+      "warnings": []
+    },
+    {
+      "id": "expanded-negative-06",
+      "query": "Warum sind zwei Blitze am Bahndamm nicht gleichzeitig für einen fahrenden Zug?",
+      "type": "negative",
+      "language": "de",
+      "answerable": false,
+      "reciprocal_rank": 0.0,
+      "work_recall_at_k": null,
+      "hit_at_k": false,
+      "precision_at_k": 0.0,
+      "correct_abstention": false,
+      "results": [
+        226489,
+        226464,
+        226490,
+        226353,
+        226365
+      ],
+      "elapsed_ms": 41.41,
+      "warnings": []
+    },
+    {
+      "id": "expanded-negative-07",
+      "query": "How do the Morlocks keep the Eloi as a source of food?",
+      "type": "negative",
+      "language": "en",
+      "answerable": false,
+      "reciprocal_rank": 0.0,
+      "work_recall_at_k": null,
+      "hit_at_k": false,
+      "precision_at_k": 0.0,
+      "correct_abstention": false,
+      "results": [
+        221800,
+        221683,
+        221559,
+        221322,
+        221395
+      ],
+      "elapsed_ms": 42.995,
+      "warnings": []
+    },
+    {
+      "id": "expanded-negative-08",
+      "query": "How does the detective solve the mystery of the speckled band?",
+      "type": "negative",
+      "language": "en",
+      "answerable": false,
+      "reciprocal_rank": 0.0,
+      "work_recall_at_k": null,
+      "hit_at_k": false,
+      "precision_at_k": 0.0,
+      "correct_abstention": false,
+      "results": [
+        217279,
+        217204,
+        217199,
+        217194,
+        217178
+      ],
+      "elapsed_ms": 46.727,
+      "warnings": []
+    },
+    {
+      "id": "expanded-negative-09",
+      "query": "Как отец Грегора ранит его яблоком, застрявшим в спине?",
+      "type": "negative",
+      "language": "ru",
+      "answerable": false,
+      "reciprocal_rank": 0.0,
+      "work_recall_at_k": null,
+      "hit_at_k": false,
+      "precision_at_k": 0.0,
+      "correct_abstention": false,
+      "results": [
+        225912,
+        223816,
+        225472,
+        225916,
+        224612
+      ],
+      "elapsed_ms": 43.067,
+      "warnings": []
+    },
+    {
+      "id": "expanded-negative-10",
+      "query": "What does the allegory of prisoners chained in a cave say about education?",
+      "type": "negative",
+      "language": "en",
+      "answerable": false,
+      "reciprocal_rank": 0.0,
+      "work_recall_at_k": null,
+      "hit_at_k": false,
+      "precision_at_k": 0.0,
+      "correct_abstention": false,
+      "results": [
+        219217
+      ],
+      "elapsed_ms": 26.305,
+      "warnings": []
+    }
+  ],
+  "limitations": [
+    "Small curated excerpts; not representative of a 10–50k-work library.",
+    "Ground truth is manually authored and can be incomplete.",
+    "Quote integrity is relative to parsed text, not a facsimile or OCR audit.",
+    "Process peak RSS includes Python, imported libraries, and earlier work in this process.",
+    "No generated-answer correctness, index-build cost, or paid API spending is measured here."
+  ]
+}

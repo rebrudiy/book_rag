@@ -34,6 +34,8 @@ def main() -> None:
         page.locator("#query").fill(query)
         page.locator("#search-form").get_by_role("button", name="Найти").click()
         expect(page.locator("#search-results")).to_be_visible()
+        page.locator("#book-scope-query").fill("Republic")
+        expect(page.locator('#book-filter option[value="pg1497-full"]')).to_have_count(1)
         page.locator("#book-filter").select_option("pg1497-full")
         first = page.locator("#fragments-panel .passage-card").first
         expect(first.locator(".contributor-label")).to_contain_text("Автор раздела: Benjamin Jowett")

@@ -1,13 +1,10 @@
 # Plan
 
-Goal active until verified weekly Codex remainder <=3%, user stop or environment limit.
+Active goal until verified weekly Codex remainder <=3%, user stop, or actual environment limit.
 
-Completed: working multilingual demo, exact citations/reader, saved research and export; public GitHub/CI; dev/heldout protocol; lexical/hybrid and optional reranker experiments; rights-aware offline catalog; 220-edition expansion and source/attribution audit; snapshot map cache.
-
-Now:
-- Lead: publish iteration 2, track rights-verified 1,000-edition refresh, then build and measure full-library semantic windows.
-- Corpus: pinned modern CC BY-SA D2L chapter acquisition, provenance, derived structured text and tests.
-- UI: real Jowett editorial attribution in browser, optional reranker choice, final smoke.
-- Evaluation: experiments complete; next broaden judgments/new sealed test and independent review as needed.
-
-Next choices: multilingual balance and genre coverage; ANN recall/cost experiment when exact vector scan becomes limiting; near-duplicate editions and work/translation linking; source fidelity and contextual research tools. Preserve frozen release reports and record observed regressions, not only gains.
+1. Finish balanced305-edition ingestion after successful initial1,000 queue. Import5Russian originals only after complete-body/epigraph/revision audit passes; corpus expansion remains priority after user hour-status request.
+2. Integrate fixed semantic candidate pool with batch evidence reads; evaluate prefix consistency and new dev54 scores against immutable old controls. No default E5 promotion or universal confidence threshold.
+3. Publish iteration3: modern sources, code/math fidelity, snapshots/integrity, bounded catalog/typeahead, resumable pinned-profile vectors, expanded evaluation, audits and CI browser job. Recheck remoteCI.
+4. Freeze larger corpus after parser/metadata refresh, then full multilingual vector build in background with checkpoints. Keep live ingestion and frozen experiments separate, share model weights.
+5. Independently review actual passage relevance vs incomplete single-anchor labels before further ranking changes; new sealed final split before release tuning. Investigate incremental vector reuse/ANN/disk cost once measured larger index needs it.
+6. Continue work identity/translation/near-duplicate experiments and precise editorial attribution; counts of provisional catalog groups must never be presented as verified unique works.

@@ -7,6 +7,7 @@ unclassified. Only a matching metadata rule verifies a section contributor.
 
 from __future__ import annotations
 
+import re
 import unicodedata
 from typing import Any
 
@@ -40,8 +41,14 @@ def section_attribution(title: str, metadata: dict[str, Any]) -> dict[str, str]:
         for field in ("title_contains", "author", "role"):
             if not isinstance(rule.get(field), str) or not rule[field].strip():
                 raise ValueError(f"section_attributions[{index}].{field} must be a nonempty string")
+        expected_artifact = rule.get("source_artifact_sha256")
+        if expected_artifact is not None:
+            if not isinstance(expected_artifact, str) or not re.fullmatch(r"[a-f0-9]{64}", expected_artifact):
+                raise ValueError(f"section_attributions[{index}].source_artifact_sha256 must be a SHA-256 digest")
         if rule["role"] not in EXPLICIT_ROLES:
             raise ValueError(f"section_attributions[{index}].role must be main_text or editorial")
+        if expected_artifact is not None and metadata.get("_artifact_sha256") != expected_artifact:
+            continue
         if _normalized(rule["title_contains"]) in normalized_title:
             matches.append((index, rule["author"].strip(), rule["role"]))
     if not matches:

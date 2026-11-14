@@ -1,0 +1,50 @@
+{
+  "measured_at_utc": "2026-11-14T12:24:04Z",
+  "hour_start_utc": "2026-11-14T11:24:04Z",
+  "corpus": {
+    "full_unique_works_total": "unknown; provisional catalog groups are not resolved unique works",
+    "curated_confirmed_full_work_groups_before": 19,
+    "curated_confirmed_full_work_groups_now": 19,
+    "full_editions_first_indexed_by_hour_start": 45,
+    "historical_downloaded_files_snapshot_available": false,
+    "full_editions_downloaded_now": 918,
+    "full_editions_processed_now": 918,
+    "full_editions_searchable_now": 918,
+    "full_nonperiodical_editions_searchable_now": 861,
+    "additional_partial_modern_work": 1,
+    "all_searchable_editions_now": 919,
+    "all_searchable_passages_now": 303055,
+    "remaining_discovered_now": 82
+  },
+  "interfaces": {
+    "demo": "http://127.0.0.1:8000",
+    "live_library": "http://127.0.0.1:8001"
+  },
+  "published_hour_commit": "892061a",
+  "tests_after_snapshot": "295 passed in 2.15s",
+  "processes_verified_at_measurement": [
+    {
+      "pid": 59049,
+      "task": "1000-edition ingest",
+      "elapsed": "42m39s"
+    },
+    {
+      "pid": 63524,
+      "task": "demo web server"
+    },
+    {
+      "pid": 63526,
+      "task": "full library web server"
+    },
+    {
+      "pid": 65778,
+      "task": "E5 build; subsequently completed 12343 vectors in 285.896s"
+    },
+    {
+      "pid": 66256,
+      "task": "reranker calibration"
+    }
+  ],
+  "git_diff_stat_at_report_write": " .github/workflows/ci.yml       |  35 ++++\n corpus/manifest.json           | 128 +++++++++++++-\n docs/UI.md                     |  67 ++++++++\n src/book_rag/api.py            |  11 +-\n src/book_rag/attribution.py    |   7 +\n src/book_rag/cli.py            |  48 ++++++\n src/book_rag/library.py        |  60 +++++--\n src/book_rag/parsers.py        |  24 +++\n src/book_rag/semantic.py       | 375 ++++++++++++++++++++++++++++++++++-------\n src/book_rag/static/app.js     | 163 ++++++++++++++----\n src/book_rag/static/index.html |   8 +-\n src/book_rag/static/style.css  |   3 +\n tests/browser_attribution.py   |   2 +\n tests/browser_smoke.py         | 208 ++++++++++++++++++++++-\n tests/test_attribution.py      |  17 ++\n tests/test_library.py          |  16 ++\n tests/test_parsers.py          |  22 +++\n tests/test_semantic.py         | 334 ++++++++++++++++++++++++++++++++++++\n 18 files changed, 1409 insertions(+), 119 deletions(-)\n",
+  "git_status_at_report_write": " M .github/workflows/ci.yml\n M corpus/manifest.json\n M docs/UI.md\n M src/book_rag/api.py\n M src/book_rag/attribution.py\n M src/book_rag/cli.py\n M src/book_rag/library.py\n M src/book_rag/parsers.py\n M src/book_rag/semantic.py\n M src/book_rag/static/app.js\n M src/book_rag/static/index.html\n M src/book_rag/static/style.css\n M tests/browser_attribution.py\n M tests/browser_smoke.py\n M tests/test_attribution.py\n M tests/test_library.py\n M tests/test_parsers.py\n M tests/test_semantic.py\n?? docs/ATTRIBUTION_AUDIT.md\n?? docs/CORPUS_BALANCE.md\n?? docs/EMBEDDING_PROFILES.md\n?? docs/EXPANDED_EVALUATION.md\n?? docs/MODERN_SOURCES.md\n?? docs/RUSSIAN_SOURCES.md\n?? docs/SEMANTIC_INDEX.md\n?? evals/dev-expanded.json\n?? experiments/attribution-proposals.json\n?? experiments/calibration-minilm-v1.json\n?? experiments/calibration-reranker-v1.json\n?? experiments/curated20-integrity-v3.json\n?? experiments/dev-expanded-audit.json\n?? experiments/expanded-baseline-v1.json\n?? experiments/expanded-hybrid-v1.json\n?? experiments/expanded-lexical-v1.json\n?? experiments/expanded-reranked-v1.json\n?? experiments/full-integrity-v3.json\n?? scripts/calibrate_retrieval.py\n?? src/book_rag/calibration.py\n?? src/book_rag/corpus_planning.py\n?? src/book_rag/embedding_profiles.py\n?? src/book_rag/integrity.py\n?? src/book_rag/modern_sources.py\n?? src/book_rag/russian_sources.py\n?? src/book_rag/snapshots.py\n?? tests/test_calibration.py\n?? tests/test_corpus_planning.py\n?? tests/test_embedding_profiles.py\n?? tests/test_integrity.py\n?? tests/test_modern_sources.py\n?? tests/test_snapshots.py\n"
+}

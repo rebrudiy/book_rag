@@ -208,3 +208,25 @@ def test_fb2_preserves_stanzas_and_verse_lines(tmp_path: Path) -> None:
         "<stanza><v>Third line.</v></stanza></poem></section></body></FictionBook>"
     )
     assert parse_book(path).sections[0].text == "First line.\nSecond line.\n\nThird line."
+
+
+def test_explicit_fb2_code_block_preserves_source_whitespace(tmp_path: Path) -> None:
+    from xml.etree.ElementTree import Element, SubElement, tostring
+
+    code = '```python\r\n\tif True:\r\n    message = "a  b"\r\n    print(message)\r\n```'
+    root = Element("FictionBook")
+    section = SubElement(SubElement(root, "body"), "section")
+    paragraph = SubElement(section, "p")
+    SubElement(paragraph, "code", {"{http://www.w3.org/XML/1998/namespace}space": "preserve"}).text = code
+    path = tmp_path / "code.fb2"
+    path.write_bytes(tostring(root, encoding="utf-8"))
+    assert parse_book(path).sections[0].text == code.replace("\r\n", "\n")
+
+
+def test_html_pre_preserves_indentation_tabs_and_string_spaces(tmp_path: Path) -> None:
+    from html import escape
+
+    code = '\tif True:\n    message = "a  b"\n    print(message)\n'
+    path = tmp_path / "code.html"
+    path.write_text("<html><body><pre><code>" + escape(code) + "</code></pre></body></html>")
+    assert parse_book(path).sections[0].text == code

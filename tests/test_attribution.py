@@ -117,3 +117,20 @@ def test_curated_republic_rule_is_narrow_and_names_verified_contributor() -> Non
     assert (result["role"], result["author"]) == ("editorial", "Benjamin Jowett")
     for heading in ("BOOK I.", "BOOK II.", "PERSONS OF THE DIALOGUE."):
         assert section_attribution(heading, republic)["role"] == "unclassified"
+
+
+def test_artifact_guard_rejects_changed_source_without_guessing() -> None:
+    metadata = {
+        "author": "Book author",
+        "section_attributions": [
+            {
+                "title_contains": "Introduction",
+                "author": "Audited editor",
+                "role": "editorial",
+                "source_artifact_sha256": "a" * 64,
+            }
+        ],
+    }
+    assert section_attribution("Introduction", metadata)["role"] == "unclassified"
+    assert section_attribution("Introduction", metadata | {"_artifact_sha256": "b" * 64})["role"] == "unclassified"
+    assert section_attribution("Introduction", metadata | {"_artifact_sha256": "a" * 64})["author"] == "Audited editor"

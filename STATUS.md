@@ -1,37 +1,49 @@
 # Status
 
-Updated 2026-11-14, iteration 2. Goal ACTIVE; continue autonomous development.
-Public GitHub: https://github.com/rebrudiy/book_rag. Initial commit a223654 and its CI passed.
+Updated 2026-11-14 around 15:52 MSK. Goal ACTIVE; continue autonomous work.
+GitHub https://github.com/rebrudiy/book_rag, commits a223654 and 892061a published; their CI passed. Iteration3 ready for publication after local checks.
 
-## Verified behavior
+## Corpus / real product
 
-- Local FastAPI/SQLite app: structured import, search, exact citations, reader, saved collections, Markdown exports with frozen provenance, lexical thematic map.
-- Demo: 8 curated works/excerpts, 4 languages, 45 passages. Full corpus separate in data/full.
-- Initial full expansion: 220 indexed editions, 219 provisional catalog work groups, 80,556 passages before parser refresh. Periodical issues and unresolved editions mean this is NOT 219 confirmed unique books.
-- Parser/dependency/chunker/contributor fingerprints now force correct reindexing. Explicit contributor rules distinguish Jowett's editorial introduction from Plato's dialogue; API/citations/reader carry section author and role.
-- 215 automated tests pass; Ruff/format/ty pass. Latest browser runs cover 15 workflows, desktop/mobile, Russian hybrid search, exact reader mark, map and source-preserving download; zero JS errors. Full actual Jowett browser check underway.
-- Dev 23 queries: baseline MRR/hit@5 .7778; hybrid window v2 MRR .8935, hit 1.0, cross-language 4/4, negatives 5/5, citation integrity 1.0.
-- Frozen heldout 13 queries, release-v0.2: hybrid MRR .9333, hit 1.0, cross-language 2/2. Negative abstention .6667: one scoped semantic false positive. No tuning on heldout.
-- Optional pinned local reranker: paired dev candidate-50 control MRR .9213 → .9352; cross-language .6458 → .8333, but precision regression, one explanation regression, p50 31.9 → 108.7 ms, peak RSS 833 → 1327 MiB. Optional only, default remains hybrid. No new heldout run.
-- Offline index benchmark: 20 EPUBs / 12,106 passages in 2.578 s, peak process RSS 105.19 MiB; lexical p50/p95 37.91/81.45 ms. Small noisy sample, no target-scale claim.
-- Map cache on 220-edition snapshot: 8581.63 ms cold → 6.87 ms cached. Bounded four snapshots, mutation-safe, no caching if corpus changes during construction.
+- Initial 1,000-Gutenberg queue FINISHED: 1,000 complete editions + one partial D2L work = 1,001 indexed editions, 325,201 passages at completion; all downloaded/extracted/indexed. Distinct work IDs are provisional; only 19 complete work groups manually curated (plus partial D2L). 60 periodical editions, not 1,000 confirmed unique books.
+- Balanced 305-edition queue NOW INGESTING: data/catalog/balanced-curated.json, logs data/balanced-ingestion-progress.jsonl, final report data/balanced-ingestion-report.json. Preserves existing/curated metadata. Selected EN100/FR100/DE100/RU5; only3 overlap existing index. Source serial2s, diskfloor4GiB. Previous1,000 job exited successfully.
+- Live full interface http://127.0.0.1:8001 (lexical search; whole-live semantic index NOT built). Demo8/4languages/45passages at http://127.0.0.1:8000 has working hybrid search. Both HTTP200 at last probe.
+- Pinned D2L15sourcechapters acquired/imported as one partial work;148 sections;483 code/math blocks verified exact. Raw source/license/cache/provenance outsideGit.
+- Corpus agent has acquired5Russian originals/81chapters, but fixing omitted epigraphs before finalfullcoverage claim. WAIT finalmanifestnotice before import data/russian/wikisource/manifest.json. Do not count them indexed yet.
+- 13 safe editorial rules from attribution audit applied ONLY future live curatedmanifest, artifactSHA guards prevent transferring to different editions. Frozen20 benchmarks unchanged. Seven mixed/ambiguous contributor cases remain blocked from automatic rules.
 
-## Active work / exact next actions
+## Search experiments / truthful limitations
 
-1. Lead: publish iteration 2 after final checks, track ingestion to 1,000 editions; full refresh includes parser/contributor upgrades. Current job logs data/expansion-1000-progress.jsonl, report data/expansion-1000-report.json.
-2. Corpus agent: acquire selected D2L modern science chapters from pinned CC BY-SA source with hashes/provenance and structured derived FB2; new module/tests/docs only.
-3. UI agent: actual full-corpus Jowett attribution browser check and optional reranker selector; final smoke.
-4. Evaluation agent: reranker experiment complete; available for next independent review.
-5. Then freeze expanded corpus, build multilingual windows and benchmark scale. Broaden development judgments and create a new sealed final split before further relevance tuning. Work/translation identity and near-duplicates remain research tasks.
+- Frozen snapshot data/snapshots/curated20-v3:20 full editions,19works,12,108passages. Offline currentparser reimport done, no saved notes. receipt updated. Shared model cache data/models.
+- MiniLM pinned window index:49,738vectors,214.572s. New checkpoint batches flush/fsync + atomic cursor/checksums; interrupted-prefix resume tested; immutable active generations.
+- Expanded dev54 grounded cases/44positive/10negative/12crosslanguage: baseline MRR .6144 hit .7045; lexical .5386/.6136 with negativeabstention .9; hybrid .6826/.7955 with negativeabstention .2; reranked .6686/.8182 with .2. All exact quotes/metadata/reader anchors1.0. Do not hide no-answer failure.
+- E5 explicit query/passsage prefixes, pinned MIT model, isolated snapshot data/snapshots/curated20-e5 (same source fingerprint/IDs).12,343vectors in285.896s. Expanded E5hybrid MRR .6705/hit .7273/crosshit .4167/negativeabstention0; no defaultpromotion. Model floors not comparable across embedding spaces.
+- Calibration dev-only: .90target cosine accepts1/14 answerable internalvalidation; reranker no feasible.90threshold with minimum3 accepted. No defaults or heldout changes.
+- Agent UI now fixing outputlimit-dependent hybrid candidate pool; will use fixed100distinct /≤2000windows, Library.passages batch method READY. This intentionally creates next experimental version; keep older reports frozen.
+- Original release-v0.2 heldout reports remain frozen, no tuning/reuse. Need new sealed final set before new release claims.
 
-## Runtime and quota
+## Verification / uncommitted work
 
-Run: `uv sync --extra dev --extra semantic`; `uv run bookrag demo`; `uv run bookrag embed`; `uv run bookrag serve` → http://127.0.0.1:8000.
-Full corpus: `BOOKRAG_DATA_DIR=./data/full uv run bookrag serve --port 8001`.
-All dependencies in .venv (uv bootstrap .bootstrap ignored); downloaded corpus, models, notes and indexes ignored. No paid services. Hardware 16 GiB RAM / 10 CPU; ~30 GiB free disk at last check.
-Weekly quota AVAILABLE in current session JSONL, rate_limits 10,080-minute window: latest 65% remaining. Check via `.venv/bin/python scripts/check_codex_limit.py <current rollout>` between iterations. Stop new work at <=3%; never substitute token counts.
-Downloads default to 2-second intervals, validated cache, bounded retries; long Retry-After persists a host deferral across restarts. Ingest reserves 4 GiB disk and leaves pending sources visible.
+- Latest complete local suite: 320 tests passed; Ruff/format/ty pass. User hour-status response at15:24 separately reported295 then-passing tests. Latest global lint/ty pass. Browser15 workflows plus205-record pagination fixture, actual beyond-first-page book and Jowett attribution passed.
+- Full audit snapshot499originals/160,338passages exact, report experiments/full-integrity-v3.json. Frozen20 audit20/12,108 exact. CLI verify now distinguishes incomplete original availability.
+- Added source-preserving preformatted code, consistent SQLite snapshots, whole-library integrity command, modern acquisition, balanced planning, bounded server-side catalog/typeahead and pipeline state labels. CI browser job added locally; not yet pushed/run remotely.
+- Hourly verified status snapshot experiments/hourly-status-2026-11-14T1224Z.json. Last hour report posted to user; they requested brief status then CONTINUE, not stop.
 
-## Limits
+## Agents / next actions
 
-10–50k unique-work target not reached. Demo mostly excerpts; catalog identities provisional. No OCR engine, generative prose or automatic stance claims. Exact quotations verify imported canonical text, not source transcription or print page numbers. The map is same-language lexical similarity, capped at 500 editions. Exact vectors are linear scan; full-corpus semantic index not built yet. Single-user local app, no authentication. Known heldout semantic false positive retained in reports.
+Lead: track balanced ingestion, wait complete Russian manifest then import; publish iteration3 after targeted checks; prepare frozen larger corpus semantic build. Library.passages batch method implemented/tested, notify UI done.
+Corpus: finish RU epigraph/body/rights/revision audit + cached regeneration; mocks pass; no broad crawl.
+UI: semantic fixed candidate pool + prefix consistency with batch evidence reads; no defaultmodel/prefix/build changes.
+Evaluation: calibration and attribution audit COMPLETE; available for independent actual relevance review or next controlled experiment.
+
+Current interpreter .venv; uv in ignored .bootstrap/bin/uv. No paid APIs.16GiB RAM,10CPU; source/model/indexdata ignored. Weekly quota AVAILABLE from current-session rate_limits10080-minute window: latest62%remaining. Recheck between iterations, stop new work at<=3%; no token proxy. Current rollout /Users/rebrudiy/.codex/sessions/2026/11/14/rollout-2026-11-14T13-57-03-01a1d9b4-2279-7993-a084-3011527a9369.jsonl.
+
+
+## Subsequent iteration updates
+
+- Five complete Russian originals NOW INDEXED: Ivan Ilyich, Underground, Overcoat, Fathers and Sons, Ward6.81 narrative chapters/87 parsed sections; five verified new complete work identities raise curated full-work lower bound19→24 (partial D2L counted separately).
+- Live corpus at last probe1,214 editions/405,337passages, 112DE/138FR/10RU; balanced job still has92discovered+1downloading+1oversizefailure. Source botany pg63371 imagesEPUB exceeds100MiB; corpus agent proposes same-ID no-image/text variants offline, never raises cap.
+- Pagination/typeahead complete, actual beyond-first-page and source partial/full labels browser-tested. Russian source acquisition/revision/epigraph fixes complete and cached.
+- Fixed candidate-pool100/≤2000windows plus batch evidence method complete, real5/20/50 prefix invariance verified for both models/modes. Paired reports experiments/candidate-pool-v1 show mixedquality, no defaultpromotion.
+- Evaluation agent reviewing actual source relevance where single exact-anchor labels may be incomplete; proposals only, no frozen label/score edits.
+- New CI browser job pending firstremote run. Next publish iteration3, finish balancedcorpus, resolve oversize botany via bounded officialvariant, then freeze/reindex largerlibrary and build whole-corpus vectors with checkpoints.

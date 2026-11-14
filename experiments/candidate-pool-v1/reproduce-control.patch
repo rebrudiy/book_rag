@@ -1,0 +1,109 @@
+--- a/src/book_rag/semantic.py
++++ b/src/book_rag/semantic.py
+@@ -408,35 +408,6 @@
+         return metadata
+ 
+ 
+-# A retrieval pool is independent of the number of results displayed. These
+-# bounds affect query ranking only; stored vectors and their windows are unchanged.
+-SEMANTIC_WINDOW_CANDIDATES = 2000
+-SEMANTIC_PASSAGE_CANDIDATES = 100
+-HYBRID_LEXICAL_CANDIDATES = 50
+-RETRIEVAL_STRATEGY = "fixed-passage-pool-v1"
+-
+-
+-def _candidate_passages(scores: Any, ids: Any, threshold: float) -> tuple[list[int], dict[int, float], int]:
+-    k = min(len(scores), SEMANTIC_WINDOW_CANDIDATES)
+-    positions = np.argpartition(-scores, k - 1)[:k] if k else np.array([], dtype=int)
+-    # Tie ordering uses the immutable window position, not requested output size.
+-    positions = positions[np.lexsort((positions, -scores[positions]))]
+-    ordered: list[int] = []
+-    best: dict[int, float] = {}
+-    for position in positions:
+-        score = float(scores[position])
+-        if not np.isfinite(score) or score < threshold:
+-            continue
+-        passage_id = int(ids[position])
+-        if passage_id in best:
+-            continue
+-        ordered.append(passage_id)
+-        best[passage_id] = score
+-        if len(ordered) >= SEMANTIC_PASSAGE_CANDIDATES:
+-            break
+-    return ordered, best, k
+-
+-
+ def semantic_search(
+     library: Library, query: str, mode: str, book_id: str | None, language: str | None, limit: int
+ ) -> dict[str, Any]:
+@@ -474,27 +445,33 @@
+                 )
+             }
+         scores[~np.isin(ids, list(eligible))] = -np.inf
++    k = min(len(scores), max(50, limit * 4))
++    positions = np.argpartition(-scores, k - 1)[:k] if k else np.array([], dtype=int)
++    positions = positions[np.argsort(-scores[positions], kind="stable")]
+     threshold = float(os.getenv("BOOKRAG_SEMANTIC_THRESHOLD", "0.30"))
+-    candidate_ids, best_scores, window_count = _candidate_passages(scores, ids, threshold)
+-    evidence = {passage["id"]: passage for passage in library.passages(candidate_ids)}
+-    vector_results: list[dict[str, Any]] = []
+-    warnings: list[str] = []
++    vector_results = []
++    seen: set[int] = set()
+     from book_rag.retrieval import prepare_query, rerank_results
+ 
+     plan = prepare_query(query)
+-    for passage_id in candidate_ids:
+-        passage = evidence.get(passage_id)
++    for pos in positions:
++        if float(scores[pos]) < threshold:
++            continue
++        passage_id = int(ids[pos])
++        if passage_id in seen:
++            continue
++        seen.add(passage_id)
++        passage = library.passage(passage_id)
+         if passage and passage["verified"]:
+-            score = best_scores[passage_id]
+-            vector_results.append(passage | {"score": score, "semantic_score": score})
+-        elif passage:
+-            warnings.append("Corrupt semantic citation suppressed; rebuild the affected book.")
++            passage["score"] = float(scores[pos])
++            passage["semantic_score"] = float(scores[pos])
++            vector_results.append(passage)
+     # Quoted phrase constraints apply in every retrieval mode, including vectors.
+     if plan.phrases:
+         vector_results = [r for r in vector_results if rerank_results(plan, [r], limit=1)]
+     results = vector_results
+     if mode == "hybrid":
+-        lexical = library.search(query, "lexical", book_id, language, HYBRID_LEXICAL_CANDIDATES)["results"]
++        lexical = library.search(query, "lexical", book_id, language, 50)["results"]
+         merged: dict[int, dict[str, Any]] = {}
+         fused: dict[int, float] = {}
+         for ranking in (lexical, vector_results):
+@@ -502,24 +479,11 @@
+                 merged.setdefault(item["id"], item)
+                 fused[item["id"]] = fused.get(item["id"], 0) + 1 / (60 + rank)
+         results = [merged[i] | {"score": score} for i, score in sorted(fused.items(), key=lambda kv: -kv[1])]
+-    if corpus_fingerprint(library) != metadata["corpus_fingerprint"]:
+-        result = library.search(query, "lexical", book_id, language, limit)
+-        result["warnings"].append("Corpus changed during semantic search. Showing current lexical results.")
+-        return result
+     return {
+         "query": query,
+         "mode": mode,
+         "results": results[:limit],
+-        "warnings": list(dict.fromkeys(warnings)),
++        "warnings": [],
+         "elapsed_ms": round((time.perf_counter() - started) * 1000, 2),
+         "model": metadata["model"],
+-        "retrieval_strategy": RETRIEVAL_STRATEGY,
+-        "candidate_pool": {
+-            "window_limit": SEMANTIC_WINDOW_CANDIDATES,
+-            "passage_limit": SEMANTIC_PASSAGE_CANDIDATES,
+-            "ranked_windows": window_count,
+-            "unique_passages": len(candidate_ids),
+-            "verified_passages": len(vector_results),
+-            "lexical_limit": HYBRID_LEXICAL_CANDIDATES if mode == "hybrid" else 0,
+-        },
+     }

@@ -1,0 +1,2269 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-11-14T12:12:01.375147+00:00",
+  "scope": "Targeted source attribution audit of curated20-v3; not an exhaustive authorship audit of every paragraph.",
+  "source_database": "data/snapshots/curated20-v3/library.sqlite3",
+  "read_only": true,
+  "frozen_snapshot_mutated": false,
+  "manifest_mutated": false,
+  "official_metadata_urls": [
+    "https://www.gutenberg.org/ebooks/11",
+    "https://www.gutenberg.org/ebooks/1342",
+    "https://www.gutenberg.org/ebooks/1228",
+    "https://www.gutenberg.org/ebooks/2680",
+    "https://www.gutenberg.org/ebooks/4650",
+    "https://www.gutenberg.org/ebooks/22367",
+    "https://www.gutenberg.org/ebooks/5316",
+    "https://www.gutenberg.org/ebooks/3300",
+    "https://www.gutenberg.org/ebooks/2009",
+    "https://www.gutenberg.org/ebooks/1661",
+    "https://www.gutenberg.org/ebooks/84",
+    "https://www.gutenberg.org/ebooks/2701",
+    "https://www.gutenberg.org/ebooks/2600",
+    "https://www.gutenberg.org/ebooks/1232",
+    "https://www.gutenberg.org/ebooks/1497",
+    "https://www.gutenberg.org/ebooks/3207",
+    "https://www.gutenberg.org/ebooks/4363",
+    "https://www.gutenberg.org/ebooks/5001",
+    "https://www.gutenberg.org/ebooks/61",
+    "https://www.gutenberg.org/ebooks/35"
+  ],
+  "method": [
+    "Inspect imported front matter, relevant heading sections and final-section tails.",
+    "Verify EPUB OPF creator/contributor role metadata directly in the original hashed artifact.",
+    "Use official catalog author/translator/production-credit tables, not automatically generated summaries.",
+    "Validate every proposed title_contains against every section title in its book; list all matches and reject unsafe scope.",
+    "Keep book author separate from source contributor. Do not infer note authorship from a translator or proofreader credit."
+  ],
+  "eligible_rules_by_book": {
+    "pg2680-full": [
+      {
+        "title_contains": "INTRODUCTION",
+        "author": "Unidentified editorial contributor",
+        "role": "editorial",
+        "source_url": "https://www.gutenberg.org/ebooks/2680",
+        "evidence": "Later biographical commentary explicitly surveys post-classical translations; no signed personal editor identity is established by the inspected artifact or official catalog credits."
+      },
+      {
+        "title_contains": "NOTES",
+        "author": "Unidentified editorial contributor",
+        "role": "editorial",
+        "source_url": "https://www.gutenberg.org/ebooks/2680",
+        "evidence": "The section describes editorial decisions about Casaubon’s translation and cannot be a statement by Marcus Aurelius; personal editor identity is not supplied."
+      },
+      {
+        "title_contains": "GLOSSARY",
+        "author": "Unidentified editorial contributor",
+        "role": "editorial",
+        "source_url": "https://www.gutenberg.org/ebooks/2680",
+        "evidence": "A glossary explaining English translation vocabulary is editorial reference matter, not the emperor’s philosophical prose; no personal compiler identity is verified."
+      }
+    ],
+    "pg1232-full": [
+      {
+        "title_contains": "INTRODUCTION",
+        "author": "Unidentified editorial contributor",
+        "role": "editorial",
+        "source_url": "https://www.gutenberg.org/ebooks/1232",
+        "evidence": "Explicit later biographical/editorial discussion of Machiavelli. W. K. Marriott is credited as translator, but that credit alone does not establish authorship of this unsigned commentary. Embedded historical quotations retain their inline credits and need finer attribution if extracted in isolation."
+      },
+      {
+        "title_contains": "YOUTH",
+        "author": "Unidentified editorial contributor",
+        "role": "editorial",
+        "source_url": "https://www.gutenberg.org/ebooks/1232",
+        "evidence": "Explicit later biographical/editorial discussion of Machiavelli. W. K. Marriott is credited as translator, but that credit alone does not establish authorship of this unsigned commentary. Embedded historical quotations retain their inline credits and need finer attribution if extracted in isolation."
+      },
+      {
+        "title_contains": "OFFICE",
+        "author": "Unidentified editorial contributor",
+        "role": "editorial",
+        "source_url": "https://www.gutenberg.org/ebooks/1232",
+        "evidence": "Explicit later biographical/editorial discussion of Machiavelli. W. K. Marriott is credited as translator, but that credit alone does not establish authorship of this unsigned commentary. Embedded historical quotations retain their inline credits and need finer attribution if extracted in isolation."
+      },
+      {
+        "title_contains": "LITERATURE AND DEATH",
+        "author": "Unidentified editorial contributor",
+        "role": "editorial",
+        "source_url": "https://www.gutenberg.org/ebooks/1232",
+        "evidence": "Explicit later biographical/editorial discussion of Machiavelli. W. K. Marriott is credited as translator, but that credit alone does not establish authorship of this unsigned commentary. Embedded historical quotations retain their inline credits and need finer attribution if extracted in isolation."
+      },
+      {
+        "title_contains": "THE MAN AND HIS WORKS",
+        "author": "Unidentified editorial contributor",
+        "role": "editorial",
+        "source_url": "https://www.gutenberg.org/ebooks/1232",
+        "evidence": "Explicit later biographical/editorial discussion of Machiavelli. W. K. Marriott is credited as translator, but that credit alone does not establish authorship of this unsigned commentary. Embedded historical quotations retain their inline credits and need finer attribution if extracted in isolation."
+      }
+    ],
+    "pg3207-full": [
+      {
+        "title_contains": "Thomas Hobbes of Malmesbury Printed for Andrew Crooke",
+        "author": "Unidentified editorial contributor",
+        "role": "editorial",
+        "source_url": "https://www.gutenberg.org/ebooks/3207",
+        "evidence": "The speaker describes preparing an electronic text and decisions about how to reproduce Hobbes’s original typography. Official production credits do not uniquely identify this speaker."
+      }
+    ],
+    "pg4363-full": [
+      {
+        "title_contains": "Translated by Helen Zimmern",
+        "author": "Unidentified editorial contributor",
+        "role": "editorial",
+        "source_url": "https://www.gutenberg.org/ebooks/4363",
+        "evidence": "Electronic reprint/conversion instructions are not Nietzsche’s preface and are not shown to have been written by the named translator. The section heading names the translation, not the speaker of this note."
+      }
+    ],
+    "pg2701-full": [
+      {
+        "title_contains": "By Herman Melville",
+        "author": "Unidentified editorial contributor",
+        "role": "editorial",
+        "source_url": "https://www.gutenberg.org/ebooks/2701",
+        "evidence": "The target contains contents/front matter and explicit digital production commentary. The narrative Etymology and Extracts sections are not matched by this rule."
+      }
+    ],
+    "pg1497-full": [
+      {
+        "title_contains": "Translated by Benjamin Jowett",
+        "author": "Unidentified editorial contributor",
+        "role": "editorial",
+        "source_url": "https://www.gutenberg.org/ebooks/1497",
+        "evidence": "A digital cross-reference is anonymous edition metadata, not prose by Plato or an identified statement by Jowett. Its translator heading does not establish note authorship."
+      }
+    ],
+    "pg1661-full": [
+      {
+        "title_contains": "The Adventures of Sherlock Holmes",
+        "author": "Unidentified editorial contributor",
+        "role": "editorial",
+        "source_url": "https://www.gutenberg.org/ebooks/1661",
+        "evidence": "The title section contains digital edition navigation and a contents list. The rule does not match any of Doyle’s story sections."
+      }
+    ]
+  },
+  "findings": [
+    {
+      "id": "meditations-introduction",
+      "book_id": "pg2680-full",
+      "book_author": "Marcus Aurelius, Emperor of Rome, 121-180",
+      "title": "Meditations",
+      "artifact_sha256": "62c71326bea242893ce8c3ce54bdf5fad3989a827a1462ec03f7dadf8bf5bc89",
+      "content_sha256": "e44ec0f4d2d13b28dc815556979513d5e55c75a0c0e4d4857caa4ee80319561a",
+      "source_url": "https://www.gutenberg.org/ebooks/2680",
+      "status": "eligible_future_live",
+      "safe_to_apply_to_frozen_snapshot": false,
+      "safe_for_future_live_after_artifact_and_selector_checks": true,
+      "proposed_section_attribution": {
+        "title_contains": "INTRODUCTION",
+        "author": "Unidentified editorial contributor",
+        "role": "editorial",
+        "source_url": "https://www.gutenberg.org/ebooks/2680",
+        "evidence": "Later biographical commentary explicitly surveys post-classical translations; no signed personal editor identity is established by the inspected artifact or official catalog credits."
+      },
+      "intended_section_ordinals": [
+        1
+      ],
+      "all_title_contains_matches": [
+        {
+          "ordinal": 1,
+          "title": "INTRODUCTION"
+        }
+      ],
+      "basis": "Later biographical commentary explicitly surveys post-classical translations; no signed personal editor identity is established by the inspected artifact or official catalog credits.",
+      "confidence": {
+        "editorial_or_other_contributor_voice": "high_from_explicit_source_text",
+        "person_identity": "unverified_placeholder_no_identity_guess",
+        "selector": "validated_exact_target_set"
+      },
+      "evidence": [
+        {
+          "observed_section_id": 13064,
+          "section_ordinal": 1,
+          "section_title": "INTRODUCTION",
+          "section_sha256": "c45529600f59250cefe0d497335caeae358e8378b79df4372e81c70a1f79f2ef",
+          "evidence_quote": "J. Jackson, 1906",
+          "quote_start": 29437,
+          "quote_end": 29453,
+          "context_description": "A retrospective introduction discusses the emperor and lists English translations published long after his death, including a 1906 translation.",
+          "observed_section_author": "Marcus Aurelius, Emperor of Rome, 121-180",
+          "observed_section_role": "unclassified",
+          "section_characters": 29775,
+          "section_passages": 24
+        }
+      ]
+    },
+    {
+      "id": "meditations-notes",
+      "book_id": "pg2680-full",
+      "book_author": "Marcus Aurelius, Emperor of Rome, 121-180",
+      "title": "Meditations",
+      "artifact_sha256": "62c71326bea242893ce8c3ce54bdf5fad3989a827a1462ec03f7dadf8bf5bc89",
+      "content_sha256": "e44ec0f4d2d13b28dc815556979513d5e55c75a0c0e4d4857caa4ee80319561a",
+      "source_url": "https://www.gutenberg.org/ebooks/2680",
+      "status": "eligible_future_live",
+      "safe_to_apply_to_frozen_snapshot": false,
+      "safe_for_future_live_after_artifact_and_selector_checks": true,
+      "proposed_section_attribution": {
+        "title_contains": "NOTES",
+        "author": "Unidentified editorial contributor",
+        "role": "editorial",
+        "source_url": "https://www.gutenberg.org/ebooks/2680",
+        "evidence": "The section describes editorial decisions about Casaubon’s translation and cannot be a statement by Marcus Aurelius; personal editor identity is not supplied."
+      },
+      "intended_section_ordinals": [
+        16
+      ],
+      "all_title_contains_matches": [
+        {
+          "ordinal": 16,
+          "title": "NOTES"
+        }
+      ],
+      "basis": "The section describes editorial decisions about Casaubon’s translation and cannot be a statement by Marcus Aurelius; personal editor identity is not supplied.",
+      "confidence": {
+        "editorial_or_other_contributor_voice": "high_from_explicit_source_text",
+        "person_identity": "unverified_placeholder_no_identity_guess",
+        "selector": "validated_exact_target_set"
+      },
+      "evidence": [
+        {
+          "observed_section_id": 13079,
+          "section_ordinal": 16,
+          "section_title": "NOTES",
+          "section_sha256": "6b1ad837c08402d73a27dd4689182b5fc2b4f142594affd1833e107f790a497c",
+          "evidence_quote": "Casaubon's own notes have been omitted",
+          "quote_start": 153,
+          "quote_end": 191,
+          "context_description": "The note compiler describes omitting the translator’s notes, comparing seventeenth-century editions and correcting translation errors.",
+          "observed_section_author": "Marcus Aurelius, Emperor of Rome, 121-180",
+          "observed_section_role": "unclassified",
+          "section_characters": 7138,
+          "section_passages": 6
+        }
+      ]
+    },
+    {
+      "id": "meditations-glossary",
+      "book_id": "pg2680-full",
+      "book_author": "Marcus Aurelius, Emperor of Rome, 121-180",
+      "title": "Meditations",
+      "artifact_sha256": "62c71326bea242893ce8c3ce54bdf5fad3989a827a1462ec03f7dadf8bf5bc89",
+      "content_sha256": "e44ec0f4d2d13b28dc815556979513d5e55c75a0c0e4d4857caa4ee80319561a",
+      "source_url": "https://www.gutenberg.org/ebooks/2680",
+      "status": "eligible_future_live",
+      "safe_to_apply_to_frozen_snapshot": false,
+      "safe_for_future_live_after_artifact_and_selector_checks": true,
+      "proposed_section_attribution": {
+        "title_contains": "GLOSSARY",
+        "author": "Unidentified editorial contributor",
+        "role": "editorial",
+        "source_url": "https://www.gutenberg.org/ebooks/2680",
+        "evidence": "A glossary explaining English translation vocabulary is editorial reference matter, not the emperor’s philosophical prose; no personal compiler identity is verified."
+      },
+      "intended_section_ordinals": [
+        17
+      ],
+      "all_title_contains_matches": [
+        {
+          "ordinal": 17,
+          "title": "GLOSSARY"
+        }
+      ],
+      "basis": "A glossary explaining English translation vocabulary is editorial reference matter, not the emperor’s philosophical prose; no personal compiler identity is verified.",
+      "confidence": {
+        "editorial_or_other_contributor_voice": "high_from_explicit_source_text",
+        "person_identity": "unverified_placeholder_no_identity_guess",
+        "selector": "validated_exact_target_set"
+      },
+      "evidence": [
+        {
+          "observed_section_id": 13080,
+          "section_ordinal": 17,
+          "section_title": "GLOSSARY",
+          "section_sha256": "843fc39a381a770ebd104458cedd5d7ec907b52117d94ddae70b3c7fc1f70b21",
+          "evidence_quote": "all obsolete or obscure words",
+          "quote_start": 97,
+          "quote_end": 126,
+          "context_description": "An English-language reference glossary explains proper names and obsolete vocabulary for readers of the translation.",
+          "observed_section_author": "Marcus Aurelius, Emperor of Rome, 121-180",
+          "observed_section_role": "unclassified",
+          "section_characters": 10380,
+          "section_passages": 8
+        }
+      ]
+    },
+    {
+      "id": "prince-introduction",
+      "book_id": "pg1232-full",
+      "book_author": "Machiavelli, Niccolò, 1469-1527",
+      "title": "The Prince",
+      "artifact_sha256": "0260d6165a1558ee2e94eb37d7f1ff0cf4e30b41e094d6ff1afb094950b1be88",
+      "content_sha256": "ca2db4a1725a0c9f60f19cf50792f870219df76ae0b5021f5d70afeaf66c3dc0",
+      "source_url": "https://www.gutenberg.org/ebooks/1232",
+      "status": "eligible_future_live",
+      "safe_to_apply_to_frozen_snapshot": false,
+      "safe_for_future_live_after_artifact_and_selector_checks": true,
+      "proposed_section_attribution": {
+        "title_contains": "INTRODUCTION",
+        "author": "Unidentified editorial contributor",
+        "role": "editorial",
+        "source_url": "https://www.gutenberg.org/ebooks/1232",
+        "evidence": "Explicit later biographical/editorial discussion of Machiavelli. W. K. Marriott is credited as translator, but that credit alone does not establish authorship of this unsigned commentary. Embedded historical quotations retain their inline credits and need finer attribution if extracted in isolation."
+      },
+      "intended_section_ordinals": [
+        2
+      ],
+      "all_title_contains_matches": [
+        {
+          "ordinal": 2,
+          "title": "INTRODUCTION"
+        }
+      ],
+      "basis": "Explicit later biographical/editorial discussion of Machiavelli. W. K. Marriott is credited as translator, but that credit alone does not establish authorship of this unsigned commentary. Embedded historical quotations retain their inline credits and need finer attribution if extracted in isolation.",
+      "confidence": {
+        "editorial_or_other_contributor_voice": "high_from_explicit_source_text",
+        "person_identity": "unverified_placeholder_no_identity_guess",
+        "selector": "validated_exact_target_set"
+      },
+      "evidence": [
+        {
+          "observed_section_id": 13757,
+          "section_ordinal": 2,
+          "section_title": "INTRODUCTION",
+          "section_sha256": "81b12164a93eda519e6a62e8c3f2e920727345b92d17a15976aa74946883a084",
+          "evidence_quote": "he died",
+          "quote_start": 984,
+          "quote_end": 991,
+          "context_description": "A later biographer recounts Machiavelli’s career and death in the third person.",
+          "observed_section_author": "Machiavelli, Niccolò, 1469-1527",
+          "observed_section_role": "unclassified",
+          "section_characters": 1120,
+          "section_passages": 1
+        }
+      ]
+    },
+    {
+      "id": "prince-youth",
+      "book_id": "pg1232-full",
+      "book_author": "Machiavelli, Niccolò, 1469-1527",
+      "title": "The Prince",
+      "artifact_sha256": "0260d6165a1558ee2e94eb37d7f1ff0cf4e30b41e094d6ff1afb094950b1be88",
+      "content_sha256": "ca2db4a1725a0c9f60f19cf50792f870219df76ae0b5021f5d70afeaf66c3dc0",
+      "source_url": "https://www.gutenberg.org/ebooks/1232",
+      "status": "eligible_future_live",
+      "safe_to_apply_to_frozen_snapshot": false,
+      "safe_for_future_live_after_artifact_and_selector_checks": true,
+      "proposed_section_attribution": {
+        "title_contains": "YOUTH",
+        "author": "Unidentified editorial contributor",
+        "role": "editorial",
+        "source_url": "https://www.gutenberg.org/ebooks/1232",
+        "evidence": "Explicit later biographical/editorial discussion of Machiavelli. W. K. Marriott is credited as translator, but that credit alone does not establish authorship of this unsigned commentary. Embedded historical quotations retain their inline credits and need finer attribution if extracted in isolation."
+      },
+      "intended_section_ordinals": [
+        3
+      ],
+      "all_title_contains_matches": [
+        {
+          "ordinal": 3,
+          "title": "YOUTH — Æt. 1-25—1469-94"
+        }
+      ],
+      "basis": "Explicit later biographical/editorial discussion of Machiavelli. W. K. Marriott is credited as translator, but that credit alone does not establish authorship of this unsigned commentary. Embedded historical quotations retain their inline credits and need finer attribution if extracted in isolation.",
+      "confidence": {
+        "editorial_or_other_contributor_voice": "high_from_explicit_source_text",
+        "person_identity": "unverified_placeholder_no_identity_guess",
+        "selector": "validated_exact_target_set"
+      },
+      "evidence": [
+        {
+          "observed_section_id": 13758,
+          "section_ordinal": 3,
+          "section_title": "YOUTH — Æt. 1-25—1469-94",
+          "section_sha256": "3ee23c2cbbdb584d4b2dd920be92ad6714af98b9e42b60ea99ee7605dcabdf5e",
+          "evidence_quote": "the youth of Machiavelli",
+          "quote_start": 37,
+          "quote_end": 61,
+          "context_description": "The section reconstructs Machiavelli’s childhood environment and includes a quotation from his later correspondence.",
+          "observed_section_author": "Machiavelli, Niccolò, 1469-1527",
+          "observed_section_role": "unclassified",
+          "section_characters": 2250,
+          "section_passages": 2
+        }
+      ]
+    },
+    {
+      "id": "prince-office",
+      "book_id": "pg1232-full",
+      "book_author": "Machiavelli, Niccolò, 1469-1527",
+      "title": "The Prince",
+      "artifact_sha256": "0260d6165a1558ee2e94eb37d7f1ff0cf4e30b41e094d6ff1afb094950b1be88",
+      "content_sha256": "ca2db4a1725a0c9f60f19cf50792f870219df76ae0b5021f5d70afeaf66c3dc0",
+      "source_url": "https://www.gutenberg.org/ebooks/1232",
+      "status": "eligible_future_live",
+      "safe_to_apply_to_frozen_snapshot": false,
+      "safe_for_future_live_after_artifact_and_selector_checks": true,
+      "proposed_section_attribution": {
+        "title_contains": "OFFICE",
+        "author": "Unidentified editorial contributor",
+        "role": "editorial",
+        "source_url": "https://www.gutenberg.org/ebooks/1232",
+        "evidence": "Explicit later biographical/editorial discussion of Machiavelli. W. K. Marriott is credited as translator, but that credit alone does not establish authorship of this unsigned commentary. Embedded historical quotations retain their inline credits and need finer attribution if extracted in isolation."
+      },
+      "intended_section_ordinals": [
+        4
+      ],
+      "all_title_contains_matches": [
+        {
+          "ordinal": 4,
+          "title": "OFFICE — Æt. 25-43—1494-1512"
+        }
+      ],
+      "basis": "Explicit later biographical/editorial discussion of Machiavelli. W. K. Marriott is credited as translator, but that credit alone does not establish authorship of this unsigned commentary. Embedded historical quotations retain their inline credits and need finer attribution if extracted in isolation.",
+      "confidence": {
+        "editorial_or_other_contributor_voice": "high_from_explicit_source_text",
+        "person_identity": "unverified_placeholder_no_identity_guess",
+        "selector": "validated_exact_target_set"
+      },
+      "evidence": [
+        {
+          "observed_section_id": 13759,
+          "section_ordinal": 4,
+          "section_title": "OFFICE — Æt. 25-43—1494-1512",
+          "section_sha256": "d8aad8dd059c4266c65699c05222bf20b469323cbf5384a6d9e73861ec6d81ac",
+          "evidence_quote": "he died without regaining office",
+          "quote_start": 5811,
+          "quote_end": 5843,
+          "context_description": "The biographer assesses the complete public career after Machiavelli’s death.",
+          "observed_section_author": "Machiavelli, Niccolò, 1469-1527",
+          "observed_section_role": "unclassified",
+          "section_characters": 5844,
+          "section_passages": 5
+        }
+      ]
+    },
+    {
+      "id": "prince-literature-death",
+      "book_id": "pg1232-full",
+      "book_author": "Machiavelli, Niccolò, 1469-1527",
+      "title": "The Prince",
+      "artifact_sha256": "0260d6165a1558ee2e94eb37d7f1ff0cf4e30b41e094d6ff1afb094950b1be88",
+      "content_sha256": "ca2db4a1725a0c9f60f19cf50792f870219df76ae0b5021f5d70afeaf66c3dc0",
+      "source_url": "https://www.gutenberg.org/ebooks/1232",
+      "status": "eligible_future_live",
+      "safe_to_apply_to_frozen_snapshot": false,
+      "safe_for_future_live_after_artifact_and_selector_checks": true,
+      "proposed_section_attribution": {
+        "title_contains": "LITERATURE AND DEATH",
+        "author": "Unidentified editorial contributor",
+        "role": "editorial",
+        "source_url": "https://www.gutenberg.org/ebooks/1232",
+        "evidence": "Explicit later biographical/editorial discussion of Machiavelli. W. K. Marriott is credited as translator, but that credit alone does not establish authorship of this unsigned commentary. Embedded historical quotations retain their inline credits and need finer attribution if extracted in isolation."
+      },
+      "intended_section_ordinals": [
+        5
+      ],
+      "all_title_contains_matches": [
+        {
+          "ordinal": 5,
+          "title": "LITERATURE AND DEATH — Æt. 43-58—1512-27"
+        }
+      ],
+      "basis": "Explicit later biographical/editorial discussion of Machiavelli. W. K. Marriott is credited as translator, but that credit alone does not establish authorship of this unsigned commentary. Embedded historical quotations retain their inline credits and need finer attribution if extracted in isolation.",
+      "confidence": {
+        "editorial_or_other_contributor_voice": "high_from_explicit_source_text",
+        "person_identity": "unverified_placeholder_no_identity_guess",
+        "selector": "validated_exact_target_set"
+      },
+      "evidence": [
+        {
+          "observed_section_id": 13760,
+          "section_ordinal": 5,
+          "section_title": "LITERATURE AND DEATH — Æt. 43-58—1512-27",
+          "section_sha256": "41d1df5694336cdf76b7c73fd9aaad0b094fd978a240992e3d069f7b37a3a99e",
+          "evidence_quote": "he died on 22nd June 1527",
+          "quote_start": 5638,
+          "quote_end": 5663,
+          "context_description": "The section narrates the author’s retirement and death, with an excerpt from his correspondence.",
+          "observed_section_author": "Machiavelli, Niccolò, 1469-1527",
+          "observed_section_role": "unclassified",
+          "section_characters": 5664,
+          "section_passages": 4
+        }
+      ]
+    },
+    {
+      "id": "prince-man-works",
+      "book_id": "pg1232-full",
+      "book_author": "Machiavelli, Niccolò, 1469-1527",
+      "title": "The Prince",
+      "artifact_sha256": "0260d6165a1558ee2e94eb37d7f1ff0cf4e30b41e094d6ff1afb094950b1be88",
+      "content_sha256": "ca2db4a1725a0c9f60f19cf50792f870219df76ae0b5021f5d70afeaf66c3dc0",
+      "source_url": "https://www.gutenberg.org/ebooks/1232",
+      "status": "eligible_future_live",
+      "safe_to_apply_to_frozen_snapshot": false,
+      "safe_for_future_live_after_artifact_and_selector_checks": true,
+      "proposed_section_attribution": {
+        "title_contains": "THE MAN AND HIS WORKS",
+        "author": "Unidentified editorial contributor",
+        "role": "editorial",
+        "source_url": "https://www.gutenberg.org/ebooks/1232",
+        "evidence": "Explicit later biographical/editorial discussion of Machiavelli. W. K. Marriott is credited as translator, but that credit alone does not establish authorship of this unsigned commentary. Embedded historical quotations retain their inline credits and need finer attribution if extracted in isolation."
+      },
+      "intended_section_ordinals": [
+        6
+      ],
+      "all_title_contains_matches": [
+        {
+          "ordinal": 6,
+          "title": "THE MAN AND HIS WORKS"
+        }
+      ],
+      "basis": "Explicit later biographical/editorial discussion of Machiavelli. W. K. Marriott is credited as translator, but that credit alone does not establish authorship of this unsigned commentary. Embedded historical quotations retain their inline credits and need finer attribution if extracted in isolation.",
+      "confidence": {
+        "editorial_or_other_contributor_voice": "high_from_explicit_source_text",
+        "person_identity": "unverified_placeholder_no_identity_guess",
+        "selector": "validated_exact_target_set"
+      },
+      "evidence": [
+        {
+          "observed_section_id": 13761,
+          "section_ordinal": 6,
+          "section_title": "THE MAN AND HIS WORKS",
+          "section_sha256": "0e6e5a9f2cb9d9f97a75cbf6d504ad4159827ebbdf293c3d0eeab75f998c2928",
+          "evidence_quote": "1929",
+          "quote_start": 7526,
+          "quote_end": 7530,
+          "context_description": "Retrospective literary commentary and bibliography include editions and correspondence scholarship published after the author’s life.",
+          "observed_section_author": "Machiavelli, Niccolò, 1469-1527",
+          "observed_section_role": "unclassified",
+          "section_characters": 7531,
+          "section_passages": 6
+        }
+      ]
+    },
+    {
+      "id": "leviathan-transcription-note",
+      "book_id": "pg3207-full",
+      "book_author": "Hobbes, Thomas, 1588-1679",
+      "title": "Leviathan",
+      "artifact_sha256": "a6ccaf6bea85d46d118a5e05b0b741746027b42ec1d8c703286cecde920fa219",
+      "content_sha256": "b5b88950aa3b573a38444211f11f30b270f102ddcfcdd1fb55008e23f5902afe",
+      "source_url": "https://www.gutenberg.org/ebooks/3207",
+      "status": "eligible_future_live",
+      "safe_to_apply_to_frozen_snapshot": false,
+      "safe_for_future_live_after_artifact_and_selector_checks": true,
+      "proposed_section_attribution": {
+        "title_contains": "Thomas Hobbes of Malmesbury Printed for Andrew Crooke",
+        "author": "Unidentified editorial contributor",
+        "role": "editorial",
+        "source_url": "https://www.gutenberg.org/ebooks/3207",
+        "evidence": "The speaker describes preparing an electronic text and decisions about how to reproduce Hobbes’s original typography. Official production credits do not uniquely identify this speaker."
+      },
+      "intended_section_ordinals": [
+        0
+      ],
+      "all_title_contains_matches": [
+        {
+          "ordinal": 0,
+          "title": "Thomas Hobbes of Malmesbury Printed for Andrew Crooke, at the Green Dragon in St. Paul’s Churchyard, 1651."
+        }
+      ],
+      "basis": "The speaker describes preparing an electronic text and decisions about how to reproduce Hobbes’s original typography. Official production credits do not uniquely identify this speaker.",
+      "confidence": {
+        "editorial_or_other_contributor_voice": "high_from_explicit_source_text",
+        "person_identity": "unverified_placeholder_no_identity_guess",
+        "selector": "validated_exact_target_set"
+      },
+      "evidence": [
+        {
+          "observed_section_id": 13807,
+          "section_ordinal": 0,
+          "section_title": "Thomas Hobbes of Malmesbury Printed for Andrew Crooke, at the Green Dragon in St. Paul’s Churchyard, 1651.",
+          "section_sha256": "d20a8073d4941f8067ccb425e1a80710e81f3983cea934d377b83b5ee514b663",
+          "evidence_quote": "This E-text was prepared from the Pelican Classics edition",
+          "quote_start": 0,
+          "quote_end": 58,
+          "context_description": "An unsigned electronic-text preparer explains ASCII, capitalization and treatment of Hobbes’s margin notes.",
+          "observed_section_author": "Hobbes, Thomas, 1588-1679",
+          "observed_section_role": "unclassified",
+          "section_characters": 2944,
+          "section_passages": 2
+        }
+      ]
+    },
+    {
+      "id": "nietzsche-conversion-note",
+      "book_id": "pg4363-full",
+      "book_author": "Nietzsche, Friedrich Wilhelm, 1844-1900",
+      "title": "Beyond Good and Evil",
+      "artifact_sha256": "5be9a122841a88130130999da60ce5949f277ce603c9977081cc91a56ea53290",
+      "content_sha256": "de2eb44e49856fb8886e8965949dddbde45d2a0a2c301acbab2763efee622d54",
+      "source_url": "https://www.gutenberg.org/ebooks/4363",
+      "status": "eligible_future_live",
+      "safe_to_apply_to_frozen_snapshot": false,
+      "safe_for_future_live_after_artifact_and_selector_checks": true,
+      "proposed_section_attribution": {
+        "title_contains": "Translated by Helen Zimmern",
+        "author": "Unidentified editorial contributor",
+        "role": "editorial",
+        "source_url": "https://www.gutenberg.org/ebooks/4363",
+        "evidence": "Electronic reprint/conversion instructions are not Nietzsche’s preface and are not shown to have been written by the named translator. The section heading names the translation, not the speaker of this note."
+      },
+      "intended_section_ordinals": [
+        0
+      ],
+      "all_title_contains_matches": [
+        {
+          "ordinal": 0,
+          "title": "Translated by Helen Zimmern"
+        }
+      ],
+      "basis": "Electronic reprint/conversion instructions are not Nietzsche’s preface and are not shown to have been written by the named translator. The section heading names the translation, not the speaker of this note.",
+      "confidence": {
+        "editorial_or_other_contributor_voice": "high_from_explicit_source_text",
+        "person_identity": "unverified_placeholder_no_identity_guess",
+        "selector": "validated_exact_target_set"
+      },
+      "evidence": [
+        {
+          "observed_section_id": 14496,
+          "section_ordinal": 0,
+          "section_title": "Translated by Helen Zimmern",
+          "section_sha256": "129b290ccafbbaf8bcd458442e0479d0c4805fc69fd28eaa7c05495289736e8a",
+          "evidence_quote": "Some adaptations from the original text were made",
+          "quote_start": 183,
+          "quote_end": 232,
+          "context_description": "A later electronic-text note explains converting italics, footnotes and spelling in a reprint of the Zimmern translation.",
+          "observed_section_author": "Nietzsche, Friedrich Wilhelm, 1844-1900",
+          "observed_section_role": "unclassified",
+          "section_characters": 740,
+          "section_passages": 1
+        }
+      ]
+    },
+    {
+      "id": "moby-electronic-text-note",
+      "book_id": "pg2701-full",
+      "book_author": "Melville, Herman, 1819-1891",
+      "title": "Moby Dick; Or, The Whale",
+      "artifact_sha256": "e247676589c02a65bc80ff7bf7aaaf146d7c69eadfcfb96633c5f606a08602db",
+      "content_sha256": "59a62bc8dad23f63d9eac06b5e43abd2b995bd071f5b1ca80aaf0aa58c39c684",
+      "source_url": "https://www.gutenberg.org/ebooks/2701",
+      "status": "eligible_future_live",
+      "safe_to_apply_to_frozen_snapshot": false,
+      "safe_for_future_live_after_artifact_and_selector_checks": true,
+      "proposed_section_attribution": {
+        "title_contains": "By Herman Melville",
+        "author": "Unidentified editorial contributor",
+        "role": "editorial",
+        "source_url": "https://www.gutenberg.org/ebooks/2701",
+        "evidence": "The target contains contents/front matter and explicit digital production commentary. The narrative Etymology and Extracts sections are not matched by this rule."
+      },
+      "intended_section_ordinals": [
+        0
+      ],
+      "all_title_contains_matches": [
+        {
+          "ordinal": 0,
+          "title": "By Herman Melville"
+        }
+      ],
+      "basis": "The target contains contents/front matter and explicit digital production commentary. The narrative Etymology and Extracts sections are not matched by this rule.",
+      "confidence": {
+        "editorial_or_other_contributor_voice": "high_from_explicit_source_text",
+        "person_identity": "unverified_placeholder_no_identity_guess",
+        "selector": "validated_exact_target_set"
+      },
+      "evidence": [
+        {
+          "observed_section_id": 13249,
+          "section_ordinal": 0,
+          "section_title": "By Herman Melville",
+          "section_sha256": "d99c619c3ffc456c31e2e69e4937773bd9508a70fa540a2d9ea04062b5e6768b",
+          "evidence_quote": "This text is a combination of etexts",
+          "quote_start": 4424,
+          "quote_end": 4460,
+          "context_description": "After a contents list, an electronic production note explains combining ERIS and Gutenberg texts and comparison with a printed copy.",
+          "observed_section_author": "Melville, Herman, 1819-1891",
+          "observed_section_role": "unclassified",
+          "section_characters": 4770,
+          "section_passages": 4
+        }
+      ]
+    },
+    {
+      "id": "republic-digital-cross-reference",
+      "book_id": "pg1497-full",
+      "book_author": "Plato, 428? BCE-348? BCE",
+      "title": "The Republic",
+      "artifact_sha256": "8c8bf2ed9bff65aaf226bf5db3879eb378a26e72489bd28666abc01c02f2a0c2",
+      "content_sha256": "7811a9e6a6c9901a264f440112eac27d23eba24142b571b441308bec3d69b9f6",
+      "source_url": "https://www.gutenberg.org/ebooks/1497",
+      "status": "eligible_future_live",
+      "safe_to_apply_to_frozen_snapshot": false,
+      "safe_for_future_live_after_artifact_and_selector_checks": true,
+      "proposed_section_attribution": {
+        "title_contains": "Translated by Benjamin Jowett",
+        "author": "Unidentified editorial contributor",
+        "role": "editorial",
+        "source_url": "https://www.gutenberg.org/ebooks/1497",
+        "evidence": "A digital cross-reference is anonymous edition metadata, not prose by Plato or an identified statement by Jowett. Its translator heading does not establish note authorship."
+      },
+      "intended_section_ordinals": [
+        0
+      ],
+      "all_title_contains_matches": [
+        {
+          "ordinal": 0,
+          "title": "Translated by Benjamin Jowett"
+        }
+      ],
+      "basis": "A digital cross-reference is anonymous edition metadata, not prose by Plato or an identified statement by Jowett. Its translator heading does not establish note authorship.",
+      "confidence": {
+        "editorial_or_other_contributor_voice": "high_from_explicit_source_text",
+        "person_identity": "unverified_placeholder_no_identity_guess",
+        "selector": "validated_exact_target_set"
+      },
+      "evidence": [
+        {
+          "observed_section_id": 13792,
+          "section_ordinal": 0,
+          "section_title": "Translated by Benjamin Jowett",
+          "section_sha256": "b1217f1d57bc98853efb06a69d5735f7711b415d49a78e90ec7460239567d785",
+          "evidence_quote": "eBook #150",
+          "quote_start": 48,
+          "quote_end": 58,
+          "context_description": "This short metadata note points readers to another Gutenberg ebook; it does not contain Jowett’s introduction or Plato’s dialogue.",
+          "observed_section_author": "Plato, 428? BCE-348? BCE",
+          "observed_section_role": "unclassified",
+          "section_characters": 58,
+          "section_passages": 1
+        }
+      ]
+    },
+    {
+      "id": "holmes-digital-cross-reference",
+      "book_id": "pg1661-full",
+      "book_author": "Doyle, Arthur Conan, 1859-1930",
+      "title": "The Adventures of Sherlock Holmes",
+      "artifact_sha256": "310ddf29f2b98b870b0e970061d236c9ce7c65163e0e172c254a1db3d070d3f4",
+      "content_sha256": "ed72f8cdd665e5c55802e39300e4642ec3516fcf9ec7faca82fef2eb8e994dc7",
+      "source_url": "https://www.gutenberg.org/ebooks/1661",
+      "status": "eligible_future_live",
+      "safe_to_apply_to_frozen_snapshot": false,
+      "safe_for_future_live_after_artifact_and_selector_checks": true,
+      "proposed_section_attribution": {
+        "title_contains": "The Adventures of Sherlock Holmes",
+        "author": "Unidentified editorial contributor",
+        "role": "editorial",
+        "source_url": "https://www.gutenberg.org/ebooks/1661",
+        "evidence": "The title section contains digital edition navigation and a contents list. The rule does not match any of Doyle’s story sections."
+      },
+      "intended_section_ordinals": [
+        0
+      ],
+      "all_title_contains_matches": [
+        {
+          "ordinal": 0,
+          "title": "The Adventures of Sherlock Holmes"
+        }
+      ],
+      "basis": "The title section contains digital edition navigation and a contents list. The rule does not match any of Doyle’s story sections.",
+      "confidence": {
+        "editorial_or_other_contributor_voice": "high_from_explicit_source_text",
+        "person_identity": "unverified_placeholder_no_identity_guess",
+        "selector": "validated_exact_target_set"
+      },
+      "evidence": [
+        {
+          "observed_section_id": 13204,
+          "section_ordinal": 0,
+          "section_title": "The Adventures of Sherlock Holmes",
+          "section_sha256": "2cd45e125f7433d41e09b859f2b79de462b4a61f511e8d77286c54c273e317c5",
+          "evidence_quote": "THERE IS AN ILLUSTRATED EDITION",
+          "quote_start": 0,
+          "quote_end": 31,
+          "context_description": "An electronic edition notice and contents list refer to a separately numbered illustrated Gutenberg edition.",
+          "observed_section_author": "Doyle, Arthur Conan, 1859-1930",
+          "observed_section_role": "unclassified",
+          "section_characters": 581,
+          "section_passages": 1
+        }
+      ]
+    },
+    {
+      "id": "saintsbury-preface-duplicate-title",
+      "book_id": "pg1342-full",
+      "book_author": "Austen, Jane, 1775-1817",
+      "title": "Pride and Prejudice",
+      "artifact_sha256": "fd519471687295a8b2492d9e413bc24bee21ade9808d8af29899a16e8599064e",
+      "content_sha256": "116e94fd0ba2f26de1d5d2914ecf5831d530354dce327e3e82eb1d55fbbd6f31",
+      "source_url": "https://www.gutenberg.org/ebooks/1342",
+      "status": "requires_selector_disambiguation",
+      "safe_to_apply_to_frozen_snapshot": false,
+      "safe_for_future_live_after_artifact_and_selector_checks": false,
+      "proposed_section_attribution": {
+        "title_contains": "PRIDE. and PREJUDICE",
+        "author": "George Saintsbury",
+        "role": "editorial",
+        "source_url": "https://www.gutenberg.org/ebooks/1342",
+        "evidence": "The personal author of the preface is directly credited and signed in the imported source, although the EPUB creator list and catalog author table omit him."
+      },
+      "intended_section_ordinals": [
+        1
+      ],
+      "all_title_contains_matches": [
+        {
+          "ordinal": 0,
+          "title": "PRIDE. and PREJUDICE"
+        },
+        {
+          "ordinal": 1,
+          "title": "PRIDE. and PREJUDICE"
+        }
+      ],
+      "basis": "The personal author of the preface is directly credited and signed in the imported source, although the EPUB creator list and catalog author table omit him.",
+      "confidence": {
+        "editorial_or_other_contributor_voice": "high_from_explicit_source_text",
+        "person_identity": "verified_in_source",
+        "selector": "not_safe_without_followup"
+      },
+      "evidence": [
+        {
+          "observed_section_id": 12976,
+          "section_ordinal": 1,
+          "section_title": "PRIDE. and PREJUDICE",
+          "section_sha256": "93611048b4fcda7d7b50d7178c2c4adba2a6510183e3006928355282af438215",
+          "evidence_quote": "George Saintsbury.",
+          "quote_start": 25088,
+          "quote_end": 25106,
+          "context_description": "The title-page text explicitly credits a preface by George Saintsbury, and the long critical preface ends with his signature.",
+          "observed_section_author": "Austen, Jane, 1775-1817",
+          "observed_section_role": "unclassified",
+          "section_characters": 25106,
+          "section_passages": 20
+        }
+      ],
+      "application_blocker": "Sections0 and1 have identical titles; section0 is a contents list. Current title_contains cannot assign only the signed preface. Add a source-body/structural selector or split/retitle in a future parser version before applying."
+    },
+    {
+      "id": "dallas-glossary-mixed-acknowledgement",
+      "book_id": "pg2009-full",
+      "book_author": "Darwin, Charles, 1809-1882",
+      "title": "The Origin of Species by Means of Natural Selection Or, the Preservation of Favoured Races in the Struggle for Life, 6th Edition",
+      "artifact_sha256": "734ab06f61101728b42982d6032a440eb79c051f02d4a8456bbe34ea6cb293d0",
+      "content_sha256": "a65632da80ac1e6184eb088e79275a148f53a87608489a5e574d48f5d9eae1bf",
+      "source_url": "https://www.gutenberg.org/ebooks/2009",
+      "status": "requires_section_split",
+      "safe_to_apply_to_frozen_snapshot": false,
+      "safe_for_future_live_after_artifact_and_selector_checks": false,
+      "proposed_section_attribution": {
+        "title_contains": "GLOSSARY OF THE PRINCIPAL SCIENTIFIC TERMS",
+        "author": "W. S. Dallas",
+        "role": "editorial",
+        "source_url": "https://www.gutenberg.org/ebooks/2009",
+        "evidence": "The source identifies W. S. Dallas as glossary contributor, but Darwin’s introductory acknowledgement is part of the same parsed section."
+      },
+      "intended_section_ordinals": [
+        21
+      ],
+      "all_title_contains_matches": [
+        {
+          "ordinal": 21,
+          "title": "GLOSSARY OF THE PRINCIPAL SCIENTIFIC TERMS USED IN THE PRESENT VOLUME.*"
+        }
+      ],
+      "basis": "The source identifies W. S. Dallas as glossary contributor, but Darwin’s introductory acknowledgement is part of the same parsed section.",
+      "confidence": {
+        "editorial_or_other_contributor_voice": "high_from_explicit_source_text",
+        "person_identity": "verified_in_source",
+        "selector": "not_safe_without_followup"
+      },
+      "evidence": [
+        {
+          "observed_section_id": 13200,
+          "section_ordinal": 21,
+          "section_title": "GLOSSARY OF THE PRINCIPAL SCIENTIFIC TERMS USED IN THE PRESENT VOLUME.*",
+          "section_sha256": "91804ac9cb1e6bb9b402bef5b5accffa3abb035574fb1357a4c8eefab5a53d37",
+          "evidence_quote": "Mr. W.S. Dallas for this Glossary",
+          "quote_start": 35,
+          "quote_end": 68,
+          "context_description": "The first paragraph is Darwin’s first-person acknowledgement of Dallas; the following scientific definitions are explicitly credited to Dallas.",
+          "observed_section_author": "Darwin, Charles, 1809-1882",
+          "observed_section_role": "unclassified",
+          "section_characters": 31136,
+          "section_passages": 26
+        }
+      ],
+      "application_blocker": "A whole-section Dallas rule would misattribute Darwin’s acknowledgement. Split acknowledgement from definitions and preserve both contributors before applying a rule."
+    },
+    {
+      "id": "einstein-science-and-transcriber-tail",
+      "book_id": "pg5001-full",
+      "book_author": "Einstein, Albert, 1879-1955",
+      "title": "Relativity : the Special and General Theory",
+      "artifact_sha256": "d72163123dab44b5c2d90fd17ac251b4b76de71ae3ebb04b3f3b5caa1334577f",
+      "content_sha256": "a6103c300da20c871f61c1df2488fc342511e9ecc981b7b60ad876485c8e4121",
+      "source_url": "https://www.gutenberg.org/ebooks/5001",
+      "status": "requires_section_split",
+      "safe_to_apply_to_frozen_snapshot": false,
+      "safe_for_future_live_after_artifact_and_selector_checks": false,
+      "proposed_section_attribution": {
+        "title_contains": "APPENDIX IV",
+        "author": "Unidentified editorial contributor",
+        "role": "editorial",
+        "source_url": "https://www.gutenberg.org/ebooks/5001",
+        "evidence": "The tail is explicit modern production prose while the beginning is Einstein’s scientific appendix. Official catalog production credits do not prove who wrote the complete note."
+      },
+      "intended_section_ordinals": [
+        40
+      ],
+      "all_title_contains_matches": [
+        {
+          "ordinal": 40,
+          "title": "APPENDIX IV The Structure of Space According to the General Theory of Relativity [Supplementary to Section XXXII ]"
+        }
+      ],
+      "basis": "The tail is explicit modern production prose while the beginning is Einstein’s scientific appendix. Official catalog production credits do not prove who wrote the complete note.",
+      "confidence": {
+        "editorial_or_other_contributor_voice": "high_from_explicit_source_text",
+        "person_identity": "unverified_placeholder_no_identity_guess",
+        "selector": "not_safe_without_followup"
+      },
+      "evidence": [
+        {
+          "observed_section_id": 14549,
+          "section_ordinal": 40,
+          "section_title": "APPENDIX IV The Structure of Space According to the General Theory of Relativity [Supplementary to Section XXXII ]",
+          "section_sha256": "aebc50c995b7eed98ed9e70d5e7bdb9a1b65cf98fb6d0c2a5965e9d063066a6f",
+          "evidence_quote": "This version was prepared from the version originally available from Project Gutenberg",
+          "quote_start": 2867,
+          "quote_end": 2953,
+          "context_description": "After Einstein’s cosmological appendix, the same section continues with a later digital conversion/review note and a 2018 start date.",
+          "observed_section_author": "Einstein, Albert, 1879-1955",
+          "observed_section_role": "unclassified",
+          "section_characters": 3553,
+          "section_passages": 3
+        }
+      ],
+      "application_blocker": "A whole-section editorial rule would relabel Einstein’s scientific appendix. Separate the production-note tail; do not apply APPENDIX IV as an editorial selector."
+    },
+    {
+      "id": "meditations-correspondence-appendix",
+      "book_id": "pg2680-full",
+      "book_author": "Marcus Aurelius, Emperor of Rome, 121-180",
+      "title": "Meditations",
+      "artifact_sha256": "62c71326bea242893ce8c3ce54bdf5fad3989a827a1462ec03f7dadf8bf5bc89",
+      "content_sha256": "e44ec0f4d2d13b28dc815556979513d5e55c75a0c0e4d4857caa4ee80319561a",
+      "source_url": "https://www.gutenberg.org/ebooks/2680",
+      "status": "requires_span_attribution",
+      "safe_to_apply_to_frozen_snapshot": false,
+      "safe_for_future_live_after_artifact_and_selector_checks": false,
+      "proposed_section_attribution": {
+        "title_contains": "APPENDIX",
+        "author": "Unidentified editorial contributor",
+        "role": "editorial",
+        "source_url": "https://www.gutenberg.org/ebooks/2680",
+        "evidence": "The framing prose is later commentary, but long portions are explicitly attributed historical correspondence."
+      },
+      "intended_section_ordinals": [
+        15
+      ],
+      "all_title_contains_matches": [
+        {
+          "ordinal": 15,
+          "title": "APPENDIX"
+        }
+      ],
+      "basis": "The framing prose is later commentary, but long portions are explicitly attributed historical correspondence.",
+      "confidence": {
+        "editorial_or_other_contributor_voice": "high_from_explicit_source_text",
+        "person_identity": "unverified_placeholder_no_identity_guess",
+        "selector": "not_safe_without_followup"
+      },
+      "evidence": [
+        {
+          "observed_section_id": 13078,
+          "section_ordinal": 15,
+          "section_title": "APPENDIX",
+          "section_sha256": "d8cb1710c8eab6d9dc1503f026ffb40c96b5dd999ac2bb35b616fdc937f4390e",
+          "evidence_quote": "M. CORNELIUS FRONTO was a Roman",
+          "quote_start": 68,
+          "quote_end": 99,
+          "context_description": "The appendix combines a biographical introduction, commentary, footnotes and translated letters exchanged by Marcus and Fronto.",
+          "observed_section_author": "Marcus Aurelius, Emperor of Rome, 121-180",
+          "observed_section_role": "unclassified",
+          "section_characters": 34533,
+          "section_passages": 27
+        }
+      ],
+      "application_blocker": "One section-level editorial author cannot represent the embedded letters’ distinct speakers. Split letters/commentary or attach span-level provenance before any broad appendix rule."
+    },
+    {
+      "id": "darwin-digital-notice-pg1228-full",
+      "book_id": "pg1228-full",
+      "book_author": "Darwin, Charles, 1809-1882",
+      "title": "On the Origin of Species By Means of Natural Selection Or, the Preservation of Favoured Races in the Struggle for Life",
+      "artifact_sha256": "49bb913c0d267c786846805ce8b90a2e92bc4b2ee7cc0ab9492821bd85c6819b",
+      "content_sha256": "8868ecc91f9c788d49c1e0d8c26381848f20eb2825fbb8a12116280b7e5664ee",
+      "source_url": "https://www.gutenberg.org/ebooks/1228",
+      "status": "requires_selector_disambiguation",
+      "safe_to_apply_to_frozen_snapshot": false,
+      "safe_for_future_live_after_artifact_and_selector_checks": false,
+      "proposed_section_attribution": {
+        "title_contains": "On the Origin of Species",
+        "author": "Unidentified editorial contributor",
+        "role": "editorial",
+        "source_url": "https://www.gutenberg.org/ebooks/1228",
+        "evidence": "This initial digital navigation notice is not Darwin’s authored introduction."
+      },
+      "intended_section_ordinals": [
+        0
+      ],
+      "all_title_contains_matches": [
+        {
+          "ordinal": 0,
+          "title": "On the Origin of Species"
+        },
+        {
+          "ordinal": 1,
+          "title": "On the Origin of Species"
+        },
+        {
+          "ordinal": 2,
+          "title": "DETEAILED CONTENTS. ON THE ORIGIN OF SPECIES."
+        }
+      ],
+      "basis": "This initial digital navigation notice is not Darwin’s authored introduction.",
+      "confidence": {
+        "editorial_or_other_contributor_voice": "high_from_explicit_source_text",
+        "person_identity": "unverified_placeholder_no_identity_guess",
+        "selector": "not_safe_without_followup"
+      },
+      "evidence": [
+        {
+          "observed_section_id": 13044,
+          "section_ordinal": 0,
+          "section_title": "On the Origin of Species",
+          "section_sha256": "b1cc53e800f3637432c341096d9fce961688e33b6d0a54f56e2fec87b9cfd17e",
+          "evidence_quote": "There are several editions of this ebook",
+          "quote_start": 0,
+          "quote_end": 40,
+          "context_description": "The initial note explains navigating among Gutenberg electronic editions.",
+          "observed_section_author": "Darwin, Charles, 1809-1882",
+          "observed_section_role": "unclassified",
+          "section_characters": 233,
+          "section_passages": 1
+        }
+      ],
+      "application_blocker": "The title fragment also matches other front-matter/epigraph or contents sections. Do not assign them all to the electronic-note author."
+    },
+    {
+      "id": "darwin-digital-notice-pg2009-full",
+      "book_id": "pg2009-full",
+      "book_author": "Darwin, Charles, 1809-1882",
+      "title": "The Origin of Species by Means of Natural Selection Or, the Preservation of Favoured Races in the Struggle for Life, 6th Edition",
+      "artifact_sha256": "734ab06f61101728b42982d6032a440eb79c051f02d4a8456bbe34ea6cb293d0",
+      "content_sha256": "a65632da80ac1e6184eb088e79275a148f53a87608489a5e574d48f5d9eae1bf",
+      "source_url": "https://www.gutenberg.org/ebooks/2009",
+      "status": "requires_selector_disambiguation",
+      "safe_to_apply_to_frozen_snapshot": false,
+      "safe_for_future_live_after_artifact_and_selector_checks": false,
+      "proposed_section_attribution": {
+        "title_contains": "On the Origin of Species",
+        "author": "Unidentified editorial contributor",
+        "role": "editorial",
+        "source_url": "https://www.gutenberg.org/ebooks/2009",
+        "evidence": "This initial digital navigation notice is not Darwin’s authored introduction."
+      },
+      "intended_section_ordinals": [
+        0
+      ],
+      "all_title_contains_matches": [
+        {
+          "ordinal": 0,
+          "title": "On the Origin of Species"
+        },
+        {
+          "ordinal": 1,
+          "title": "On the Origin of Species"
+        },
+        {
+          "ordinal": 2,
+          "title": "AN HISTORICAL SKETCH OF THE PROGRESS OF OPINION ON THE ORIGIN OF SPECIES, PREVIOUSLY TO THE PUBLICATION OF THE FIRST EDITION OF THIS WORK."
+        }
+      ],
+      "basis": "This initial digital navigation notice is not Darwin’s authored introduction.",
+      "confidence": {
+        "editorial_or_other_contributor_voice": "high_from_explicit_source_text",
+        "person_identity": "unverified_placeholder_no_identity_guess",
+        "selector": "not_safe_without_followup"
+      },
+      "evidence": [
+        {
+          "observed_section_id": 13179,
+          "section_ordinal": 0,
+          "section_title": "On the Origin of Species",
+          "section_sha256": "b1cc53e800f3637432c341096d9fce961688e33b6d0a54f56e2fec87b9cfd17e",
+          "evidence_quote": "There are several editions of this ebook",
+          "quote_start": 0,
+          "quote_end": 40,
+          "context_description": "The initial note explains navigating among Gutenberg electronic editions.",
+          "observed_section_author": "Darwin, Charles, 1809-1882",
+          "observed_section_role": "unclassified",
+          "section_characters": 233,
+          "section_passages": 1
+        }
+      ],
+      "application_blocker": "The title fragment also matches other front-matter/epigraph or contents sections. Do not assign them all to the electronic-note author."
+    },
+    {
+      "id": "prince-biographical-title-collision",
+      "book_id": "pg1232-full",
+      "book_author": "Machiavelli, Niccolò, 1469-1527",
+      "title": "The Prince",
+      "artifact_sha256": "0260d6165a1558ee2e94eb37d7f1ff0cf4e30b41e094d6ff1afb094950b1be88",
+      "content_sha256": "ca2db4a1725a0c9f60f19cf50792f870219df76ae0b5021f5d70afeaf66c3dc0",
+      "source_url": "https://www.gutenberg.org/ebooks/1232",
+      "status": "requires_selector_disambiguation",
+      "safe_to_apply_to_frozen_snapshot": false,
+      "safe_for_future_live_after_artifact_and_selector_checks": false,
+      "proposed_section_attribution": {
+        "title_contains": "The Prince",
+        "author": "Unidentified editorial contributor",
+        "role": "editorial",
+        "source_url": "https://www.gutenberg.org/ebooks/1232",
+        "evidence": "This short biography is posthumous reference text, but its generic section title is unsafe as a selector."
+      },
+      "intended_section_ordinals": [
+        1
+      ],
+      "all_title_contains_matches": [
+        {
+          "ordinal": 0,
+          "title": "The Prince"
+        },
+        {
+          "ordinal": 1,
+          "title": "The Prince"
+        },
+        {
+          "ordinal": 31,
+          "title": "CHAPTER XXIV. WHY THE PRINCES OF ITALY HAVE LOST THEIR STATES"
+        }
+      ],
+      "basis": "This short biography is posthumous reference text, but its generic section title is unsafe as a selector.",
+      "confidence": {
+        "editorial_or_other_contributor_voice": "high_from_explicit_source_text",
+        "person_identity": "unverified_placeholder_no_identity_guess",
+        "selector": "not_safe_without_followup"
+      },
+      "evidence": [
+        {
+          "observed_section_id": 13756,
+          "section_ordinal": 1,
+          "section_title": "The Prince",
+          "section_sha256": "60dbf6d333aa04b87047a8b400dcc7319b6ada24c9182503912cfa8dfffd2477",
+          "evidence_quote": "Died at Florence on 22nd June 1527.",
+          "quote_start": 242,
+          "quote_end": 277,
+          "context_description": "A short front-matter biography reports the author’s death.",
+          "observed_section_author": "Machiavelli, Niccolò, 1469-1527",
+          "observed_section_role": "unclassified",
+          "section_characters": 277,
+          "section_passages": 1
+        }
+      ],
+      "application_blocker": "Casefolded substring The Prince also occurs in main-chapter headings containing The Princes. Reject this broad selector; use a future exact/structural/body selector."
+    }
+  ],
+  "controls_and_unresolved_spans": [
+    {
+      "book_id": "pg1497-full",
+      "decision": "retain_existing_rule",
+      "section_attribution": {
+        "title_contains": "INTRODUCTION AND ANALYSIS",
+        "author": "Benjamin Jowett",
+        "role": "editorial"
+      },
+      "matched_sections": [
+        1,
+        2,
+        3
+      ],
+      "observed_matches_correct": true,
+      "basis": "Existing source-audited contributor rule; official catalog and OPF separately credit Jowett as translator. Dialogue books are not matched."
+    },
+    {
+      "book_id": "pg5001-full",
+      "section_ordinals": [
+        1
+      ],
+      "decision": "do_not_relabel_as_editorial",
+      "basis": "The preface is signed A. EINSTEIN and datedDecember1916. A Preface heading alone is not evidence of another contributor."
+    },
+    {
+      "book_id": "pg1228-full",
+      "section_ordinals": [
+        3
+      ],
+      "decision": "do_not_relabel_as_editorial",
+      "basis": "The introduction recounts Darwin’s Beagle work in the first person and explains his own research."
+    },
+    {
+      "book_id": "pg2009-full",
+      "section_ordinals": [
+        5
+      ],
+      "decision": "do_not_relabel_as_editorial",
+      "basis": "Darwin’s own revised first-person introduction is distinct from the digital edition notice."
+    },
+    {
+      "book_id": "pg3300-full",
+      "section_ordinals": [
+        1,
+        21,
+        44
+      ],
+      "decision": "do_not_relabel_from_heading_alone",
+      "basis": "The introductions explain the author’s plan and the appendix adds material to his argument; no separate commentator identity established."
+    },
+    {
+      "book_id": "pg3207-full",
+      "section_ordinals": [
+        1,
+        3
+      ],
+      "decision": "do_not_relabel_as_editorial",
+      "basis": "Hobbes’s signed dedication and authored introduction are distinct from the preceding ASCII transcription note."
+    },
+    {
+      "book_id": "pg4363-full",
+      "section_ordinals": [
+        2,
+        12
+      ],
+      "decision": "do_not_relabel_as_editorial",
+      "basis": "Nietzsche’s dated preface and translated closing poem are authored literary content. Magnus’s translator heading does not make the poem editorial prose."
+    },
+    {
+      "book_id": "pg35-full",
+      "section_ordinals": [
+        1
+      ],
+      "decision": "do_not_relabel_as_editorial",
+      "basis": "I. Introduction is the opening narrated scene of Wells’s fiction, not an external editor’s introduction."
+    },
+    {
+      "book_id": "pg2701-full",
+      "section_ordinals": [
+        1,
+        2,
+        3
+      ],
+      "decision": "do_not_relabel_whole_sections_as_unknown_editor",
+      "basis": "The Etymology/Extracts framing includes Melville’s literary devices and an anthology of individually credited quotations. It needs nested quotation attribution, not a generic external-editor assumption."
+    },
+    {
+      "book_id": "pg4650-full",
+      "decision": "span_review_required",
+      "basis": "Inline chapter notes carry B. signatures and references. An initial is insufficient to name a personal editor; relabeling whole chapters would misattribute Voltaire’s main text."
+    },
+    {
+      "book_id": "pg1232-full",
+      "decision": "span_review_required",
+      "basis": "Footnotes name and quote Burd and other sources within main chapters. Preserve those local credits; an unsigned note compiler cannot be inferred from the translator credit."
+    },
+    {
+      "book_id": "pg1342-full",
+      "section_ordinals": [
+        8
+      ],
+      "decision": "do_not_relabel_as_editorial",
+      "basis": "A note for Miss Bennet is part of a chapter heading/caption, and the section is Austen’s narrative. Keyword note is insufficient."
+    }
+  ],
+  "epub_contributor_metadata": [
+    {
+      "book_id": "pg11-full",
+      "artifact_sha256": "4f81245d31380ac1d6eafb9a321e3691369bc70985736ae4bccf849a4f784036",
+      "opf_path": "OEBPS/content.opf",
+      "people": [
+        {
+          "field": "creator",
+          "name": "Lewis Carroll",
+          "roles": [
+            "aut"
+          ],
+          "legacy_role": null
+        }
+      ],
+      "artifact_hash_checked": true
+    },
+    {
+      "book_id": "pg1342-full",
+      "artifact_sha256": "fd519471687295a8b2492d9e413bc24bee21ade9808d8af29899a16e8599064e",
+      "opf_path": "OEBPS/content.opf",
+      "people": [
+        {
+          "field": "creator",
+          "name": "Jane Austen",
+          "roles": [
+            "aut"
+          ],
+          "legacy_role": null
+        }
+      ],
+      "artifact_hash_checked": true
+    },
+    {
+      "book_id": "pg1228-full",
+      "artifact_sha256": "49bb913c0d267c786846805ce8b90a2e92bc4b2ee7cc0ab9492821bd85c6819b",
+      "opf_path": "OEBPS/content.opf",
+      "people": [
+        {
+          "field": "creator",
+          "name": "Charles Darwin",
+          "roles": [
+            "aut"
+          ],
+          "legacy_role": null
+        }
+      ],
+      "artifact_hash_checked": true
+    },
+    {
+      "book_id": "pg2680-full",
+      "artifact_sha256": "62c71326bea242893ce8c3ce54bdf5fad3989a827a1462ec03f7dadf8bf5bc89",
+      "opf_path": "OEBPS/content.opf",
+      "people": [
+        {
+          "field": "creator",
+          "name": "Emperor of Rome Marcus Aurelius",
+          "roles": [
+            "aut"
+          ],
+          "legacy_role": null
+        }
+      ],
+      "artifact_hash_checked": true
+    },
+    {
+      "book_id": "pg4650-full",
+      "artifact_sha256": "52f706dea0bad8e08913b254333901f3f6dfb1b472a90a8802b97b9604986d59",
+      "opf_path": "OEBPS/content.opf",
+      "people": [
+        {
+          "field": "creator",
+          "name": "Voltaire",
+          "roles": [
+            "aut"
+          ],
+          "legacy_role": null
+        }
+      ],
+      "artifact_hash_checked": true
+    },
+    {
+      "book_id": "pg22367-full",
+      "artifact_sha256": "9fc9a802421caf591d674ffafa6d17eaf08b2e3d54849c081c9276a5174ee60e",
+      "opf_path": "OEBPS/content.opf",
+      "people": [
+        {
+          "field": "creator",
+          "name": "Franz Kafka",
+          "roles": [
+            "aut"
+          ],
+          "legacy_role": null
+        }
+      ],
+      "artifact_hash_checked": true
+    },
+    {
+      "book_id": "pg5316-full",
+      "artifact_sha256": "b6c36094b7fc62254974a265e05aa0b17c3a4b8cc68b4c50462cf8eb0eb1e482",
+      "opf_path": "OEBPS/content.opf",
+      "people": [
+        {
+          "field": "creator",
+          "name": "Aleksandr Sergeevich Pushkin",
+          "roles": [
+            "aut"
+          ],
+          "legacy_role": null
+        }
+      ],
+      "artifact_hash_checked": true
+    },
+    {
+      "book_id": "pg3300-full",
+      "artifact_sha256": "52c8c5b9cc2b18d1edc87a326b76f0d8aee568932995d407083b394aaa9165ab",
+      "opf_path": "OEBPS/content.opf",
+      "people": [
+        {
+          "field": "creator",
+          "name": "Adam Smith",
+          "roles": [
+            "aut"
+          ],
+          "legacy_role": null
+        }
+      ],
+      "artifact_hash_checked": true
+    },
+    {
+      "book_id": "pg2009-full",
+      "artifact_sha256": "734ab06f61101728b42982d6032a440eb79c051f02d4a8456bbe34ea6cb293d0",
+      "opf_path": "OEBPS/content.opf",
+      "people": [
+        {
+          "field": "creator",
+          "name": "Charles Darwin",
+          "roles": [
+            "aut"
+          ],
+          "legacy_role": null
+        }
+      ],
+      "artifact_hash_checked": true
+    },
+    {
+      "book_id": "pg1661-full",
+      "artifact_sha256": "310ddf29f2b98b870b0e970061d236c9ce7c65163e0e172c254a1db3d070d3f4",
+      "opf_path": "OEBPS/content.opf",
+      "people": [
+        {
+          "field": "creator",
+          "name": "Arthur Conan Doyle",
+          "roles": [
+            "aut"
+          ],
+          "legacy_role": null
+        }
+      ],
+      "artifact_hash_checked": true
+    },
+    {
+      "book_id": "pg84-full",
+      "artifact_sha256": "0bfcc8cacdc72e132272844ed465c6198f1049a8d2b9e3f16806d02beee452e3",
+      "opf_path": "OEBPS/content.opf",
+      "people": [
+        {
+          "field": "creator",
+          "name": "Mary Wollstonecraft Shelley",
+          "roles": [
+            "aut"
+          ],
+          "legacy_role": null
+        }
+      ],
+      "artifact_hash_checked": true
+    },
+    {
+      "book_id": "pg2701-full",
+      "artifact_sha256": "e247676589c02a65bc80ff7bf7aaaf146d7c69eadfcfb96633c5f606a08602db",
+      "opf_path": "OEBPS/content.opf",
+      "people": [
+        {
+          "field": "creator",
+          "name": "Herman Melville",
+          "roles": [
+            "aut"
+          ],
+          "legacy_role": null
+        }
+      ],
+      "artifact_hash_checked": true
+    },
+    {
+      "book_id": "pg2600-full",
+      "artifact_sha256": "c856e9e16693084763aa3fd68f1b1b6dbc41123db6c1e5bb48af78302f2f921e",
+      "opf_path": "OEBPS/content.opf",
+      "people": [
+        {
+          "field": "creator",
+          "name": "graf Leo Tolstoy",
+          "roles": [
+            "aut"
+          ],
+          "legacy_role": null
+        },
+        {
+          "field": "contributor",
+          "name": "Aylmer Maude",
+          "roles": [
+            "trl"
+          ],
+          "legacy_role": null
+        },
+        {
+          "field": "contributor",
+          "name": "Louise Maude",
+          "roles": [
+            "trl"
+          ],
+          "legacy_role": null
+        }
+      ],
+      "artifact_hash_checked": true
+    },
+    {
+      "book_id": "pg1232-full",
+      "artifact_sha256": "0260d6165a1558ee2e94eb37d7f1ff0cf4e30b41e094d6ff1afb094950b1be88",
+      "opf_path": "OEBPS/content.opf",
+      "people": [
+        {
+          "field": "creator",
+          "name": "Niccolò Machiavelli",
+          "roles": [
+            "aut"
+          ],
+          "legacy_role": null
+        },
+        {
+          "field": "contributor",
+          "name": "W. K. Marriott",
+          "roles": [
+            "trl"
+          ],
+          "legacy_role": null
+        }
+      ],
+      "artifact_hash_checked": true
+    },
+    {
+      "book_id": "pg1497-full",
+      "artifact_sha256": "8c8bf2ed9bff65aaf226bf5db3879eb378a26e72489bd28666abc01c02f2a0c2",
+      "opf_path": "OEBPS/content.opf",
+      "people": [
+        {
+          "field": "creator",
+          "name": "Plato",
+          "roles": [
+            "aut"
+          ],
+          "legacy_role": null
+        },
+        {
+          "field": "contributor",
+          "name": "Benjamin Jowett",
+          "roles": [
+            "trl"
+          ],
+          "legacy_role": null
+        }
+      ],
+      "artifact_hash_checked": true
+    },
+    {
+      "book_id": "pg3207-full",
+      "artifact_sha256": "a6ccaf6bea85d46d118a5e05b0b741746027b42ec1d8c703286cecde920fa219",
+      "opf_path": "OEBPS/content.opf",
+      "people": [
+        {
+          "field": "creator",
+          "name": "Thomas Hobbes",
+          "roles": [
+            "aut"
+          ],
+          "legacy_role": null
+        }
+      ],
+      "artifact_hash_checked": true
+    },
+    {
+      "book_id": "pg4363-full",
+      "artifact_sha256": "5be9a122841a88130130999da60ce5949f277ce603c9977081cc91a56ea53290",
+      "opf_path": "OEBPS/content.opf",
+      "people": [
+        {
+          "field": "creator",
+          "name": "Friedrich Wilhelm Nietzsche",
+          "roles": [
+            "aut"
+          ],
+          "legacy_role": null
+        },
+        {
+          "field": "contributor",
+          "name": "Helen Zimmern",
+          "roles": [
+            "trl"
+          ],
+          "legacy_role": null
+        }
+      ],
+      "artifact_hash_checked": true
+    },
+    {
+      "book_id": "pg5001-full",
+      "artifact_sha256": "d72163123dab44b5c2d90fd17ac251b4b76de71ae3ebb04b3f3b5caa1334577f",
+      "opf_path": "OEBPS/content.opf",
+      "people": [
+        {
+          "field": "creator",
+          "name": "Albert Einstein",
+          "roles": [
+            "aut"
+          ],
+          "legacy_role": null
+        },
+        {
+          "field": "contributor",
+          "name": "Robert W. Lawson",
+          "roles": [
+            "trl"
+          ],
+          "legacy_role": null
+        }
+      ],
+      "artifact_hash_checked": true
+    },
+    {
+      "book_id": "pg61-full",
+      "artifact_sha256": "eb9d882661805128f3f476818a9eee328b77778b0d5ef7415fe08fcd76ecd763",
+      "opf_path": "OEBPS/content.opf",
+      "people": [
+        {
+          "field": "creator",
+          "name": "Karl Marx",
+          "roles": [
+            "aut"
+          ],
+          "legacy_role": null
+        },
+        {
+          "field": "creator",
+          "name": "Friedrich Engels",
+          "roles": [
+            "aut"
+          ],
+          "legacy_role": null
+        }
+      ],
+      "artifact_hash_checked": true
+    },
+    {
+      "book_id": "pg35-full",
+      "artifact_sha256": "f52cfd0c629d87db3ef91ced77ef5fd7e8fc8f3a997c73aede05e67091d14eec",
+      "opf_path": "OEBPS/content.opf",
+      "people": [
+        {
+          "field": "creator",
+          "name": "H. G. Wells",
+          "roles": [
+            "aut"
+          ],
+          "legacy_role": null
+        }
+      ],
+      "artifact_hash_checked": true
+    }
+  ],
+  "inventory": [
+    {
+      "book_id": "pg11-full",
+      "title": "Alice's Adventures in Wonderland",
+      "source_url": "https://www.gutenberg.org/ebooks/11",
+      "artifact_sha256": "4f81245d31380ac1d6eafb9a321e3691369bc70985736ae4bccf849a4f784036",
+      "sections_total": 13,
+      "targeted_sections_inspected": [
+        {
+          "ordinal": 0,
+          "title": "Alice’s Adventures in Wonderland",
+          "characters": 537
+        },
+        {
+          "ordinal": 1,
+          "title": "CHAPTER I. Down the Rabbit-Hole",
+          "characters": 11310
+        },
+        {
+          "ordinal": 12,
+          "title": "CHAPTER XII. Alice’s Evidence",
+          "characters": 11533
+        }
+      ]
+    },
+    {
+      "book_id": "pg1342-full",
+      "title": "Pride and Prejudice",
+      "source_url": "https://www.gutenberg.org/ebooks/1342",
+      "artifact_sha256": "fd519471687295a8b2492d9e413bc24bee21ade9808d8af29899a16e8599064e",
+      "sections_total": 69,
+      "targeted_sections_inspected": [
+        {
+          "ordinal": 0,
+          "title": "PRIDE. and PREJUDICE",
+          "characters": 439
+        },
+        {
+          "ordinal": 1,
+          "title": "PRIDE. and PREJUDICE",
+          "characters": 25106
+        },
+        {
+          "ordinal": 8,
+          "title": "A note for Miss Bennet. CHAPTER VII.",
+          "characters": 11202
+        },
+        {
+          "ordinal": 68,
+          "title": "THE FULL PROJECT GUTENBERG™ LICENSE",
+          "characters": 4
+        }
+      ]
+    },
+    {
+      "book_id": "pg1228-full",
+      "title": "On the Origin of Species By Means of Natural Selection Or, the Preservation of Favoured Races in the Struggle for Life",
+      "source_url": "https://www.gutenberg.org/ebooks/1228",
+      "artifact_sha256": "49bb913c0d267c786846805ce8b90a2e92bc4b2ee7cc0ab9492821bd85c6819b",
+      "sections_total": 19,
+      "targeted_sections_inspected": [
+        {
+          "ordinal": 0,
+          "title": "On the Origin of Species",
+          "characters": 233
+        },
+        {
+          "ordinal": 1,
+          "title": "On the Origin of Species",
+          "characters": 685
+        },
+        {
+          "ordinal": 3,
+          "title": "INTRODUCTION.",
+          "characters": 10184
+        },
+        {
+          "ordinal": 18,
+          "title": "INDEX.",
+          "characters": 29975
+        }
+      ]
+    },
+    {
+      "book_id": "pg2680-full",
+      "title": "Meditations",
+      "source_url": "https://www.gutenberg.org/ebooks/2680",
+      "artifact_sha256": "62c71326bea242893ce8c3ce54bdf5fad3989a827a1462ec03f7dadf8bf5bc89",
+      "sections_total": 19,
+      "targeted_sections_inspected": [
+        {
+          "ordinal": 0,
+          "title": "BOOKS",
+          "characters": 241
+        },
+        {
+          "ordinal": 1,
+          "title": "INTRODUCTION",
+          "characters": 29775
+        },
+        {
+          "ordinal": 15,
+          "title": "APPENDIX",
+          "characters": 34533
+        },
+        {
+          "ordinal": 16,
+          "title": "NOTES",
+          "characters": 7138
+        },
+        {
+          "ordinal": 17,
+          "title": "GLOSSARY",
+          "characters": 10380
+        },
+        {
+          "ordinal": 18,
+          "title": "Paragraphs with First Lines",
+          "characters": 29756
+        }
+      ]
+    },
+    {
+      "book_id": "pg4650-full",
+      "title": "Candide, ou l'optimisme",
+      "source_url": "https://www.gutenberg.org/ebooks/4650",
+      "artifact_sha256": "52f706dea0bad8e08913b254333901f3f6dfb1b472a90a8802b97b9604986d59",
+      "sections_total": 37,
+      "targeted_sections_inspected": [
+        {
+          "ordinal": 0,
+          "title": "DE L’ IMPRIMERIE DE A. FIRMIN DIDOT,",
+          "characters": 17
+        },
+        {
+          "ordinal": 1,
+          "title": "CHEZ LEFÈVRE, LIBRAIRE,",
+          "characters": 70
+        },
+        {
+          "ordinal": 36,
+          "title": "CHAPITRE XXX. Conclusion.",
+          "characters": 9247
+        }
+      ]
+    },
+    {
+      "book_id": "pg22367-full",
+      "title": "Die Verwandlung",
+      "source_url": "https://www.gutenberg.org/ebooks/22367",
+      "artifact_sha256": "9fc9a802421caf591d674ffafa6d17eaf08b2e3d54849c081c9276a5174ee60e",
+      "sections_total": 4,
+      "targeted_sections_inspected": [
+        {
+          "ordinal": 0,
+          "title": "DIE VERWANDLUNG",
+          "characters": 170
+        },
+        {
+          "ordinal": 1,
+          "title": "I.",
+          "characters": 38701
+        },
+        {
+          "ordinal": 3,
+          "title": "III.",
+          "characters": 40506
+        }
+      ]
+    },
+    {
+      "book_id": "pg5316-full",
+      "title": "Красавице, которая нюхала табак",
+      "source_url": "https://www.gutenberg.org/ebooks/5316",
+      "artifact_sha256": "b6c36094b7fc62254974a265e05aa0b17c3a4b8cc68b4c50462cf8eb0eb1e482",
+      "sections_total": 1,
+      "targeted_sections_inspected": [
+        {
+          "ordinal": 0,
+          "title": "Красавице, которая нюхала",
+          "characters": 1509
+        }
+      ]
+    },
+    {
+      "book_id": "pg3300-full",
+      "title": "An Inquiry into the Nature and Causes of the Wealth of Nations",
+      "source_url": "https://www.gutenberg.org/ebooks/3300",
+      "artifact_sha256": "52c8c5b9cc2b18d1edc87a326b76f0d8aee568932995d407083b394aaa9165ab",
+      "sections_total": 55,
+      "targeted_sections_inspected": [
+        {
+          "ordinal": 0,
+          "title": "An Inquiry into the Nature and Causes of the Wealth of Nations",
+          "characters": 2839
+        },
+        {
+          "ordinal": 1,
+          "title": "INTRODUCTION AND PLAN OF THE WORK.",
+          "characters": 6273
+        },
+        {
+          "ordinal": 21,
+          "title": "INTRODUCTION.",
+          "characters": 4952
+        },
+        {
+          "ordinal": 44,
+          "title": "APPENDIX TO BOOK IV",
+          "characters": 1020
+        },
+        {
+          "ordinal": 53,
+          "title": "APPENDIX TO ARTICLES I. AND II.—Taxes upon the Capital Value of Lands, Houses, and Stock.",
+          "characters": 123649
+        },
+        {
+          "ordinal": 54,
+          "title": "CHAPTER III. OF PUBLIC DEBTS.",
+          "characters": 106555
+        }
+      ]
+    },
+    {
+      "book_id": "pg2009-full",
+      "title": "The Origin of Species by Means of Natural Selection Or, the Preservation of Favoured Races in the Struggle for Life, 6th Edition",
+      "source_url": "https://www.gutenberg.org/ebooks/2009",
+      "artifact_sha256": "734ab06f61101728b42982d6032a440eb79c051f02d4a8456bbe34ea6cb293d0",
+      "sections_total": 25,
+      "targeted_sections_inspected": [
+        {
+          "ordinal": 0,
+          "title": "On the Origin of Species",
+          "characters": 233
+        },
+        {
+          "ordinal": 1,
+          "title": "On the Origin of Species",
+          "characters": 968
+        },
+        {
+          "ordinal": 5,
+          "title": "INTRODUCTION.",
+          "characters": 9767
+        },
+        {
+          "ordinal": 21,
+          "title": "GLOSSARY OF THE PRINCIPAL SCIENTIFIC TERMS USED IN THE PRESENT VOLUME.*",
+          "characters": 31136
+        },
+        {
+          "ordinal": 24,
+          "title": "THE FULL PROJECT GUTENBERG™ LICENSE",
+          "characters": 4
+        }
+      ]
+    },
+    {
+      "book_id": "pg1661-full",
+      "title": "The Adventures of Sherlock Holmes",
+      "source_url": "https://www.gutenberg.org/ebooks/1661",
+      "artifact_sha256": "310ddf29f2b98b870b0e970061d236c9ce7c65163e0e172c254a1db3d070d3f4",
+      "sections_total": 15,
+      "targeted_sections_inspected": [
+        {
+          "ordinal": 0,
+          "title": "The Adventures of Sherlock Holmes",
+          "characters": 581
+        },
+        {
+          "ordinal": 1,
+          "title": "I.",
+          "characters": 19101
+        },
+        {
+          "ordinal": 14,
+          "title": "XII. THE ADVENTURE OF THE COPPER BEECHES",
+          "characters": 52971
+        }
+      ]
+    },
+    {
+      "book_id": "pg84-full",
+      "title": "Frankenstein; or, The modern Prometheus",
+      "source_url": "https://www.gutenberg.org/ebooks/84",
+      "artifact_sha256": "0bfcc8cacdc72e132272844ed465c6198f1049a8d2b9e3f16806d02beee452e3",
+      "sections_total": 30,
+      "targeted_sections_inspected": [
+        {
+          "ordinal": 0,
+          "title": "Frankenstein;",
+          "characters": 81
+        },
+        {
+          "ordinal": 1,
+          "title": "CONTENTS",
+          "characters": 327
+        },
+        {
+          "ordinal": 29,
+          "title": "Chapter 24",
+          "characters": 45619
+        }
+      ]
+    },
+    {
+      "book_id": "pg2701-full",
+      "title": "Moby Dick; Or, The Whale",
+      "source_url": "https://www.gutenberg.org/ebooks/2701",
+      "artifact_sha256": "e247676589c02a65bc80ff7bf7aaaf146d7c69eadfcfb96633c5f606a08602db",
+      "sections_total": 140,
+      "targeted_sections_inspected": [
+        {
+          "ordinal": 0,
+          "title": "By Herman Melville",
+          "characters": 4770
+        },
+        {
+          "ordinal": 1,
+          "title": "(Supplied by a Late Consumptive Usher to a Grammar School.)",
+          "characters": 868
+        },
+        {
+          "ordinal": 2,
+          "title": "EXTRACTS. (Supplied by a Sub-Sub-Librarian).",
+          "characters": 1721
+        },
+        {
+          "ordinal": 3,
+          "title": "EXTRACTS.",
+          "characters": 18577
+        },
+        {
+          "ordinal": 139,
+          "title": "“AND I ONLY AM ESCAPED ALONE TO TELL THEE” Job.",
+          "characters": 1448
+        }
+      ]
+    },
+    {
+      "book_id": "pg2600-full",
+      "title": "War and Peace",
+      "source_url": "https://www.gutenberg.org/ebooks/2600",
+      "artifact_sha256": "c856e9e16693084763aa3fd68f1b1b6dbc41123db6c1e5bb48af78302f2f921e",
+      "sections_total": 366,
+      "targeted_sections_inspected": [
+        {
+          "ordinal": 0,
+          "title": "WAR AND PEACE",
+          "characters": 5058
+        },
+        {
+          "ordinal": 1,
+          "title": "CHAPTER I",
+          "characters": 11439
+        },
+        {
+          "ordinal": 365,
+          "title": "CHAPTER XII",
+          "characters": 4875
+        }
+      ]
+    },
+    {
+      "book_id": "pg1232-full",
+      "title": "The Prince",
+      "source_url": "https://www.gutenberg.org/ebooks/1232",
+      "artifact_sha256": "0260d6165a1558ee2e94eb37d7f1ff0cf4e30b41e094d6ff1afb094950b1be88",
+      "sections_total": 37,
+      "targeted_sections_inspected": [
+        {
+          "ordinal": 0,
+          "title": "The Prince",
+          "characters": 2422
+        },
+        {
+          "ordinal": 1,
+          "title": "The Prince",
+          "characters": 277
+        },
+        {
+          "ordinal": 2,
+          "title": "INTRODUCTION",
+          "characters": 1120
+        },
+        {
+          "ordinal": 7,
+          "title": "DEDICATION",
+          "characters": 2520
+        },
+        {
+          "ordinal": 36,
+          "title": "CASTRUCCIO CASTRACANI 1284-1328",
+          "characters": 58555
+        }
+      ]
+    },
+    {
+      "book_id": "pg1497-full",
+      "title": "The Republic",
+      "source_url": "https://www.gutenberg.org/ebooks/1497",
+      "artifact_sha256": "8c8bf2ed9bff65aaf226bf5db3879eb378a26e72489bd28666abc01c02f2a0c2",
+      "sections_total": 15,
+      "targeted_sections_inspected": [
+        {
+          "ordinal": 0,
+          "title": "Translated by Benjamin Jowett",
+          "characters": 58
+        },
+        {
+          "ordinal": 1,
+          "title": "INTRODUCTION AND ANALYSIS.",
+          "characters": 230316
+        },
+        {
+          "ordinal": 2,
+          "title": "INTRODUCTION AND ANALYSIS.",
+          "characters": 230915
+        },
+        {
+          "ordinal": 3,
+          "title": "INTRODUCTION AND ANALYSIS.",
+          "characters": 90898
+        },
+        {
+          "ordinal": 14,
+          "title": "BOOK X.",
+          "characters": 62917
+        }
+      ]
+    },
+    {
+      "book_id": "pg3207-full",
+      "title": "Leviathan",
+      "source_url": "https://www.gutenberg.org/ebooks/3207",
+      "artifact_sha256": "a6ccaf6bea85d46d118a5e05b0b741746027b42ec1d8c703286cecde920fa219",
+      "sections_total": 689,
+      "targeted_sections_inspected": [
+        {
+          "ordinal": 0,
+          "title": "Thomas Hobbes of Malmesbury Printed for Andrew Crooke, at the Green Dragon in St. Paul’s Churchyard, 1651.",
+          "characters": 2944
+        },
+        {
+          "ordinal": 1,
+          "title": "LEVIATHAN",
+          "characters": 2338
+        },
+        {
+          "ordinal": 3,
+          "title": "THE INTRODUCTION",
+          "characters": 4708
+        },
+        {
+          "ordinal": 688,
+          "title": "A REVIEW, AND CONCLUSION",
+          "characters": 22220
+        }
+      ]
+    },
+    {
+      "book_id": "pg4363-full",
+      "title": "Beyond Good and Evil",
+      "source_url": "https://www.gutenberg.org/ebooks/4363",
+      "artifact_sha256": "5be9a122841a88130130999da60ce5949f277ce603c9977081cc91a56ea53290",
+      "sections_total": 13,
+      "targeted_sections_inspected": [
+        {
+          "ordinal": 0,
+          "title": "Translated by Helen Zimmern",
+          "characters": 740
+        },
+        {
+          "ordinal": 1,
+          "title": "Contents",
+          "characters": 25
+        },
+        {
+          "ordinal": 2,
+          "title": "PREFACE",
+          "characters": 4193
+        },
+        {
+          "ordinal": 12,
+          "title": "Translated by L. A. Magnus",
+          "characters": 4115
+        }
+      ]
+    },
+    {
+      "book_id": "pg5001-full",
+      "title": "Relativity : the Special and General Theory",
+      "source_url": "https://www.gutenberg.org/ebooks/5001",
+      "artifact_sha256": "d72163123dab44b5c2d90fd17ac251b4b76de71ae3ebb04b3f3b5caa1334577f",
+      "sections_total": 41,
+      "targeted_sections_inspected": [
+        {
+          "ordinal": 0,
+          "title": "Relativity\n\nThe Special and General Theory A Popular Exposition",
+          "characters": 16
+        },
+        {
+          "ordinal": 1,
+          "title": "Preface",
+          "characters": 1524
+        },
+        {
+          "ordinal": 34,
+          "title": "APPENDIX I Simple Derivation of the Lorentz Transformation [Supplementary to Section XI ]",
+          "characters": 5672
+        },
+        {
+          "ordinal": 35,
+          "title": "APPENDIX II Minkowski’s Four-Dimensional Space (“World”) [Supplementary to Section XVII ]",
+          "characters": 1564
+        },
+        {
+          "ordinal": 36,
+          "title": "APPENDIX III The Experimental Confirmation of the General Theory of Relativity",
+          "characters": 2645
+        },
+        {
+          "ordinal": 40,
+          "title": "APPENDIX IV The Structure of Space According to the General Theory of Relativity [Supplementary to Section XXXII ]",
+          "characters": 3553
+        }
+      ]
+    },
+    {
+      "book_id": "pg61-full",
+      "title": "The Communist Manifesto",
+      "source_url": "https://www.gutenberg.org/ebooks/61",
+      "artifact_sha256": "eb9d882661805128f3f476818a9eee328b77778b0d5ef7415fe08fcd76ecd763",
+      "sections_total": 8,
+      "targeted_sections_inspected": [
+        {
+          "ordinal": 0,
+          "title": "by Karl Marx and Friedrich Engels",
+          "characters": 62
+        },
+        {
+          "ordinal": 1,
+          "title": "The Communist Manifesto",
+          "characters": 1050
+        },
+        {
+          "ordinal": 7,
+          "title": "IV. POSITION OF THE COMMUNISTS IN RELATION TO THE VARIOUS EXISTING OPPOSITION PARTIES",
+          "characters": 2966
+        }
+      ]
+    },
+    {
+      "book_id": "pg35-full",
+      "title": "The Time Machine",
+      "source_url": "https://www.gutenberg.org/ebooks/35",
+      "artifact_sha256": "f52cfd0c629d87db3ef91ced77ef5fd7e8fc8f3a997c73aede05e67091d14eec",
+      "sections_total": 18,
+      "targeted_sections_inspected": [
+        {
+          "ordinal": 0,
+          "title": "The Time Machine",
+          "characters": 454
+        },
+        {
+          "ordinal": 1,
+          "title": "I. Introduction",
+          "characters": 9783
+        },
+        {
+          "ordinal": 17,
+          "title": "Epilogue",
+          "characters": 1528
+        }
+      ]
+    }
+  ],
+  "counts": {
+    "books": 20,
+    "targeted_sections_inspected": 79,
+    "eligible_new_rules": 13,
+    "eligible_target_sections": 13,
+    "eligible_target_passages": 65,
+    "blocked_findings": 7,
+    "existing_jowett_control_sections": 3
+  },
+  "application_constraints": [
+    "Apply only to future live imports after paired benchmark work; never mutate curated20-v3 or frozen evaluation files.",
+    "Require matching bookID and source artifactSHA256, then revalidate the complete set of title matches.",
+    "Do not copy blocked candidate rules or use generic global Preface/Introduction/Notes patterns.",
+    "Unidentified editorial contributor is an uncertainty label, not a verified personal identity.",
+    "A section contributor label does not identify every nested quotation speaker; preserve local source credits."
+  ],
+  "source_database_file_sha256": "ea1feab7c1d1c58acd7457529ef70885f2767ceeab6050ec12db0fa4f74bb4b8",
+  "audited_implementation_sha256": {
+    "attribution.py": "c07e7ba29c0dbd79555e8b8d91b17cb0058b7fad5fb1ddf733d96858ecce9d44",
+    "library.py": "79bb6a0a1830a4af62c7f6f482d12c1cfa08caea9a8b93589081489718a35f01",
+    "parsers.py": "0abdaebe406853c8437dcd4dbfdb576c4e4a660fbcc2e5e74f38c087eb14c18d"
+  },
+  "frozen_benchmark_files_unchanged": {
+    "evals/dev-expanded.json": "8955a6cf471318fa70d24f518c3a08f410865f9a9f4a751f47d29de3a94deb44",
+    "experiments/dev-expanded-audit.json": "46cf097ca66cdc09c36ac517c01b741cf2327281796b332a375ee974f135f253"
+  }
+}

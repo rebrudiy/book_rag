@@ -74,3 +74,70 @@ snapshot; ingestion during the build produces a visible limitation and prevents
 caching. Saved annotations do not invalidate the map. A local measurement on
 220 indexed editions took 8,581.63 ms initially and 6.87 ms with a matching cache
 entry; timings exclude HTTP serialization and vary with the corpus and machine.
+
+An optional **С переоценкой · медленнее** mode is available in the search's
+additional-mode selector. It requests `mode=reranked`: a local multilingual
+cross-encoder reorders a bounded set of retrieval candidates. The default stays
+hybrid. Missing model dependencies, weights or inference support leave the
+backend's labeled retrieval fallback and warning visible. Model scores are not
+probabilities, and reranking does not rewrite quotations or attribution.
+
+For a reproducible check of **real source attribution**, import the curated
+20-edition manifest (review [source rights](SOURCES.md) first) and run a separate
+full-corpus server:
+
+```sh
+BOOKRAG_DATA_DIR=./data/full uv run bookrag ingest corpus/manifest.json
+BOOKRAG_DATA_DIR=./data/full uv run bookrag serve --port 8001
+# In a second terminal:
+uv run python tests/browser_attribution.py --base-url http://127.0.0.1:8001
+```
+
+The script searches `Republic of Plato longest` within `pg1497-full`. It checks
+Benjamin Jowett's explicitly attributed editorial introduction, confirms that the
+citation retains Jowett and Plato, independently checks canonical source offsets,
+and follows the hit into the reader to verify the exact highlighted quotation
+and contributor label. It uses real API data without mocks or corpus mutation.
+Two viewport screenshots are written to `artifacts/attribution/` to avoid an
+unbounded full-page capture of the complete introduction.
+
+## Large catalogs and partial editions
+
+The landing page requests only six indexed metadata records. It does not preload
+the catalog. The library requests pages of 48 editions from `/api/books`, with
+server-side Unicode title/author search, language and pipeline-status filters.
+Previous/next controls and matching totals describe the actual filtered page.
+The default status is indexed; selecting all statuses or a pipeline stage exposes
+discovered/downloaded/failed editions without treating them as searchable.
+
+The search scope includes a native, keyboard-accessible select and a title/author
+search input. Metadata queries are debounced by 250 ms and request at most 50
+indexed matches. The selected edition remains visible and pinned even when a
+new query returns a different set of matches; an explicit scope notice and reset
+button prevent an invisible restriction. Language choices come from corpus stats,
+not the first catalog page. Map-to-book searches also pin their chosen metadata
+without fetching the full text until the reader is opened.
+
+Research-book selection has its own bounded title/author lookup. It describes
+the number of displayed matches, retains selected editions separately from the
+current lookup results, and permits up to ten books per research request. It
+does not present the first metadata page as the complete library.
+
+Cards and readers honor explicit `coverage` metadata: `selected_chapters` is
+labeled **Выбранные главы**, while `excerpt` is labeled as a partial excerpt.
+For example, the selected D2L chapters form one partially covered work; the UI
+does not imply that the complete book is available.
+
+The regular browser smoke script includes a deterministic 205-record mock
+catalog to check pagination, status filters, Unicode lookup, retained scope,
+research selection and partial-text labels. It does not insert these fixtures
+into the real library. To additionally reach a real indexed title beyond the
+first catalog page, run:
+
+```sh
+uv run python tests/browser_smoke.py --semantic \
+  --full-catalog-base-url http://127.0.0.1:8001
+```
+
+The full-catalog check needs more than 48 indexed editions. It follows an actual
+metadata result into the reader and locates it through the scope typeahead.

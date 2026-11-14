@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import re
 import sqlite3
 import time
@@ -231,7 +232,9 @@ class Library:
                         (book_id, ordinal, section.title, section.text),
                     )
                     section_id = cursor.lastrowid
-                    attribution = section_attribution(section.title, metadata | {"author": author})
+                    attribution = section_attribution(
+                        section.title, metadata | {"author": author, "_artifact_sha256": artifact_hash}
+                    )
                     conn.execute(
                         "INSERT INTO section_roles(section_id,section_author,section_role,attribution_basis) "
                         "VALUES (?,?,?,?)",
@@ -325,17 +328,45 @@ class Library:
             }
 
     def books(self, language: str | None = None, q: str = "") -> list[dict[str, Any]]:
+        """Return complete metadata for local evaluation/export workflows."""
+        return self.book_page(language=language, q=q, limit=None)["books"]
+
+    def book_page(
+        self,
+        language: str | None = None,
+        q: str = "",
+        status: str | None = None,
+        offset: int = 0,
+        limit: int | None = 100,
+    ) -> dict[str, Any]:
+        """Fetch a bounded catalog page and consistent total without loading all books."""
+        if offset < 0 or (limit is not None and not 1 <= limit <= 500):
+            raise ValueError("Invalid catalog pagination")
+        where = (
+            "WHERE (? IS NULL OR b.language=?) AND (?='' OR instr(casefold(b.title),casefold(?))>0 "
+            "OR instr(casefold(b.author),casefold(?))>0) AND (? IS NULL OR b.status=?)"
+        )
+        params = (language, language, q, q, q, status, status)
         with self.connect() as conn:
-            return [
-                dict(row)
-                for row in conn.execute(
-                    "SELECT b.*, (SELECT COUNT(*) FROM sections s WHERE s.book_id=b.id) sections,"
-                    "(SELECT COUNT(*) FROM passages p WHERE p.book_id=b.id) passages FROM books b "
-                    "WHERE (? IS NULL OR language=?) AND (?='' OR instr(casefold(title),casefold(?))>0 "
-                    "OR instr(casefold(author),casefold(?))>0) ORDER BY title",
-                    (language, language, q, q, q),
-                )
-            ]
+            conn.execute("BEGIN")
+            total = conn.execute("SELECT COUNT(*) FROM books b " + where, params).fetchone()[0]
+            rows = conn.execute(
+                "SELECT b.*, (SELECT COUNT(*) FROM sections s WHERE s.book_id=b.id) sections,"
+                "(SELECT COUNT(*) FROM passages p WHERE p.book_id=b.id) passages,"
+                "json_extract(m.metadata,'$.coverage') coverage,json_extract(m.metadata,'$.work_type') work_type,"
+                "json_extract(m.metadata,'$.work_identity_status') work_identity_status "
+                "FROM books b LEFT JOIN book_metadata m ON m.book_id=b.id "
+                + where
+                + " ORDER BY b.title,b.id LIMIT ? OFFSET ?",
+                (*params, limit if limit is not None else -1, offset),
+            ).fetchall()
+        return {
+            "books": [dict(row) for row in rows],
+            "total": total,
+            "offset": offset,
+            "limit": limit,
+            "has_more": offset + len(rows) < total,
+        }
 
     def get_book(self, book_id: str) -> dict[str, Any] | None:
         with self.connect() as conn:
@@ -379,6 +410,32 @@ class Library:
         r["reader_url"] = "/?" + urlencode({"book": r["book_id"], "section": r["section_id"], "passage": r["id"]})
         return r
 
+    def passages(self, passage_ids: list[int]) -> list[dict[str, Any]]:
+        """Read a bounded candidate batch in input order, verifying exact source slices.
+
+        Missing or nonsearchable passages are omitted. Corrupt evidence carries
+        verified=False so retrieval callers can suppress it and report a warning.
+        """
+        if len(passage_ids) > 500 or any(type(identity) is not int or identity < 1 for identity in passage_ids):
+            raise ValueError("Expected at most 500 positive integer passage IDs")
+        if not passage_ids:
+            return []
+        unique = list(dict.fromkeys(passage_ids))
+        placeholders = ",".join("?" for _ in unique)
+        with self.connect() as conn:
+            rows = conn.execute(
+                "SELECT p.*,b.title,b.author,b.language,b.edition,b.work_id,b.source_url,b.rights,"
+                "b.rights_url,b.artifact_sha256,b.content_sha256,s.title section_title,"
+                "substr(s.text,p.start+1,p.end-p.start) section_quote,"
+                "a.section_author,a.section_role,a.attribution_basis,0.0 score "
+                "FROM passages p JOIN books b ON b.id=p.book_id JOIN sections s ON s.id=p.section_id "
+                "LEFT JOIN section_roles a ON a.section_id=s.id "
+                f"WHERE b.status='indexed' AND p.id IN ({placeholders})",
+                unique,
+            ).fetchall()
+        found = {row["id"]: self._result(row) for row in rows}
+        return [dict(found[identity]) for identity in passage_ids if identity in found]
+
     def passage(self, passage_id: int) -> dict[str, Any] | None:
         with self.connect() as conn:
             row = conn.execute(
@@ -412,7 +469,12 @@ class Library:
             from book_rag.reranking import rerank
 
             candidates = self.search(query, "hybrid", book_id, language, 50)
-            ranked = rerank(query, candidates["results"], self.data_dir / "models", limit=limit)
+            ranked = rerank(
+                query,
+                candidates["results"],
+                Path(os.getenv("BOOKRAG_MODEL_CACHE", str(self.data_dir / "models"))).expanduser(),
+                limit=limit,
+            )
             if ranked["available"]:
                 return {
                     "query": query,

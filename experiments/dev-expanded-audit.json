@@ -1,0 +1,1693 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-11-14T11:59:28.651164+00:00",
+  "source_database": "data/snapshots/curated20-v3/library.sqlite3",
+  "read_only": true,
+  "manifest_sha256": "a0916d1a489e9e99f54aca90f2f98348a46b03e5a8ffbfae42fea363ced82c4a",
+  "source_snapshot_sha256": "efe0ac3153dfd9d685535013ef32a6b787b1d3041d6ed6a526acf24198ffbeb6",
+  "required_book_ids": [
+    "pg11-full",
+    "pg1228-full",
+    "pg1232-full",
+    "pg1342-full",
+    "pg1497-full",
+    "pg1661-full",
+    "pg2009-full",
+    "pg22367-full",
+    "pg2600-full",
+    "pg2680-full",
+    "pg2701-full",
+    "pg3207-full",
+    "pg3300-full",
+    "pg35-full",
+    "pg4363-full",
+    "pg4650-full",
+    "pg5001-full",
+    "pg5316-full",
+    "pg61-full",
+    "pg84-full"
+  ],
+  "indexed_editions": 20,
+  "unique_works": 19,
+  "source_snapshot": [
+    {
+      "id": "pg11-full",
+      "work_id": "pg11-alice",
+      "title": "Alice's Adventures in Wonderland",
+      "author": "Carroll, Lewis, 1832-1898",
+      "language": "en",
+      "edition": "Project Gutenberg #11, full electronic edition; updated Jun 26, 2025",
+      "source_url": "https://www.gutenberg.org/ebooks/11",
+      "rights": "Public domain in the USA. Project Gutenberg trademark license applies; check local law outside the USA.",
+      "rights_url": "https://www.gutenberg.org/policy/license.html",
+      "status": "indexed",
+      "artifact_sha256": "4f81245d31380ac1d6eafb9a321e3691369bc70985736ae4bccf849a4f784036",
+      "content_sha256": "696306f122e0307f124a07b63bde1ff3b3eb31f992b777368555d8eb4425b291"
+    },
+    {
+      "id": "pg1228-full",
+      "work_id": "pg1228-origin",
+      "title": "On the Origin of Species By Means of Natural Selection Or, the Preservation of Favoured Races in the Struggle for Life",
+      "author": "Darwin, Charles, 1809-1882",
+      "language": "en",
+      "edition": "Project Gutenberg #1228, full electronic edition; updated Oct 6, 2026; 1859 first edition",
+      "source_url": "https://www.gutenberg.org/ebooks/1228",
+      "rights": "Public domain in the USA. Project Gutenberg trademark license applies; check local law outside the USA.",
+      "rights_url": "https://www.gutenberg.org/policy/license.html",
+      "status": "indexed",
+      "artifact_sha256": "49bb913c0d267c786846805ce8b90a2e92bc4b2ee7cc0ab9492821bd85c6819b",
+      "content_sha256": "8868ecc91f9c788d49c1e0d8c26381848f20eb2825fbb8a12116280b7e5664ee"
+    },
+    {
+      "id": "pg1232-full",
+      "work_id": "pg1232",
+      "title": "The Prince",
+      "author": "Machiavelli, Niccolò, 1469-1527",
+      "language": "en",
+      "edition": "Project Gutenberg #1232, full electronic edition; updated Jul 24, 2026; translator Marriott, W. K. (William Kenaz), -1927",
+      "source_url": "https://www.gutenberg.org/ebooks/1232",
+      "rights": "Public domain in the USA. Project Gutenberg trademark license applies; check local law outside the USA.",
+      "rights_url": "https://www.gutenberg.org/policy/license.html",
+      "status": "indexed",
+      "artifact_sha256": "0260d6165a1558ee2e94eb37d7f1ff0cf4e30b41e094d6ff1afb094950b1be88",
+      "content_sha256": "ca2db4a1725a0c9f60f19cf50792f870219df76ae0b5021f5d70afeaf66c3dc0"
+    },
+    {
+      "id": "pg1342-full",
+      "work_id": "pg1342-pride",
+      "title": "Pride and Prejudice",
+      "author": "Austen, Jane, 1775-1817",
+      "language": "en",
+      "edition": "Project Gutenberg #1342, full electronic edition; updated Sep 29, 2026",
+      "source_url": "https://www.gutenberg.org/ebooks/1342",
+      "rights": "Public domain in the USA. Project Gutenberg trademark license applies; check local law outside the USA.",
+      "rights_url": "https://www.gutenberg.org/policy/license.html",
+      "status": "indexed",
+      "artifact_sha256": "fd519471687295a8b2492d9e413bc24bee21ade9808d8af29899a16e8599064e",
+      "content_sha256": "116e94fd0ba2f26de1d5d2914ecf5831d530354dce327e3e82eb1d55fbbd6f31"
+    },
+    {
+      "id": "pg1497-full",
+      "work_id": "pg1497",
+      "title": "The Republic",
+      "author": "Plato, 428? BCE-348? BCE",
+      "language": "en",
+      "edition": "Project Gutenberg #1497, full electronic edition; updated Oct 3, 2026; translator Jowett, Benjamin, 1817-1893",
+      "source_url": "https://www.gutenberg.org/ebooks/1497",
+      "rights": "Public domain in the USA. Project Gutenberg trademark license applies; check local law outside the USA.",
+      "rights_url": "https://www.gutenberg.org/policy/license.html",
+      "status": "indexed",
+      "artifact_sha256": "8c8bf2ed9bff65aaf226bf5db3879eb378a26e72489bd28666abc01c02f2a0c2",
+      "content_sha256": "7811a9e6a6c9901a264f440112eac27d23eba24142b571b441308bec3d69b9f6"
+    },
+    {
+      "id": "pg1661-full",
+      "work_id": "pg1661",
+      "title": "The Adventures of Sherlock Holmes",
+      "author": "Doyle, Arthur Conan, 1859-1930",
+      "language": "en",
+      "edition": "Project Gutenberg #1661, full electronic edition; updated Oct 10, 2023",
+      "source_url": "https://www.gutenberg.org/ebooks/1661",
+      "rights": "Public domain in the USA. Project Gutenberg trademark license applies; check local law outside the USA.",
+      "rights_url": "https://www.gutenberg.org/policy/license.html",
+      "status": "indexed",
+      "artifact_sha256": "310ddf29f2b98b870b0e970061d236c9ce7c65163e0e172c254a1db3d070d3f4",
+      "content_sha256": "ed72f8cdd665e5c55802e39300e4642ec3516fcf9ec7faca82fef2eb8e994dc7"
+    },
+    {
+      "id": "pg2009-full",
+      "work_id": "pg1228-origin",
+      "title": "The Origin of Species by Means of Natural Selection Or, the Preservation of Favoured Races in the Struggle for Life, 6th Edition",
+      "author": "Darwin, Charles, 1809-1882",
+      "language": "en",
+      "edition": "Project Gutenberg #2009, full electronic edition; updated Oct 7, 2026; sixth edition",
+      "source_url": "https://www.gutenberg.org/ebooks/2009",
+      "rights": "Public domain in the USA. Project Gutenberg trademark license applies; check local law outside the USA.",
+      "rights_url": "https://www.gutenberg.org/policy/license.html",
+      "status": "indexed",
+      "artifact_sha256": "734ab06f61101728b42982d6032a440eb79c051f02d4a8456bbe34ea6cb293d0",
+      "content_sha256": "a65632da80ac1e6184eb088e79275a148f53a87608489a5e574d48f5d9eae1bf"
+    },
+    {
+      "id": "pg22367-full",
+      "work_id": "pg22367-metamorphosis",
+      "title": "Die Verwandlung",
+      "author": "Kafka, Franz, 1883-1924",
+      "language": "de",
+      "edition": "Project Gutenberg #22367, full electronic edition; updated Dec 29, 2017",
+      "source_url": "https://www.gutenberg.org/ebooks/22367",
+      "rights": "Public domain in the USA. Project Gutenberg trademark license applies; check local law outside the USA.",
+      "rights_url": "https://www.gutenberg.org/policy/license.html",
+      "status": "indexed",
+      "artifact_sha256": "9fc9a802421caf591d674ffafa6d17eaf08b2e3d54849c081c9276a5174ee60e",
+      "content_sha256": "5c8ca21e3bca39960600a35febfd00df08c39206304977b2c67bf70c57ab61d7"
+    },
+    {
+      "id": "pg2600-full",
+      "work_id": "pg2600",
+      "title": "War and Peace",
+      "author": "Tolstoy, Leo, graf, 1828-1910",
+      "language": "en",
+      "edition": "Project Gutenberg #2600, full electronic edition; updated Jun 14, 2022; translator Maude, Aylmer, 1858-1938, Maude, Louise, 1855-1939",
+      "source_url": "https://www.gutenberg.org/ebooks/2600",
+      "rights": "Public domain in the USA. Project Gutenberg trademark license applies; check local law outside the USA.",
+      "rights_url": "https://www.gutenberg.org/policy/license.html",
+      "status": "indexed",
+      "artifact_sha256": "c856e9e16693084763aa3fd68f1b1b6dbc41123db6c1e5bb48af78302f2f921e",
+      "content_sha256": "4aec066b8aa7272bde30c5d555d2251862357a940eba009a7364d7071223e459"
+    },
+    {
+      "id": "pg2680-full",
+      "work_id": "pg2680-meditations",
+      "title": "Meditations",
+      "author": "Marcus Aurelius, Emperor of Rome, 121-180",
+      "language": "en",
+      "edition": "Project Gutenberg #2680, full electronic edition; updated Jul 13, 2026; Meric Casaubon translation",
+      "source_url": "https://www.gutenberg.org/ebooks/2680",
+      "rights": "Public domain in the USA. Project Gutenberg trademark license applies; check local law outside the USA.",
+      "rights_url": "https://www.gutenberg.org/policy/license.html",
+      "status": "indexed",
+      "artifact_sha256": "62c71326bea242893ce8c3ce54bdf5fad3989a827a1462ec03f7dadf8bf5bc89",
+      "content_sha256": "e44ec0f4d2d13b28dc815556979513d5e55c75a0c0e4d4857caa4ee80319561a"
+    },
+    {
+      "id": "pg2701-full",
+      "work_id": "pg2701",
+      "title": "Moby Dick; Or, The Whale",
+      "author": "Melville, Herman, 1819-1891",
+      "language": "en",
+      "edition": "Project Gutenberg #2701, full electronic edition; updated Oct 11, 2026",
+      "source_url": "https://www.gutenberg.org/ebooks/2701",
+      "rights": "Public domain in the USA. Project Gutenberg trademark license applies; check local law outside the USA.",
+      "rights_url": "https://www.gutenberg.org/policy/license.html",
+      "status": "indexed",
+      "artifact_sha256": "e247676589c02a65bc80ff7bf7aaaf146d7c69eadfcfb96633c5f606a08602db",
+      "content_sha256": "59a62bc8dad23f63d9eac06b5e43abd2b995bd071f5b1ca80aaf0aa58c39c684"
+    },
+    {
+      "id": "pg3207-full",
+      "work_id": "pg3207",
+      "title": "Leviathan",
+      "author": "Hobbes, Thomas, 1588-1679",
+      "language": "en",
+      "edition": "Project Gutenberg #3207, full electronic edition; updated Sep 17, 2025",
+      "source_url": "https://www.gutenberg.org/ebooks/3207",
+      "rights": "Public domain in the USA. Project Gutenberg trademark license applies; check local law outside the USA.",
+      "rights_url": "https://www.gutenberg.org/policy/license.html",
+      "status": "indexed",
+      "artifact_sha256": "a6ccaf6bea85d46d118a5e05b0b741746027b42ec1d8c703286cecde920fa219",
+      "content_sha256": "b5b88950aa3b573a38444211f11f30b270f102ddcfcdd1fb55008e23f5902afe"
+    },
+    {
+      "id": "pg3300-full",
+      "work_id": "pg3300-wealth",
+      "title": "An Inquiry into the Nature and Causes of the Wealth of Nations",
+      "author": "Smith, Adam, 1723-1790",
+      "language": "en",
+      "edition": "Project Gutenberg #3300, full electronic edition; updated Jul 3, 2025",
+      "source_url": "https://www.gutenberg.org/ebooks/3300",
+      "rights": "Public domain in the USA. Project Gutenberg trademark license applies; check local law outside the USA.",
+      "rights_url": "https://www.gutenberg.org/policy/license.html",
+      "status": "indexed",
+      "artifact_sha256": "52c8c5b9cc2b18d1edc87a326b76f0d8aee568932995d407083b394aaa9165ab",
+      "content_sha256": "ad673dc1d34b88121e35ffdc0f77faca2fc2ecb561e0e12ff84e94079d5e1be8"
+    },
+    {
+      "id": "pg35-full",
+      "work_id": "pg35",
+      "title": "The Time Machine",
+      "author": "Wells, H. G. (Herbert George), 1866-1946",
+      "language": "en",
+      "edition": "Project Gutenberg #35, full electronic edition; updated Jun 16, 2026",
+      "source_url": "https://www.gutenberg.org/ebooks/35",
+      "rights": "Public domain in the USA. Project Gutenberg trademark license applies; check local law outside the USA.",
+      "rights_url": "https://www.gutenberg.org/policy/license.html",
+      "status": "indexed",
+      "artifact_sha256": "f52cfd0c629d87db3ef91ced77ef5fd7e8fc8f3a997c73aede05e67091d14eec",
+      "content_sha256": "30a6cd34d1dcbee8bb718c24d2fe1891550c92577d32889628e447f6a4ad022e"
+    },
+    {
+      "id": "pg4363-full",
+      "work_id": "pg4363",
+      "title": "Beyond Good and Evil",
+      "author": "Nietzsche, Friedrich Wilhelm, 1844-1900",
+      "language": "en",
+      "edition": "Project Gutenberg #4363, full electronic edition; updated Oct 2, 2026; translator Zimmern, Helen, 1846-1934",
+      "source_url": "https://www.gutenberg.org/ebooks/4363",
+      "rights": "Public domain in the USA. Project Gutenberg trademark license applies; check local law outside the USA.",
+      "rights_url": "https://www.gutenberg.org/policy/license.html",
+      "status": "indexed",
+      "artifact_sha256": "5be9a122841a88130130999da60ce5949f277ce603c9977081cc91a56ea53290",
+      "content_sha256": "de2eb44e49856fb8886e8965949dddbde45d2a0a2c301acbab2763efee622d54"
+    },
+    {
+      "id": "pg4650-full",
+      "work_id": "pg4650-candide",
+      "title": "Candide, ou l'optimisme",
+      "author": "Voltaire, 1694-1778",
+      "language": "fr",
+      "edition": "Project Gutenberg #4650, full electronic edition; updated Nov 17, 2022",
+      "source_url": "https://www.gutenberg.org/ebooks/4650",
+      "rights": "Public domain in the USA. Project Gutenberg trademark license applies; check local law outside the USA.",
+      "rights_url": "https://www.gutenberg.org/policy/license.html",
+      "status": "indexed",
+      "artifact_sha256": "52f706dea0bad8e08913b254333901f3f6dfb1b472a90a8802b97b9604986d59",
+      "content_sha256": "4f0ad0c1c33c42972509db417f1b6245485d53b8e2d411d9e5ac868424ad3929"
+    },
+    {
+      "id": "pg5001-full",
+      "work_id": "pg5001",
+      "title": "Relativity : the Special and General Theory",
+      "author": "Einstein, Albert, 1879-1955",
+      "language": "en",
+      "edition": "Project Gutenberg #5001, full electronic edition; updated Jan 7, 2022; translator Lawson, Robert W. (Robert William)",
+      "source_url": "https://www.gutenberg.org/ebooks/5001",
+      "rights": "Public domain in the USA. Project Gutenberg trademark license applies; check local law outside the USA.",
+      "rights_url": "https://www.gutenberg.org/policy/license.html",
+      "status": "indexed",
+      "artifact_sha256": "d72163123dab44b5c2d90fd17ac251b4b76de71ae3ebb04b3f3b5caa1334577f",
+      "content_sha256": "a6103c300da20c871f61c1df2488fc342511e9ecc981b7b60ad876485c8e4121"
+    },
+    {
+      "id": "pg5316-full",
+      "work_id": "pg5316-pushkin",
+      "title": "Красавице, которая нюхала табак",
+      "author": "Pushkin, Aleksandr Sergeevich, 1799-1837",
+      "language": "ru",
+      "edition": "Project Gutenberg #5316, full electronic edition; updated Dec 28, 2020",
+      "source_url": "https://www.gutenberg.org/ebooks/5316",
+      "rights": "Public domain in the USA. Project Gutenberg trademark license applies; check local law outside the USA.",
+      "rights_url": "https://www.gutenberg.org/policy/license.html",
+      "status": "indexed",
+      "artifact_sha256": "b6c36094b7fc62254974a265e05aa0b17c3a4b8cc68b4c50462cf8eb0eb1e482",
+      "content_sha256": "8a7aa7908207cf37a14670b1971b3bec002d476837b01d2e0c5c81cf8c287f26"
+    },
+    {
+      "id": "pg61-full",
+      "work_id": "pg61",
+      "title": "The Communist Manifesto",
+      "author": "Marx, Karl, 1818-1883; Engels, Friedrich, 1820-1895",
+      "language": "en",
+      "edition": "Project Gutenberg #61, full electronic edition; updated Mar 2, 2022",
+      "source_url": "https://www.gutenberg.org/ebooks/61",
+      "rights": "Public domain in the USA. Project Gutenberg trademark license applies; check local law outside the USA.",
+      "rights_url": "https://www.gutenberg.org/policy/license.html",
+      "status": "indexed",
+      "artifact_sha256": "eb9d882661805128f3f476818a9eee328b77778b0d5ef7415fe08fcd76ecd763",
+      "content_sha256": "172aa700dd37b5116fc041faf9313a7fca85c18ce6d61726878aa71ed2d67d75"
+    },
+    {
+      "id": "pg84-full",
+      "work_id": "pg84",
+      "title": "Frankenstein; or, The modern Prometheus",
+      "author": "Shelley, Mary Wollstonecraft, 1797-1851",
+      "language": "en",
+      "edition": "Project Gutenberg #84, full electronic edition; updated Feb 10, 2026",
+      "source_url": "https://www.gutenberg.org/ebooks/84",
+      "rights": "Public domain in the USA. Project Gutenberg trademark license applies; check local law outside the USA.",
+      "rights_url": "https://www.gutenberg.org/policy/license.html",
+      "status": "indexed",
+      "artifact_sha256": "0bfcc8cacdc72e132272844ed465c6198f1049a8d2b9e3f16806d02beee452e3",
+      "content_sha256": "5844ca1e8cd7f90e3361c6737a298bb2c01b38b6de93e4ad83e6d2277b2440a3"
+    }
+  ],
+  "index_versions": [
+    {
+      "book_id": "pg11-full",
+      "fingerprint": "a8cadff7472256437f4524401ce329c6fd6c1b338645127271f4426e081bfe46"
+    },
+    {
+      "book_id": "pg1228-full",
+      "fingerprint": "a8cadff7472256437f4524401ce329c6fd6c1b338645127271f4426e081bfe46"
+    },
+    {
+      "book_id": "pg1232-full",
+      "fingerprint": "a8cadff7472256437f4524401ce329c6fd6c1b338645127271f4426e081bfe46"
+    },
+    {
+      "book_id": "pg1342-full",
+      "fingerprint": "a8cadff7472256437f4524401ce329c6fd6c1b338645127271f4426e081bfe46"
+    },
+    {
+      "book_id": "pg1497-full",
+      "fingerprint": "03e5aeba05e9922b40d63772957d42e58f164f68dd49697a02616718ceef6bca"
+    },
+    {
+      "book_id": "pg1661-full",
+      "fingerprint": "a8cadff7472256437f4524401ce329c6fd6c1b338645127271f4426e081bfe46"
+    },
+    {
+      "book_id": "pg2009-full",
+      "fingerprint": "a8cadff7472256437f4524401ce329c6fd6c1b338645127271f4426e081bfe46"
+    },
+    {
+      "book_id": "pg22367-full",
+      "fingerprint": "a8cadff7472256437f4524401ce329c6fd6c1b338645127271f4426e081bfe46"
+    },
+    {
+      "book_id": "pg2600-full",
+      "fingerprint": "a8cadff7472256437f4524401ce329c6fd6c1b338645127271f4426e081bfe46"
+    },
+    {
+      "book_id": "pg2680-full",
+      "fingerprint": "a8cadff7472256437f4524401ce329c6fd6c1b338645127271f4426e081bfe46"
+    },
+    {
+      "book_id": "pg2701-full",
+      "fingerprint": "a8cadff7472256437f4524401ce329c6fd6c1b338645127271f4426e081bfe46"
+    },
+    {
+      "book_id": "pg3207-full",
+      "fingerprint": "a8cadff7472256437f4524401ce329c6fd6c1b338645127271f4426e081bfe46"
+    },
+    {
+      "book_id": "pg3300-full",
+      "fingerprint": "a8cadff7472256437f4524401ce329c6fd6c1b338645127271f4426e081bfe46"
+    },
+    {
+      "book_id": "pg35-full",
+      "fingerprint": "a8cadff7472256437f4524401ce329c6fd6c1b338645127271f4426e081bfe46"
+    },
+    {
+      "book_id": "pg4363-full",
+      "fingerprint": "a8cadff7472256437f4524401ce329c6fd6c1b338645127271f4426e081bfe46"
+    },
+    {
+      "book_id": "pg4650-full",
+      "fingerprint": "a8cadff7472256437f4524401ce329c6fd6c1b338645127271f4426e081bfe46"
+    },
+    {
+      "book_id": "pg5001-full",
+      "fingerprint": "a8cadff7472256437f4524401ce329c6fd6c1b338645127271f4426e081bfe46"
+    },
+    {
+      "book_id": "pg5316-full",
+      "fingerprint": "a8cadff7472256437f4524401ce329c6fd6c1b338645127271f4426e081bfe46"
+    },
+    {
+      "book_id": "pg61-full",
+      "fingerprint": "a8cadff7472256437f4524401ce329c6fd6c1b338645127271f4426e081bfe46"
+    },
+    {
+      "book_id": "pg84-full",
+      "fingerprint": "a8cadff7472256437f4524401ce329c6fd6c1b338645127271f4426e081bfe46"
+    }
+  ],
+  "queries": 54,
+  "positive_queries": 44,
+  "negative_queries": 10,
+  "types": {
+    "exact_quote": 5,
+    "idea": 3,
+    "argument": 5,
+    "scene": 5,
+    "approx_book_description": 2,
+    "explanation": 4,
+    "cross_language": 12,
+    "footnote": 2,
+    "source_role": 2,
+    "compare": 4,
+    "negative": 10
+  },
+  "query_languages": {
+    "en": 34,
+    "fr": 6,
+    "de": 6,
+    "ru": 8
+  },
+  "positive_source_books": [
+    "pg11-full",
+    "pg1228-full",
+    "pg1232-full",
+    "pg1342-full",
+    "pg1497-full",
+    "pg1661-full",
+    "pg2009-full",
+    "pg22367-full",
+    "pg2600-full",
+    "pg2680-full",
+    "pg2701-full",
+    "pg3207-full",
+    "pg3300-full",
+    "pg35-full",
+    "pg4363-full",
+    "pg4650-full",
+    "pg5001-full",
+    "pg5316-full",
+    "pg61-full",
+    "pg84-full"
+  ],
+  "positive_evidence_spans": 48,
+  "evidence_audit": [
+    {
+      "query_id": "expanded-01",
+      "book_id": "pg11-full",
+      "work_id": "pg11-alice",
+      "section_ordinal": 12,
+      "section_title": "CHAPTER XII. Alice’s Evidence",
+      "text": "Sentence first—verdict afterwards.",
+      "observed_section_id": 12974,
+      "start": 7763,
+      "end": 7797,
+      "section_characters": 11533,
+      "section_position_fraction": 1.0,
+      "evidence_position_fraction": 0.6731,
+      "context": " offended tone, and everybody laughed, “Let the jury consider their verdict.” the King said, for about the twentieth time that day.\n\n“No, no!” said the Queen. “Sentence first—verdict afterwards.”\n\n“Stuff and nonsense!” said Alice loudly. “The idea of having the sentence first!”\n\n“Hold your tongue!” said the Queen, turning purple.\n\n“I won’t!” said Alice.\n\n“Off with her head!” the Queen shouted at the top of her ",
+      "matching_passage_ids": [
+        217286
+      ],
+      "observed_section_author": "Carroll, Lewis, 1832-1898",
+      "observed_section_role": "unclassified",
+      "attribution_basis": "book_metadata_unclassified",
+      "expected_role_matches_observed": null,
+      "expected_author_matches_observed": null
+    },
+    {
+      "query_id": "expanded-02",
+      "book_id": "pg1342-full",
+      "work_id": "pg1342-pride",
+      "section_ordinal": 64,
+      "section_title": "“The efforts of his aunt.” CHAPTER LVIII.",
+      "text": "My affections and wishes are unchanged",
+      "observed_section_id": 13039,
+      "start": 2738,
+      "end": 2776,
+      "section_characters": 13636,
+      "section_position_fraction": 0.9412,
+      "evidence_position_fraction": 0.2008,
+      "context": "d. After a short pause, her companion added, “You are too generous to trifle with me. If your feelings are still what they were last April, tell me so at once. My affections and wishes are unchanged; but one word from you will silence me on this subject for ever.”\n\nElizabeth, feeling all the more than common awkwardness and anxiety of his situation, now forced herself to speak; and immediately, though not very flue",
+      "matching_passage_ids": [
+        217828
+      ],
+      "observed_section_author": "Austen, Jane, 1775-1817",
+      "observed_section_role": "unclassified",
+      "attribution_basis": "book_metadata_unclassified",
+      "expected_role_matches_observed": null,
+      "expected_author_matches_observed": null
+    },
+    {
+      "query_id": "expanded-03",
+      "book_id": "pg1228-full",
+      "work_id": "pg1228-origin",
+      "section_ordinal": 17,
+      "section_title": "CHAPTER XIV. RECAPITULATION AND CONCLUSION.",
+      "text": "There is grandeur in this view of life",
+      "observed_section_id": 13061,
+      "start": 57426,
+      "end": 57464,
+      "section_characters": 57750,
+      "section_position_fraction": 0.9444,
+      "evidence_position_fraction": 0.9944,
+      "context": "r of nature, from famine and death, the most exalted object which we are capable of conceiving, namely, the production of the higher animals, directly follows. There is grandeur in this view of life, with its several powers, having been originally breathed into a few forms or into one; and that, whilst this planet has gone cycling on according to the fixed law of gravity, from so simple a beginning endless forms mo",
+      "matching_passage_ids": [
+        218584
+      ],
+      "observed_section_author": "Darwin, Charles, 1809-1882",
+      "observed_section_role": "unclassified",
+      "attribution_basis": "book_metadata_unclassified",
+      "expected_role_matches_observed": null,
+      "expected_author_matches_observed": null
+    },
+    {
+      "query_id": "expanded-04",
+      "book_id": "pg2680-full",
+      "work_id": "pg2680-meditations",
+      "section_ordinal": 14,
+      "section_title": "THE TWELFTH BOOK",
+      "text": "in matter of life, three acts is the whole play",
+      "observed_section_id": 13077,
+      "start": 19988,
+      "end": 20035,
+      "section_characters": 20314,
+      "section_position_fraction": 0.7778,
+      "evidence_position_fraction": 0.984,
+      "context": " from the stage, whom he had taken in to act a while. Oh, but the play is not yet at an end, there are but three acts yet acted of it? Thou hast well said: for in matter of life, three acts is the whole play. Now to set a certain time to every man's acting, belongs unto him only, who as first he was of thy composition, so is now the cause of thy dissolution. As for thyself; thou hast to do with neither. Go thy ways then wel",
+      "matching_passage_ids": [
+        218886
+      ],
+      "observed_section_author": "Marcus Aurelius, Emperor of Rome, 121-180",
+      "observed_section_role": "unclassified",
+      "attribution_basis": "book_metadata_unclassified",
+      "expected_role_matches_observed": null,
+      "expected_author_matches_observed": null
+    },
+    {
+      "query_id": "expanded-05",
+      "book_id": "pg4650-full",
+      "work_id": "pg4650-candide",
+      "section_ordinal": 36,
+      "section_title": "CHAPITRE XXX. Conclusion.",
+      "text": "le travail éloigne de nous trois grands maux, l’ennui, le vice, et le besoin.",
+      "observed_section_id": 13118,
+      "start": 6771,
+      "end": 6848,
+      "section_characters": 9247,
+      "section_position_fraction": 1.0,
+      "evidence_position_fraction": 0.7322,
+      "context": "de Martin.\n\nVous devez avoir, dit Candide au Turc, une vaste et magnifique terre? Je n’ai que vingt arpents, répondit le Turc; je les cultive avec mes enfants; le travail éloigne de nous trois grands maux, l’ennui, le vice, et le besoin.\n\nCandide en retournant dans sa métairie fit de profondes réflexions sur le discours du Turc. Il dit à Pangloss et à Martin: Ce bon vieillard me paraît s’être fait un sort bien préférable à celui des six rois avec qui no",
+      "matching_passage_ids": [
+        219115
+      ],
+      "observed_section_author": "Voltaire, 1694-1778",
+      "observed_section_role": "unclassified",
+      "attribution_basis": "book_metadata_unclassified",
+      "expected_role_matches_observed": null,
+      "expected_author_matches_observed": null
+    },
+    {
+      "query_id": "expanded-06",
+      "book_id": "pg22367-full",
+      "work_id": "pg22367-metamorphosis",
+      "section_ordinal": 2,
+      "section_title": "II.",
+      "text": "Ein ihm sofort nachfliegender drang dagegen förmlich in Gregors Rücken ein",
+      "observed_section_id": 13121,
+      "start": 40990,
+      "end": 41064,
+      "section_characters": 41874,
+      "section_position_fraction": 0.6667,
+      "evidence_position_fraction": 0.9789,
+      "context": "ten Äpfel rollten wie elektrisiert auf dem Boden herum und stießen aneinander. Ein schwach geworfener Apfel streifte Gregors Rücken, glitt aber unschädlich ab. Ein ihm sofort nachfliegender drang dagegen förmlich in Gregors Rücken ein; Gregor wollte sich weiterschleppen, als könne der überraschende unglaubliche Schmerz mit dem Ortswechsel vergehen; doch fühlte er sich wie festgenagelt und streckte sich in vollständiger Verwirrung aller Sinne. Nur mit",
+      "matching_passage_ids": [
+        219183
+      ],
+      "observed_section_author": "Kafka, Franz, 1883-1924",
+      "observed_section_role": "unclassified",
+      "attribution_basis": "book_metadata_unclassified",
+      "expected_role_matches_observed": null,
+      "expected_author_matches_observed": null
+    },
+    {
+      "query_id": "expanded-07",
+      "book_id": "pg5316-full",
+      "work_id": "pg5316-pushkin",
+      "section_ordinal": 0,
+      "section_title": "Красавице, которая нюхала",
+      "text": "Ах, отчего я не табак!",
+      "observed_section_id": 13123,
+      "start": 1483,
+      "end": 1505,
+      "section_characters": 1509,
+      "section_position_fraction": 0.0,
+      "evidence_position_fraction": 0.9828,
+      "context": " горы,\n\nЧтоб не могли нескромны взоры\n\nОткрыть вместилище божественных\n\nкрасот.\n\nНо что! мечта, мечта пустая.\n\nНе будет этого никак.\n\nСудьба завистливая злая!\n\nАх, отчего я не табак! . .",
+      "matching_passage_ids": [
+        219217
+      ],
+      "observed_section_author": "Pushkin, Aleksandr Sergeevich, 1799-1837",
+      "observed_section_role": "unclassified",
+      "attribution_basis": "book_metadata_unclassified",
+      "expected_role_matches_observed": null,
+      "expected_author_matches_observed": null
+    },
+    {
+      "query_id": "expanded-08",
+      "book_id": "pg3300-full",
+      "work_id": "pg3300-wealth",
+      "section_ordinal": 47,
+      "section_title": "PART III. Of the Expense of public Works and public Institutions.",
+      "text": "generally becomes as stupid and ignorant as it is possible for a human creature to become",
+      "observed_section_id": 13171,
+      "start": 137504,
+      "end": 137593,
+      "section_characters": 222734,
+      "section_position_fraction": 0.8704,
+      "evidence_position_fraction": 0.6173,
+      "context": "o exercise his invention, in finding out expedients for removing difficulties which never occur. He naturally loses, therefore, the habit of such exertion, and generally becomes as stupid and ignorant as it is possible for a human creature to become. The torpor of his mind renders him not only incapable of relishing or bearing a part in any rational conversation, but of conceiving any generous, noble, or tender sentiment, and consequently of forming any just judgme",
+      "matching_passage_ids": [
+        220631
+      ],
+      "observed_section_author": "Smith, Adam, 1723-1790",
+      "observed_section_role": "unclassified",
+      "attribution_basis": "book_metadata_unclassified",
+      "expected_role_matches_observed": null,
+      "expected_author_matches_observed": null
+    },
+    {
+      "query_id": "expanded-09",
+      "book_id": "pg2009-full",
+      "work_id": "pg1228-origin",
+      "section_ordinal": 11,
+      "section_title": "CHAPTER VI. DIFFICULTIES OF THE THEORY.",
+      "text": "numerous gradations from a simple and imperfect eye to one complex and perfect",
+      "observed_section_id": 13190,
+      "start": 29404,
+      "end": 29482,
+      "section_characters": 92962,
+      "section_position_fraction": 0.4583,
+      "evidence_position_fraction": 0.3163,
+      "context": "kind declared the doctrine false; but the old saying of Vox populi, vox Dei, as every philosopher knows, cannot be trusted in science. Reason tells me, that if numerous gradations from a simple and imperfect eye to one complex and perfect can be shown to exist, each grade being useful to its possessor, as is certainly the case; if further, the eye ever varies and the variations be inherited, as is likewise certainly the case; and if such variations shoul",
+      "matching_passage_ids": [
+        221300
+      ],
+      "observed_section_author": "Darwin, Charles, 1809-1882",
+      "observed_section_role": "unclassified",
+      "attribution_basis": "book_metadata_unclassified",
+      "expected_role_matches_observed": null,
+      "expected_author_matches_observed": null
+    },
+    {
+      "query_id": "expanded-10",
+      "book_id": "pg1661-full",
+      "work_id": "pg1661",
+      "section_ordinal": 10,
+      "section_title": "VIII. THE ADVENTURE OF THE SPECKLED BAND",
+      "text": "It is a swamp adder!",
+      "observed_section_id": 13214,
+      "start": 48440,
+      "end": 48460,
+      "section_characters": 52906,
+      "section_position_fraction": 0.7143,
+      "evidence_position_fraction": 0.9156,
+      "context": "instant his strange headgear began to move, and there reared itself from among his hair the squat diamond-shaped head and puffed neck of a loathsome serpent.\n\n“It is a swamp adder!” cried Holmes; “the deadliest snake in India. He has died within ten seconds of being bitten. Violence does, in truth, recoil upon the violent, and the schemer falls into the pit which he digs for another. Let us thrust",
+      "matching_passage_ids": [
+        222263
+      ],
+      "observed_section_author": "Doyle, Arthur Conan, 1859-1930",
+      "observed_section_role": "unclassified",
+      "attribution_basis": "book_metadata_unclassified",
+      "expected_role_matches_observed": null,
+      "expected_author_matches_observed": null
+    },
+    {
+      "query_id": "expanded-11",
+      "book_id": "pg84-full",
+      "work_id": "pg84",
+      "section_ordinal": 15,
+      "section_title": "Chapter 10",
+      "text": "I ought to be thy Adam, but I am rather the fallen angel",
+      "observed_section_id": 13234,
+      "start": 8606,
+      "end": 8662,
+      "section_characters": 12963,
+      "section_position_fraction": 0.5172,
+      "evidence_position_fraction": 0.6639,
+      "context": "not equitable to every other and trample upon me alone, to whom thy justice, and even thy clemency and affection, is most due. Remember that I am thy creature; I ought to be thy Adam, but I am rather the fallen angel, whom thou drivest from joy for no misdeed. Everywhere I see bliss, from which I alone am irrevocably excluded. I was benevolent and good; misery made me a fiend. Make me happy, and I shall again be virtuous.”\n\n“Begone!",
+      "matching_passage_ids": [
+        222567
+      ],
+      "observed_section_author": "Shelley, Mary Wollstonecraft, 1797-1851",
+      "observed_section_role": "unclassified",
+      "attribution_basis": "book_metadata_unclassified",
+      "expected_role_matches_observed": null,
+      "expected_author_matches_observed": null
+    },
+    {
+      "query_id": "expanded-12",
+      "book_id": "pg2701-full",
+      "work_id": "pg2701",
+      "section_ordinal": 138,
+      "section_title": "CHAPTER 135. The Chase.—Third Day.",
+      "text": "from hell’s heart I stab at thee",
+      "observed_section_id": 13387,
+      "start": 22241,
+      "end": 22273,
+      "section_characters": 25042,
+      "section_position_fraction": 0.9928,
+      "evidence_position_fraction": 0.8881,
+      "context": "ole foregone life, and top this one piled comber of my death! Towards thee I roll, thou all-destroying but unconquering whale; to the last I grapple with thee; from hell’s heart I stab at thee; for hate’s sake I spit my last breath at thee. Sink all coffins and all hearses to one common pool! and since neither can be mine, let me then tow to pieces, while still chasing thee, though tied to thee, thou damned w",
+      "matching_passage_ids": [
+        223742
+      ],
+      "observed_section_author": "Melville, Herman, 1819-1891",
+      "observed_section_role": "unclassified",
+      "attribution_basis": "book_metadata_unclassified",
+      "expected_role_matches_observed": null,
+      "expected_author_matches_observed": null
+    },
+    {
+      "query_id": "expanded-13",
+      "book_id": "pg2600-full",
+      "work_id": "pg2600",
+      "section_ordinal": 65,
+      "section_title": "CHAPTER XVI",
+      "text": "How quiet, peaceful, and solemn",
+      "observed_section_id": 13454,
+      "start": 7733,
+      "end": 7764,
+      "section_characters": 8288,
+      "section_position_fraction": 0.1781,
+      "evidence_position_fraction": 0.933,
+      "context": " he saw nothing. Above him there was now nothing but the sky—the lofty sky, not clear yet still immeasurably lofty, with gray clouds gliding slowly across it. “How quiet, peaceful, and solemn; not at all as I ran,” thought Prince Andrew—“not as we ran, shouting and fighting, not at all as the gunner and the Frenchman with frightened and angry faces struggled for the mop: how differently do those clouds glide",
+      "matching_passage_ids": [
+        224325
+      ],
+      "observed_section_author": "Tolstoy, Leo, graf, 1828-1910",
+      "observed_section_role": "unclassified",
+      "attribution_basis": "book_metadata_unclassified",
+      "expected_role_matches_observed": null,
+      "expected_author_matches_observed": null
+    },
+    {
+      "query_id": "expanded-14",
+      "book_id": "pg1232-full",
+      "work_id": "pg1232",
+      "section_ordinal": 24,
+      "section_title": "CHAPTER XVII. CONCERNING CRUELTY AND CLEMENCY, AND WHETHER IT IS BETTER TO BE LOVED THAN FEARED",
+      "text": "it is much safer to be feared than loved",
+      "observed_section_id": 13779,
+      "start": 1995,
+      "end": 2035,
+      "section_characters": 6082,
+      "section_position_fraction": 0.6667,
+      "evidence_position_fraction": 0.328,
+      "context": "ter to be loved than feared or feared than loved? It may be answered that one should wish to be both, but, because it is difficult to unite them in one person, it is much safer to be feared than loved, when, of the two, either must be dispensed with. Because this is to be asserted in general of men, that they are ungrateful, fickle, false, cowardly, covetous, and as long as you succeed they are yours entirely; they w",
+      "matching_passage_ids": [
+        226433
+      ],
+      "observed_section_author": "Machiavelli, Niccolò, 1469-1527",
+      "observed_section_role": "unclassified",
+      "attribution_basis": "book_metadata_unclassified",
+      "expected_role_matches_observed": null,
+      "expected_author_matches_observed": null
+    },
+    {
+      "query_id": "expanded-15",
+      "book_id": "pg1497-full",
+      "work_id": "pg1497",
+      "section_ordinal": 11,
+      "section_title": "BOOK VII.",
+      "text": "being prevented by the chains from turning round their heads",
+      "expected_section_author": "Plato, 428? BCE-348? BCE",
+      "observed_section_id": 13803,
+      "start": 352,
+      "end": 412,
+      "section_characters": 62958,
+      "section_position_fraction": 0.7857,
+      "evidence_position_fraction": 0.0056,
+      "context": "hing all along the den; here they have been from their childhood, and have their legs and necks chained so that they cannot move, and can only see before them, being prevented by the chains from turning round their heads. Above and behind them a fire is blazing at a distance, and between the fire and the prisoners there is a raised way; and you will see, if you look, a low wall built along the way, like the screen which marionette playe",
+      "matching_passage_ids": [
+        227322
+      ],
+      "observed_section_author": "Plato, 428? BCE-348? BCE",
+      "observed_section_role": "unclassified",
+      "attribution_basis": "book_metadata_unclassified",
+      "expected_role_matches_observed": null,
+      "expected_author_matches_observed": true
+    },
+    {
+      "query_id": "expanded-16",
+      "book_id": "pg3207-full",
+      "work_id": "pg3207",
+      "section_ordinal": 109,
+      "section_title": "The Incommodities Of Such A War",
+      "text": "solitary, poore, nasty, brutish, and short",
+      "observed_section_id": 13916,
+      "start": 742,
+      "end": 784,
+      "section_characters": 3325,
+      "section_position_fraction": 0.1584,
+      "evidence_position_fraction": 0.2232,
+      "context": " the Earth; no account of Time; no Arts; no Letters; no Society; and which is worst of all, continuall feare, and danger of violent death; And the life of man, solitary, poore, nasty, brutish, and short.\n\nIt may seem strange to some man, that has not well weighed these things; that Nature should thus dissociate, and render men apt to invade, and destroy one another: and he may therefore, not trusting to this Inference,",
+      "matching_passage_ids": [
+        227713
+      ],
+      "observed_section_author": "Hobbes, Thomas, 1588-1679",
+      "observed_section_role": "unclassified",
+      "attribution_basis": "book_metadata_unclassified",
+      "expected_role_matches_observed": null,
+      "expected_author_matches_observed": null
+    },
+    {
+      "query_id": "expanded-17",
+      "book_id": "pg4363-full",
+      "work_id": "pg4363",
+      "section_ordinal": 6,
+      "section_title": "CHAPTER IV. APOPHTHEGMS AND INTERLUDES",
+      "text": "He who fights with monsters should be careful lest he thereby become a monster",
+      "observed_section_id": 14502,
+      "start": 10346,
+      "end": 10424,
+      "section_characters": 14593,
+      "section_position_fraction": 0.5,
+      "evidence_position_fraction": 0.709,
+      "context": "5. Comparing man and woman generally, one may say that woman would not have the genius for adornment, if she had not the instinct for the SECONDARY role.\n\n146. He who fights with monsters should be careful lest he thereby become a monster. And if thou gaze long into an abyss, the abyss will also gaze into thee.\n\n147. From old Florentine novels—moreover, from life: Buona femmina e mala femmina vuol bastone.—Sacchetti, Nov. 86.\n\n148. To seduce their neighb",
+      "matching_passage_ids": [
+        228736
+      ],
+      "observed_section_author": "Nietzsche, Friedrich Wilhelm, 1844-1900",
+      "observed_section_role": "unclassified",
+      "attribution_basis": "book_metadata_unclassified",
+      "expected_role_matches_observed": null,
+      "expected_author_matches_observed": null
+    },
+    {
+      "query_id": "expanded-18",
+      "book_id": "pg5001-full",
+      "work_id": "pg5001",
+      "section_ordinal": 4,
+      "section_title": "III Space and Time in Classical Mechanics",
+      "text": "the stone falls to earth in a parabolic curve",
+      "observed_section_id": 14513,
+      "start": 700,
+      "end": 745,
+      "section_characters": 3049,
+      "section_position_fraction": 0.1,
+      "evidence_position_fraction": 0.2296,
+      "context": "regarding the influence of the air resistance, I see the stone descend in a straight line. A pedestrian who observes the misdeed from the footpath notices that the stone falls to earth in a parabolic curve. I now ask: Do the “positions” traversed by the stone lie “in reality” on a straight line or on a parabola? Moreover, what is meant here by motion “in space”? From the considerations of the previous section the answer i",
+      "matching_passage_ids": [
+        228939
+      ],
+      "observed_section_author": "Einstein, Albert, 1879-1955",
+      "observed_section_role": "unclassified",
+      "attribution_basis": "book_metadata_unclassified",
+      "expected_role_matches_observed": null,
+      "expected_author_matches_observed": null
+    },
+    {
+      "query_id": "expanded-19",
+      "book_id": "pg61-full",
+      "work_id": "pg61",
+      "section_ordinal": 2,
+      "section_title": "I. BOURGEOIS AND PROLETARIANS",
+      "text": "the epidemic of over-production",
+      "observed_section_id": 14552,
+      "start": 12301,
+      "end": 12332,
+      "section_characters": 27700,
+      "section_position_fraction": 0.2857,
+      "evidence_position_fraction": 0.4441,
+      "context": "created productive forces, are periodically destroyed. In these crises there breaks out an epidemic that, in all earlier epochs, would have seemed an absurdity—the epidemic of over-production. Society suddenly finds itself put back into a state of momentary barbarism; it appears as if a famine, a universal war of devastation had cut off the supply of every means of subsistence; industry and commerce seem to ",
+      "matching_passage_ids": [
+        229082
+      ],
+      "observed_section_author": "Marx, Karl, 1818-1883; Engels, Friedrich, 1820-1895",
+      "observed_section_role": "unclassified",
+      "attribution_basis": "book_metadata_unclassified",
+      "expected_role_matches_observed": null,
+      "expected_author_matches_observed": null
+    },
+    {
+      "query_id": "expanded-20",
+      "book_id": "pg35-full",
+      "work_id": "pg35",
+      "section_ordinal": 8,
+      "section_title": "VIII. Explanation",
+      "text": "the sole descendants of our generation",
+      "observed_section_id": 14566,
+      "start": 15255,
+      "end": 15293,
+      "section_characters": 23346,
+      "section_position_fraction": 0.4706,
+      "evidence_position_fraction": 0.6534,
+      "context": "th dawned on me: that Man had not remained one species, but had differentiated into two distinct animals: that my graceful children of the Upper World were not the sole descendants of our generation, but that this bleached, obscene, nocturnal Thing, which had flashed before me, was also heir to all the ages.\n\n“I thought of the flickering pillars and of my theory of an underground ventilation. I began to suspect the",
+      "matching_passage_ids": [
+        229207
+      ],
+      "observed_section_author": "Wells, H. G. (Herbert George), 1866-1946",
+      "observed_section_role": "unclassified",
+      "attribution_basis": "book_metadata_unclassified",
+      "expected_role_matches_observed": null,
+      "expected_author_matches_observed": null
+    },
+    {
+      "query_id": "expanded-cross-01",
+      "book_id": "pg11-full",
+      "work_id": "pg11-alice",
+      "section_ordinal": 8,
+      "section_title": "CHAPTER VIII. The Queen’s Croquet-Ground",
+      "text": "the balls were live hedgehogs, the mallets live flamingoes",
+      "observed_section_id": 12970,
+      "start": 6725,
+      "end": 6783,
+      "section_characters": 13601,
+      "section_position_fraction": 0.6667,
+      "evidence_position_fraction": 0.4944,
+      "context": "settled down in a minute or two, and the game began. Alice thought she had never seen such a curious croquet-ground in her life; it was all ridges and furrows; the balls were live hedgehogs, the mallets live flamingoes, and the soldiers had to double themselves up and to stand on their hands and feet, to make the arches.\n\nThe chief difficulty Alice found at first was in managing her flamingo: she succeeded in getting its body tucked a",
+      "matching_passage_ids": [
+        217247
+      ],
+      "observed_section_author": "Carroll, Lewis, 1832-1898",
+      "observed_section_role": "unclassified",
+      "attribution_basis": "book_metadata_unclassified",
+      "expected_role_matches_observed": null,
+      "expected_author_matches_observed": null
+    },
+    {
+      "query_id": "expanded-cross-02",
+      "book_id": "pg1342-full",
+      "work_id": "pg1342-pride",
+      "section_ordinal": 39,
+      "section_title": "“Hearing herself called.” CHAPTER XXXV.",
+      "text": "my sister’s fortune, which is thirty thousand pounds",
+      "observed_section_id": 13014,
+      "start": 15461,
+      "end": 15513,
+      "section_characters": 16962,
+      "section_position_fraction": 0.5735,
+      "evidence_position_fraction": 0.9115,
+      "context": "ut I wrote to Mr. Wickham, who left the place immediately, and Mrs. Younge was of course removed from her charge. Mr. Wickham’s chief object was unquestionably my sister’s fortune, which is thirty thousand pounds; but I cannot help supposing that the hope of revenging himself on me was a strong inducement. His revenge would have been complete indeed. This, madam, is a faithful narrative of every event in which we have been conce",
+      "matching_passage_ids": [
+        217593
+      ],
+      "observed_section_author": "Austen, Jane, 1775-1817",
+      "observed_section_role": "unclassified",
+      "attribution_basis": "book_metadata_unclassified",
+      "expected_role_matches_observed": null,
+      "expected_author_matches_observed": null
+    },
+    {
+      "query_id": "expanded-cross-03",
+      "book_id": "pg1228-full",
+      "work_id": "pg1228-origin",
+      "section_ordinal": 16,
+      "section_title": "CHAPTER XIII. MUTUAL AFFINITIES OF ORGANIC BEINGS: MORPHOLOGY: EMBRYOLOGY: RUDIMENTARY ORGANS.",
+      "text": "when organs are reduced in size, either from disuse or selection",
+      "observed_section_id": 13060,
+      "start": 86310,
+      "end": 86374,
+      "section_characters": 87346,
+      "section_position_fraction": 0.8889,
+      "evidence_position_fraction": 0.9881,
+      "context": "elation to their habits of life, through the principle of modifications being inherited at corresponding ages. On this same principle—and bearing in mind, that when organs are reduced in size, either from disuse or selection, it will generally be at that period of life when the being has to provide for its own wants, and bearing in mind how strong is the principle of inheritance—the occurrence of rudimentary organs and their final abortion,",
+      "matching_passage_ids": [
+        218536
+      ],
+      "observed_section_author": "Darwin, Charles, 1809-1882",
+      "observed_section_role": "unclassified",
+      "attribution_basis": "book_metadata_unclassified",
+      "expected_role_matches_observed": null,
+      "expected_author_matches_observed": null
+    },
+    {
+      "query_id": "expanded-cross-04",
+      "book_id": "pg3300-full",
+      "work_id": "pg3300-wealth",
+      "section_ordinal": 47,
+      "section_title": "PART III. Of the Expense of public Works and public Institutions.",
+      "text": "The education of the common people requires",
+      "observed_section_id": 13171,
+      "start": 141558,
+      "end": 141601,
+      "section_characters": 222734,
+      "section_position_fraction": 0.8704,
+      "evidence_position_fraction": 0.6355,
+      "context": " abilities of those few, all the nobler parts of the human character may be, in a great measure, obliterated and extinguished in the great body of the people.\n\nThe education of the common people requires, perhaps, in a civilized and commercial society, the attention of the public, more than that of people of some rank and fortune. People of some rank and fortune are generally eighteen or nineteen years of age before the",
+      "matching_passage_ids": [
+        220634
+      ],
+      "observed_section_author": "Smith, Adam, 1723-1790",
+      "observed_section_role": "unclassified",
+      "attribution_basis": "book_metadata_unclassified",
+      "expected_role_matches_observed": null,
+      "expected_author_matches_observed": null
+    },
+    {
+      "query_id": "expanded-cross-05",
+      "book_id": "pg84-full",
+      "work_id": "pg84",
+      "section_ordinal": 22,
+      "section_title": "Chapter 17",
+      "text": "You must create a female for me",
+      "observed_section_id": 13241,
+      "start": 230,
+      "end": 261,
+      "section_characters": 10240,
+      "section_position_fraction": 0.7586,
+      "evidence_position_fraction": 0.0225,
+      "context": "tion of a reply. But I was bewildered, perplexed, and unable to arrange my ideas sufficiently to understand the full extent of his proposition. He continued,\n\n“You must create a female for me with whom I can live in the interchange of those sympathies necessary for my being. This you alone can do, and I demand it of you as a right which you must not refuse to concede.”\n\nThe latter part of his tale had kindle",
+      "matching_passage_ids": [
+        222642
+      ],
+      "observed_section_author": "Shelley, Mary Wollstonecraft, 1797-1851",
+      "observed_section_role": "unclassified",
+      "attribution_basis": "book_metadata_unclassified",
+      "expected_role_matches_observed": null,
+      "expected_author_matches_observed": null
+    },
+    {
+      "query_id": "expanded-cross-06",
+      "book_id": "pg2701-full",
+      "work_id": "pg2701",
+      "section_ordinal": 131,
+      "section_title": "CHAPTER 128. The Pequod Meets The Rachel.",
+      "text": "Captain Gardiner, I will not do it. Even now I lose time.",
+      "observed_section_id": 13380,
+      "start": 6501,
+      "end": 6558,
+      "section_characters": 7814,
+      "section_position_fraction": 0.9424,
+      "evidence_position_fraction": 0.832,
+      "context": "t—run, run, men, now, and stand by to square in the yards.”\n\n“Avast,” cried Ahab—“touch not a rope-yarn”; then in a voice that prolongingly moulded every word—“Captain Gardiner, I will not do it. Even now I lose time. Good-bye, good-bye. God bless ye, man, and may I forgive myself, but I must go. Mr. Starbuck, look at the binnacle watch, and in three minutes from this present instant warn off all strangers: then brace forward again, ",
+      "matching_passage_ids": [
+        223673
+      ],
+      "observed_section_author": "Melville, Herman, 1819-1891",
+      "observed_section_role": "unclassified",
+      "attribution_basis": "book_metadata_unclassified",
+      "expected_role_matches_observed": null,
+      "expected_author_matches_observed": null
+    },
+    {
+      "query_id": "expanded-cross-07",
+      "book_id": "pg2600-full",
+      "work_id": "pg2600",
+      "section_ordinal": 68,
+      "section_title": "CHAPTER XIX",
+      "text": "Prince Andrew thought of the insignificance of greatness",
+      "observed_section_id": 13457,
+      "start": 6198,
+      "end": 6254,
+      "section_characters": 9057,
+      "section_position_fraction": 0.1863,
+      "evidence_position_fraction": 0.6843,
+      "context": " with the stern and solemn train of thought that weakness from loss of blood, suffering, and the nearness of death aroused in him. Looking into Napoleon’s eyes Prince Andrew thought of the insignificance of greatness, the unimportance of life which no one could understand, and the still greater unimportance of death, the meaning of which no one alive could understand or explain.\n\nThe Emperor without waiting for an answer turned away",
+      "matching_passage_ids": [
+        224351
+      ],
+      "observed_section_author": "Tolstoy, Leo, graf, 1828-1910",
+      "observed_section_role": "unclassified",
+      "attribution_basis": "book_metadata_unclassified",
+      "expected_role_matches_observed": null,
+      "expected_author_matches_observed": null
+    },
+    {
+      "query_id": "expanded-cross-08",
+      "book_id": "pg1232-full",
+      "work_id": "pg1232",
+      "section_ordinal": 25,
+      "section_title": "CHAPTER XVIII. [1] CONCERNING THE WAY IN WHICH PRINCES SHOULD KEEP FAITH",
+      "text": "a fox to discover the snares and a lion to terrify the wolves",
+      "observed_section_id": 13780,
+      "start": 1500,
+      "end": 1561,
+      "section_characters": 7112,
+      "section_position_fraction": 0.6944,
+      "evidence_position_fraction": 0.2109,
+      "context": " the fox and the lion; because the lion cannot defend himself against snares and the fox cannot defend himself against wolves. Therefore, it is necessary to be a fox to discover the snares and a lion to terrify the wolves. Those who rely simply on the lion do not understand what they are about. Therefore a wise lord cannot, nor ought he to, keep faith when such observance may be turned against him, and when the reasons that caused him to",
+      "matching_passage_ids": [
+        226438
+      ],
+      "observed_section_author": "Machiavelli, Niccolò, 1469-1527",
+      "observed_section_role": "unclassified",
+      "attribution_basis": "book_metadata_unclassified",
+      "expected_role_matches_observed": null,
+      "expected_author_matches_observed": null
+    },
+    {
+      "query_id": "expanded-cross-09",
+      "book_id": "pg1497-full",
+      "work_id": "pg1497",
+      "section_ordinal": 11,
+      "section_title": "BOOK VII.",
+      "text": "human beings living in a underground den",
+      "expected_section_author": "Plato, 428? BCE-348? BCE",
+      "observed_section_id": 13803,
+      "start": 101,
+      "end": 141,
+      "section_characters": 62958,
+      "section_position_fraction": 0.7857,
+      "evidence_position_fraction": 0.0016,
+      "context": "And now, I said, let me show in a figure how far our nature is enlightened or unenlightened:—Behold! human beings living in a underground den, which has a mouth open towards the light and reaching all along the den; here they have been from their childhood, and have their legs and necks chained so that they cannot move, and can only see before them, being pre",
+      "matching_passage_ids": [
+        227322
+      ],
+      "observed_section_author": "Plato, 428? BCE-348? BCE",
+      "observed_section_role": "unclassified",
+      "attribution_basis": "book_metadata_unclassified",
+      "expected_role_matches_observed": null,
+      "expected_author_matches_observed": true
+    },
+    {
+      "query_id": "expanded-cross-10",
+      "book_id": "pg5001-full",
+      "work_id": "pg5001",
+      "section_ordinal": 10,
+      "section_title": "IX The Relativity of Simultaneity",
+      "text": "which are simultaneous with reference to the railway embankment also simultaneous relatively to the train?",
+      "observed_section_id": 14519,
+      "start": 788,
+      "end": 894,
+      "section_characters": 4191,
+      "section_position_fraction": 0.25,
+      "evidence_position_fraction": 0.188,
+      "context": "spect to the embankment. As a natural consequence, however, the following question arises:\n\nFig. 1.\n\nAre two events (e.g. the two strokes of lightning A and B) which are simultaneous with reference to the railway embankment also simultaneous relatively to the train? We shall show directly that the answer must be in the negative.\n\nWhen we say that the lightning strokes A and B are simultaneous with respect to be embankment, we mean: the rays of light emitted at the places A and B, w",
+      "matching_passage_ids": [
+        228956
+      ],
+      "observed_section_author": "Einstein, Albert, 1879-1955",
+      "observed_section_role": "unclassified",
+      "attribution_basis": "book_metadata_unclassified",
+      "expected_role_matches_observed": null,
+      "expected_author_matches_observed": null
+    },
+    {
+      "query_id": "expanded-cross-11",
+      "book_id": "pg61-full",
+      "work_id": "pg61",
+      "section_ordinal": 2,
+      "section_title": "I. BOURGEOIS AND PROLETARIANS",
+      "text": "Because there is too much civilisation, too much means of subsistence",
+      "observed_section_id": 14552,
+      "start": 12575,
+      "end": 12644,
+      "section_characters": 27700,
+      "section_position_fraction": 0.2857,
+      "evidence_position_fraction": 0.454,
+      "context": "pears as if a famine, a universal war of devastation had cut off the supply of every means of subsistence; industry and commerce seem to be destroyed; and why? Because there is too much civilisation, too much means of subsistence, too much industry, too much commerce. The productive forces at the disposal of society no longer tend to further the development of the conditions of bourgeois property; on the contrary, they have become too powerful f",
+      "matching_passage_ids": [
+        229083
+      ],
+      "observed_section_author": "Marx, Karl, 1818-1883; Engels, Friedrich, 1820-1895",
+      "observed_section_role": "unclassified",
+      "attribution_basis": "book_metadata_unclassified",
+      "expected_role_matches_observed": null,
+      "expected_author_matches_observed": null
+    },
+    {
+      "query_id": "expanded-cross-12",
+      "book_id": "pg35-full",
+      "work_id": "pg35",
+      "section_ordinal": 9,
+      "section_title": "IX. The Morlocks",
+      "text": "I struck another light, and waved it in their dazzled faces",
+      "observed_section_id": 14567,
+      "start": 10178,
+      "end": 10237,
+      "section_characters": 11783,
+      "section_position_fraction": 0.5294,
+      "evidence_position_fraction": 0.8638,
+      "context": "ering like the rain, as they hurried after me.\n\n“In a moment I was clutched by several hands, and there was no mistaking that they were trying to haul me back. I struck another light, and waved it in their dazzled faces. You can scarce imagine how nauseatingly inhuman they looked—those pale, chinless faces and great, lidless, pinkish-grey eyes!—as they stared in their blindness and bewilderment. But I did not stay to look, I promise yo",
+      "matching_passage_ids": [
+        229222
+      ],
+      "observed_section_author": "Wells, H. G. (Herbert George), 1866-1946",
+      "observed_section_role": "unclassified",
+      "attribution_basis": "book_metadata_unclassified",
+      "expected_role_matches_observed": null,
+      "expected_author_matches_observed": null
+    },
+    {
+      "query_id": "expanded-note-01",
+      "book_id": "pg1232-full",
+      "work_id": "pg1232",
+      "section_ordinal": 10,
+      "section_title": "CHAPTER III. CONCERNING MIXED PRINCIPALITIES",
+      "text": "He was Georges d’Amboise, created a cardinal by Alexander VI. Born 1460, died 1510.",
+      "observed_section_id": 13765,
+      "start": 15971,
+      "end": 16054,
+      "section_characters": 17108,
+      "section_position_fraction": 0.2778,
+      "evidence_position_fraction": 0.9335,
+      "context": "of Louis XI, and married in 1499 Anne of Brittany, widow of Charles VIII, in order to retain the Duchy of Brittany for the crown.\n\n[6] The Archbishop of Rouen. He was Georges d’Amboise, created a cardinal by Alexander VI. Born 1460, died 1510.\n\nThus King Louis lost Lombardy by not having followed any of the conditions observed by those who have taken possession of countries and wished to retain them. Nor is there any miracle in this, but much that is reasonab",
+      "matching_passage_ids": [
+        226363
+      ],
+      "observed_section_author": "Machiavelli, Niccolò, 1469-1527",
+      "observed_section_role": "unclassified",
+      "attribution_basis": "book_metadata_unclassified",
+      "expected_role_matches_observed": null,
+      "expected_author_matches_observed": null
+    },
+    {
+      "query_id": "expanded-note-02",
+      "book_id": "pg1232-full",
+      "work_id": "pg1232",
+      "section_ordinal": 25,
+      "section_title": "CHAPTER XVIII. [1] CONCERNING THE WAY IN WHICH PRINCES SHOULD KEEP FAITH",
+      "text": "The present chapter has given greater offence than any other portion of Machiavelli’s writings.",
+      "observed_section_id": 13780,
+      "start": 5,
+      "end": 100,
+      "section_characters": 7112,
+      "section_position_fraction": 0.6944,
+      "evidence_position_fraction": 0.0007,
+      "context": "[1] “The present chapter has given greater offence than any other portion of Machiavelli’s writings.” Burd, “Il Principe,” p. 297.\n\nEvery one admits how praiseworthy it is in a prince to keep faith, and to live with integrity and not with craft. Nevertheless our experience has been that those princes who have done grea",
+      "matching_passage_ids": [
+        226437
+      ],
+      "observed_section_author": "Machiavelli, Niccolò, 1469-1527",
+      "observed_section_role": "unclassified",
+      "attribution_basis": "book_metadata_unclassified",
+      "expected_role_matches_observed": null,
+      "expected_author_matches_observed": null
+    },
+    {
+      "query_id": "expanded-role-01",
+      "book_id": "pg1497-full",
+      "work_id": "pg1497",
+      "section_ordinal": 1,
+      "section_title": "INTRODUCTION AND ANALYSIS.",
+      "text": "The Republic of Plato is the longest of his works with the exception of the Laws",
+      "expected_section_role": "editorial",
+      "expected_section_author": "Benjamin Jowett",
+      "observed_section_id": 13793,
+      "start": 0,
+      "end": 80,
+      "section_characters": 230316,
+      "section_position_fraction": 0.0714,
+      "evidence_position_fraction": 0.0,
+      "context": "The Republic of Plato is the longest of his works with the exception of the Laws, and is certainly the greatest of them. There are nearer approaches to modern metaphysics in the Philebus and in the Sophist; the Politicus or Statesman is more ideal; the form and institutions of the State are more cle",
+      "matching_passage_ids": [
+        226548
+      ],
+      "observed_section_author": "Benjamin Jowett",
+      "observed_section_role": "editorial",
+      "attribution_basis": "explicit_section_attributions[0]",
+      "expected_role_matches_observed": true,
+      "expected_author_matches_observed": true
+    },
+    {
+      "query_id": "expanded-role-02",
+      "book_id": "pg2680-full",
+      "work_id": "pg2680-meditations",
+      "section_ordinal": 16,
+      "section_title": "NOTES",
+      "text": "Casaubon's own notes have been omitted",
+      "expected_section_role": "editorial",
+      "observed_section_id": 13079,
+      "start": 153,
+      "end": 191,
+      "section_characters": 7138,
+      "section_position_fraction": 0.8889,
+      "evidence_position_fraction": 0.0214,
+      "context": "This being neither a critical edition of the text nor an emended edition of Casaubon's translation, it has not been thought necessary to add full notes. Casaubon's own notes have been omitted, because for the most part they are discursive, and not necessary to an understanding of what is written. In those which here follow, certain emendations of his are mentioned, which he proposes in his notes, and follows",
+      "matching_passage_ids": [
+        218914
+      ],
+      "observed_section_author": "Marcus Aurelius, Emperor of Rome, 121-180",
+      "observed_section_role": "unclassified",
+      "attribution_basis": "book_metadata_unclassified",
+      "expected_role_matches_observed": false,
+      "expected_author_matches_observed": null
+    },
+    {
+      "query_id": "expanded-late-01",
+      "book_id": "pg2600-full",
+      "work_id": "pg2600",
+      "section_ordinal": 362,
+      "section_title": "CHAPTER IX",
+      "text": "history should deduce a definition of the conception of freedom and inevitability",
+      "observed_section_id": 13751,
+      "start": 1368,
+      "end": 1449,
+      "section_characters": 12146,
+      "section_position_fraction": 0.9918,
+      "evidence_position_fraction": 0.1126,
+      "context": "sciences. Instead of first defining the conceptions of freedom and inevitability in themselves, and then ranging the phenomena of life under those definitions, history should deduce a definition of the conception of freedom and inevitability themselves from the immense quantity of phenomena of which it is cognizant and that always appear dependent on these two elements.\n\nWhatever presentation of the activity of many men or of an individual we may consider, ",
+      "matching_passage_ids": [
+        226301
+      ],
+      "observed_section_author": "Tolstoy, Leo, graf, 1828-1910",
+      "observed_section_role": "unclassified",
+      "attribution_basis": "book_metadata_unclassified",
+      "expected_role_matches_observed": null,
+      "expected_author_matches_observed": null
+    },
+    {
+      "query_id": "expanded-late-02",
+      "book_id": "pg5001-full",
+      "work_id": "pg5001",
+      "section_ordinal": 38,
+      "section_title": "( b ) Deflection of Light by a Gravitational Field",
+      "text": "photographic registration of stars during a total eclipse of the sun",
+      "observed_section_id": 14547,
+      "start": 896,
+      "end": 964,
+      "section_characters": 3228,
+      "section_position_fraction": 0.95,
+      "evidence_position_fraction": 0.2776,
+      "context": "nd the other half by the geometrical modification (“curvature”) of space caused by the sun.\n\nFig. 5\n\nThis result admits of an experimental test by means of the photographic registration of stars during a total eclipse of the sun. The only reason why we must wait for a total eclipse is because at every other time the atmosphere is so strongly illuminated by the light from the sun that the stars situated near the sun’s disc are invisible. The pre",
+      "matching_passage_ids": [
+        229062
+      ],
+      "observed_section_author": "Einstein, Albert, 1879-1955",
+      "observed_section_role": "unclassified",
+      "attribution_basis": "book_metadata_unclassified",
+      "expected_role_matches_observed": null,
+      "expected_author_matches_observed": null
+    },
+    {
+      "query_id": "expanded-late-03",
+      "book_id": "pg2701-full",
+      "work_id": "pg2701",
+      "section_ordinal": 139,
+      "section_title": "“AND I ONLY AM ESCAPED ALONE TO TELL THEE” Job.",
+      "text": "Buoyed up by that coffin",
+      "observed_section_id": 13388,
+      "start": 1033,
+      "end": 1057,
+      "section_characters": 1448,
+      "section_position_fraction": 1.0,
+      "evidence_position_fraction": 0.7134,
+      "context": "unning spring, and, owing to its great buoyancy, rising with great force, the coffin life-buoy shot lengthwise from the sea, fell over, and floated by my side. Buoyed up by that coffin, for almost one whole day and night, I floated on a soft and dirgelike main. The unharming sharks, they glided by as if with padlocks on their mouths; the savage sea-hawks sailed with sheathed beaks. On the second day, ",
+      "matching_passage_ids": [
+        223745
+      ],
+      "observed_section_author": "Melville, Herman, 1819-1891",
+      "observed_section_role": "unclassified",
+      "attribution_basis": "book_metadata_unclassified",
+      "expected_role_matches_observed": null,
+      "expected_author_matches_observed": null
+    },
+    {
+      "query_id": "expanded-late-04",
+      "book_id": "pg1661-full",
+      "work_id": "pg1661",
+      "section_ordinal": 3,
+      "section_title": "III.",
+      "text": "Irene’s photograph!",
+      "observed_section_id": 13207,
+      "start": 5174,
+      "end": 5193,
+      "section_characters": 5869,
+      "section_position_fraction": 0.2143,
+      "evidence_position_fraction": 0.8816,
+      "context": "esty has something which I should value even more highly,” said Holmes.\n\n“You have but to name it.”\n\n“This photograph!”\n\nThe King stared at him in amazement.\n\n“Irene’s photograph!” he cried. “Certainly, if you wish it.”\n\n“I thank your Majesty. Then there is no more to be done in the matter. I have the honour to wish you a very good morning.” He bowed, and, turning away without observing the hand ",
+      "matching_passage_ids": [
+        222000
+      ],
+      "observed_section_author": "Doyle, Arthur Conan, 1859-1930",
+      "observed_section_role": "unclassified",
+      "attribution_basis": "book_metadata_unclassified",
+      "expected_role_matches_observed": null,
+      "expected_author_matches_observed": null
+    },
+    {
+      "query_id": "expanded-compare-01",
+      "book_id": "pg3300-full",
+      "work_id": "pg3300-wealth",
+      "section_ordinal": 47,
+      "section_title": "PART III. Of the Expense of public Works and public Institutions.",
+      "text": "generally becomes as stupid and ignorant as it is possible for a human creature to become",
+      "observed_section_id": 13171,
+      "start": 137504,
+      "end": 137593,
+      "section_characters": 222734,
+      "section_position_fraction": 0.8704,
+      "evidence_position_fraction": 0.6173,
+      "context": "o exercise his invention, in finding out expedients for removing difficulties which never occur. He naturally loses, therefore, the habit of such exertion, and generally becomes as stupid and ignorant as it is possible for a human creature to become. The torpor of his mind renders him not only incapable of relishing or bearing a part in any rational conversation, but of conceiving any generous, noble, or tender sentiment, and consequently of forming any just judgme",
+      "matching_passage_ids": [
+        220631
+      ],
+      "observed_section_author": "Smith, Adam, 1723-1790",
+      "observed_section_role": "unclassified",
+      "attribution_basis": "book_metadata_unclassified",
+      "expected_role_matches_observed": null,
+      "expected_author_matches_observed": null
+    },
+    {
+      "query_id": "expanded-compare-01",
+      "book_id": "pg61-full",
+      "work_id": "pg61",
+      "section_ordinal": 2,
+      "section_title": "I. BOURGEOIS AND PROLETARIANS",
+      "text": "He becomes an appendage of the machine",
+      "observed_section_id": 14552,
+      "start": 14495,
+      "end": 14533,
+      "section_characters": 27700,
+      "section_position_fraction": 0.2857,
+      "evidence_position_fraction": 0.5233,
+      "context": "ensive use of machinery and to division of labour, the work of the proletarians has lost all individual character, and consequently, all charm for the workman. He becomes an appendage of the machine, and it is only the most simple, most monotonous, and most easily acquired knack, that is required of him. Hence, the cost of production of a workman is restricted, almost entirely, to the means of subsistence that he r",
+      "matching_passage_ids": [
+        229084
+      ],
+      "observed_section_author": "Marx, Karl, 1818-1883; Engels, Friedrich, 1820-1895",
+      "observed_section_role": "unclassified",
+      "attribution_basis": "book_metadata_unclassified",
+      "expected_role_matches_observed": null,
+      "expected_author_matches_observed": null
+    },
+    {
+      "query_id": "expanded-compare-02",
+      "book_id": "pg1232-full",
+      "work_id": "pg1232",
+      "section_ordinal": 24,
+      "section_title": "CHAPTER XVII. CONCERNING CRUELTY AND CLEMENCY, AND WHETHER IT IS BETTER TO BE LOVED THAN FEARED",
+      "text": "it is much safer to be feared than loved",
+      "observed_section_id": 13779,
+      "start": 1995,
+      "end": 2035,
+      "section_characters": 6082,
+      "section_position_fraction": 0.6667,
+      "evidence_position_fraction": 0.328,
+      "context": "ter to be loved than feared or feared than loved? It may be answered that one should wish to be both, but, because it is difficult to unite them in one person, it is much safer to be feared than loved, when, of the two, either must be dispensed with. Because this is to be asserted in general of men, that they are ungrateful, fickle, false, cowardly, covetous, and as long as you succeed they are yours entirely; they w",
+      "matching_passage_ids": [
+        226433
+      ],
+      "observed_section_author": "Machiavelli, Niccolò, 1469-1527",
+      "observed_section_role": "unclassified",
+      "attribution_basis": "book_metadata_unclassified",
+      "expected_role_matches_observed": null,
+      "expected_author_matches_observed": null
+    },
+    {
+      "query_id": "expanded-compare-02",
+      "book_id": "pg3207-full",
+      "work_id": "pg3207",
+      "section_ordinal": 187,
+      "section_title": "Which Is Not To Be Had From The Law Of Nature:",
+      "text": "Covenants, without the Sword, are but Words",
+      "observed_section_id": 13994,
+      "start": 301,
+      "end": 344,
+      "section_characters": 1524,
+      "section_position_fraction": 0.2718,
+      "evidence_position_fraction": 0.1975,
+      "context": " the terrour of some Power, to cause them to be observed, are contrary to our naturall Passions, that carry us to Partiality, Pride, Revenge, and the like. And Covenants, without the Sword, are but Words, and of no strength to secure a man at all. Therefore notwithstanding the Lawes of Nature, (which every one hath then kept, when he has the will to keep them, when he can do it safely,) if there be no Power erected, or ",
+      "matching_passage_ids": [
+        227801
+      ],
+      "observed_section_author": "Hobbes, Thomas, 1588-1679",
+      "observed_section_role": "unclassified",
+      "attribution_basis": "book_metadata_unclassified",
+      "expected_role_matches_observed": null,
+      "expected_author_matches_observed": null
+    },
+    {
+      "query_id": "expanded-compare-03",
+      "book_id": "pg2680-full",
+      "work_id": "pg2680-meditations",
+      "section_ordinal": 8,
+      "section_title": "THE SIXTH BOOK",
+      "text": "The best kind of revenge is, not to become like unto them.",
+      "observed_section_id": 13071,
+      "start": 1338,
+      "end": 1396,
+      "section_characters": 30491,
+      "section_position_fraction": 0.4444,
+      "evidence_position_fraction": 0.0439,
+      "context": "er it hath to do with and accordingly doth all things; so we that do not, no wonder, if we wonder at many things, the reasons whereof we cannot comprehend.\n\nV. The best kind of revenge is, not to become like unto them.\n\nVI. Let this be thy only joy, and thy only comfort, from one sociable kind action without intermission to pass unto another, God being ever in thy mind.\n\nVII. The rational commanding part, as it alone can stir up and t",
+      "matching_passage_ids": [
+        218724
+      ],
+      "observed_section_author": "Marcus Aurelius, Emperor of Rome, 121-180",
+      "observed_section_role": "unclassified",
+      "attribution_basis": "book_metadata_unclassified",
+      "expected_role_matches_observed": null,
+      "expected_author_matches_observed": null
+    },
+    {
+      "query_id": "expanded-compare-03",
+      "book_id": "pg4363-full",
+      "work_id": "pg4363",
+      "section_ordinal": 6,
+      "section_title": "CHAPTER IV. APOPHTHEGMS AND INTERLUDES",
+      "text": "He who fights with monsters should be careful lest he thereby become a monster",
+      "observed_section_id": 14502,
+      "start": 10346,
+      "end": 10424,
+      "section_characters": 14593,
+      "section_position_fraction": 0.5,
+      "evidence_position_fraction": 0.709,
+      "context": "5. Comparing man and woman generally, one may say that woman would not have the genius for adornment, if she had not the instinct for the SECONDARY role.\n\n146. He who fights with monsters should be careful lest he thereby become a monster. And if thou gaze long into an abyss, the abyss will also gaze into thee.\n\n147. From old Florentine novels—moreover, from life: Buona femmina e mala femmina vuol bastone.—Sacchetti, Nov. 86.\n\n148. To seduce their neighb",
+      "matching_passage_ids": [
+        228736
+      ],
+      "observed_section_author": "Nietzsche, Friedrich Wilhelm, 1844-1900",
+      "observed_section_role": "unclassified",
+      "attribution_basis": "book_metadata_unclassified",
+      "expected_role_matches_observed": null,
+      "expected_author_matches_observed": null
+    },
+    {
+      "query_id": "expanded-compare-04",
+      "book_id": "pg1228-full",
+      "work_id": "pg1228-origin",
+      "section_ordinal": 9,
+      "section_title": "CHAPTER VI. DIFFICULTIES ON THEORY.",
+      "text": "numerous gradations from a perfect and complex eye to one very imperfect and simple",
+      "observed_section_id": 13053,
+      "start": 28921,
+      "end": 29004,
+      "section_characters": 66412,
+      "section_position_fraction": 0.5,
+      "evidence_position_fraction": 0.4355,
+      "context": "chromatic aberration, could have been formed by natural selection, seems, I freely confess, absurd in the highest possible degree. Yet reason tells me, that if numerous gradations from a perfect and complex eye to one very imperfect and simple, each grade being useful to its possessor, can be shown to exist; if further, the eye does vary ever so slightly, and the variations be inherited, which is certainly the case; and if any variation or modification in the",
+      "matching_passage_ids": [
+        218144
+      ],
+      "observed_section_author": "Darwin, Charles, 1809-1882",
+      "observed_section_role": "unclassified",
+      "attribution_basis": "book_metadata_unclassified",
+      "expected_role_matches_observed": null,
+      "expected_author_matches_observed": null
+    },
+    {
+      "query_id": "expanded-compare-04",
+      "book_id": "pg2009-full",
+      "work_id": "pg1228-origin",
+      "section_ordinal": 11,
+      "section_title": "CHAPTER VI. DIFFICULTIES OF THE THEORY.",
+      "text": "numerous gradations from a simple and imperfect eye to one complex and perfect",
+      "observed_section_id": 13190,
+      "start": 29404,
+      "end": 29482,
+      "section_characters": 92962,
+      "section_position_fraction": 0.4583,
+      "evidence_position_fraction": 0.3163,
+      "context": "kind declared the doctrine false; but the old saying of Vox populi, vox Dei, as every philosopher knows, cannot be trusted in science. Reason tells me, that if numerous gradations from a simple and imperfect eye to one complex and perfect can be shown to exist, each grade being useful to its possessor, as is certainly the case; if further, the eye ever varies and the variations be inherited, as is likewise certainly the case; and if such variations shoul",
+      "matching_passage_ids": [
+        221300
+      ],
+      "observed_section_author": "Darwin, Charles, 1809-1882",
+      "observed_section_role": "unclassified",
+      "attribution_basis": "book_metadata_unclassified",
+      "expected_role_matches_observed": null,
+      "expected_author_matches_observed": null
+    }
+  ],
+  "negative_scope_audit": [
+    {
+      "query_id": "expanded-negative-01",
+      "book_id": "pg1661-full",
+      "section_characters_checked": 561292,
+      "distinguishing_terms_found": {
+        "doubloon": false
+      },
+      "judgment_basis": "Manual scenario/topic selection plus full extracted-text absence check; lexical absence is supporting evidence, not general semantic entailment proof."
+    },
+    {
+      "query_id": "expanded-negative-02",
+      "book_id": "pg35-full",
+      "section_characters_checked": 179167,
+      "distinguishing_terms_found": {
+        "Darcy": false,
+        "Elizabeth": false
+      },
+      "judgment_basis": "Manual scenario/topic selection plus full extracted-text absence check; lexical absence is supporting evidence, not general semantic entailment proof."
+    },
+    {
+      "query_id": "expanded-negative-03",
+      "book_id": "pg5001-full",
+      "section_characters_checked": 175642,
+      "distinguishing_terms_found": {
+        "covenants": false,
+        "sword": false
+      },
+      "judgment_basis": "Manual scenario/topic selection plus full extracted-text absence check; lexical absence is supporting evidence, not general semantic entailment proof."
+    },
+    {
+      "query_id": "expanded-negative-04",
+      "book_id": "pg1342-full",
+      "section_characters_checked": 710958,
+      "distinguishing_terms_found": {
+        "Adam Smith": false
+      },
+      "judgment_basis": "Manual scenario/topic selection plus full extracted-text absence check; lexical absence is supporting evidence, not general semantic entailment proof."
+    },
+    {
+      "query_id": "expanded-negative-05",
+      "book_id": "pg2701-full",
+      "section_characters_checked": 1212781,
+      "distinguishing_terms_found": {
+        "De Lacey": false
+      },
+      "judgment_basis": "Manual scenario/topic selection plus full extracted-text absence check; lexical absence is supporting evidence, not general semantic entailment proof."
+    },
+    {
+      "query_id": "expanded-negative-06",
+      "book_id": "pg1232-full",
+      "section_characters_checked": 279925,
+      "distinguishing_terms_found": {
+        "lightning": false,
+        "simultaneity": false
+      },
+      "judgment_basis": "Manual scenario/topic selection plus full extracted-text absence check; lexical absence is supporting evidence, not general semantic entailment proof."
+    },
+    {
+      "query_id": "expanded-negative-07",
+      "book_id": "pg2009-full",
+      "section_characters_checked": 1255743,
+      "distinguishing_terms_found": {
+        "Morlocks": false,
+        "Eloi": false
+      },
+      "judgment_basis": "Manual scenario/topic selection plus full extracted-text absence check; lexical absence is supporting evidence, not general semantic entailment proof."
+    },
+    {
+      "query_id": "expanded-negative-08",
+      "book_id": "pg11-full",
+      "section_characters_checked": 143590,
+      "distinguishing_terms_found": {
+        "speckled": false,
+        "detective": false
+      },
+      "judgment_basis": "Manual scenario/topic selection plus full extracted-text absence check; lexical absence is supporting evidence, not general semantic entailment proof."
+    },
+    {
+      "query_id": "expanded-negative-09",
+      "book_id": "pg2600-full",
+      "section_characters_checked": 3199087,
+      "distinguishing_terms_found": {
+        "Gregor Samsa": false
+      },
+      "judgment_basis": "Manual scenario/topic selection plus full extracted-text absence check; lexical absence is supporting evidence, not general semantic entailment proof."
+    },
+    {
+      "query_id": "expanded-negative-10",
+      "book_id": "pg5316-full",
+      "section_characters_checked": 1509,
+      "distinguishing_terms_found": {
+        "prisoners": false,
+        "cave": false,
+        "education": false
+      },
+      "judgment_basis": "Manual scenario/topic selection plus full extracted-text absence check; lexical absence is supporting evidence, not general semantic entailment proof."
+    }
+  ],
+  "known_manual_role_gaps": [
+    {
+      "query_id": "expanded-role-02",
+      "book_id": "pg2680-full",
+      "work_id": "pg2680-meditations",
+      "section_ordinal": 16,
+      "section_title": "NOTES",
+      "text": "Casaubon's own notes have been omitted",
+      "expected_section_role": "editorial",
+      "observed_section_id": 13079,
+      "start": 153,
+      "end": 191,
+      "section_characters": 7138,
+      "section_position_fraction": 0.8889,
+      "evidence_position_fraction": 0.0214,
+      "context": "This being neither a critical edition of the text nor an emended edition of Casaubon's translation, it has not been thought necessary to add full notes. Casaubon's own notes have been omitted, because for the most part they are discursive, and not necessary to an understanding of what is written. In those which here follow, certain emendations of his are mentioned, which he proposes in his notes, and follows",
+      "matching_passage_ids": [
+        218914
+      ],
+      "observed_section_author": "Marcus Aurelius, Emperor of Rome, 121-180",
+      "observed_section_role": "unclassified",
+      "attribution_basis": "book_metadata_unclassified",
+      "expected_role_matches_observed": false,
+      "expected_author_matches_observed": null
+    }
+  ],
+  "limitations": [
+    "Manually selected positives are not exhaustive relevance judgments.",
+    "Roles and section-specific attribution require manual audit beyond current evaluator metrics.",
+    "Incorrect-book negatives use explicit scope and distinguishing concept absence; they are not a general semantic no-answer proof.",
+    "No ranking scores computed and no frozen heldout queries read or changed."
+  ],
+  "dataset_sha256": "8955a6cf471318fa70d24f518c3a08f410865f9a9f4a751f47d29de3a94deb44",
+  "database_counts": {
+    "books": 20,
+    "works": 19,
+    "passages": 12108
+  },
+  "database_file_sha256": "ea1feab7c1d1c58acd7457529ef70885f2767ceeab6050ec12db0fa4f74bb4b8",
+  "database_digest_note": "Main SQLite file SHA256 measured read-only after checkpoint with empty WAL; canonical book/artifact/content digests also retained.",
+  "canonical_evidence_context_sha256": "828afa00a914969ac2dd3c6a2a6097b275551c225d131d1ff7956bc1f3ece715",
+  "frozen": true
+}

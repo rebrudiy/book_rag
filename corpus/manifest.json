@@ -93,7 +93,33 @@
       "Life"
     ],
     "work_identity_status": "curated",
-    "work_type": "book_or_text"
+    "work_type": "book_or_text",
+    "section_attributions": [
+      {
+        "title_contains": "INTRODUCTION",
+        "author": "Unidentified editorial contributor",
+        "role": "editorial",
+        "source_url": "https://www.gutenberg.org/ebooks/2680",
+        "evidence": "Later biographical commentary explicitly surveys post-classical translations; no signed personal editor identity is established by the inspected artifact or official catalog credits.",
+        "source_artifact_sha256": "62c71326bea242893ce8c3ce54bdf5fad3989a827a1462ec03f7dadf8bf5bc89"
+      },
+      {
+        "title_contains": "NOTES",
+        "author": "Unidentified editorial contributor",
+        "role": "editorial",
+        "source_url": "https://www.gutenberg.org/ebooks/2680",
+        "evidence": "The section describes editorial decisions about Casaubon’s translation and cannot be a statement by Marcus Aurelius; personal editor identity is not supplied.",
+        "source_artifact_sha256": "62c71326bea242893ce8c3ce54bdf5fad3989a827a1462ec03f7dadf8bf5bc89"
+      },
+      {
+        "title_contains": "GLOSSARY",
+        "author": "Unidentified editorial contributor",
+        "role": "editorial",
+        "source_url": "https://www.gutenberg.org/ebooks/2680",
+        "evidence": "A glossary explaining English translation vocabulary is editorial reference matter, not the emperor’s philosophical prose; no personal compiler identity is verified.",
+        "source_artifact_sha256": "62c71326bea242893ce8c3ce54bdf5fad3989a827a1462ec03f7dadf8bf5bc89"
+      }
+    ]
   },
   {
     "id": "pg4650-full",
@@ -224,7 +250,17 @@
       "Detective and mystery stories, English"
     ],
     "work_identity_status": "curated",
-    "work_type": "book_or_text"
+    "work_type": "book_or_text",
+    "section_attributions": [
+      {
+        "title_contains": "The Adventures of Sherlock Holmes",
+        "author": "Unidentified editorial contributor",
+        "role": "editorial",
+        "source_url": "https://www.gutenberg.org/ebooks/1661",
+        "evidence": "The title section contains digital edition navigation and a contents list. The rule does not match any of Doyle’s story sections.",
+        "source_artifact_sha256": "310ddf29f2b98b870b0e970061d236c9ce7c65163e0e172c254a1db3d070d3f4"
+      }
+    ]
   },
   {
     "id": "pg84-full",
@@ -280,7 +316,17 @@
       "Whaling ships -- Fiction"
     ],
     "work_identity_status": "curated",
-    "work_type": "book_or_text"
+    "work_type": "book_or_text",
+    "section_attributions": [
+      {
+        "title_contains": "By Herman Melville",
+        "author": "Unidentified editorial contributor",
+        "role": "editorial",
+        "source_url": "https://www.gutenberg.org/ebooks/2701",
+        "evidence": "The target contains contents/front matter and explicit digital production commentary. The narrative Etymology and Extracts sections are not matched by this rule.",
+        "source_artifact_sha256": "e247676589c02a65bc80ff7bf7aaaf146d7c69eadfcfb96633c5f606a08602db"
+      }
+    ]
   },
   {
     "id": "pg2600-full",
@@ -328,7 +374,49 @@
       "Political ethics -- Early works to 1800"
     ],
     "work_identity_status": "curated",
-    "work_type": "book_or_text"
+    "work_type": "book_or_text",
+    "section_attributions": [
+      {
+        "title_contains": "INTRODUCTION",
+        "author": "Unidentified editorial contributor",
+        "role": "editorial",
+        "source_url": "https://www.gutenberg.org/ebooks/1232",
+        "evidence": "Explicit later biographical/editorial discussion of Machiavelli. W. K. Marriott is credited as translator, but that credit alone does not establish authorship of this unsigned commentary. Embedded historical quotations retain their inline credits and need finer attribution if extracted in isolation.",
+        "source_artifact_sha256": "0260d6165a1558ee2e94eb37d7f1ff0cf4e30b41e094d6ff1afb094950b1be88"
+      },
+      {
+        "title_contains": "YOUTH",
+        "author": "Unidentified editorial contributor",
+        "role": "editorial",
+        "source_url": "https://www.gutenberg.org/ebooks/1232",
+        "evidence": "Explicit later biographical/editorial discussion of Machiavelli. W. K. Marriott is credited as translator, but that credit alone does not establish authorship of this unsigned commentary. Embedded historical quotations retain their inline credits and need finer attribution if extracted in isolation.",
+        "source_artifact_sha256": "0260d6165a1558ee2e94eb37d7f1ff0cf4e30b41e094d6ff1afb094950b1be88"
+      },
+      {
+        "title_contains": "OFFICE",
+        "author": "Unidentified editorial contributor",
+        "role": "editorial",
+        "source_url": "https://www.gutenberg.org/ebooks/1232",
+        "evidence": "Explicit later biographical/editorial discussion of Machiavelli. W. K. Marriott is credited as translator, but that credit alone does not establish authorship of this unsigned commentary. Embedded historical quotations retain their inline credits and need finer attribution if extracted in isolation.",
+        "source_artifact_sha256": "0260d6165a1558ee2e94eb37d7f1ff0cf4e30b41e094d6ff1afb094950b1be88"
+      },
+      {
+        "title_contains": "LITERATURE AND DEATH",
+        "author": "Unidentified editorial contributor",
+        "role": "editorial",
+        "source_url": "https://www.gutenberg.org/ebooks/1232",
+        "evidence": "Explicit later biographical/editorial discussion of Machiavelli. W. K. Marriott is credited as translator, but that credit alone does not establish authorship of this unsigned commentary. Embedded historical quotations retain their inline credits and need finer attribution if extracted in isolation.",
+        "source_artifact_sha256": "0260d6165a1558ee2e94eb37d7f1ff0cf4e30b41e094d6ff1afb094950b1be88"
+      },
+      {
+        "title_contains": "THE MAN AND HIS WORKS",
+        "author": "Unidentified editorial contributor",
+        "role": "editorial",
+        "source_url": "https://www.gutenberg.org/ebooks/1232",
+        "evidence": "Explicit later biographical/editorial discussion of Machiavelli. W. K. Marriott is credited as translator, but that credit alone does not establish authorship of this unsigned commentary. Embedded historical quotations retain their inline credits and need finer attribution if extracted in isolation.",
+        "source_artifact_sha256": "0260d6165a1558ee2e94eb37d7f1ff0cf4e30b41e094d6ff1afb094950b1be88"
+      }
+    ]
   },
   {
     "id": "pg1497-full",
@@ -360,6 +448,14 @@
         "role": "editorial",
         "source_url": "https://www.gutenberg.org/ebooks/1497",
         "evidence": "The electronic edition credits Benjamin Jowett as translator and contains his Introduction and Analysis before the dialogue books; audited against the downloaded EPUB."
+      },
+      {
+        "title_contains": "Translated by Benjamin Jowett",
+        "author": "Unidentified editorial contributor",
+        "role": "editorial",
+        "source_url": "https://www.gutenberg.org/ebooks/1497",
+        "evidence": "A digital cross-reference is anonymous edition metadata, not prose by Plato or an identified statement by Jowett. Its translator heading does not establish note authorship.",
+        "source_artifact_sha256": "8c8bf2ed9bff65aaf226bf5db3879eb378a26e72489bd28666abc01c02f2a0c2"
       }
     ]
   },
@@ -383,7 +479,17 @@
       "State, The -- Early works to 1800"
     ],
     "work_identity_status": "curated",
-    "work_type": "book_or_text"
+    "work_type": "book_or_text",
+    "section_attributions": [
+      {
+        "title_contains": "Thomas Hobbes of Malmesbury Printed for Andrew Crooke",
+        "author": "Unidentified editorial contributor",
+        "role": "editorial",
+        "source_url": "https://www.gutenberg.org/ebooks/3207",
+        "evidence": "The speaker describes preparing an electronic text and decisions about how to reproduce Hobbes’s original typography. Official production credits do not uniquely identify this speaker.",
+        "source_artifact_sha256": "a6ccaf6bea85d46d118a5e05b0b741746027b42ec1d8c703286cecde920fa219"
+      }
+    ]
   },
   {
     "id": "pg4363-full",
@@ -405,7 +511,17 @@
       "Philosophy, German"
     ],
     "work_identity_status": "curated",
-    "work_type": "book_or_text"
+    "work_type": "book_or_text",
+    "section_attributions": [
+      {
+        "title_contains": "Translated by Helen Zimmern",
+        "author": "Unidentified editorial contributor",
+        "role": "editorial",
+        "source_url": "https://www.gutenberg.org/ebooks/4363",
+        "evidence": "Electronic reprint/conversion instructions are not Nietzsche’s preface and are not shown to have been written by the named translator. The section heading names the translation, not the speaker of this note.",
+        "source_artifact_sha256": "5be9a122841a88130130999da60ce5949f277ce603c9977081cc91a56ea53290"
+      }
+    ]
   },
   {
     "id": "pg5001-full",

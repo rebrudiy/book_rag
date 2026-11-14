@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "dataset_sha256": "8955a6cf471318fa70d24f518c3a08f410865f9a9f4a751f47d29de3a94deb44",
+  "split": "dev",
+  "k": 5,
+  "baseline_mode": "hybrid",
+  "candidate_mode": "hybrid",
+  "metrics": {
+    "mrr_at_k": {
+      "baseline": 0.6825757575757576,
+      "candidate": 0.6712121212121213,
+      "delta": -0.011363636363636354,
+      "higher_is_better": true
+    },
+    "hit_at_k": {
+      "baseline": 0.7954545454545454,
+      "candidate": 0.7954545454545454,
+      "delta": 0.0,
+      "higher_is_better": true
+    },
+    "work_recall_at_k": {
+      "baseline": 0.9659090909090909,
+      "candidate": 0.9659090909090909,
+      "delta": 0.0,
+      "higher_is_better": true
+    },
+    "precision_at_k": {
+      "baseline": 0.18181818181818182,
+      "candidate": 0.18181818181818182,
+      "delta": 0.0,
+      "higher_is_better": true
+    },
+    "negative_abstention_accuracy": {
+      "baseline": 0.2,
+      "candidate": 0.2,
+      "delta": 0.0,
+      "higher_is_better": true
+    },
+    "quote_exact_rate": {
+      "baseline": 1.0,
+      "candidate": 1.0,
+      "delta": 0.0,
+      "higher_is_better": true
+    },
+    "metadata_exact_rate": {
+      "baseline": 1.0,
+      "candidate": 1.0,
+      "delta": 0.0,
+      "higher_is_better": true
+    },
+    "reader_anchor_exact_rate": {
+      "baseline": 1.0,
+      "candidate": 1.0,
+      "delta": 0.0,
+      "higher_is_better": true
+    },
+    "latency_p50_ms": {
+      "baseline": 115.492,
+      "candidate": 115.121,
+      "delta": -0.3710000000000093,
+      "higher_is_better": false
+    },
+    "latency_p95_ms": {
+      "baseline": 154.699,
+      "candidate": 173.364,
+      "delta": 18.664999999999992,
+      "higher_is_better": false
+    },
+    "elapsed_seconds": {
+      "baseline": 5.351,
+      "candidate": 5.655,
+      "delta": 0.30400000000000027,
+      "higher_is_better": false
+    },
+    "process_peak_rss_mib": {
+      "baseline": 1020.0,
+      "candidate": 836.53,
+      "delta": -183.47000000000003,
+      "higher_is_better": false
+    }
+  },
+  "corpus_sha256": "efe0ac3153dfd9d685535013ef32a6b787b1d3041d6ed6a526acf24198ffbeb6"
+}

@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "purpose": "Fixed semantic evidence pool independent of displayed result limit; correctness/performance experiment, no model promotion",
+  "dataset": "evals/dev-expanded.json",
+  "dataset_sha256": "8955a6cf471318fa70d24f518c3a08f410865f9a9f4a751f47d29de3a94deb44",
+  "split": "dev",
+  "k": 5,
+  "policy": {
+    "strategy": "fixed-passage-pool-v1",
+    "window_limit": 2000,
+    "unique_passage_limit": 100,
+    "lexical_limit": 50
+  },
+  "control_implementation": {
+    "semantic_sha256": "6dd2717dff2cb28b478d79cb59c60a2161087686f7de65de5aaf8d0f353d01a1",
+    "pool": "max(50, output_limit*4) windows",
+    "dataset": "evals/dev-expanded.json"
+  },
+  "fixed_implementation": {
+    "semantic_sha256": "98e378ae65a64853043743d32bda0a6eb64f5dd09bda2a69ceb3dfc702229026",
+    "retrieval_strategy": "fixed-passage-pool-v1",
+    "passage_pool": 100,
+    "window_pool": 2000,
+    "dataset": "evals/dev-expanded.json"
+  },
+  "pairs": {
+    "minilm-semantic": {
+      "control": "control-minilm-semantic.json",
+      "fixed": "fixed-minilm-semantic.json",
+      "comparison": "comparison-minilm-semantic.json",
+      "cross_language_control": {
+        "queries": 12,
+        "mrr_at_k": 0.4583333333333333,
+        "hit_at_k": 0.75
+      },
+      "cross_language_fixed": {
+        "queries": 12,
+        "mrr_at_k": 0.4583333333333333,
+        "hit_at_k": 0.75
+      }
+    },
+    "minilm-hybrid": {
+      "control": "control-minilm-hybrid.json",
+      "fixed": "fixed-minilm-hybrid.json",
+      "comparison": "comparison-minilm-hybrid.json",
+      "cross_language_control": {
+        "queries": 12,
+        "mrr_at_k": 0.4166666666666667,
+        "hit_at_k": 0.6666666666666666
+      },
+      "cross_language_fixed": {
+        "queries": 12,
+        "mrr_at_k": 0.4166666666666667,
+        "hit_at_k": 0.6666666666666666
+      }
+    },
+    "e5-semantic": {
+      "control": "control-e5-semantic.json",
+      "fixed": "fixed-e5-semantic.json",
+      "comparison": "comparison-e5-semantic.json",
+      "cross_language_control": {
+        "queries": 12,
+        "mrr_at_k": 0.3958333333333333,
+        "hit_at_k": 0.5
+      },
+      "cross_language_fixed": {
+        "queries": 12,
+        "mrr_at_k": 0.3958333333333333,
+        "hit_at_k": 0.5
+      }
+    },
+    "e5-hybrid": {
+      "control": "control-e5-hybrid.json",
+      "fixed": "fixed-e5-hybrid.json",
+      "comparison": "comparison-e5-hybrid.json",
+      "cross_language_control": {
+        "queries": 12,
+        "mrr_at_k": 0.3125,
+        "hit_at_k": 0.4166666666666667
+      },
+      "cross_language_fixed": {
+        "queries": 12,
+        "mrr_at_k": 0.3125,
+        "hit_at_k": 0.4166666666666667
+      }
+    }
+  },
+  "limitations": [
+    "MiniLM hybrid MRR regressed slightly; no across-the-board relevance improvement is claimed.",
+    "Negative abstention is unchanged and remains inadequate.",
+    "Timing is one local paired run with loaded model caches, not a scalability benchmark.",
+    "Two corpus fingerprint scans per semantic query add O(P) work.",
+    "Control source is reconstructed exactly from the pre-change function and verified against the captured loaded-source SHA256; reproduce-control.patch restores it.",
+    "Held-out data was not used."
+  ]
+}

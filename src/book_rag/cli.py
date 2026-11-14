@@ -176,3 +176,66 @@ def export_saved(output: Path = Path("data/exports/collection.md"), collection: 
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(markdown, encoding="utf-8")
     emit({"output": str(output), "collection": collection, "bytes": output.stat().st_size})
+
+
+@app.command()
+def snapshot(output: Path, manifest: Path | None = None, include_saved: bool = True) -> None:
+    """Freeze a consistent library backup or a manifest-filtered evaluation subset."""
+    from book_rag.snapshots import create_snapshot
+    from book_rag.sources import load_manifest
+
+    book_ids = [entry["id"] for entry in load_manifest(manifest)] if manifest else None
+    emit(create_snapshot(Library(data_dir()), output, book_ids, include_saved))
+
+
+@app.command("acquire-modern")
+def acquire_modern(output: Path = Path("data/modern/d2l"), index: bool = False) -> None:
+    """Acquire pinned CC BY-SA D2L chapters with exact code/math and full provenance."""
+    from book_rag.modern_sources import acquire_d2l
+
+    result = acquire_d2l(output)
+    emit({key: str(value) if isinstance(value, Path) else value for key, value in result.items()})
+    if index:
+        emit(ingest_manifest(result["manifest"]))
+
+
+@app.command()
+def verify(artifacts: bool = False, output: Path | None = None) -> None:
+    """Audit every canonical citation and optionally original artifact hashes."""
+    from book_rag.integrity import audit_library
+
+    report = audit_library(Library(data_dir()), artifacts=artifacts)
+    if output:
+        output.parent.mkdir(parents=True, exist_ok=True)
+        output.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n")
+    emit(report)
+    if not report["valid"]:
+        raise typer.Exit(1)
+
+
+@app.command("plan-balanced")
+def plan_balanced(
+    catalog: Path,
+    output: Path = Path("data/catalog/balanced.json"),
+    per_language: Annotated[int, typer.Option(min=1)] = 100,
+    language: Annotated[list[str] | None, typer.Option()] = None,
+) -> None:
+    """Plan a rights-checked language/subject-balanced queue from offline metadata."""
+    from book_rag.corpus_planning import plan_balanced_corpus
+
+    emit(plan_balanced_corpus(catalog, output, per_language, language))
+
+
+@app.command("acquire-russian")
+def acquire_russian(
+    output: Path = Path("data/russian/wikisource"),
+    limit: Annotated[int, typer.Option(min=1, max=5)] = 5,
+    index: bool = False,
+) -> None:
+    """Acquire five verified Russian originals with captured-revision provenance."""
+    from book_rag.russian_sources import acquire_russian as acquire
+
+    result = acquire(output, limit=limit)
+    emit({key: str(value) if isinstance(value, Path) else value for key, value in result.items()})
+    if index:
+        emit(ingest_manifest(result["manifest"]))
