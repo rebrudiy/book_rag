@@ -1,0 +1,281 @@
+{
+  "version": 1,
+  "split": "dev",
+  "description": "Manually labeled questions over 8 public-domain demo excerpts; not a general-library benchmark.",
+  "corpus_manifest": "corpus/demo/manifest.json",
+  "queries": [
+    {
+      "id": "dev-quote-alice",
+      "query": "White Rabbit with pink eyes",
+      "type": "quote",
+      "language": "en",
+      "answerable": true,
+      "relevant_work_ids": [
+        "pg11-alice"
+      ],
+      "evidence_contains": [
+        "White Rabbit with pink eyes"
+      ]
+    },
+    {
+      "id": "dev-scene-alice",
+      "query": "A girl follows a rabbit who takes a watch out of his pocket",
+      "type": "scene",
+      "language": "en",
+      "answerable": true,
+      "relevant_work_ids": [
+        "pg11-alice"
+      ],
+      "evidence_contains": [
+        "waistcoat-pocket"
+      ]
+    },
+    {
+      "id": "dev-quote-pride",
+      "query": "a single man in possession of a good fortune",
+      "type": "quote",
+      "language": "en",
+      "answerable": true,
+      "relevant_work_ids": [
+        "pg1342-pride"
+      ],
+      "evidence_contains": [
+        "single man in possession"
+      ]
+    },
+    {
+      "id": "dev-description-pride",
+      "query": "Bingley Bennet marriage daughters fortune",
+      "type": "book_description",
+      "language": "en",
+      "answerable": true,
+      "relevant_work_ids": [
+        "pg1342-pride"
+      ]
+    },
+    {
+      "id": "dev-quote-darwin",
+      "query": "struggle for existence",
+      "type": "quote",
+      "language": "en",
+      "answerable": true,
+      "relevant_work_ids": [
+        "pg1228-origin"
+      ],
+      "evidence_contains": [
+        "struggle for existence"
+      ]
+    },
+    {
+      "id": "dev-argument-darwin",
+      "query": "Why do species not increase without limit despite producing many eggs and seeds?",
+      "type": "argument",
+      "language": "en",
+      "answerable": true,
+      "relevant_work_ids": [
+        "pg1228-origin"
+      ],
+      "evidence_contains": [
+        "destruction",
+        "destroyed"
+      ]
+    },
+    {
+      "id": "dev-idea-meditations",
+      "query": "unwilling to rise in the morning",
+      "type": "idea",
+      "language": "en",
+      "answerable": true,
+      "relevant_work_ids": [
+        "pg2680-meditations"
+      ],
+      "evidence_contains": [
+        "unwilling to rise"
+      ]
+    },
+    {
+      "id": "dev-quote-wealth",
+      "query": "division of labour",
+      "type": "quote",
+      "language": "en",
+      "answerable": true,
+      "relevant_work_ids": [
+        "pg3300-wealth"
+      ],
+      "evidence_contains": [
+        "division of labour"
+      ]
+    },
+    {
+      "id": "dev-scene-wealth",
+      "query": "pin manufacture eighteen operations ten men",
+      "type": "explanation",
+      "language": "en",
+      "answerable": true,
+      "relevant_work_ids": [
+        "pg3300-wealth"
+      ],
+      "evidence_contains": [
+        "eighteen distinct operations"
+      ]
+    },
+    {
+      "id": "dev-quote-candide",
+      "query": "tout est au mieux",
+      "type": "quote",
+      "language": "fr",
+      "answerable": true,
+      "relevant_work_ids": [
+        "pg4650-candide"
+      ],
+      "evidence_contains": [
+        "tout est au mieux"
+      ]
+    },
+    {
+      "id": "dev-argument-candide",
+      "query": "Pangloss les nez ont été faits pour porter des lunettes",
+      "type": "argument",
+      "language": "fr",
+      "answerable": true,
+      "relevant_work_ids": [
+        "pg4650-candide"
+      ],
+      "evidence_contains": [
+        "les nez ont été faits"
+      ]
+    },
+    {
+      "id": "dev-quote-kafka",
+      "query": "ungeheueren Ungeziefer verwandelt",
+      "type": "quote",
+      "language": "de",
+      "answerable": true,
+      "relevant_work_ids": [
+        "pg22367-metamorphosis"
+      ],
+      "evidence_contains": [
+        "ungeheueren Ungeziefer verwandelt"
+      ]
+    },
+    {
+      "id": "dev-pushkin",
+      "query": "Ах, отчего я не табак",
+      "type": "quote",
+      "language": "ru",
+      "answerable": true,
+      "relevant_work_ids": [
+        "pg5316-pushkin"
+      ],
+      "evidence_contains": [
+        "отчего я не табак"
+      ]
+    },
+    {
+      "id": "dev-cross-alice",
+      "query": "Девочка бежит за белым кроликом с карманными часами",
+      "type": "cross_language",
+      "language": "ru",
+      "answerable": true,
+      "relevant_work_ids": [
+        "pg11-alice"
+      ],
+      "evidence_contains": [
+        "waistcoat-pocket"
+      ]
+    },
+    {
+      "id": "dev-cross-wealth",
+      "query": "Разделение труда увеличивает производительность булавочной фабрики",
+      "type": "cross_language",
+      "language": "ru",
+      "answerable": true,
+      "relevant_work_ids": [
+        "pg3300-wealth"
+      ],
+      "evidence_contains": [
+        "pin-maker",
+        "eighteen distinct operations"
+      ]
+    },
+    {
+      "id": "dev-cross-kafka",
+      "query": "A travelling salesman wakes up transformed into a huge insect",
+      "type": "cross_language",
+      "language": "en",
+      "answerable": true,
+      "relevant_work_ids": [
+        "pg22367-metamorphosis"
+      ],
+      "evidence_contains": [
+        "Ungeziefer verwandelt"
+      ]
+    },
+    {
+      "id": "dev-cross-candide",
+      "query": "A philosopher teaches that noses were made for wearing spectacles",
+      "type": "cross_language",
+      "language": "en",
+      "answerable": true,
+      "relevant_work_ids": [
+        "pg4650-candide"
+      ],
+      "evidence_contains": [
+        "les nez ont été faits"
+      ]
+    },
+    {
+      "id": "dev-comparison-work",
+      "query": "work and labour improve society",
+      "type": "comparison",
+      "language": "en",
+      "answerable": true,
+      "relevant_work_ids": [
+        "pg2680-meditations",
+        "pg3300-wealth"
+      ],
+      "evidence_contains": [
+        "common good of human society",
+        "division of labour"
+      ]
+    },
+    {
+      "id": "dev-negative-quantum",
+      "query": "superconducting qubits quantum decoherence",
+      "type": "negative",
+      "language": "en",
+      "answerable": false
+    },
+    {
+      "id": "dev-negative-biotech",
+      "query": "CRISPR Cas9 guide RNA",
+      "type": "negative",
+      "language": "en",
+      "answerable": false
+    },
+    {
+      "id": "dev-negative-scoped",
+      "query": "White Rabbit pocket watch",
+      "type": "negative",
+      "language": "en",
+      "answerable": false,
+      "filters": {
+        "book_id": "pg1228-origin"
+      }
+    },
+    {
+      "id": "dev-negative-natural-question",
+      "query": "Who won the Nobel Prize in physics in 2025?",
+      "type": "negative",
+      "language": "en",
+      "answerable": false
+    },
+    {
+      "id": "dev-negative-modern-question",
+      "query": "How does CRISPR Cas9 edit a human genome?",
+      "type": "negative",
+      "language": "en",
+      "answerable": false
+    }
+  ]
+}

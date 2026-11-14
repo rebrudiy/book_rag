@@ -1,0 +1,82 @@
+[
+  {
+    "id": "pg11-alice",
+    "source_sha256": "01b38ea4c710a84bc18d0bd41271a5a1a92b94e97b2812f4dece97d4a694725e",
+    "source_char_start": 1501,
+    "source_char_end": 10090,
+    "paragraphs": 19,
+    "canonical_characters": 8494,
+    "file_sha256": "ceceb5641daca70b4a8374df10d90acfa1e637b16bd6ba4b7b9e5eff1c87aab5",
+    "anchor": "Alice was beginning to get very tired"
+  },
+  {
+    "id": "pg1342-pride",
+    "source_sha256": "3f6bb9d6f78e0293b56acd4714dd68cb7d6d1d293402031ce9d5a216bcaf9d75",
+    "source_char_start": 35259,
+    "source_char_end": 43665,
+    "paragraphs": 68,
+    "canonical_characters": 8272,
+    "file_sha256": "256af3cdaccb707b80ac5ca3519ad1ace225bb731efc86e5ae82fa21197674cc",
+    "anchor": "It is a truth universally acknowledged"
+  },
+  {
+    "id": "pg1228-origin",
+    "source_sha256": "362142cb7c6f90850477520cfe2a62fe423ae92ea8eb6d9cd8b30ddb39de60b9",
+    "source_char_start": 126414,
+    "source_char_end": 133323,
+    "paragraphs": 6,
+    "canonical_characters": 6899,
+    "file_sha256": "1ba12b27b1717ad2ad912d3c91cbbcce75512ca42e1ba05d5ff6a60d922ba1c6",
+    "anchor": "A struggle for existence inevitably follows"
+  },
+  {
+    "id": "pg2680-meditations",
+    "source_sha256": "6977474f82a39dd88a4af31a59504821658174d33c177732c54357e4d680b96c",
+    "source_char_start": 113561,
+    "source_char_end": 120206,
+    "paragraphs": 7,
+    "canonical_characters": 6633,
+    "file_sha256": "dad17af5ea3ba989031e3c5cb6bf3805a09cfd2e2d21d0ac1197d71601d544d5",
+    "anchor": "I. In the morning when thou findest thyself unwilling"
+  },
+  {
+    "id": "pg4650-candide",
+    "source_sha256": "1cc10ab3268a76aa01bd3f9722ae2ae0e5e36b869a18b0bb0832b75bc0327806",
+    "source_char_start": 7639,
+    "source_char_end": 15114,
+    "paragraphs": 12,
+    "canonical_characters": 7453,
+    "file_sha256": "e04737936a280f46a51cd4c8644a2dbed9a14f1b03ef60bbfe13698d74b2f65b",
+    "anchor": "Il y avait en Vestphalie"
+  },
+  {
+    "id": "pg22367-metamorphosis",
+    "source_sha256": "359d3f5983c812393f4bd7ee49a350ffffc7d476015e58d6b84b6c848dd2b0e9",
+    "source_char_start": 1450,
+    "source_char_end": 9734,
+    "paragraphs": 8,
+    "canonical_characters": 8270,
+    "file_sha256": "4876baa73f8b8625f45041ae56ca26e9972227bea8061491fdb33f27e3ac5020",
+    "anchor": "Als Gregor Samsa eines Morgens"
+  },
+  {
+    "id": "pg5316-pushkin",
+    "source_sha256": "2cc3f7cd652dce2f7e08250e9b46957575f7d96c2463a78fbde3a486ebcecffc",
+    "source_char_start": 968,
+    "source_char_end": 2422,
+    "paragraphs": 1,
+    "canonical_characters": 1454,
+    "file_sha256": "d92a1499f8df63ce88da4325a49fd84c139051b202e1b9e2175b18f22178e8af",
+    "anchor": "Возможно ль? вместо роз"
+  },
+  {
+    "id": "pg3300-wealth",
+    "source_sha256": "e91d52dca43fd0fd69baf7776b00a5d8e74b69675b6b608ca8a0378aaf3ae58d",
+    "source_char_start": 10932,
+    "source_char_end": 20019,
+    "paragraphs": 4,
+    "canonical_characters": 8373,
+    "file_sha256": "a02e3e58dfc998a9fc8aef46ead2cc82e637298f23f1ae8a9acbc3bb63f56c6a",
+    "anchor": "The greatest improvements in the productive powers"
+  }
+]

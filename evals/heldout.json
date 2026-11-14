@@ -1,0 +1,166 @@
+{
+  "version": 1,
+  "split": "heldout",
+  "description": "Manually labeled questions over 8 public-domain demo excerpts; not a general-library benchmark.",
+  "corpus_manifest": "corpus/demo/manifest.json",
+  "queries": [
+    {
+      "id": "heldout-scene-marmalade",
+      "query": "A falling child finds an empty jar of orange marmalade",
+      "type": "scene",
+      "language": "en",
+      "answerable": true,
+      "relevant_work_ids": [
+        "pg11-alice"
+      ],
+      "evidence_contains": [
+        "ORANGE MARMALADE"
+      ]
+    },
+    {
+      "id": "heldout-quote-pride",
+      "query": "You have no compassion on my poor nerves",
+      "type": "quote",
+      "language": "en",
+      "answerable": true,
+      "relevant_work_ids": [
+        "pg1342-pride"
+      ],
+      "evidence_contains": [
+        "poor nerves"
+      ]
+    },
+    {
+      "id": "heldout-explanation-elephants",
+      "query": "How can a slowly breeding elephant population grow to millions?",
+      "type": "explanation",
+      "language": "en",
+      "answerable": true,
+      "relevant_work_ids": [
+        "pg1228-origin"
+      ],
+      "evidence_contains": [
+        "fifteen million elephants"
+      ]
+    },
+    {
+      "id": "heldout-idea-generosity",
+      "query": "Doing a good turn without expecting retaliation or applause",
+      "type": "idea",
+      "language": "en",
+      "answerable": true,
+      "relevant_work_ids": [
+        "pg2680-meditations"
+      ],
+      "evidence_contains": [
+        "retaliation",
+        "recompense"
+      ]
+    },
+    {
+      "id": "heldout-argument-agriculture",
+      "query": "Why is division of labour less complete in agriculture than manufacture?",
+      "type": "argument",
+      "language": "en",
+      "answerable": true,
+      "relevant_work_ids": [
+        "pg3300-wealth"
+      ],
+      "evidence_contains": [
+        "nature of agriculture",
+        "separation of all the different branches"
+      ]
+    },
+    {
+      "id": "heldout-candide-expulsion",
+      "query": "Candide est chassé du château après un baiser",
+      "type": "scene",
+      "language": "fr",
+      "answerable": true,
+      "relevant_work_ids": [
+        "pg4650-candide"
+      ],
+      "evidence_contains": [
+        "chassa Candide du château"
+      ]
+    },
+    {
+      "id": "heldout-kafka-clock",
+      "query": "Gregor hat den Zug um fünf verschlafen",
+      "type": "scene",
+      "language": "de",
+      "answerable": true,
+      "relevant_work_ids": [
+        "pg22367-metamorphosis"
+      ],
+      "evidence_contains": [
+        "Zug fährt um fünf",
+        "Fünfuhrzug"
+      ]
+    },
+    {
+      "id": "heldout-pushkin",
+      "query": "Красавица предпочла табак цветам",
+      "type": "idea",
+      "language": "ru",
+      "answerable": true,
+      "relevant_work_ids": [
+        "pg5316-pushkin"
+      ],
+      "evidence_contains": [
+        "не утренний цветок"
+      ]
+    },
+    {
+      "id": "heldout-cross-darwin",
+      "query": "Почему животные не размножаются бесконечно и вынуждены бороться за существование",
+      "type": "cross_language",
+      "language": "ru",
+      "answerable": true,
+      "relevant_work_ids": [
+        "pg1228-origin"
+      ],
+      "evidence_contains": [
+        "struggle for existence"
+      ]
+    },
+    {
+      "id": "heldout-cross-stoic",
+      "query": "Нужно вставать с постели и выполнять свой долг, как пчёлы и муравьи",
+      "type": "cross_language",
+      "language": "ru",
+      "answerable": true,
+      "relevant_work_ids": [
+        "pg2680-meditations"
+      ],
+      "evidence_contains": [
+        "sparrows and ants",
+        "unwilling to rise"
+      ]
+    },
+    {
+      "id": "heldout-negative-sql",
+      "query": "PostgreSQL MVCC vacuum xmin xmax",
+      "type": "negative",
+      "language": "en",
+      "answerable": false
+    },
+    {
+      "id": "heldout-negative-scoped",
+      "query": "Pangloss lunettes château",
+      "type": "negative",
+      "language": "fr",
+      "answerable": false,
+      "filters": {
+        "book_id": "pg3300-wealth"
+      }
+    },
+    {
+      "id": "heldout-negative-modern-question",
+      "query": "What are the memory requirements of an RTX 5090 GPU?",
+      "type": "negative",
+      "language": "en",
+      "answerable": false
+    }
+  ]
+}

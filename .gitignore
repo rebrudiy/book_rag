@@ -1,0 +1,17 @@
+.venv/
+.bootstrap/
+.tools/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.env
+.env.*
+!.env.example
+data/
+models/
+.cache/
+node_modules/
+artifacts/
+*.sqlite*
+.DS_Store
