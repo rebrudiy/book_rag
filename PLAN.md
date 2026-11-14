@@ -2,9 +2,9 @@
 
 Goal ACTIVE: continue until authentic weekly Codex remainder <=3%, explicit user stop, or actual environment limit. Never replace quota with token counts.
 
-1. Finish resumed frozen1308 MiniLM build; preserve source DB bytes and durable checkpoint. Install only its complete ready generation with strict input/window/ID proofs and explicit target binding.
-2. Verify real semantic/hybrid queries and reader in the 3991-edition interface, including uncovered-book/language lexical fallback. Measure latency, memory and citation integrity; publish coherent code and check CI.
-3. Make actual books visible on the start screen with language-aware starter shelves backed by the real catalogue. Keep reference/partial/translation coverage clear.
-4. Increase searchable corpus with measured disk capacity and permitted sources. Investigate opt-in span storage after the owned-copy experiment saved41%; no production migration until every read/proof path is compatible and paired checks pass.
-5. Expand language diversity and work/edition/translator authority evidence. Editions and provisional groups never equal verified unique works. No noisy authority retry after provider timeout.
-6. Improve multilingual relevance through reproducible paired development experiments; preserve frozen controls and held-out labels. No threshold/model/reranker promotion without evidence. No paid APIs/equipment.
+1. Publish starter shelves, real1308 semantic availability receipt/browser checks and evaluation/diagnostic tools; verify GitHub CI.
+2. Finish paired54 baseline/lexical/hybrid on3991 editions. Keep src/book_rag/*.py frozen until completion so implementation SHAs match. Preserve original20/E5 controls and held-out labels.
+3. Diagnose global RU→DE Kafka failure before candidate truncation. Then select measured query-translation/window/model experiment; no model/threshold/reranker promotion without paired evidence.
+4. Improve FTS latency using bounded hydration/eligible rowid ranges only after exact order/score/source equivalence; balance topic-map book selection across languages. Agents prepare isolated patches while evaluator runs.
+5. Acquire10 bounded complete RU originals after persisted provider cooldown23:06:28UTC, verify source/rights/notes/chapter boundaries, then import only after root releases live writes.
+6. Grow corpus with measured storage capacity. Span experiment saved41%, but production remains incompatible until explicit mode/all reads/FTS OLD deletes/proofs are adapted and safe migration/rebind is tested. No paid APIs/equipment.

@@ -1,5 +1,26 @@
 # Book Atlas interface
 
+The real installed large-library probe is GET-only and uses one global model
+query, followed by an early lexical fallback for an uncovered reference:
+
+```sh
+uv run python scripts/browser_large_semantic.py --base-url http://127.0.0.1:8001 \
+  --output artifacts/large-semantic-browser \
+  --expected-covered 1308 --expected-searchable 3991
+```
+
+Run it serially with model evaluations. It verifies the Russian Alice situation
+query's top book (`pg11-full`), independent canonical offsets, exact reader
+highlight, the 1,308/3,991 edition coverage label, and lexical fallback within
+`ruwikibooks-regex-266423`. It checks 390 px mobile overflow and JavaScript/
+console errors, rejects non-GET browser requests, and never saves annotations.
+The actual live run passed with two search requests: semantic 8,291.54 ms and
+uncovered-reference fallback 28.05 ms. Five bounded screenshots and `report.json`
+are written under the chosen output directory; all five were inspected.
+This is an availability/reader check, not a general retrieval-quality score;
+the recorded global Kafka miss remains in
+[`semantic1308-availability-v1.json`](../experiments/semantic1308-availability-v1.json).
+
 The UI is served by the local FastAPI app at `/`. It uses no CDN, web fonts,
 client framework, paid API or build step. All book text and annotations are
 inserted as DOM text nodes. External source links accept only HTTP(S).
@@ -8,6 +29,9 @@ locators supplied by the API.
 
 Primary workflows:
 
+- Browse **Знакомые книги — уже в библиотеке** on the home page. Its Russian,
+  English, French and German shelves contain only matching indexed catalogue
+  editions, with native reader links and **Искать в книге** scope actions.
 - Search exact words, hybrid retrieval or semantic retrieval. Backend warnings
   are displayed, including when an optional model is unavailable. Language and
   book filters scope the request.
@@ -23,6 +47,44 @@ Primary workflows:
   verified agreement/disagreement between authors.
 - Inspect the library pipeline and filter its catalog. Demo excerpts are marked
   on book cards to distinguish an extract from a complete text.
+
+The starter shelf answers “which familiar books are already here?” rather than
+presenting the alphabetically first catalogue page as a reading recommendation.
+Its small title/author lookup list is intersected with real
+`GET /api/books?status=indexed&language=…&q=…&limit=8` responses. A matching title
+with the wrong author, an unavailable edition or a different language cannot
+become a card. Missing books have no placeholder card. Among returned matching
+editions, explicitly full coverage is preferred; actual edition labels and
+partial-text badges remain visible. The Russian selection contains Russian
+works in Russian. Other shelves explicitly say they include translations;
+their labels describe the text language, not the author's original language.
+
+Only the selected language loads: at most six bounded requests for Russian or
+English, four for French or German, each capped at eight catalogue results.
+Other languages load on demand, and repeated selection or reader return uses
+the session cache. A page reload or refreshed library stats invalidates it.
+The existing six-edition landing request and paginated full catalogue remain
+bounded. **Все книги на этом языке** opens the indexed language catalogue and
+retains the language on refresh. An empty starter shelf still links to that
+catalogue; it does not imply that the language has no other books.
+**Искать в книге** clears any old query/results, pins the actual edition, and
+focuses the query field. It makes no search or model request until submission.
+
+Verify the shelf without changing a live library:
+
+```sh
+uv run python scripts/browser_starter_shelf.py
+```
+
+The script imports the checked-in licensed demo into its own temporary library
+and uses the actual API and Chromium, without response mocks. It checks all four
+languages, exact Russian reader text, native deep links, unavailable/wrong-author
+exclusion, partial coverage labels, scoped lexical evidence and exact highlights,
+bounded lazy requests/cache, language catalogue refresh, an empty shelf with a
+nonempty catalogue, keyboard focus and 390 px layout. No embeddings are loaded.
+Optional `--live-base-url http://127.0.0.1:8000` (repeatable) adds strictly GET-only
+checks of existing shelf metadata and source reader text. Screenshots and
+`report.json` go to `artifacts/starter-shelf-browser/`.
 
 When an acquired file is archived, the reader's source details offer
 **Скачать зафиксированный файл**. The provider page and rights links remain

@@ -4,6 +4,8 @@ An open, local-first library for finding passages, reading books in context and 
 
 **Current scope:** functional prototype, not yet a 10–50k-work library. Includes eight small public-domain demo works/excerpts in English, French, German and Russian. Runtime books, models, indexes and user notes stay outside Git.
 
+[Measured large-library MVP](docs/LARGE_LIBRARY.md): the maintained local instance has 3,991 searchable editions and a verified semantic subset of 1,308. The report includes actual queries, timings and a known global-description failure; these runtime data are acquired separately from the demo.
+
 ## Run
 
 Install [uv](https://docs.astral.sh/uv/getting-started/installation/) and Python 3.12+:

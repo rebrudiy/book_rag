@@ -1,0 +1,381 @@
+{
+  "created_at": "2026-11-14T22:35:12.844101+00:00",
+  "kind": "exploratory_availability_smoke_not_blind_relevance_benchmark",
+  "source_database_sha256": "2d77675ba2a68f63e25f507355272e3206db8f9abbe959f326cea96f774939f0",
+  "source_database_unchanged": true,
+  "semantic_coverage": {
+    "indexed_editions": 1308,
+    "searchable_editions": 3991,
+    "passages": 445466,
+    "vectors": 1865985
+  },
+  "model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+  "model_revision": "e8f8c211226b894fcb81acc59f3b34ba3efd5f42",
+  "generation": "gen-1812f290f02e09f392e2c880bbcee602de30282ec4ad406300e1c6ff1393555f-a8b86bbaa7d0",
+  "input_proof": {
+    "cursor": {
+      "passage_id": 1321579,
+      "window_index": 6
+    },
+    "different_duplicate_rows": 0,
+    "duplicate_rows": 3928,
+    "kind": "schema2_reconciled_exact",
+    "passages": 445466,
+    "requires_materialization": false,
+    "schema_version": 1,
+    "unique_key_checksum": "1d70e9d8a32b858d584072dc35558c16a119f219ffb5cb603b0e38205a73ad5b",
+    "unique_keys": 1862057,
+    "window_input_checksum": "cc9f5977f9316d8f99f6dfaa337e315a610e8624fe3f77da7f2eb01de0ecbab1",
+    "windows": 1865985
+  },
+  "file_methods": {
+    "checkpoint.json": "hardlink",
+    "embeddings.npy": "hardlink",
+    "ids.npy": "hardlink",
+    "metadata.json": "hardlink",
+    "vector-reuse.json": "hardlink",
+    "window-keys.sqlite3": "hardlink"
+  },
+  "coverage_fingerprints": {
+    "mapping_fingerprint": "b2240354f22d1322427149b373b203f45b579ddaf088e78a506c2fc3c39814a4",
+    "passage_fingerprint": "5fc148db4f88d6941973cafa1df0992b81cf43348ead9ff2e0e86bc5313470bb",
+    "section_text_fingerprint": "dce79e313508c9493f3de7418785bd7408887099ef53edf473526cb088448954"
+  },
+  "installation_receipt": {
+    "path": "installations/install-fda51e49bb044a228a1e1d1ab70bb911.json",
+    "sha256": "5e80856e5fb35e1f02e743f433398edf8a593fc3a8e776c618f139b602e19599"
+  },
+  "cases": [
+    {
+      "name": "kafka-global-known-failure",
+      "query": "Человек просыпается и обнаруживает, что превратился в насекомое",
+      "book_scope": null,
+      "mode": "semantic",
+      "elapsed_ms": 15033.11,
+      "expected_book": "pg22367-full",
+      "expected_book_in_top5": false,
+      "hits": [
+        {
+          "id": 1302421,
+          "book_id": "pg38385-full",
+          "title": "Voyage autour de mon jardin",
+          "section_title": "LETTRE XI. SUR LE DOS.",
+          "reader_url": "/?book=pg38385-full&section=174413&passage=1302421",
+          "semantic_score": 0.6355800628662109,
+          "independent_checks": {
+            "quote_exact": true,
+            "metadata_exact": true,
+            "reader_anchor_exact": true
+          },
+          "text_sha256": "eda189c36c7039e5c686f69cb0ad2c98a39317faebe05d94aac7f0063e19a20a"
+        },
+        {
+          "id": 1302384,
+          "book_id": "pg38385-full",
+          "title": "Voyage autour de mon jardin",
+          "section_title": "LETTRE VIII.",
+          "reader_url": "/?book=pg38385-full&section=174410&passage=1302384",
+          "semantic_score": 0.63536536693573,
+          "independent_checks": {
+            "quote_exact": true,
+            "metadata_exact": true,
+            "reader_anchor_exact": true
+          },
+          "text_sha256": "e27e7e93db2867bbb36acd29f2819a0e1aea0566c9f1b21bb1cc0a2e9c5f9c2d"
+        },
+        {
+          "id": 1302355,
+          "book_id": "pg38385-full",
+          "title": "Voyage autour de mon jardin",
+          "section_title": "LETTRE V. SUR UN ROSIER.",
+          "reader_url": "/?book=pg38385-full&section=174407&passage=1302355",
+          "semantic_score": 0.6313937902450562,
+          "independent_checks": {
+            "quote_exact": true,
+            "metadata_exact": true,
+            "reader_anchor_exact": true
+          },
+          "text_sha256": "5c47b0d43227b21aae23d42e15e0e639993994b92336f886cccbb6ab36c64b14"
+        },
+        {
+          "id": 1009858,
+          "book_id": "pg106-full",
+          "title": "Jungle Tales of Tarzan",
+          "section_title": "CHAPTER IX The Nightmare",
+          "reader_url": "/?book=pg106-full&section=136926&passage=1009858",
+          "semantic_score": 0.6242741942405701,
+          "independent_checks": {
+            "quote_exact": true,
+            "metadata_exact": true,
+            "reader_anchor_exact": true
+          },
+          "text_sha256": "ef110c0dd7a9360ac70b92e22d1714a9f1eb09a383c43ebe594b69d35a1fc2d3"
+        },
+        {
+          "id": 1302423,
+          "book_id": "pg38385-full",
+          "title": "Voyage autour de mon jardin",
+          "section_title": "LETTRE XI. SUR LE DOS.",
+          "reader_url": "/?book=pg38385-full&section=174413&passage=1302423",
+          "semantic_score": 0.6241409182548523,
+          "independent_checks": {
+            "quote_exact": true,
+            "metadata_exact": true,
+            "reader_anchor_exact": true
+          },
+          "text_sha256": "aad3ddbd76b06ca83444a4e5180d29bc8187e20a6c4cb138c2f4a272a32628eb"
+        }
+      ]
+    },
+    {
+      "name": "alice-global",
+      "query": "Девочка следует за белым кроликом и падает в его нору",
+      "book_scope": null,
+      "mode": "semantic",
+      "elapsed_ms": 3143.47,
+      "expected_book": "pg11-full",
+      "expected_book_in_top5": true,
+      "hits": [
+        {
+          "id": 884922,
+          "book_id": "pg11-full",
+          "title": "Alice's Adventures in Wonderland",
+          "section_title": "CHAPTER II. The Pool of Tears",
+          "reader_url": "/?book=pg11-full&section=119762&passage=884922",
+          "semantic_score": 0.5504410862922668,
+          "independent_checks": {
+            "quote_exact": true,
+            "metadata_exact": true,
+            "reader_anchor_exact": true
+          },
+          "text_sha256": "becbbaef0598309ae7ab3b5e8cc80b0af4604ae53dacf77515639abcac6149c4"
+        },
+        {
+          "id": 918836,
+          "book_id": "pg10737-full",
+          "title": "Book about Animals",
+          "section_title": "ABOUT ANIMALS.",
+          "reader_url": "/?book=pg10737-full&section=123433&passage=918836",
+          "semantic_score": 0.54140305519104,
+          "independent_checks": {
+            "quote_exact": true,
+            "metadata_exact": true,
+            "reader_anchor_exact": true
+          },
+          "text_sha256": "d2f9875c73ce8d093929294a4fe4f75b77a5a8515a9248961dcabf3ddf8974f5"
+        },
+        {
+          "id": 884942,
+          "book_id": "pg11-full",
+          "title": "Alice's Adventures in Wonderland",
+          "section_title": "CHAPTER IV. The Rabbit Sends in a Little Bill",
+          "reader_url": "/?book=pg11-full&section=119764&passage=884942",
+          "semantic_score": 0.5408436059951782,
+          "independent_checks": {
+            "quote_exact": true,
+            "metadata_exact": true,
+            "reader_anchor_exact": true
+          },
+          "text_sha256": "2efa92450c26a85fbe276c3ae34fe8937550261e75f55d15ca0eb015e744579c"
+        },
+        {
+          "id": 1019410,
+          "book_id": "pg23939-full",
+          "title": "La fille de Dosia",
+          "section_title": "II",
+          "reader_url": "/?book=pg23939-full&section=137871&passage=1019410",
+          "semantic_score": 0.5341264605522156,
+          "independent_checks": {
+            "quote_exact": true,
+            "metadata_exact": true,
+            "reader_anchor_exact": true
+          },
+          "text_sha256": "f14d1f1f784d97f1be538645211a24aeeeb49b5bf491a85d684f59aeaac81b00"
+        },
+        {
+          "id": 885027,
+          "book_id": "pg11-full",
+          "title": "Alice's Adventures in Wonderland",
+          "section_title": "CHAPTER XII. Alice’s Evidence",
+          "reader_url": "/?book=pg11-full&section=119772&passage=885027",
+          "semantic_score": 0.529526948928833,
+          "independent_checks": {
+            "quote_exact": true,
+            "metadata_exact": true,
+            "reader_anchor_exact": true
+          },
+          "text_sha256": "8e1d2f0aed1cbd3939e3a529a4c722dbdd3abd39d573dbb1ece148a32960ef93"
+        }
+      ]
+    },
+    {
+      "name": "kafka-scoped",
+      "query": "Человек просыпается и обнаруживает, что превратился в насекомое",
+      "book_scope": "pg22367-full",
+      "mode": "semantic",
+      "elapsed_ms": 470.51,
+      "expected_book": "pg22367-full",
+      "expected_book_in_top5": true,
+      "hits": [
+        {
+          "id": 944665,
+          "book_id": "pg22367-full",
+          "title": "Die Verwandlung",
+          "section_title": "I.",
+          "reader_url": "/?book=pg22367-full&section=128554&passage=944665",
+          "semantic_score": 0.3943069875240326,
+          "independent_checks": {
+            "quote_exact": true,
+            "metadata_exact": true,
+            "reader_anchor_exact": true
+          },
+          "text_sha256": "d5c7e9ef1526980b5c94a6b59b4b1b92bb1f2e72aa454738375f9ba6ae43445d"
+        },
+        {
+          "id": 944667,
+          "book_id": "pg22367-full",
+          "title": "Die Verwandlung",
+          "section_title": "I.",
+          "reader_url": "/?book=pg22367-full&section=128554&passage=944667",
+          "semantic_score": 0.3559649586677551,
+          "independent_checks": {
+            "quote_exact": true,
+            "metadata_exact": true,
+            "reader_anchor_exact": true
+          },
+          "text_sha256": "390927aa3ea77e42c5978a10a0bb7570de880e530e2b7b7012c32c7f514f708c"
+        },
+        {
+          "id": 944672,
+          "book_id": "pg22367-full",
+          "title": "Die Verwandlung",
+          "section_title": "I.",
+          "reader_url": "/?book=pg22367-full&section=128554&passage=944672",
+          "semantic_score": 0.3390849232673645,
+          "independent_checks": {
+            "quote_exact": true,
+            "metadata_exact": true,
+            "reader_anchor_exact": true
+          },
+          "text_sha256": "a0b0667f55f4f635ecc8a2cca6122f3840c508ddb0275192f1324b8135a63a71"
+        },
+        {
+          "id": 944666,
+          "book_id": "pg22367-full",
+          "title": "Die Verwandlung",
+          "section_title": "I.",
+          "reader_url": "/?book=pg22367-full&section=128554&passage=944666",
+          "semantic_score": 0.3388281464576721,
+          "independent_checks": {
+            "quote_exact": true,
+            "metadata_exact": true,
+            "reader_anchor_exact": true
+          },
+          "text_sha256": "34672454afae9932570bf60cff61731ffff2e941f1fe2f093a882439203e7652"
+        },
+        {
+          "id": 944698,
+          "book_id": "pg22367-full",
+          "title": "Die Verwandlung",
+          "section_title": "II.",
+          "reader_url": "/?book=pg22367-full&section=128555&passage=944698",
+          "semantic_score": 0.33633217215538025,
+          "independent_checks": {
+            "quote_exact": true,
+            "metadata_exact": true,
+            "reader_anchor_exact": true
+          },
+          "text_sha256": "ae9e760b95c6a663548dbba1672c364ce0a8ca822865faba9f206b736c9a08d9"
+        }
+      ]
+    },
+    {
+      "name": "tolstoy-scoped",
+      "query": "Человек перед смертью думает, что прожил жизнь неправильно",
+      "book_scope": "wsru-ivan-ilyich-f20f7ddf97c0",
+      "mode": "semantic",
+      "elapsed_ms": 517.81,
+      "expected_book": "wsru-ivan-ilyich-f20f7ddf97c0",
+      "expected_book_in_top5": true,
+      "hits": [
+        {
+          "id": 1321515,
+          "book_id": "wsru-ivan-ilyich-f20f7ddf97c0",
+          "title": "Смерть Ивана Ильича",
+          "section_title": "Глава IX",
+          "reader_url": "/?book=wsru-ivan-ilyich-f20f7ddf97c0&section=176760&passage=1321515",
+          "semantic_score": 0.6598547101020813,
+          "independent_checks": {
+            "quote_exact": true,
+            "metadata_exact": true,
+            "reader_anchor_exact": true
+          },
+          "text_sha256": "cfe88f668b9aa6b6f231b6de8480577e69dc714d3e31ce7c9d4519e231034c6c"
+        },
+        {
+          "id": 1321495,
+          "book_id": "wsru-ivan-ilyich-f20f7ddf97c0",
+          "title": "Смерть Ивана Ильича",
+          "section_title": "Глава VI",
+          "reader_url": "/?book=wsru-ivan-ilyich-f20f7ddf97c0&section=176757&passage=1321495",
+          "semantic_score": 0.6269879937171936,
+          "independent_checks": {
+            "quote_exact": true,
+            "metadata_exact": true,
+            "reader_anchor_exact": true
+          },
+          "text_sha256": "a3d886ff5a449d9d822fcc3a2d933476ccbd566832b66adcbd1e902e35aae2f0"
+        },
+        {
+          "id": 1321522,
+          "book_id": "wsru-ivan-ilyich-f20f7ddf97c0",
+          "title": "Смерть Ивана Ильича",
+          "section_title": "Глава XI",
+          "reader_url": "/?book=wsru-ivan-ilyich-f20f7ddf97c0&section=176762&passage=1321522",
+          "semantic_score": 0.616388201713562,
+          "independent_checks": {
+            "quote_exact": true,
+            "metadata_exact": true,
+            "reader_anchor_exact": true
+          },
+          "text_sha256": "96f5423244b9031298e4cde32999c0168322c41f19cdc6953b9f76a943f6d247"
+        },
+        {
+          "id": 1321518,
+          "book_id": "wsru-ivan-ilyich-f20f7ddf97c0",
+          "title": "Смерть Ивана Ильича",
+          "section_title": "Глава X",
+          "reader_url": "/?book=wsru-ivan-ilyich-f20f7ddf97c0&section=176761&passage=1321518",
+          "semantic_score": 0.6069183349609375,
+          "independent_checks": {
+            "quote_exact": true,
+            "metadata_exact": true,
+            "reader_anchor_exact": true
+          },
+          "text_sha256": "eac9369a52d96c31160355cff2d9a54953b95adf1f09745679491850eb1e7e98"
+        },
+        {
+          "id": 1321520,
+          "book_id": "wsru-ivan-ilyich-f20f7ddf97c0",
+          "title": "Смерть Ивана Ильича",
+          "section_title": "Глава XI",
+          "reader_url": "/?book=wsru-ivan-ilyich-f20f7ddf97c0&section=176762&passage=1321520",
+          "semantic_score": 0.6053614020347595,
+          "independent_checks": {
+            "quote_exact": true,
+            "metadata_exact": true,
+            "reader_anchor_exact": true
+          },
+          "text_sha256": "e0c7ebf70a81d126829587a8e668baced757ccb7376ccd94bae01e748f2222ab"
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "These exploratory queries were inspected, not held out or a general quality estimate.",
+    "Global Kafka description failed despite a correct scoped first hit; candidate exclusion is unresolved.",
+    "First Kafka global query includes cold model loading; later timings are warm and not isolated benchmarks.",
+    "Independent quote checks prove canonical text/metadata/reader links, not provider transcription fidelity.",
+    "Source editions and provisional groups do not establish the number of unique complete works."
+  ]
+}

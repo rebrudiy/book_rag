@@ -12,10 +12,43 @@
     landingTotal: 0, libraryOffset: 0, libraryTotal: 0, libraryHasMore: false, libraryRequest: 0,
     scopeBook: null, scopeBooks: [], scopeTotal: 0, scopeLoaded: false, scopeRequest: 0,
     compareBooks: [], compareTotal: 0, compareLoaded: false, compareRequest: 0, researchSelection: new Map(),
+    starterLanguage: '', starterCache: new Map(), starterPending: new Map(), starterVersion: 0,
   };
   const languageNames = { ru: 'Русский', en: 'English', fr: 'Français', de: 'Deutsch', es: 'Español', it: 'Italiano', zh: '中文', ja: '日本語', la: 'Latina', el: 'Ελληνικά', pt: 'Português', uk: 'Українська', ar: 'العربية' };
   const statusNames = { discovered: 'Найдены', downloaded: 'Скачаны', processed: 'Обработаны', indexed: 'В поиске', searchable: 'В поиске', failed: 'Пока недоступны · ошибка', deferred: 'Пока недоступны · отложены', error: 'Требуют внимания', duplicate: 'Дубли' };
   const ingestionNames = { discovered: 'Ожидают загрузки', downloaded: 'Файл получен', processed: 'Текст извлечён', indexed: 'Завершены', failed: 'Не удались', deferred: 'Отложены', duplicate: 'Дубли' };
+  // These are catalogue lookup hints, never fabricated book cards. Every match
+  // must have the requested language, title, author and searchable status.
+  const starterSeeds = {
+    ru: [
+      { q: 'Записки из подполья', title: ['записки из подполья'], author: ['достоевский'] },
+      { q: 'Отцы и дети', title: ['отцы и дети'], author: ['тургенев'] },
+      { q: 'Смерть Ивана Ильича', title: ['смерть ивана ильича'], author: ['толстой'] },
+      { q: 'Палата', title: ['палата'], author: ['чехов'] },
+      { q: 'Шинель', title: ['шинель'], author: ['гоголь'] },
+      { q: 'Пушкин', title: ['красавице'], author: ['пушкин'] },
+    ],
+    en: [
+      { q: 'Wonderland', title: ['alice', 'wonderland'], author: ['carroll'] },
+      { q: 'Pride and Prejudice', title: ['pride and prejudice'], author: ['austen'] },
+      { q: 'Origin of Species', title: ['origin of species'], author: ['darwin'] },
+      { q: 'Republic', title: ['republic'], author: ['plato'] },
+      { q: 'Meditations', title: ['meditations'], author: ['aurelius'] },
+      { q: 'Wealth of Nations', title: ['wealth of nations'], author: ['smith'] },
+    ],
+    fr: [
+      { q: 'Candide', title: ['candide'], author: ['voltaire'] },
+      { q: 'Bovary', title: ['madame bovary'], author: ['flaubert'] },
+      { q: 'Fables', title: ['fables'], author: ['la fontaine'] },
+      { q: 'Discours de la méthode', title: ['discours de la méthode'], author: ['descartes'] },
+    ],
+    de: [
+      { q: 'Verwandlung', title: ['verwandlung'], author: ['kafka'] },
+      { q: 'Faust', title: ['faust'], author: ['goethe'] },
+      { q: 'Zarathustra', title: ['zarathustra'], author: ['nietzsche'] },
+      { q: 'reinen Vernunft', title: ['kritik', 'reinen vernunft'], author: ['kant'] },
+    ],
+  };
 
   function node(tag, className, value) {
     const el = document.createElement(tag);
@@ -119,6 +152,7 @@
     if (view === 'library') loadLibrary();
     if (view === 'saved') renderSaved();
     if (view === 'explore') loadExplore();
+    if (view === 'search' && !$('discovery').classList.contains('hidden') && !new URLSearchParams(location.search).has('q')) loadStarterShelf();
     window.scrollTo({ top: 0, behavior: 'instant' });
   }
   function navigate(event) {
@@ -217,6 +251,83 @@
     $('discovery-empty').classList.toggle('hidden', searchable.length !== 0);
     if (!state.scopeLoaded) { state.scopeBooks = searchable; state.scopeTotal = state.landingTotal; renderScopeBooks(); }
     if (!state.compareLoaded) { state.compareBooks = searchable; state.compareTotal = state.landingTotal; renderCompareBooks(); }
+  }
+  function starterLanguages() {
+    const languages = state.stats?.languages;
+    const codes = Array.isArray(languages) ? languages.map((item) => typeof item === 'string' ? item : item.language) : Object.keys(languages || {});
+    return Object.keys(starterSeeds).filter((code) => codes.includes(code));
+  }
+  function starterText(value) { return String(value || '').normalize('NFKC').toLocaleLowerCase().replaceAll('ё', 'е'); }
+  function starterMatch(book, seed, language) {
+    return bookSearchable(book) && book.language === language && seed.title.every((term) => starterText(book.title).includes(term)) && seed.author.every((term) => starterText(book.author).includes(term));
+  }
+  function starterPreference(book) {
+    const full = ['full', 'complete poem'].includes(coverageType(book));
+    return (full ? 3 : coverageType(book) ? 0 : 1) + (book.work_identity_status === 'curated' ? 0.1 : 0);
+  }
+  function scopeStarterBook(book) {
+    // Opening a scope never starts an embedding request or reuses an old query.
+    state.searchSequence++; state.scopeRequest++;
+    state.query = ''; $('query').value = ''; $('book-scope-query').value = '';
+    $('language-filter').value = book.language;
+    state.scopeBooks = [book]; state.scopeTotal = 1; state.scopeLoaded = false; setScopeBook(book);
+    showView('search'); setPanel('fragments');
+    $('discovery').classList.add('hidden'); $('search-results').classList.remove('hidden');
+    $('search-warnings').classList.add('hidden'); renderSemanticCoverage(null);
+    $('results-meta').textContent = `Поиск в книге: ${book.title}`;
+    empty($('fragments-panel'), 'Что найти в этой книге?', 'Введите цитату, ситуацию или мысль. Поиск будет ограничен выбранным изданием.');
+    loadScopeBooks(); $('query').focus();
+  }
+  function starterCard(book, index) {
+    const card = createBookCard(book, index); card.classList.add('starter-card'); card.dataset.bookId = asID(book.id);
+    const cover = card.querySelector('.book-cover'); cover.replaceChildren(node('span', '', String(index + 1).padStart(2, '0')));
+    const title = card.querySelector('h3'); title.lang = book.language;
+    const edition = node('p', 'starter-edition', book.edition || 'Издание из текущего каталога'); title.nextElementSibling.after(edition);
+    const footer = card.querySelector('.book-card-footer'); footer.replaceChildren();
+    const read = node('a', 'book-open', 'Читать ↗'); read.href = '/?' + new URLSearchParams({ book: book.id }); read.setAttribute('aria-label', `Читать: ${book.title}`);
+    read.addEventListener('click', (event) => { if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return; event.preventDefault(); openBook(book.id); });
+    const searchBook = button('Искать в книге', () => scopeStarterBook(book), 'starter-search'); searchBook.setAttribute('aria-label', `Искать в книге: ${book.title}`);
+    footer.append(read, searchBook); return card;
+  }
+  function renderStarterShelf() {
+    const language = state.starterLanguage; const data = state.starterCache.get(language);
+    const available = starterLanguages();
+    $('starter-shelf').classList.toggle('hidden', !available.length);
+    document.querySelectorAll('[data-shelf-language]').forEach((el) => { el.disabled = !available.includes(el.dataset.shelfLanguage); el.setAttribute('aria-pressed', String(el.dataset.shelfLanguage === language)); });
+    $('starter-catalog').href = '/?' + new URLSearchParams({ view: 'library', language });
+    $('starter-context').textContent = language === 'ru' ? 'Русские произведения на русском языке. На полке — лишь часть каталога.' : 'Издания на выбранном языке, включая переводы. На полке — лишь часть каталога.';
+    const target = $('starter-books'); const status = $('starter-status'); status.replaceChildren();
+    target.setAttribute('aria-busy', String(!data));
+    if (!available.length) return;
+    if (!data) { status.textContent = 'Проверяем, какие книги доступны…'; loading(target, 'Собираем полку из каталога'); return; }
+    if (data.books.length) { target.replaceChildren(...data.books.map(starterCard)); status.textContent = `На полке: ${formatNumber(data.books.length)} изданий.`; }
+    else empty(target, data.errors ? 'Полку пока не удалось загрузить' : 'На этой полке пока нет знакомых названий', 'Все доступные книги на этом языке можно посмотреть в каталоге.');
+    if (data.errors) {
+      status.append(node('span', '', ' Часть запросов к каталогу не выполнена. '), button('Повторить', () => { state.starterCache.delete(language); loadStarterShelf(language); }));
+    }
+  }
+  async function loadStarterShelf(language = state.starterLanguage) {
+    const available = starterLanguages();
+    state.starterLanguage = available.includes(language) ? language : available[0] || '';
+    language = state.starterLanguage; renderStarterShelf();
+    if (!language || state.starterCache.has(language) || state.starterPending.has(language)) return;
+    const version = state.starterVersion;
+    const pending = Promise.allSettled(starterSeeds[language].map(async (seed) => {
+      const params = new URLSearchParams({ status: 'indexed', language, q: seed.q, limit: '8', offset: '0' });
+      const result = await api(`/api/books?${params}`);
+      return (result.books || []).filter((book) => starterMatch(book, seed, language)).sort((a, b) => starterPreference(b) - starterPreference(a))[0] || null;
+    }));
+    state.starterPending.set(language, pending);
+    const results = await pending;
+    if (version !== state.starterVersion) return;
+    state.starterPending.delete(language);
+    const books = results.filter((result) => result.status === 'fulfilled' && result.value).map((result) => result.value);
+    state.starterCache.set(language, { books: books.filter((book, index) => books.findIndex((other) => asID(other.id) === asID(book.id)) === index), errors: results.some((result) => result.status === 'rejected') });
+    if (state.starterLanguage === language) renderStarterShelf();
+  }
+  function shelfCatalogFilters(language) {
+    $('library-query').value = ''; $('library-language').value = language;
+    $('library-status').value = 'indexed'; $('library-ingestion-status').value = ''; state.libraryOffset = 0;
   }
   function renderScopeBooks() {
     const selected = state.scopeBook;
@@ -362,6 +473,8 @@
     const results = await Promise.allSettled([api('/api/stats'), api('/api/books?status=indexed&limit=6&offset=0')]);
     if (results[0].status === 'fulfilled') { state.stats = results[0].value; renderStats(); }
     if (results[1].status === 'fulfilled') { state.books = results[1].value.books || []; state.landingTotal = results[1].value.total ?? state.books.length; renderCatalog(); }
+    state.starterVersion++; state.starterCache.clear(); state.starterPending.clear();
+    if (state.starterLanguage && state.view === 'search' && results[0].status === 'fulfilled') loadStarterShelf();
     if (results.some((result) => result.status === 'rejected')) showError(results.find((result) => result.status === 'rejected').reason);
   }
 
@@ -909,6 +1022,7 @@
     const params = new URLSearchParams(location.search);
     if (params.has('saved')) { await openSaved(params.get('saved'), params.has('chapter') ? params.get('chapter') : null, false); return; }
     if (params.get('book')) { await openBook(params.get('book'), params.get('section'), params.get('passage'), false); return; }
+    if (params.get('view') === 'library' && [...$('library-language').options].some((option) => option.value === params.get('language'))) shelfCatalogFilters(params.get('language'));
     showView(params.get('view') || 'search', false);
     if (params.has('q')) { $('query').value = params.get('q'); await search(false); }
   }
@@ -946,6 +1060,8 @@
   document.querySelectorAll('[data-mode]').forEach((el) => el.addEventListener('click', () => { setMode(el.dataset.mode); if (state.query) search(); }));
   document.querySelectorAll('[data-query]').forEach((el) => el.addEventListener('click', () => { $('query').value = el.dataset.query; search(); }));
   $('refresh-map').addEventListener('click', () => loadExplore(true));
+  document.querySelectorAll('[data-shelf-language]').forEach((el) => el.addEventListener('click', () => loadStarterShelf(el.dataset.shelfLanguage)));
+  $('starter-catalog').addEventListener('click', (event) => { if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return; event.preventDefault(); shelfCatalogFilters(state.starterLanguage); showView('library'); history.replaceState({}, '', $('starter-catalog').href); });
   $('map-language').addEventListener('change', () => { state.mapSelection = null; populateMapBooks(); renderExplore(); });
   $('map-book').addEventListener('change', () => { if ($('map-book').value) focusMapBook($('map-book').value); else { state.mapSelection = null; renderExplore(); } });
   $('search-extra-mode').addEventListener('change', () => { setMode($('search-extra-mode').value || 'hybrid'); if (state.query) search(); });
@@ -975,7 +1091,7 @@
   $('library-ingestion-status').addEventListener('change', () => loadLibrary(0));
   $('library-prev').addEventListener('click', () => loadLibrary(Math.max(0, state.libraryOffset - 48)));
   $('library-next').addEventListener('click', () => loadLibrary(state.libraryOffset + 48));
-  $('reload-library').addEventListener('click', refreshLibrary);
+  $('reload-library').addEventListener('click', async () => { await refreshLibrary(); loadStarterShelf(); });
   $('reader-back').addEventListener('click', () => { const previous = state.previousView; showView(previous); if (previous === 'saved') refreshSaved().catch(showError); });
   $('prev-chapter').addEventListener('click', () => { const sections = sectionList(state.currentBook); const index = sections.findIndex((item) => asID(item.id) === asID(state.currentSection?.id)); if (index > 0) selectChapter(sections[index - 1].id); });
   $('next-chapter').addEventListener('click', () => { const sections = sectionList(state.currentBook); const index = sections.findIndex((item) => asID(item.id) === asID(state.currentSection?.id)); if (index >= 0 && index < sections.length - 1) selectChapter(sections[index + 1].id); });

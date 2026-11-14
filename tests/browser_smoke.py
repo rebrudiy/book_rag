@@ -257,7 +257,7 @@ def check_catalog_pagination(page: Page, base_url: str) -> dict[str, object]:
             and (not status or book["status"] == status)
         ]
         matches.sort(key=lambda book: str(book["title"]))
-        requests.append({"limit": limit, "offset": offset, "q": query, "status": status})
+        requests.append({"limit": limit, "offset": offset, "q": query, "status": status, "language": language})
         route.fulfill(
             json={
                 "books": matches[offset : offset + limit],
@@ -311,7 +311,18 @@ def check_catalog_pagination(page: Page, base_url: str) -> dict[str, object]:
         ),
     )
     page.goto(base_url, wait_until="networkidle")
-    assert requests == [{"limit": 6, "offset": 0, "q": "", "status": "indexed"}], "Landing must not preload catalog"
+    assert requests[0] == {"limit": 6, "offset": 0, "q": "", "status": "indexed", "language": ""}
+    # The selected RU starter shelf adds bounded title lookups, not catalogue pages.
+    shelf_requests = requests[1:]
+    assert len(shelf_requests) == 6 and len({request["q"] for request in shelf_requests}) == 6
+    assert all(
+        request["limit"] == 8
+        and request["offset"] == 0
+        and request["status"] == "indexed"
+        and request["language"] == "ru"
+        and request["q"]
+        for request in shelf_requests
+    ), "Landing must not preload other languages or the full catalogue"
     page.get_by_role("navigation", name="Основная навигация").get_by_role("link", name="Библиотека").click()
     expect(page.locator("#library-books .book-card")).to_have_count(48)
     expect(page.locator("#library-count")).to_contain_text("1–48 из 200")
