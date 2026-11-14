@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "dataset_sha256": "e637ab5be3467c2cc8294f1dd8395d80bc49fdb972107da35830caaf30fe75be",
+  "split": "dev",
+  "k": 5,
+  "baseline_mode": "hybrid-candidate50",
+  "candidate_mode": "hybrid-cross-encoder",
+  "metrics": {
+    "mrr_at_k": {
+      "baseline": 0.9212962962962963,
+      "candidate": 0.9351851851851851,
+      "delta": 0.01388888888888884,
+      "higher_is_better": true
+    },
+    "hit_at_k": {
+      "baseline": 1.0,
+      "candidate": 1.0,
+      "delta": 0.0,
+      "higher_is_better": true
+    },
+    "work_recall_at_k": {
+      "baseline": 1.0,
+      "candidate": 1.0,
+      "delta": 0.0,
+      "higher_is_better": true
+    },
+    "precision_at_k": {
+      "baseline": 0.35555555555555557,
+      "candidate": 0.34444444444444444,
+      "delta": -0.011111111111111127,
+      "higher_is_better": true
+    },
+    "negative_abstention_accuracy": {
+      "baseline": 1.0,
+      "candidate": 1.0,
+      "delta": 0.0,
+      "higher_is_better": true
+    },
+    "quote_exact_rate": {
+      "baseline": 1.0,
+      "candidate": 1.0,
+      "delta": 0.0,
+      "higher_is_better": true
+    },
+    "metadata_exact_rate": {
+      "baseline": 1.0,
+      "candidate": 1.0,
+      "delta": 0.0,
+      "higher_is_better": true
+    },
+    "reader_anchor_exact_rate": {
+      "baseline": 1.0,
+      "candidate": 1.0,
+      "delta": 0.0,
+      "higher_is_better": true
+    },
+    "latency_p50_ms": {
+      "baseline": 31.925,
+      "candidate": 108.688,
+      "delta": 76.763,
+      "higher_is_better": false
+    },
+    "latency_p95_ms": {
+      "baseline": 47.53,
+      "candidate": 596.209,
+      "delta": 548.679,
+      "higher_is_better": false
+    },
+    "elapsed_seconds": {
+      "baseline": 4.68,
+      "candidate": 9.946,
+      "delta": 5.266,
+      "higher_is_better": false
+    },
+    "process_peak_rss_mib": {
+      "baseline": 833.34,
+      "candidate": 1326.98,
+      "delta": 493.64,
+      "higher_is_better": false
+    }
+  },
+  "corpus_sha256": "89d933ff06b8f19dd736b9c4d14a0180d81426706952a2318733adacae972270"
+}

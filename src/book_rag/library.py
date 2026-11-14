@@ -17,6 +17,8 @@ from contextlib import contextmanager
 from pathlib import Path
 from typing import Any
 
+CHUNKER_VERSION = "paragraph-sentence-v1-1200-2000"
+
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS books (
  id TEXT PRIMARY KEY, title TEXT NOT NULL, author TEXT NOT NULL, language TEXT NOT NULL,
@@ -27,6 +29,9 @@ CREATE TABLE IF NOT EXISTS books (
 );
 CREATE INDEX IF NOT EXISTS books_work ON books(work_id);
 CREATE INDEX IF NOT EXISTS books_content ON books(content_sha256);
+CREATE TABLE IF NOT EXISTS index_versions (
+ book_id TEXT PRIMARY KEY REFERENCES books(id) ON DELETE CASCADE, fingerprint TEXT NOT NULL
+);
 CREATE TABLE IF NOT EXISTS book_metadata (
  book_id TEXT PRIMARY KEY REFERENCES books(id) ON DELETE CASCADE, metadata TEXT NOT NULL
 );
@@ -34,12 +39,21 @@ CREATE TABLE IF NOT EXISTS sections (
  id INTEGER PRIMARY KEY, book_id TEXT NOT NULL REFERENCES books(id) ON DELETE CASCADE,
  ordinal INTEGER NOT NULL, title TEXT NOT NULL, text TEXT NOT NULL, UNIQUE(book_id,ordinal)
 );
+CREATE TABLE IF NOT EXISTS section_roles (
+ section_id INTEGER PRIMARY KEY REFERENCES sections(id) ON DELETE CASCADE,
+ section_author TEXT NOT NULL, section_role TEXT NOT NULL, attribution_basis TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS source_deferrals (
+ host TEXT PRIMARY KEY, retry_at REAL NOT NULL
+);
 CREATE TABLE IF NOT EXISTS passages (
  id INTEGER PRIMARY KEY AUTOINCREMENT, book_id TEXT NOT NULL REFERENCES books(id) ON DELETE CASCADE,
  section_id INTEGER NOT NULL REFERENCES sections(id) ON DELETE CASCADE,
  start INTEGER NOT NULL, end INTEGER NOT NULL, text TEXT NOT NULL, sha256 TEXT NOT NULL,
  UNIQUE(section_id,start,end)
 );
+CREATE INDEX IF NOT EXISTS passages_book ON passages(book_id);
+CREATE INDEX IF NOT EXISTS passages_section ON passages(section_id);
 CREATE VIRTUAL TABLE IF NOT EXISTS passage_fts USING fts5(
  text, title, author, section_title, content='', tokenize='unicode61 remove_diacritics 2'
 );
@@ -49,6 +63,9 @@ CREATE TABLE IF NOT EXISTS saved (
  collection TEXT NOT NULL DEFAULT '', note TEXT NOT NULL DEFAULT '',
  snapshot_text TEXT NOT NULL DEFAULT '', snapshot_citation TEXT NOT NULL DEFAULT '',
  created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+CREATE TABLE IF NOT EXISTS saved_provenance (
+ item_id INTEGER PRIMARY KEY REFERENCES saved(id) ON DELETE CASCADE, metadata TEXT NOT NULL
 );
 CREATE TABLE IF NOT EXISTS events (
  id INTEGER PRIMARY KEY, book_id TEXT NOT NULL, stage TEXT NOT NULL, detail TEXT NOT NULL DEFAULT '',
@@ -106,6 +123,7 @@ class Library:
     def connect(self) -> Generator[sqlite3.Connection]:
         conn = sqlite3.connect(self.db_path, timeout=30)
         conn.row_factory = sqlite3.Row
+        conn.create_function("casefold", 1, lambda value: str(value or "").casefold(), deterministic=True)
         conn.execute("PRAGMA foreign_keys=ON")
         conn.execute("PRAGMA journal_mode=WAL")
         try:
@@ -136,13 +154,21 @@ class Library:
         with self.connect() as conn:
             conn.execute(
                 "UPDATE books SET status=?,error=?,local_path=COALESCE(?,local_path) WHERE id=?",
-                (stage, detail if stage == "failed" else None, local_path, book_id),
+                (stage, detail if stage in ("failed", "deferred") else None, local_path, book_id),
             )
             conn.execute("INSERT INTO events(book_id,stage,detail) VALUES (?,?,?)", (book_id, stage, detail))
 
     def import_book(self, path: Path, metadata: dict[str, Any]) -> dict[str, Any]:
         """Index atomically, deduplicate normalized editions, resume safely after failure."""
-        from book_rag.parsers import parse_book
+        from book_rag.attribution import section_attribution
+        from book_rag.parsers import PARSER_FINGERPRINT, parse_book
+
+        indexer_version = digest(
+            PARSER_FINGERPRINT
+            + CHUNKER_VERSION
+            + "explicit-contributors-v1"
+            + json.dumps(metadata.get("section_attributions", []), ensure_ascii=False, sort_keys=True)
+        )
 
         book_id = self.register(metadata)
         fields = ("title", "author", "language", "work_id", "edition", "source_url", "rights", "rights_url")
@@ -151,8 +177,21 @@ class Library:
                 artifact_hash = hashlib.file_digest(artifact, "sha256").hexdigest()
             with self.connect() as conn:
                 old = conn.execute("SELECT * FROM books WHERE id=?", (book_id,)).fetchone()
+                version = conn.execute("SELECT fingerprint FROM index_versions WHERE book_id=?", (book_id,)).fetchone()
                 changed = any(str(metadata[k] or "") != old[k] for k in fields if k in metadata) if old else True
-                if old and old["status"] == "indexed" and old["artifact_sha256"] == artifact_hash and not changed:
+                if (
+                    old
+                    and old["status"] == "indexed"
+                    and old["artifact_sha256"] == artifact_hash
+                    and not changed
+                    and version
+                    and version[0] == indexer_version
+                ):
+                    conn.execute(
+                        "INSERT INTO book_metadata(book_id,metadata) VALUES (?,?) "
+                        "ON CONFLICT(book_id) DO UPDATE SET metadata=excluded.metadata",
+                        (book_id, json.dumps(metadata, ensure_ascii=False, sort_keys=True)),
+                    )
                     return {"id": book_id, "status": "indexed", "skipped": True}
             self.stage(book_id, "downloaded", local_path=str(path.resolve()))
             parsed = parse_book(path)
@@ -192,6 +231,15 @@ class Library:
                         (book_id, ordinal, section.title, section.text),
                     )
                     section_id = cursor.lastrowid
+                    attribution = section_attribution(section.title, metadata | {"author": author})
+                    conn.execute(
+                        "INSERT INTO section_roles(section_id,section_author,section_role,attribution_basis) "
+                        "VALUES (?,?,?,?)",
+                        (section_id, attribution["author"], attribution["role"], attribution["attribution_basis"]),
+                    )
+                    indexed_author = (
+                        author if attribution["author"] == author else author + "; " + attribution["author"]
+                    )
                     for start, end in chunk_spans(section.text):
                         text = section.text[start:end]
                         cursor = conn.execute(
@@ -200,12 +248,17 @@ class Library:
                         )
                         conn.execute(
                             "INSERT INTO passage_fts(rowid,text,title,author,section_title) VALUES (?,?,?,?,?)",
-                            (cursor.lastrowid, text, title, author, section.title),
+                            (cursor.lastrowid, text, title, indexed_author, section.title),
                         )
                 conn.execute(
                     "UPDATE books SET title=?,author=?,language=?,artifact_sha256=?,content_sha256=?,"
                     "status='indexed',error=NULL,indexed_at=CURRENT_TIMESTAMP WHERE id=?",
                     (title, author, language, artifact_hash, content_hash, book_id),
+                )
+                conn.execute(
+                    "INSERT INTO index_versions(book_id,fingerprint) VALUES (?,?) "
+                    "ON CONFLICT(book_id) DO UPDATE SET fingerprint=excluded.fingerprint",
+                    (book_id, indexer_version),
                 )
                 conn.execute("INSERT INTO events(book_id,stage) VALUES (?,'indexed')", (book_id,))
             return {"id": book_id, "status": "indexed", "skipped": False}
@@ -216,15 +269,24 @@ class Library:
 
     def _remove_index(self, conn: sqlite3.Connection, book_id: str) -> None:
         rows = conn.execute(
-            "SELECT p.*,b.title,b.author,s.title section_title FROM passages p JOIN books b ON p.book_id=b.id "
-            "JOIN sections s ON p.section_id=s.id WHERE p.book_id=?",
+            "SELECT p.*,b.title,b.author,s.title section_title,a.section_author FROM passages p "
+            "JOIN books b ON p.book_id=b.id JOIN sections s ON p.section_id=s.id "
+            "LEFT JOIN section_roles a ON a.section_id=s.id WHERE p.book_id=?",
             (book_id,),
         ).fetchall()
         for row in rows:
             conn.execute(
                 "INSERT INTO passage_fts(passage_fts,rowid,text,title,author,section_title) "
                 "VALUES ('delete',?,?,?,?,?)",
-                (row["id"], row["text"], row["title"], row["author"], row["section_title"]),
+                (
+                    row["id"],
+                    row["text"],
+                    row["title"],
+                    row["author"] + "; " + row["section_author"]
+                    if row["section_author"] and row["section_author"] != row["author"]
+                    else row["author"],
+                    row["section_title"],
+                ),
             )
         conn.execute("DELETE FROM sections WHERE book_id=?", (book_id,))
 
@@ -238,6 +300,22 @@ class Library:
                     "SELECT COUNT(*) FROM passages p JOIN books b ON b.id=p.book_id WHERE b.status='indexed'"
                 ).fetchone()[0],
                 "status_counts": counts,
+                "work_count_is_provisional": bool(
+                    conn.execute(
+                        "SELECT COUNT(*) FROM books b LEFT JOIN book_metadata m ON m.book_id=b.id "
+                        "WHERE b.status='indexed' AND "
+                        "COALESCE(json_extract(m.metadata,'$.work_identity_status'),'unspecified')"
+                        "!='curated'"
+                    ).fetchone()[0]
+                ),
+                "curated_work_groups": conn.execute(
+                    "SELECT COUNT(DISTINCT b.work_id) FROM books b JOIN book_metadata m ON m.book_id=b.id "
+                    "WHERE b.status='indexed' AND json_extract(m.metadata,'$.work_identity_status')='curated'"
+                ).fetchone()[0],
+                "periodical_editions": conn.execute(
+                    "SELECT COUNT(*) FROM books b JOIN book_metadata m ON m.book_id=b.id "
+                    "WHERE b.status='indexed' AND json_extract(m.metadata,'$.work_type')='periodical_issue'"
+                ).fetchone()[0],
                 "languages": [
                     dict(r)
                     for r in conn.execute(
@@ -253,8 +331,9 @@ class Library:
                 for row in conn.execute(
                     "SELECT b.*, (SELECT COUNT(*) FROM sections s WHERE s.book_id=b.id) sections,"
                     "(SELECT COUNT(*) FROM passages p WHERE p.book_id=b.id) passages FROM books b "
-                    "WHERE (? IS NULL OR language=?) AND (?='' OR title LIKE ? OR author LIKE ?) ORDER BY title",
-                    (language, language, q, f"%{q}%", f"%{q}%"),
+                    "WHERE (? IS NULL OR language=?) AND (?='' OR instr(casefold(title),casefold(?))>0 "
+                    "OR instr(casefold(author),casefold(?))>0) ORDER BY title",
+                    (language, language, q, q, q),
                 )
             ]
 
@@ -269,7 +348,9 @@ class Library:
             book["sections"] = [
                 dict(r)
                 for r in conn.execute(
-                    "SELECT id,ordinal,title,text FROM sections WHERE book_id=? ORDER BY ordinal", (book_id,)
+                    "SELECT s.id,s.ordinal,s.title,s.text,a.section_author,a.section_role,a.attribution_basis "
+                    "FROM sections s LEFT JOIN section_roles a ON a.section_id=s.id WHERE s.book_id=? ORDER BY ordinal",
+                    (book_id,),
                 )
             ]
             return book
@@ -277,13 +358,22 @@ class Library:
     @staticmethod
     def _result(row: sqlite3.Row) -> dict[str, Any]:
         r = dict(row)
-        valid = r["section_text"][r["start"] : r["end"]] == r["text"] and digest(r["text"]) == r["sha256"]
-        r.pop("section_text")
+        section_quote = r.pop("section_quote", None)
+        if section_quote is None:
+            section_quote = r.pop("section_text")[r["start"] : r["end"]]
+        valid = (
+            0 <= r["start"] < r["end"]
+            and r["end"] - r["start"] == len(r["text"])
+            and section_quote == r["text"]
+            and digest(r["text"]) == r["sha256"]
+        )
         r.pop("sha256")
         r["verified"] = valid
         r["citation"] = (
             f"{r['author']}. {r['title']}. {r['edition']}. {r['section_title']}, chars {r['start']}–{r['end']}."
         )
+        if r.get("section_author") and r["section_author"] != r["author"]:
+            r["citation"] = f"{r['section_author']} ({r.get('section_role', 'contributor')}). В: " + r["citation"]
         from urllib.parse import urlencode
 
         r["reader_url"] = "/?" + urlencode({"book": r["book_id"], "section": r["section_id"], "passage": r["id"]})
@@ -293,8 +383,11 @@ class Library:
         with self.connect() as conn:
             row = conn.execute(
                 "SELECT p.*,b.title,b.author,b.language,b.edition,b.work_id,b.source_url,b.rights,"
-                "s.title section_title,s.text section_text,0.0 score FROM passages p "
-                "JOIN books b ON p.book_id=b.id JOIN sections s ON p.section_id=s.id WHERE p.id=?",
+                "b.rights_url,b.artifact_sha256,b.content_sha256,"
+                "s.title section_title,s.text section_text,a.section_author,a.section_role,a.attribution_basis,"
+                "0.0 score FROM passages p "
+                "JOIN books b ON p.book_id=b.id JOIN sections s ON p.section_id=s.id "
+                "LEFT JOIN section_roles a ON a.section_id=s.id WHERE p.id=?",
                 (passage_id,),
             ).fetchone()
             if row is None:
@@ -313,31 +406,60 @@ class Library:
     ) -> dict[str, Any]:
         started = time.perf_counter()
         limit = max(1, min(limit, 50))
-        if mode not in ("lexical", "hybrid", "semantic"):
+        if mode not in ("baseline", "lexical", "hybrid", "semantic", "reranked"):
             raise ValueError("Unknown search mode")
-        if mode != "lexical":
+        if mode == "reranked":
+            from book_rag.reranking import rerank
+
+            candidates = self.search(query, "hybrid", book_id, language, 50)
+            ranked = rerank(query, candidates["results"], self.data_dir / "models", limit=limit)
+            if ranked["available"]:
+                return {
+                    "query": query,
+                    "mode": "reranked",
+                    "results": ranked["results"],
+                    "warnings": candidates["warnings"] + ranked["warnings"],
+                    "elapsed_ms": round((time.perf_counter() - started) * 1000, 2),
+                    "model": candidates.get("model"),
+                    "reranker": ranked["model"],
+                    "reranker_revision": ranked["revision"],
+                }
+            candidates["results"] = candidates["results"][:limit]
+            candidates["warnings"].extend(ranked["warnings"])
+            return candidates
+        if mode in ("hybrid", "semantic"):
             from book_rag.semantic import semantic_search
 
             return semantic_search(self, query, mode, book_id, language, limit)
         tokens = re.findall(r"[^\W_]+", unicodedata.normalize("NFKC", query), re.UNICODE)[:40]
+        from book_rag.retrieval import prepare_query, rerank_results
+
+        plan = prepare_query(query)
+        expression = plan.expression if mode == "lexical" else " OR ".join('"' + t + '"' for t in tokens)
         results: list[dict[str, Any]] = []
         warnings: list[str] = []
-        if tokens:
-            # Never expose FTS query syntax; natural language terms are quoted and ORed.
-            expression = " OR ".join('"' + t.replace('"', '""') + '"' for t in tokens)
+        if mode == "lexical" and not expression and plan.reason:
+            warnings.append(plan.reason)
+        if expression:
             with self.connect() as conn:
                 rows = conn.execute(
                     "SELECT p.*,b.title,b.author,b.language,b.edition,b.work_id,b.source_url,b.rights,"
-                    "s.title section_title,s.text section_text,bm25(passage_fts,1.0,2.0,1.5,1.2) score "
+                    "b.rights_url,b.artifact_sha256,b.content_sha256,"
+                    "s.title section_title,substr(s.text,p.start+1,p.end-p.start) section_quote,"
+                    "a.section_author,a.section_role,a.attribution_basis,"
+                    "bm25(passage_fts,1.0,2.0,1.5,1.2) score "
                     "FROM passage_fts JOIN passages p ON p.id=passage_fts.rowid JOIN books b ON b.id=p.book_id "
-                    "JOIN sections s ON s.id=p.section_id WHERE passage_fts MATCH ? AND b.status='indexed' "
+                    "JOIN sections s ON s.id=p.section_id LEFT JOIN section_roles a ON a.section_id=s.id "
+                    "WHERE passage_fts MATCH ? AND b.status='indexed' "
                     "AND (? IS NULL OR b.id=?) AND (? IS NULL OR b.language=?) ORDER BY score,p.id LIMIT ?",
-                    (expression, book_id, book_id, language, language, limit),
+                    (expression, book_id, book_id, language, language, max(200, limit) if mode == "lexical" else limit),
                 ).fetchall()
                 results = [self._result(row) for row in rows]
                 if any(not r["verified"] for r in results):
                     warnings.append("Corrupt citation suppressed; rebuild the affected book")
                     results = [r for r in results if r["verified"]]
+                if mode == "lexical":
+                    results = rerank_results(plan, results, limit=limit)
         return {
             "query": query,
             "mode": mode,
@@ -363,6 +485,10 @@ class Library:
                     counts[r["book_id"]] = counts.get(r["book_id"], 0) + 1
                 if len(results) >= limit:
                     break
+        from book_rag.retrieval import has_research_support, prepare_query
+
+        plan = prepare_query(query)
+        results = [r for r in results if has_research_support(plan, r)]
         return {
             "query": query,
             "results": results,
@@ -379,6 +505,20 @@ class Library:
         for row in rows:
             row["text"] = row.pop("snapshot_text")
             row["citation"] = row.pop("snapshot_citation")
+            with self.connect() as conn:
+                provenance = conn.execute(
+                    "SELECT metadata FROM saved_provenance WHERE item_id=?", (row["id"],)
+                ).fetchone()
+            row["provenance"] = json.loads(provenance[0]) if provenance else {}
+            if row["passage_id"] is not None:
+                current = self.passage(row["passage_id"])
+                if (
+                    current
+                    and current["verified"]
+                    and current["text"] == row["text"]
+                    and current["citation"] == row["citation"]
+                ):
+                    row["reader_url"] = current["reader_url"]
         return rows
 
     def save(self, item: dict[str, Any]) -> dict[str, Any]:
@@ -406,8 +546,51 @@ class Library:
                 ),
             )
             new_id = cursor.lastrowid
+            if passage:
+                fields = (
+                    "book_id",
+                    "title",
+                    "author",
+                    "edition",
+                    "source_url",
+                    "rights",
+                    "rights_url",
+                    "section_id",
+                    "section_title",
+                    "section_author",
+                    "section_role",
+                    "attribution_basis",
+                    "start",
+                    "end",
+                    "artifact_sha256",
+                    "content_sha256",
+                )
+                provenance = {key: passage.get(key) for key in fields}
+                conn.execute(
+                    "INSERT INTO saved_provenance(item_id,metadata) VALUES (?,?)",
+                    (new_id, json.dumps(provenance, ensure_ascii=False)),
+                )
         return next(r for r in self.saved() if r["id"] == new_id)
 
     def delete_saved(self, item_id: int) -> bool:
         with self.connect() as conn:
             return conn.execute("DELETE FROM saved WHERE id=?", (item_id,)).rowcount > 0
+
+    def defer_source(self, url: str, retry_at: float) -> None:
+        from urllib.parse import urlparse
+
+        with self.connect() as conn:
+            conn.execute(
+                "INSERT INTO source_deferrals(host,retry_at) VALUES (?,?) "
+                "ON CONFLICT(host) DO UPDATE SET retry_at=MAX(retry_at,excluded.retry_at)",
+                (urlparse(url).netloc.casefold(), retry_at),
+            )
+
+    def source_retry_at(self, url: str) -> float | None:
+        from urllib.parse import urlparse
+
+        with self.connect() as conn:
+            row = conn.execute(
+                "SELECT retry_at FROM source_deferrals WHERE host=?", (urlparse(url).netloc.casefold(),)
+            ).fetchone()
+        return float(row[0]) if row and row[0] > time.time() else None

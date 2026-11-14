@@ -13,6 +13,7 @@ import os
 import shutil
 import time
 import uuid
+from collections.abc import Iterator
 from functools import lru_cache
 from typing import TYPE_CHECKING, Any
 
@@ -40,6 +41,29 @@ def _model(name: str, cache: str) -> Any:
     return sentence_transformers.SentenceTransformer(name, cache_folder=cache)
 
 
+def token_windows(text: str, offsets: list[tuple[int, int]], budget: int, overlap: int = 20) -> Iterator[str]:
+    """Emit exact text windows whose tokenizer spans fit a bounded token budget."""
+    if budget <= overlap or overlap < 0:
+        raise ValueError("Token budget must exceed nonnegative overlap")
+    for start in range(0, len(offsets), budget - overlap):
+        end = min(start + budget, len(offsets))
+        if end > start:
+            yield text[offsets[start][0] : offsets[end - 1][1]]
+        if end == len(offsets):
+            break
+
+
+def _windows(model: Any, row: Any) -> list[str]:
+    header = f"{row['title']} — {row['author']} / {row['section_title']}"
+    header_ids = model.tokenizer.encode(header, add_special_tokens=False)[:24]
+    prefix = model.tokenizer.decode(header_ids, skip_special_tokens=True)
+    budget = max(32, model.max_seq_length - len(header_ids) - 6)
+    offsets = model.tokenizer(row["text"], add_special_tokens=False, return_offsets_mapping=True, truncation=False)[
+        "offset_mapping"
+    ]
+    return [prefix + "\n" + window for window in token_windows(row["text"], offsets, budget)]
+
+
 def build_index(library: Library, model_name: str | None = None, batch_size: int = 32) -> dict[str, Any]:
     if batch_size < 1 or batch_size > 512:
         raise ValueError("batch_size must be between 1 and 512")
@@ -52,36 +76,52 @@ def build_index(library: Library, model_name: str | None = None, batch_size: int
     staging = directory / generation
     staging.mkdir()
     fingerprint = corpus_fingerprint(library)
+    sql = (
+        "SELECT p.id,p.text,b.title,b.author,s.title section_title FROM passages p "
+        "JOIN books b ON b.id=p.book_id JOIN sections s ON s.id=p.section_id "
+        "WHERE b.status='indexed' ORDER BY p.id"
+    )
     try:
         with library.connect() as conn:
-            count = conn.execute(
-                "SELECT COUNT(*) FROM passages p JOIN books b ON b.id=p.book_id WHERE b.status='indexed'"
-            ).fetchone()[0]
+            count = 0
+            passages = 0
+            for row in conn.execute(sql):
+                count += len(_windows(model, row))
+                passages += 1
             if not count:
                 raise ValueError("Import books before building an embedding index")
-            dim = model.get_sentence_embedding_dimension()
+            dim = model.get_embedding_dimension()
             vectors = np.lib.format.open_memmap(
                 staging / "embeddings.npy", mode="w+", dtype="float32", shape=(count, dim)
             )
             ids = np.lib.format.open_memmap(staging / "ids.npy", mode="w+", dtype="int64", shape=(count,))
-            cursor = conn.execute(
-                "SELECT p.id,p.text,b.title,b.author,s.title section_title FROM passages p "
-                "JOIN books b ON b.id=p.book_id JOIN sections s ON s.id=p.section_id "
-                "WHERE b.status='indexed' ORDER BY p.id"
-            )
+            pending: list[str] = []
+            pending_ids: list[int] = []
             offset = 0
-            while rows := cursor.fetchmany(batch_size):
-                texts = [f"{r['title']} — {r['author']}\n{r['section_title']}\n{r['text']}" for r in rows]
+
+            def flush() -> None:
+                nonlocal offset
                 batch = model.encode(
-                    texts,
+                    pending,
                     batch_size=batch_size,
                     normalize_embeddings=True,
                     convert_to_numpy=True,
                     show_progress_bar=False,
                 )
-                vectors[offset : offset + len(rows)] = batch
-                ids[offset : offset + len(rows)] = [r["id"] for r in rows]
-                offset += len(rows)
+                vectors[offset : offset + len(pending)] = batch
+                ids[offset : offset + len(pending)] = pending_ids
+                offset += len(pending)
+                pending.clear()
+                pending_ids.clear()
+
+            for row in conn.execute(sql):
+                for window in _windows(model, row):
+                    pending.append(window)
+                    pending_ids.append(row["id"])
+                    if len(pending) >= batch_size:
+                        flush()
+            if pending:
+                flush()
             vectors.flush()
             ids.flush()
         if corpus_fingerprint(library) != fingerprint:
@@ -90,11 +130,15 @@ def build_index(library: Library, model_name: str | None = None, batch_size: int
             "generation": generation,
             "model": name,
             "corpus_fingerprint": fingerprint,
-            "passages": count,
+            "passages": passages,
+            "vectors": count,
             "dimensions": dim,
             "seconds": round(time.perf_counter() - started, 3),
             "model_max_tokens": model.max_seq_length,
-            "context": "title + author + section + passage; model may truncate long passages",
+            "strategy": "token-windows-v2",
+            "overlap_tokens": 20,
+            "context_header_tokens": 24,
+            "context": "bounded title/author/section header + overlapping tokenizer-offset text windows",
         }
         (staging / "metadata.json").write_text(json.dumps(metadata, indent=2))
         temporary = directory / f"active-{generation}.tmp"
@@ -147,14 +191,25 @@ def semantic_search(
     positions = positions[np.argsort(-scores[positions], kind="stable")]
     threshold = float(os.getenv("BOOKRAG_SEMANTIC_THRESHOLD", "0.30"))
     vector_results = []
+    seen: set[int] = set()
+    from book_rag.retrieval import prepare_query, rerank_results
+
+    plan = prepare_query(query)
     for pos in positions:
         if float(scores[pos]) < threshold:
             continue
-        passage = library.passage(int(ids[pos]))
+        passage_id = int(ids[pos])
+        if passage_id in seen:
+            continue
+        seen.add(passage_id)
+        passage = library.passage(passage_id)
         if passage and passage["verified"]:
             passage["score"] = float(scores[pos])
             passage["semantic_score"] = float(scores[pos])
             vector_results.append(passage)
+    # Quoted phrase constraints apply in every retrieval mode, including vectors.
+    if plan.phrases:
+        vector_results = [r for r in vector_results if rerank_results(plan, [r], limit=1)]
     results = vector_results
     if mode == "hybrid":
         lexical = library.search(query, "lexical", book_id, language, 50)["results"]

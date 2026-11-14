@@ -19,7 +19,9 @@
       "Children's stories",
       "Imaginary places -- Juvenile fiction",
       "Alice (Fictitious character from Carroll) -- Juvenile fiction"
-    ]
+    ],
+    "work_identity_status": "curated",
+    "work_type": "book_or_text"
   },
   {
     "id": "pg1342-full",
@@ -44,7 +46,9 @@
       "Domestic fiction",
       "Courtship -- Fiction",
       "Social classes -- Fiction"
-    ]
+    ],
+    "work_identity_status": "curated",
+    "work_type": "book_or_text"
   },
   {
     "id": "pg1228-full",
@@ -64,7 +68,9 @@
     "subjects": [
       "Evolution (Biology)",
       "Natural selection"
-    ]
+    ],
+    "work_identity_status": "curated",
+    "work_type": "book_or_text"
   },
   {
     "id": "pg2680-full",
@@ -85,7 +91,9 @@
       "Stoics",
       "Ethics",
       "Life"
-    ]
+    ],
+    "work_identity_status": "curated",
+    "work_type": "book_or_text"
   },
   {
     "id": "pg4650-full",
@@ -105,7 +113,9 @@
     "subjects": [
       "Satire",
       "Optimism -- Fiction"
-    ]
+    ],
+    "work_identity_status": "curated",
+    "work_type": "book_or_text"
   },
   {
     "id": "pg22367-full",
@@ -125,7 +135,9 @@
     "subjects": [
       "Psychological fiction",
       "Metamorphosis -- Fiction"
-    ]
+    ],
+    "work_identity_status": "curated",
+    "work_type": "book_or_text"
   },
   {
     "id": "pg5316-full",
@@ -144,7 +156,9 @@
     "catalog_rights_checked": true,
     "subjects": [
       "Poetry"
-    ]
+    ],
+    "work_identity_status": "curated",
+    "work_type": "book_or_text"
   },
   {
     "id": "pg3300-full",
@@ -163,7 +177,9 @@
     "catalog_rights_checked": true,
     "subjects": [
       "Economics"
-    ]
+    ],
+    "work_identity_status": "curated",
+    "work_type": "book_or_text"
   },
   {
     "id": "pg2009-full",
@@ -183,7 +199,9 @@
     "subjects": [
       "Evolution (Biology)",
       "Natural selection"
-    ]
+    ],
+    "work_identity_status": "curated",
+    "work_type": "book_or_text"
   },
   {
     "id": "pg1661-full",
@@ -204,7 +222,9 @@
       "Holmes, Sherlock (Fictitious character) -- Fiction",
       "Private investigators -- England -- Fiction",
       "Detective and mystery stories, English"
-    ]
+    ],
+    "work_identity_status": "curated",
+    "work_type": "book_or_text"
   },
   {
     "id": "pg84-full",
@@ -229,7 +249,9 @@
       "Monsters -- Fiction",
       "Frankenstein, Victor (Fictitious character) -- Fiction",
       "Frankenstein's monster (Fictitious character) -- Fiction"
-    ]
+    ],
+    "work_identity_status": "curated",
+    "work_type": "book_or_text"
   },
   {
     "id": "pg2701-full",
@@ -256,7 +278,9 @@
       "Ahab, Captain (Fictitious character) -- Fiction",
       "Whales -- Fiction",
       "Whaling ships -- Fiction"
-    ]
+    ],
+    "work_identity_status": "curated",
+    "work_type": "book_or_text"
   },
   {
     "id": "pg2600-full",
@@ -279,7 +303,9 @@
       "Napoleonic Wars, 1800-1815 -- Campaigns -- Russia -- Fiction",
       "Russia -- History -- Alexander I, 1801-1825 -- Fiction",
       "Aristocracy (Social class) -- Russia -- Fiction"
-    ]
+    ],
+    "work_identity_status": "curated",
+    "work_type": "book_or_text"
   },
   {
     "id": "pg1232-full",
@@ -300,7 +326,9 @@
       "State, The -- Early works to 1800",
       "Political science -- Philosophy -- Early works to 1800",
       "Political ethics -- Early works to 1800"
-    ]
+    ],
+    "work_identity_status": "curated",
+    "work_type": "book_or_text"
   },
   {
     "id": "pg1497-full",
@@ -322,6 +350,17 @@
       "Political science -- Early works to 1800",
       "Utopias -- Early works to 1800",
       "Justice -- Early works to 1800"
+    ],
+    "work_identity_status": "curated",
+    "work_type": "book_or_text",
+    "section_attributions": [
+      {
+        "title_contains": "INTRODUCTION AND ANALYSIS",
+        "author": "Benjamin Jowett",
+        "role": "editorial",
+        "source_url": "https://www.gutenberg.org/ebooks/1497",
+        "evidence": "The electronic edition credits Benjamin Jowett as translator and contains his Introduction and Analysis before the dialogue books; audited against the downloaded EPUB."
+      }
     ]
   },
   {
@@ -342,7 +381,9 @@
     "subjects": [
       "Political science -- Early works to 1800",
       "State, The -- Early works to 1800"
-    ]
+    ],
+    "work_identity_status": "curated",
+    "work_type": "book_or_text"
   },
   {
     "id": "pg4363-full",
@@ -362,7 +403,9 @@
     "subjects": [
       "Ethics",
       "Philosophy, German"
-    ]
+    ],
+    "work_identity_status": "curated",
+    "work_type": "book_or_text"
   },
   {
     "id": "pg5001-full",
@@ -381,7 +424,9 @@
     "catalog_rights_checked": true,
     "subjects": [
       "Relativity (Physics)"
-    ]
+    ],
+    "work_identity_status": "curated",
+    "work_type": "book_or_text"
   },
   {
     "id": "pg61-full",
@@ -401,7 +446,9 @@
     "subjects": [
       "Socialism",
       "Communism"
-    ]
+    ],
+    "work_identity_status": "curated",
+    "work_type": "book_or_text"
   },
   {
     "id": "pg35-full",
@@ -422,6 +469,8 @@
       "Science fiction",
       "Time travel -- Fiction",
       "Dystopias -- Fiction"
-    ]
+    ],
+    "work_identity_status": "curated",
+    "work_type": "book_or_text"
   }
 ]

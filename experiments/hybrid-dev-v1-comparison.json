@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "dataset_sha256": "e637ab5be3467c2cc8294f1dd8395d80bc49fdb972107da35830caaf30fe75be",
+  "split": "dev",
+  "k": 5,
+  "baseline_mode": "lexical",
+  "candidate_mode": "hybrid",
+  "metrics": {
+    "mrr_at_k": {
+      "baseline": 0.7777777777777778,
+      "candidate": 0.7407407407407408,
+      "delta": -0.03703703703703698,
+      "higher_is_better": true
+    },
+    "hit_at_k": {
+      "baseline": 0.7777777777777778,
+      "candidate": 0.8888888888888888,
+      "delta": 0.11111111111111105,
+      "higher_is_better": true
+    },
+    "work_recall_at_k": {
+      "baseline": 0.7777777777777778,
+      "candidate": 0.9722222222222222,
+      "delta": 0.19444444444444442,
+      "higher_is_better": true
+    },
+    "precision_at_k": {
+      "baseline": 0.3111111111111111,
+      "candidate": 0.3222222222222222,
+      "delta": 0.011111111111111072,
+      "higher_is_better": true
+    },
+    "negative_abstention_accuracy": {
+      "baseline": 0.6,
+      "candidate": 0.6,
+      "delta": 0.0,
+      "higher_is_better": true
+    },
+    "quote_exact_rate": {
+      "baseline": 1.0,
+      "candidate": 1.0,
+      "delta": 0.0,
+      "higher_is_better": true
+    },
+    "metadata_exact_rate": {
+      "baseline": 1.0,
+      "candidate": 1.0,
+      "delta": 0.0,
+      "higher_is_better": true
+    },
+    "reader_anchor_exact_rate": {
+      "baseline": 1.0,
+      "candidate": 1.0,
+      "delta": 0.0,
+      "higher_is_better": true
+    },
+    "latency_p50_ms": {
+      "baseline": 0.547,
+      "candidate": 39.169,
+      "delta": 38.622,
+      "higher_is_better": false
+    },
+    "latency_p95_ms": {
+      "baseline": 0.733,
+      "candidate": 325.567,
+      "delta": 324.834,
+      "higher_is_better": false
+    },
+    "elapsed_seconds": {
+      "baseline": 0.017,
+      "candidate": 8.988,
+      "delta": 8.971,
+      "higher_is_better": false
+    },
+    "process_peak_rss_mib": {
+      "baseline": 35.69,
+      "candidate": 762.48,
+      "delta": 726.79,
+      "higher_is_better": false
+    }
+  },
+  "corpus_sha256": "53356885f624411b2f26b12051b0ebd5dc43354a94022d97f29ef8a4724a5c0e"
+}

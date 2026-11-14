@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "dataset_sha256": "f73de671c88309aebb715c53c78174b6a6b642da6ad6bab566a7271972b0f2d5",
+  "split": "heldout",
+  "k": 5,
+  "baseline_mode": "baseline",
+  "candidate_mode": "hybrid",
+  "metrics": {
+    "mrr_at_k": {
+      "baseline": 0.75,
+      "candidate": 0.9333333333333333,
+      "delta": 0.18333333333333335,
+      "higher_is_better": true
+    },
+    "hit_at_k": {
+      "baseline": 0.8,
+      "candidate": 1.0,
+      "delta": 0.19999999999999996,
+      "higher_is_better": true
+    },
+    "work_recall_at_k": {
+      "baseline": 0.8,
+      "candidate": 1.0,
+      "delta": 0.19999999999999996,
+      "higher_is_better": true
+    },
+    "precision_at_k": {
+      "baseline": 0.18,
+      "candidate": 0.22000000000000003,
+      "delta": 0.040000000000000036,
+      "higher_is_better": true
+    },
+    "negative_abstention_accuracy": {
+      "baseline": 0.6666666666666666,
+      "candidate": 0.6666666666666666,
+      "delta": 0.0,
+      "higher_is_better": true
+    },
+    "quote_exact_rate": {
+      "baseline": 1.0,
+      "candidate": 1.0,
+      "delta": 0.0,
+      "higher_is_better": true
+    },
+    "metadata_exact_rate": {
+      "baseline": 1.0,
+      "candidate": 1.0,
+      "delta": 0.0,
+      "higher_is_better": true
+    },
+    "reader_anchor_exact_rate": {
+      "baseline": 1.0,
+      "candidate": 1.0,
+      "delta": 0.0,
+      "higher_is_better": true
+    },
+    "latency_p50_ms": {
+      "baseline": 0.773,
+      "candidate": 26.739,
+      "delta": 25.966,
+      "higher_is_better": false
+    },
+    "latency_p95_ms": {
+      "baseline": 1.406,
+      "candidate": 2341.712,
+      "delta": 2340.306,
+      "higher_is_better": false
+    },
+    "elapsed_seconds": {
+      "baseline": 0.026,
+      "candidate": 6.223,
+      "delta": 6.197,
+      "higher_is_better": false
+    },
+    "process_peak_rss_mib": {
+      "baseline": 36.3,
+      "candidate": 841.23,
+      "delta": 804.9300000000001,
+      "higher_is_better": false
+    }
+  },
+  "corpus_sha256": "89d933ff06b8f19dd736b9c4d14a0180d81426706952a2318733adacae972270"
+}

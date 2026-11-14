@@ -8,10 +8,13 @@ Images, styling and layout are not retained. Footnotes remain readable text.
 
 from __future__ import annotations
 
+import hashlib
+import json
 import posixpath
 import re
 import unicodedata
 from dataclasses import dataclass
+from importlib.metadata import version
 from pathlib import Path
 from urllib.parse import unquote
 from xml.etree.ElementTree import Element
@@ -23,6 +26,19 @@ from pypdf import PdfReader
 
 MAX_FILE_BYTES = 100 * 1024 * 1024
 MAX_MEMBER_BYTES = 20 * 1024 * 1024
+
+
+def _loaded_parser_fingerprint() -> str:
+    """Bind identity once to the source and dependency versions being loaded."""
+    source_digest = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
+    dependencies = {name: version(name) for name in ("beautifulsoup4", "defusedxml", "pypdf")}
+    identity = {"source_sha256": source_digest, "dependencies": dependencies}
+    return hashlib.sha256(json.dumps(identity, sort_keys=True).encode()).hexdigest()
+
+
+# Never recompute this during import_book: a running worker must keep the
+# identity of its loaded parser even if another process edits the source file.
+PARSER_FINGERPRINT = _loaded_parser_fingerprint()
 
 
 @dataclass(slots=True)
@@ -50,6 +66,27 @@ def _text(node: Tag) -> str:
     return normalize_text(node.get_text(" ", strip=True))
 
 
+def _verse_container(node: Tag) -> bool:
+    classes = node.get("class") or []
+    if isinstance(classes, str):
+        classes = classes.split()
+    return node.name == "div" and bool(set(classes) & {"poem", "stanza", "verse"})
+
+
+def _block_text(node: Tag) -> str:
+    """Preserve explicit verse/preformatted line breaks, not HTML source wrapping."""
+    has_lines = node.name == "pre" or bool(node.find("br")) or _verse_container(node)
+    if not has_lines:
+        return normalize_text(node.get_text())
+    for line_break in node.find_all("br"):
+        line_break.replace_with("\n")
+    for line in node.find_all(class_=lambda value: value is not None and value in {"verse", "verse-line", "line"}):
+        line.append("\n")
+    text = unicodedata.normalize("NFC", node.get_text().replace("\r\n", "\n").replace("\r", "\n"))
+    lines = [" ".join(line.split()) for line in text.split("\n")]
+    return re.sub(r"\n{3,}", "\n\n", "\n".join(lines)).strip()
+
+
 def _html(data: bytes | str, fallback: str) -> ParsedBook:
     soup = BeautifulSoup(data, "html.parser")
     title = _text(soup.title) if soup.title else fallback
@@ -61,11 +98,21 @@ def _html(data: bytes | str, fallback: str) -> ParsedBook:
     sections: list[Section] = []
     heading, paragraphs = "Text", []
     root = soup.body or soup
-    for node in root.find_all(["h1", "h2", "h3", "h4", "h5", "h6", "p", "li", "pre", "blockquote", "dt", "dd"]):
+    for node in root.find_all(["h1", "h2", "h3", "h4", "h5", "h6", "p", "li", "pre", "blockquote", "dt", "dd", "div"]):
+        if node.name == "div" and not _verse_container(node):
+            continue
+        if _verse_container(node) and node.find(class_=lambda value: value == "stanza"):
+            continue
+        if any(
+            _verse_container(parent) and not parent.find(class_=lambda value: value == "stanza")
+            for parent in node.parents
+            if isinstance(parent, Tag)
+        ):
+            continue
         if node.name in {"p", "li", "blockquote", "dd", "pre"} and node.find(["p", "li", "pre", "blockquote"]):
             continue
         # Do not duplicate a paragraph nested in a list/quotation that is emitted itself.
-        value = _text(node)
+        value = _text(node) if node.name.startswith("h") else _block_text(node)
         if not value:
             continue
         if node.name.startswith("h"):
@@ -194,6 +241,17 @@ def _fb2(path: Path) -> ParsedBook:
             if name == "section":
                 flush()
                 visit(child, title)
+            elif name == "poem":
+                stanza_texts = []
+                for stanza in child.findall("{*}stanza"):
+                    lines = [normalize_text("".join(line.itertext())) for line in stanza.findall("{*}v")]
+                    stanza_texts.append("\n".join(lines))
+                poem_title = child.find("{*}title")
+                if poem_title is not None:
+                    stanza_texts.insert(0, normalize_text("".join(poem_title.itertext())))
+                value = "\n\n".join(stanza_texts).strip()
+                if value:
+                    paragraphs.append(value)
             elif name != "binary":
                 value = normalize_text("".join(child.itertext()))
                 if value:

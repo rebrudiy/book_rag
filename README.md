@@ -77,3 +77,23 @@ uv run bookrag evaluate --dataset evals/heldout.json --output experiments/local-
 Interactive schema: http://127.0.0.1:8000/docs. Key routes: `/api/search`, `/api/books`, `/api/books/{id}`, `/api/passages/{id}`, `/api/research`, `/api/saved`, `/api/stats`. Default binding is loopback. Authentication and multi-user access are not implemented; this is a personal local research application.
 
 Contributions: include a use case, provenance for any text fixtures and relevant tests. Do not commit corpus downloads, models, personal collections, environment files or credentials.
+
+## Larger offline discovery and research export
+
+Download the [official RDF catalog](https://www.gutenberg.org/ebooks/offline_catalogs.html) once, following [provider harvesting guidance](https://www.gutenberg.org/policy/robot_access.html), then discover without crawling the website:
+
+```sh
+uv run bookrag discover data/catalog/rdf-files.tar.bz2 --output data/catalog/queue.json --limit 200 --language en --language ru
+BOOKRAG_DATA_DIR=./data/full uv run bookrag ingest data/catalog/queue.json
+uv run bookrag export --collection 'Research' --output data/exports/research.md
+```
+
+Discovery requires explicit per-record public-domain rights; ordinary CSV metadata without rights is skipped. Reruns extend the queue. Downloads use a two-second interval, bounded retries, validated cache sidecars and atomic completion. Imports stop before free disk falls below 4 GiB; queued records remain discoverable. Parser/dependency/chunker fingerprints ensure upgraded extraction rules trigger reindexing even when files are unchanged.
+
+The theme map shows shared vocabulary and lexical similarity within a language. It does not infer author agreement or opposition. Catalog work groups remain provisional unless curated; discovered periodical issues are labeled separately. See the [corpus audit](docs/CORPUS_AUDIT.md) for observed source and attribution defects.
+
+[Retrieval experiments](docs/RETRIEVAL.md) record both gains and regressions, including a semantic false positive on the frozen held-out split. The default UI requests hybrid search and clearly shows lexical fallback when the optional index is unavailable. The original lexical baseline remains available with `--mode baseline`.
+
+For an optional, slower local cross-encoder ordering pass, use `uv run bookrag search 'your research query' --mode reranked`. The model is revision-pinned and downloaded locally on first use. [Paired development measurements](docs/RERANKING.md) show a small ranking gain with higher memory/latency and an observed regression; this is an explicit option, not the default.
+
+Contributor attribution can be supplied through audited `section_attributions` metadata rules. The curated Republic marks Jowett's introduction as editorial rather than attributing its prose to Plato. Unclassified sections retain catalog authorship as context, without claiming verified section authorship.

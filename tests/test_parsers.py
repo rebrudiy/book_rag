@@ -187,3 +187,24 @@ def test_download_rejects_insecure_redirect(tmp_path: Path, monkeypatch: pytest.
     with pytest.raises(ValueError, match="insecure"):
         download_source(entry, tmp_path)
     assert not (tmp_path / "sample.txt").exists()
+
+
+def test_html_preserves_explicit_poetry_and_preformatted_lines(tmp_path: Path) -> None:
+    path = tmp_path / "verse.html"
+    path.write_text(
+        "<h1>Poetry</h1><p>First <em>line</em>.<br>Second line.</p>"
+        '<div class="poem"><div class="stanza"><span>Third line.</span><br>'
+        "<span>Fourth line.</span></div></div><pre>Fifth line.\nSixth line.</pre>"
+    )
+    text = parse_book(path).sections[0].text
+    assert text == "First line.\nSecond line.\n\nThird line.\nFourth line.\n\nFifth line.\nSixth line."
+
+
+def test_fb2_preserves_stanzas_and_verse_lines(tmp_path: Path) -> None:
+    path = tmp_path / "verse.fb2"
+    path.write_text(
+        "<FictionBook><body><section><title><p>Poetry</p></title><poem>"
+        "<stanza><v>First line.</v><v>Second <emphasis>line</emphasis>.</v></stanza>"
+        "<stanza><v>Third line.</v></stanza></poem></section></body></FictionBook>"
+    )
+    assert parse_book(path).sections[0].text == "First line.\nSecond line.\n\nThird line."

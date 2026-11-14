@@ -76,7 +76,9 @@ or encrypted PDFs return an actionable import failure. OCR is an explicit future
 step rather than silently indexing an empty scan.
 
 Canonical section text uses Unicode NFC, LF newlines, collapsed whitespace
-within paragraphs, and two newlines between paragraphs. Wrapped TXT lines join
+within paragraphs, and two newlines between paragraphs. Explicit HTML `br`,
+`pre`, supported verse/stanza containers and FB2 `poem/stanza/v` retain single
+newlines between verse lines. Wrapped TXT lines join
 with a space. HTML styling and images are omitted; footnotes remain text. Exact
 citation offsets refer to canonical section text, **not raw source-byte offsets
 or a printed page number inferred from layout**. The original source hash and
@@ -85,6 +87,52 @@ edition link let a reviewer identify the source artifact independently.
 ZIP members are read without filesystem extraction, with member and total size
 limits; paths cannot escape the archive. XML uses defusedxml to reject external
 entities. Legacy non-UTF-8 TXT files require explicit conversion so quotations
-are not silently corrupted. PDF layout, poetry lineation, tables and inline
+are not silently corrupted. PDF layout, unmarked poetry lineation, tables and inline
 formatting remain extraction limitations. Dedicated structure-aware rendering
 and OCR quality evaluation are planned.
+
+## Offline discovery at scale
+
+`book_rag.catalog.discover_gutenberg(catalog_path, output, limit=100,
+languages=None)` consumes a local official RDF catalog archive (`.tar.bz2`,
+`.tar.gz`) or individual `.rdf`. It performs no network calls, streams archive
+members without extracting paths, and appends at most `limit` new entries to an
+atomic output manifest. Repeated calls retain existing IDs and continue through
+eligible metadata. The output is a **discovered queue**, not downloaded books.
+
+Only records explicitly stating `Public domain in the USA` and type `Text` are
+accepted. Missing/other rights, audio, unsupported formats and language filters
+have separate rejection counters. EPUB3 is preferred, followed by other EPUB,
+HTML and UTF-8 text. Existing curated IDs (`pgN-full`) and verified work links
+are retained. Other work IDs remain conservative per-record identities; catalog
+record counts must not be represented as deduplicated work counts.
+
+Official download: [RDF catalog archive](https://www.gutenberg.org/cache/epub/feeds/rdf-files.tar.bz2).
+Store it outside Git, download once, and reuse it offline. The official CSV
+remains supported only with explicitly enriched `Rights` and `Download URL`
+columns; plain provider CSV rows are skipped because they cannot prove rights.
+
+On 2026-11-14, the locally downloaded 121 MiB RDF archive yielded a 1,000-edition
+queue from 1,219 inspected records in 0.676 seconds and 33.88 MiB peak process RSS
+on this Mac. Twelve records failed rights filtering, 174 were non-text, 31 failed
+the selected language filter and two lacked suitable formats. This measures
+metadata discovery only; it excludes network download and book indexing cost.
+
+## Download recovery and provenance
+
+Remote files have a `.source.json` sidecar containing requested URL, final URL,
+SHA-256, byte size and UTC retrieval time. Cache reuse verifies URL, size and
+file hash; legacy caches without a sidecar, changed source URLs and damaged
+files trigger a new download. Atomic `.part` writes keep incomplete responses
+from becoming completed files. A crash between file and sidecar replacement
+causes a verified cache miss on the next run.
+
+Transport failures, HTTP 429 and selected transient 5xx statuses retry at most
+three attempts. `Retry-After` accepts seconds or HTTP dates. Delays up to ten seconds are
+honored inline; longer delays raise `DownloadDeferred` with the requested
+UTC retry timestamp so workers do not retry earlier than the provider allows.
+Missing or invalid values use bounded exponential backoff. Permanent 4xx
+errors fail immediately. Retries restart at byte zero and retain the previous
+completed file on failure. This is restartable acquisition, not HTTP range
+resume. Corpus workers must serialize downloads for the same source ID and
+respect the provider's aggregate request rate.

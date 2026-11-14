@@ -1,12 +1,13 @@
 # Plan
 
-Goal active: continue iterations until verified weekly Codex remainder <=3%, user stop, or environment limit.
+Goal active until verified weekly Codex remainder <=3%, user stop or environment limit.
 
-1. ✓ Vertical slice: permitted demo → resumable import → lexical search → exact citations → reader + saved research.
-2. ✓ Baseline + separate heldout fixtures, browser desktop/mobile, source provenance, type/lint/unit checks.
-3. Now: publish public GitHub; finish first multilingual embeddings experiment; fix natural no-answer false matches while preserving frozen baseline.
-4. Parallel: expand full EPUB corpus (20 editions/19 works), rights-aware offline discovery, thematic map/related books.
-5. Next: compare retrieval modes on dev, measure indexing/latency/memory, use heldout once for release verification; CI check.
-6. Then: broader query judgments, semantic chunking/model context, optional reranking and ANN capacity benchmarks; improve ingestion fidelity and near-duplicate/work matching based on measured errors.
+Completed: working multilingual demo, exact citations/reader, saved research and export; public GitHub/CI; dev/heldout protocol; lexical/hybrid and optional reranker experiments; rights-aware offline catalog; 220-edition expansion and source/attribution audit; snapshot map cache.
 
-Ownership: lead library/API/CLI/semantic/integration/docs; corpus agent parsers/sources/catalog/demo; UI agent static/explore/browser; evaluation agent metrics/fixtures/retrieval/CI. Avoid overlapping edits.
+Now:
+- Lead: publish iteration 2, track rights-verified 1,000-edition refresh, then build and measure full-library semantic windows.
+- Corpus: pinned modern CC BY-SA D2L chapter acquisition, provenance, derived structured text and tests.
+- UI: real Jowett editorial attribution in browser, optional reranker choice, final smoke.
+- Evaluation: experiments complete; next broaden judgments/new sealed test and independent review as needed.
+
+Next choices: multilingual balance and genre coverage; ANN recall/cost experiment when exact vector scan becomes limiting; near-duplicate editions and work/translation linking; source fidelity and contextual research tools. Preserve frozen release reports and record observed regressions, not only gains.

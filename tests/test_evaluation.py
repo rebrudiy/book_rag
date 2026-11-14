@@ -197,3 +197,16 @@ def test_fixture_ground_truth_is_present_in_demo_source() -> None:
             assert set(targets).issubset(texts), case["id"]
             for fragment in case.get("evidence_contains", []):
                 assert any(fragment.casefold() in texts[work] for work in targets), (case["id"], fragment)
+
+
+@pytest.mark.parametrize(
+    ("start", "end"),
+    [(0, 999), (-1, 999), (0, True), (0, 0)],
+)
+def test_invalid_offsets_are_rejected_even_when_python_slice_would_match(start: int, end: int) -> None:
+    source = BOOK["sections"][0]["text"]
+    # Python clamps an excessive end, accepts negative offsets and treats bool
+    # as an integer. Equal sliced text therefore cannot establish valid bounds.
+    result = RESULT | {"start": start, "end": end, "text": source[start:end]}
+    assert source[start:end] == result["text"]
+    assert verify_result(result, BOOK)["quote_exact"] is False

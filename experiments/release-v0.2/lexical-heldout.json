@@ -1,0 +1,470 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-11-14T11:24:53.867341+00:00",
+  "dataset": "heldout.json",
+  "dataset_sha256": "f73de671c88309aebb715c53c78174b6a6b642da6ad6bab566a7271972b0f2d5",
+  "split": "heldout",
+  "mode": "lexical",
+  "actual_search_modes": {
+    "lexical": 13
+  },
+  "embedding_models": [],
+  "environment": {
+    "python": "3.12.12",
+    "platform": "macOS-26.6.2-arm64-arm-64bit"
+  },
+  "implementation_sha256": {
+    "__init__.py": "75f47d5ed1cd9a5bbcae9f15abdf4122ce48bd6ca996d1a795c26ecc5a82ea96",
+    "api.py": "064b31d08b17f0a28368da09c1fd028d267bd4d0632673f3e0a435d64b9f0cf6",
+    "catalog.py": "e6d2ffd7839a8f6cb06a903d907613935388f3c93192edfa170c22290e681fb7",
+    "cli.py": "06e1b6b0ba21283bce6c3505c443fcb042516e1548f2188564ab2ced8574f2c1",
+    "config.py": "913d11f0397cd2ba78ac518890dd39aa8256feb092bba168fd0aa464136f7144",
+    "evaluation.py": "8300a15a8ebb54b19e639b3a14a1b443ff591705f6384dd7af5a2a4a5ae90294",
+    "explore.py": "e262a575fbad27510e5fc0cb5dcccc0b98ed61bfb0864faf25fff86daf405554",
+    "library.py": "51f5474d44ccdd98e95f8bf38a3df21856f7c6f978f874f809d9ad31f5f872fb",
+    "parsers.py": "e6c06a671e6c0fdb709e59edca6c9a590fd134618f4aac14da62c683b9fe0d4c",
+    "retrieval.py": "d9603f66ac040e2b5184d0ab1260207f62aa9b3f2fd0e67b52644b2f7f6cdedd",
+    "semantic.py": "3428065e0ee54b7368364e04e784c796d71e8d1b0ec54b996dfc43f98a82268b",
+    "sources.py": "42c87cda2bcaa1eac567a3ef7dcb29a409f46d1005272b3966e683106abaed45"
+  },
+  "k": 5,
+  "corpus": {
+    "books": 8,
+    "works": 8,
+    "passages": 45,
+    "status_counts": {
+      "indexed": 8
+    },
+    "languages": [
+      {
+        "language": "de",
+        "count": 1
+      },
+      {
+        "language": "en",
+        "count": 5
+      },
+      {
+        "language": "fr",
+        "count": 1
+      },
+      {
+        "language": "ru",
+        "count": 1
+      }
+    ]
+  },
+  "corpus_sha256": "89d933ff06b8f19dd736b9c4d14a0180d81426706952a2318733adacae972270",
+  "corpus_snapshot": [
+    {
+      "id": "pg11-alice",
+      "work_id": "pg11-alice",
+      "title": "Alice's Adventures in Wonderland",
+      "author": "Lewis Carroll",
+      "language": "en",
+      "edition": "Millennium Fulcrum Edition 3.0; opening extract",
+      "status": "indexed",
+      "artifact_sha256": "ceceb5641daca70b4a8374df10d90acfa1e637b16bd6ba4b7b9e5eff1c87aab5",
+      "content_sha256": "e9ecab8611f556fd574f28269f30bf011c85ea34dc0733284c5873e0bb48b00b",
+      "source_url": "https://www.gutenberg.org/ebooks/11",
+      "rights": "Public domain in the USA; Project Gutenberg trademark license applies; check local law outside the USA",
+      "rights_url": "https://www.gutenberg.org/policy/license.html"
+    },
+    {
+      "id": "pg1228-origin",
+      "work_id": "pg1228-origin",
+      "title": "On the Origin of Species",
+      "author": "Charles Darwin",
+      "language": "en",
+      "edition": "1859 first edition; chapter III extract",
+      "status": "indexed",
+      "artifact_sha256": "1ba12b27b1717ad2ad912d3c91cbbcce75512ca42e1ba05d5ff6a60d922ba1c6",
+      "content_sha256": "6537921c3582b919725cdba3b31d531c62a6aabd94777a8a9584764e8af62fee",
+      "source_url": "https://www.gutenberg.org/ebooks/1228",
+      "rights": "Public domain in the USA; Project Gutenberg trademark license applies; check local law outside the USA",
+      "rights_url": "https://www.gutenberg.org/policy/license.html"
+    },
+    {
+      "id": "pg1342-pride",
+      "work_id": "pg1342-pride",
+      "title": "Pride and Prejudice",
+      "author": "Jane Austen",
+      "language": "en",
+      "edition": "George Allen 1894 edition as transcribed; opening extract",
+      "status": "indexed",
+      "artifact_sha256": "256af3cdaccb707b80ac5ca3519ad1ace225bb731efc86e5ae82fa21197674cc",
+      "content_sha256": "91e13b8e6a2ed5000d30395b46b192d1accd966f98705663abca20f2b981f555",
+      "source_url": "https://www.gutenberg.org/ebooks/1342",
+      "rights": "Public domain in the USA; Project Gutenberg trademark license applies; check local law outside the USA",
+      "rights_url": "https://www.gutenberg.org/policy/license.html"
+    },
+    {
+      "id": "pg22367-metamorphosis",
+      "work_id": "pg22367-metamorphosis",
+      "title": "Die Verwandlung",
+      "author": "Franz Kafka",
+      "language": "de",
+      "edition": "German original, 1915; opening extract",
+      "status": "indexed",
+      "artifact_sha256": "4876baa73f8b8625f45041ae56ca26e9972227bea8061491fdb33f27e3ac5020",
+      "content_sha256": "b03c211ecaae6afa4d44b005b72f073055827897d500a234cc69fdcc5463d2da",
+      "source_url": "https://www.gutenberg.org/ebooks/22367",
+      "rights": "Public domain in the USA; Project Gutenberg trademark license applies; check local law outside the USA",
+      "rights_url": "https://www.gutenberg.org/policy/license.html"
+    },
+    {
+      "id": "pg2680-meditations",
+      "work_id": "pg2680-meditations",
+      "title": "Meditations",
+      "author": "Marcus Aurelius",
+      "language": "en",
+      "edition": "Meric Casaubon translation (1634), later edited transcription; book V extract",
+      "status": "indexed",
+      "artifact_sha256": "dad17af5ea3ba989031e3c5cb6bf3805a09cfd2e2d21d0ac1197d71601d544d5",
+      "content_sha256": "48034b65a8b9fad19d1e833198814562b4ff3705483a59156ae602241497201f",
+      "source_url": "https://www.gutenberg.org/ebooks/2680",
+      "rights": "Public domain in the USA; Project Gutenberg trademark license applies; check local law outside the USA",
+      "rights_url": "https://www.gutenberg.org/policy/license.html"
+    },
+    {
+      "id": "pg3300-wealth",
+      "work_id": "pg3300-wealth",
+      "title": "The Wealth of Nations",
+      "author": "Adam Smith",
+      "language": "en",
+      "edition": "English text, transcription by Colin Muir and David Widger; book I chapter I extract",
+      "status": "indexed",
+      "artifact_sha256": "a02e3e58dfc998a9fc8aef46ead2cc82e637298f23f1ae8a9acbc3bb63f56c6a",
+      "content_sha256": "e56526704c7fd2ce6f7b50e6a09eacacd61320148b6972302b3c5896356b3d20",
+      "source_url": "https://www.gutenberg.org/ebooks/3300",
+      "rights": "Public domain in the USA; Project Gutenberg trademark license applies; check local law outside the USA",
+      "rights_url": "https://www.gutenberg.org/policy/license.html"
+    },
+    {
+      "id": "pg4650-candide",
+      "work_id": "pg4650-candide",
+      "title": "Candide, ou l’optimisme",
+      "author": "Voltaire",
+      "language": "fr",
+      "edition": "Beuchot edition, tome XXXIII, Paris 1829; opening extract",
+      "status": "indexed",
+      "artifact_sha256": "e04737936a280f46a51cd4c8644a2dbed9a14f1b03ef60bbfe13698d74b2f65b",
+      "content_sha256": "3f7fc1f48816a564b126da0e6ef2a4f479cded57795de09bb558c54b38f2f4ee",
+      "source_url": "https://www.gutenberg.org/ebooks/4650",
+      "rights": "Public domain in the USA; Project Gutenberg trademark license applies; check local law outside the USA",
+      "rights_url": "https://www.gutenberg.org/policy/license.html"
+    },
+    {
+      "id": "pg5316-pushkin",
+      "work_id": "pg5316-pushkin",
+      "title": "Красавице, которая нюхала табак",
+      "author": "Александр Пушкин",
+      "language": "ru",
+      "edition": "Russian original poem (1814); complete poem",
+      "status": "indexed",
+      "artifact_sha256": "a26899a11331aebedc3e851f1b08d1e26dd411ba829a604561d2b3ff7a45dd4f",
+      "content_sha256": "5830f9157d1ea1b1aff8918aec3b52956a41e0cdd394be237804d103e5479124",
+      "source_url": "https://www.gutenberg.org/ebooks/5316",
+      "rights": "Public domain in the USA; Project Gutenberg trademark license applies; check local law outside the USA",
+      "rights_url": "https://www.gutenberg.org/policy/license.html"
+    }
+  ],
+  "queries": 13,
+  "answerable_queries": 10,
+  "negative_queries": 3,
+  "metrics": {
+    "mrr_at_k": 0.65,
+    "hit_at_k": 0.7,
+    "work_recall_at_k": 0.7,
+    "precision_at_k": 0.16,
+    "negative_abstention_accuracy": 1.0,
+    "quote_exact_rate": 1.0,
+    "metadata_exact_rate": 1.0,
+    "reader_anchor_exact_rate": 1.0,
+    "returned_passages": 19,
+    "latency_p50_ms": 1.695,
+    "latency_p95_ms": 5.814,
+    "elapsed_seconds": 0.042,
+    "process_peak_rss_mib": 36.58
+  },
+  "by_type": {
+    "argument": {
+      "queries": 1,
+      "mrr_at_k": 0.5,
+      "hit_at_k": 1.0
+    },
+    "cross_language": {
+      "queries": 2,
+      "mrr_at_k": 0.0,
+      "hit_at_k": 0.0
+    },
+    "explanation": {
+      "queries": 1,
+      "mrr_at_k": 0.0,
+      "hit_at_k": 0.0
+    },
+    "idea": {
+      "queries": 2,
+      "mrr_at_k": 1.0,
+      "hit_at_k": 1.0
+    },
+    "quote": {
+      "queries": 1,
+      "mrr_at_k": 1.0,
+      "hit_at_k": 1.0
+    },
+    "scene": {
+      "queries": 3,
+      "mrr_at_k": 1.0,
+      "hit_at_k": 1.0
+    }
+  },
+  "by_language": {
+    "de": {
+      "queries": 1,
+      "mrr_at_k": 1.0
+    },
+    "en": {
+      "queries": 5,
+      "mrr_at_k": 0.7
+    },
+    "fr": {
+      "queries": 1,
+      "mrr_at_k": 1.0
+    },
+    "ru": {
+      "queries": 3,
+      "mrr_at_k": 0.3333333333333333
+    }
+  },
+  "cases": [
+    {
+      "id": "heldout-scene-marmalade",
+      "query": "A falling child finds an empty jar of orange marmalade",
+      "type": "scene",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 1.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        2
+      ],
+      "elapsed_ms": 3.084,
+      "warnings": []
+    },
+    {
+      "id": "heldout-quote-pride",
+      "query": "You have no compassion on my poor nerves",
+      "type": "quote",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 1.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        10,
+        12,
+        45,
+        6
+      ],
+      "elapsed_ms": 7.326,
+      "warnings": []
+    },
+    {
+      "id": "heldout-explanation-elephants",
+      "query": "How can a slowly breeding elephant population grow to millions?",
+      "type": "explanation",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 0.0,
+      "work_recall_at_k": 0.0,
+      "hit_at_k": false,
+      "precision_at_k": 0.0,
+      "correct_abstention": null,
+      "results": [],
+      "elapsed_ms": 1.695,
+      "warnings": []
+    },
+    {
+      "id": "heldout-idea-generosity",
+      "query": "Doing a good turn without expecting retaliation or applause",
+      "type": "idea",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 1.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        24
+      ],
+      "elapsed_ms": 4.806,
+      "warnings": []
+    },
+    {
+      "id": "heldout-argument-agriculture",
+      "query": "Why is division of labour less complete in agriculture than manufacture?",
+      "type": "argument",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 0.5,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        42,
+        43,
+        40,
+        39,
+        44
+      ],
+      "elapsed_ms": 4.589,
+      "warnings": []
+    },
+    {
+      "id": "heldout-candide-expulsion",
+      "query": "Candide est chassé du château après un baiser",
+      "type": "scene",
+      "language": "fr",
+      "answerable": true,
+      "reciprocal_rank": 1.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        29,
+        28,
+        30,
+        26,
+        27
+      ],
+      "elapsed_ms": 2.655,
+      "warnings": []
+    },
+    {
+      "id": "heldout-kafka-clock",
+      "query": "Gregor hat den Zug um fünf verschlafen",
+      "type": "scene",
+      "language": "de",
+      "answerable": true,
+      "reciprocal_rank": 1.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.4,
+      "correct_abstention": null,
+      "results": [
+        35,
+        34
+      ],
+      "elapsed_ms": 2.151,
+      "warnings": []
+    },
+    {
+      "id": "heldout-pushkin",
+      "query": "Красавица предпочла табак цветам",
+      "type": "idea",
+      "language": "ru",
+      "answerable": true,
+      "reciprocal_rank": 1.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        46
+      ],
+      "elapsed_ms": 0.737,
+      "warnings": []
+    },
+    {
+      "id": "heldout-cross-darwin",
+      "query": "Почему животные не размножаются бесконечно и вынуждены бороться за существование",
+      "type": "cross_language",
+      "language": "ru",
+      "answerable": true,
+      "reciprocal_rank": 0.0,
+      "work_recall_at_k": 0.0,
+      "hit_at_k": false,
+      "precision_at_k": 0.0,
+      "correct_abstention": null,
+      "results": [],
+      "elapsed_ms": 0.73,
+      "warnings": []
+    },
+    {
+      "id": "heldout-cross-stoic",
+      "query": "Нужно вставать с постели и выполнять свой долг, как пчёлы и муравьи",
+      "type": "cross_language",
+      "language": "ru",
+      "answerable": true,
+      "reciprocal_rank": 0.0,
+      "work_recall_at_k": 0.0,
+      "hit_at_k": false,
+      "precision_at_k": 0.0,
+      "correct_abstention": null,
+      "results": [],
+      "elapsed_ms": 0.447,
+      "warnings": []
+    },
+    {
+      "id": "heldout-negative-sql",
+      "query": "PostgreSQL MVCC vacuum xmin xmax",
+      "type": "negative",
+      "language": "en",
+      "answerable": false,
+      "reciprocal_rank": 0.0,
+      "work_recall_at_k": null,
+      "hit_at_k": false,
+      "precision_at_k": 0.0,
+      "correct_abstention": true,
+      "results": [],
+      "elapsed_ms": 0.404,
+      "warnings": []
+    },
+    {
+      "id": "heldout-negative-scoped",
+      "query": "Pangloss lunettes château",
+      "type": "negative",
+      "language": "fr",
+      "answerable": false,
+      "reciprocal_rank": 0.0,
+      "work_recall_at_k": null,
+      "hit_at_k": false,
+      "precision_at_k": 0.0,
+      "correct_abstention": true,
+      "results": [],
+      "elapsed_ms": 0.412,
+      "warnings": []
+    },
+    {
+      "id": "heldout-negative-modern-question",
+      "query": "What are the memory requirements of an RTX 5090 GPU?",
+      "type": "negative",
+      "language": "en",
+      "answerable": false,
+      "reciprocal_rank": 0.0,
+      "work_recall_at_k": null,
+      "hit_at_k": false,
+      "precision_at_k": 0.0,
+      "correct_abstention": true,
+      "results": [],
+      "elapsed_ms": 0.385,
+      "warnings": []
+    }
+  ],
+  "limitations": [
+    "Small curated excerpts; not representative of a 10–50k-work library.",
+    "Ground truth is manually authored and can be incomplete.",
+    "Quote integrity is relative to parsed text, not a facsimile or OCR audit.",
+    "Process peak RSS includes Python, imported libraries, and earlier work in this process.",
+    "No generated-answer correctness, index-build cost, or paid API spending is measured here."
+  ]
+}

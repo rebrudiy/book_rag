@@ -1,0 +1,653 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-11-14T11:21:08.285397+00:00",
+  "dataset": "dev.json",
+  "dataset_sha256": "e637ab5be3467c2cc8294f1dd8395d80bc49fdb972107da35830caaf30fe75be",
+  "split": "dev",
+  "mode": "lexical",
+  "actual_search_modes": {
+    "lexical-candidate": 23
+  },
+  "embedding_models": [],
+  "environment": {
+    "python": "3.12.12",
+    "platform": "macOS-26.6.2-arm64-arm-64bit"
+  },
+  "implementation_sha256": {
+    "__init__.py": "75f47d5ed1cd9a5bbcae9f15abdf4122ce48bd6ca996d1a795c26ecc5a82ea96",
+    "api.py": "064b31d08b17f0a28368da09c1fd028d267bd4d0632673f3e0a435d64b9f0cf6",
+    "catalog.py": "e6d2ffd7839a8f6cb06a903d907613935388f3c93192edfa170c22290e681fb7",
+    "cli.py": "9e52b4668a9df55eeda701ddbe3677999c9820f3f57235ceb9e0c8b8329ef19e",
+    "config.py": "913d11f0397cd2ba78ac518890dd39aa8256feb092bba168fd0aa464136f7144",
+    "evaluation.py": "8300a15a8ebb54b19e639b3a14a1b443ff591705f6384dd7af5a2a4a5ae90294",
+    "library.py": "51f5474d44ccdd98e95f8bf38a3df21856f7c6f978f874f809d9ad31f5f872fb",
+    "parsers.py": "1896ca8a14d8f9a9365bdb74d3a97f9033e36fa00c01a71dd3c5f4b9f680c971",
+    "retrieval.py": "2820dcd507a794b81817252811bd6ae10ce66f81346b733f2672975ac98a0106",
+    "semantic.py": "edee0c903e765d4469bf5bc1f70e410431cd6bef99322540e16422a8065f233d",
+    "sources.py": "aa529ff32bed438327eecd2bfedb78563b1795a530d23b5a8891069060efd7f1"
+  },
+  "k": 5,
+  "corpus": {
+    "books": 8,
+    "works": 8,
+    "passages": 45,
+    "status_counts": {
+      "indexed": 8
+    },
+    "languages": [
+      {
+        "language": "de",
+        "count": 1
+      },
+      {
+        "language": "en",
+        "count": 5
+      },
+      {
+        "language": "fr",
+        "count": 1
+      },
+      {
+        "language": "ru",
+        "count": 1
+      }
+    ]
+  },
+  "corpus_sha256": "53356885f624411b2f26b12051b0ebd5dc43354a94022d97f29ef8a4724a5c0e",
+  "corpus_snapshot": [
+    {
+      "id": "pg11-alice",
+      "work_id": "pg11-alice",
+      "title": "Alice's Adventures in Wonderland",
+      "author": "Lewis Carroll",
+      "language": "en",
+      "edition": "Millennium Fulcrum Edition 3.0; opening extract",
+      "status": "indexed",
+      "artifact_sha256": "ceceb5641daca70b4a8374df10d90acfa1e637b16bd6ba4b7b9e5eff1c87aab5",
+      "content_sha256": "e9ecab8611f556fd574f28269f30bf011c85ea34dc0733284c5873e0bb48b00b",
+      "source_url": "https://www.gutenberg.org/ebooks/11",
+      "rights": "Public domain in the USA; Project Gutenberg trademark license applies; check local law outside the USA",
+      "rights_url": "https://www.gutenberg.org/policy/license.html"
+    },
+    {
+      "id": "pg1228-origin",
+      "work_id": "pg1228-origin",
+      "title": "On the Origin of Species",
+      "author": "Charles Darwin",
+      "language": "en",
+      "edition": "1859 first edition; chapter III extract",
+      "status": "indexed",
+      "artifact_sha256": "1ba12b27b1717ad2ad912d3c91cbbcce75512ca42e1ba05d5ff6a60d922ba1c6",
+      "content_sha256": "6537921c3582b919725cdba3b31d531c62a6aabd94777a8a9584764e8af62fee",
+      "source_url": "https://www.gutenberg.org/ebooks/1228",
+      "rights": "Public domain in the USA; Project Gutenberg trademark license applies; check local law outside the USA",
+      "rights_url": "https://www.gutenberg.org/policy/license.html"
+    },
+    {
+      "id": "pg1342-pride",
+      "work_id": "pg1342-pride",
+      "title": "Pride and Prejudice",
+      "author": "Jane Austen",
+      "language": "en",
+      "edition": "George Allen 1894 edition as transcribed; opening extract",
+      "status": "indexed",
+      "artifact_sha256": "256af3cdaccb707b80ac5ca3519ad1ace225bb731efc86e5ae82fa21197674cc",
+      "content_sha256": "91e13b8e6a2ed5000d30395b46b192d1accd966f98705663abca20f2b981f555",
+      "source_url": "https://www.gutenberg.org/ebooks/1342",
+      "rights": "Public domain in the USA; Project Gutenberg trademark license applies; check local law outside the USA",
+      "rights_url": "https://www.gutenberg.org/policy/license.html"
+    },
+    {
+      "id": "pg22367-metamorphosis",
+      "work_id": "pg22367-metamorphosis",
+      "title": "Die Verwandlung",
+      "author": "Franz Kafka",
+      "language": "de",
+      "edition": "German original, 1915; opening extract",
+      "status": "indexed",
+      "artifact_sha256": "4876baa73f8b8625f45041ae56ca26e9972227bea8061491fdb33f27e3ac5020",
+      "content_sha256": "b03c211ecaae6afa4d44b005b72f073055827897d500a234cc69fdcc5463d2da",
+      "source_url": "https://www.gutenberg.org/ebooks/22367",
+      "rights": "Public domain in the USA; Project Gutenberg trademark license applies; check local law outside the USA",
+      "rights_url": "https://www.gutenberg.org/policy/license.html"
+    },
+    {
+      "id": "pg2680-meditations",
+      "work_id": "pg2680-meditations",
+      "title": "Meditations",
+      "author": "Marcus Aurelius",
+      "language": "en",
+      "edition": "Meric Casaubon translation (1634), later edited transcription; book V extract",
+      "status": "indexed",
+      "artifact_sha256": "dad17af5ea3ba989031e3c5cb6bf3805a09cfd2e2d21d0ac1197d71601d544d5",
+      "content_sha256": "48034b65a8b9fad19d1e833198814562b4ff3705483a59156ae602241497201f",
+      "source_url": "https://www.gutenberg.org/ebooks/2680",
+      "rights": "Public domain in the USA; Project Gutenberg trademark license applies; check local law outside the USA",
+      "rights_url": "https://www.gutenberg.org/policy/license.html"
+    },
+    {
+      "id": "pg3300-wealth",
+      "work_id": "pg3300-wealth",
+      "title": "The Wealth of Nations",
+      "author": "Adam Smith",
+      "language": "en",
+      "edition": "English text, transcription by Colin Muir and David Widger; book I chapter I extract",
+      "status": "indexed",
+      "artifact_sha256": "a02e3e58dfc998a9fc8aef46ead2cc82e637298f23f1ae8a9acbc3bb63f56c6a",
+      "content_sha256": "e56526704c7fd2ce6f7b50e6a09eacacd61320148b6972302b3c5896356b3d20",
+      "source_url": "https://www.gutenberg.org/ebooks/3300",
+      "rights": "Public domain in the USA; Project Gutenberg trademark license applies; check local law outside the USA",
+      "rights_url": "https://www.gutenberg.org/policy/license.html"
+    },
+    {
+      "id": "pg4650-candide",
+      "work_id": "pg4650-candide",
+      "title": "Candide, ou l’optimisme",
+      "author": "Voltaire",
+      "language": "fr",
+      "edition": "Beuchot edition, tome XXXIII, Paris 1829; opening extract",
+      "status": "indexed",
+      "artifact_sha256": "e04737936a280f46a51cd4c8644a2dbed9a14f1b03ef60bbfe13698d74b2f65b",
+      "content_sha256": "3f7fc1f48816a564b126da0e6ef2a4f479cded57795de09bb558c54b38f2f4ee",
+      "source_url": "https://www.gutenberg.org/ebooks/4650",
+      "rights": "Public domain in the USA; Project Gutenberg trademark license applies; check local law outside the USA",
+      "rights_url": "https://www.gutenberg.org/policy/license.html"
+    },
+    {
+      "id": "pg5316-pushkin",
+      "work_id": "pg5316-pushkin",
+      "title": "Красавице, которая нюхала табак",
+      "author": "Александр Пушкин",
+      "language": "ru",
+      "edition": "Russian original poem (1814); complete poem",
+      "status": "indexed",
+      "artifact_sha256": "d92a1499f8df63ce88da4325a49fd84c139051b202e1b9e2175b18f22178e8af",
+      "content_sha256": "f4c84e73fb6e8f1b92b6d4c042e83c2e14eca2851d6ff83f741442d31fb3e140",
+      "source_url": "https://www.gutenberg.org/ebooks/5316",
+      "rights": "Public domain in the USA; Project Gutenberg trademark license applies; check local law outside the USA",
+      "rights_url": "https://www.gutenberg.org/policy/license.html"
+    }
+  ],
+  "queries": 23,
+  "answerable_queries": 18,
+  "negative_queries": 5,
+  "metrics": {
+    "mrr_at_k": 0.75,
+    "hit_at_k": 0.7777777777777778,
+    "work_recall_at_k": 0.7777777777777778,
+    "precision_at_k": 0.30000000000000004,
+    "negative_abstention_accuracy": 1.0,
+    "quote_exact_rate": 1.0,
+    "metadata_exact_rate": 1.0,
+    "reader_anchor_exact_rate": 1.0,
+    "returned_passages": 36,
+    "latency_p50_ms": 1.512,
+    "latency_p95_ms": 6.567,
+    "elapsed_seconds": 0.077,
+    "process_peak_rss_mib": 24.02
+  },
+  "by_type": {
+    "argument": {
+      "queries": 2,
+      "mrr_at_k": 1.0,
+      "hit_at_k": 1.0
+    },
+    "book_description": {
+      "queries": 1,
+      "mrr_at_k": 1.0,
+      "hit_at_k": 1.0
+    },
+    "comparison": {
+      "queries": 1,
+      "mrr_at_k": 1.0,
+      "hit_at_k": 1.0
+    },
+    "cross_language": {
+      "queries": 4,
+      "mrr_at_k": 0.0,
+      "hit_at_k": 0.0
+    },
+    "explanation": {
+      "queries": 1,
+      "mrr_at_k": 0.5,
+      "hit_at_k": 1.0
+    },
+    "idea": {
+      "queries": 1,
+      "mrr_at_k": 1.0,
+      "hit_at_k": 1.0
+    },
+    "quote": {
+      "queries": 7,
+      "mrr_at_k": 1.0,
+      "hit_at_k": 1.0
+    },
+    "scene": {
+      "queries": 1,
+      "mrr_at_k": 1.0,
+      "hit_at_k": 1.0
+    }
+  },
+  "by_language": {
+    "de": {
+      "queries": 1,
+      "mrr_at_k": 1.0
+    },
+    "en": {
+      "queries": 12,
+      "mrr_at_k": 0.7916666666666666
+    },
+    "fr": {
+      "queries": 2,
+      "mrr_at_k": 1.0
+    },
+    "ru": {
+      "queries": 3,
+      "mrr_at_k": 0.3333333333333333
+    }
+  },
+  "cases": [
+    {
+      "id": "dev-quote-alice",
+      "query": "White Rabbit with pink eyes",
+      "type": "quote",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 1.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        1,
+        5
+      ],
+      "elapsed_ms": 5.338,
+      "warnings": []
+    },
+    {
+      "id": "dev-scene-alice",
+      "query": "A girl follows a rabbit who takes a watch out of his pocket",
+      "type": "scene",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 1.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        1
+      ],
+      "elapsed_ms": 3.603,
+      "warnings": []
+    },
+    {
+      "id": "dev-quote-pride",
+      "query": "a single man in possession of a good fortune",
+      "type": "quote",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 1.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        8,
+        9
+      ],
+      "elapsed_ms": 6.703,
+      "warnings": []
+    },
+    {
+      "id": "dev-description-pride",
+      "query": "Bingley Bennet marriage daughters fortune",
+      "type": "book_description",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 1.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 1.0,
+      "correct_abstention": null,
+      "results": [
+        9,
+        11,
+        12,
+        8,
+        10
+      ],
+      "elapsed_ms": 3.604,
+      "warnings": []
+    },
+    {
+      "id": "dev-quote-darwin",
+      "query": "struggle for existence",
+      "type": "quote",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 1.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        15,
+        20,
+        18,
+        16,
+        17
+      ],
+      "elapsed_ms": 3.544,
+      "warnings": []
+    },
+    {
+      "id": "dev-argument-darwin",
+      "query": "Why do species not increase without limit despite producing many eggs and seeds?",
+      "type": "argument",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 1.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.8,
+      "correct_abstention": null,
+      "results": [
+        19,
+        15,
+        16,
+        17
+      ],
+      "elapsed_ms": 13.003,
+      "warnings": []
+    },
+    {
+      "id": "dev-idea-meditations",
+      "query": "unwilling to rise in the morning",
+      "type": "idea",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 1.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        21
+      ],
+      "elapsed_ms": 1.512,
+      "warnings": []
+    },
+    {
+      "id": "dev-quote-wealth",
+      "query": "division of labour",
+      "type": "quote",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 1.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.6,
+      "correct_abstention": null,
+      "results": [
+        40,
+        42,
+        39,
+        41,
+        44
+      ],
+      "elapsed_ms": 2.952,
+      "warnings": []
+    },
+    {
+      "id": "dev-scene-wealth",
+      "query": "pin manufacture eighteen operations ten men",
+      "type": "explanation",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 0.5,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        41,
+        40
+      ],
+      "elapsed_ms": 4.25,
+      "warnings": []
+    },
+    {
+      "id": "dev-quote-candide",
+      "query": "tout est au mieux",
+      "type": "quote",
+      "language": "fr",
+      "answerable": true,
+      "reciprocal_rank": 1.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.4,
+      "correct_abstention": null,
+      "results": [
+        31,
+        28
+      ],
+      "elapsed_ms": 1.26,
+      "warnings": []
+    },
+    {
+      "id": "dev-argument-candide",
+      "query": "Pangloss les nez ont été faits pour porter des lunettes",
+      "type": "argument",
+      "language": "fr",
+      "answerable": true,
+      "reciprocal_rank": 1.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        28
+      ],
+      "elapsed_ms": 2.772,
+      "warnings": []
+    },
+    {
+      "id": "dev-quote-kafka",
+      "query": "ungeheueren Ungeziefer verwandelt",
+      "type": "quote",
+      "language": "de",
+      "answerable": true,
+      "reciprocal_rank": 1.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        32
+      ],
+      "elapsed_ms": 0.94,
+      "warnings": []
+    },
+    {
+      "id": "dev-pushkin",
+      "query": "Ах, отчего я не табак",
+      "type": "quote",
+      "language": "ru",
+      "answerable": true,
+      "reciprocal_rank": 1.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        38
+      ],
+      "elapsed_ms": 0.749,
+      "warnings": []
+    },
+    {
+      "id": "dev-cross-alice",
+      "query": "Девочка бежит за белым кроликом с карманными часами",
+      "type": "cross_language",
+      "language": "ru",
+      "answerable": true,
+      "reciprocal_rank": 0.0,
+      "work_recall_at_k": 0.0,
+      "hit_at_k": false,
+      "precision_at_k": 0.0,
+      "correct_abstention": null,
+      "results": [],
+      "elapsed_ms": 0.414,
+      "warnings": []
+    },
+    {
+      "id": "dev-cross-wealth",
+      "query": "Разделение труда увеличивает производительность булавочной фабрики",
+      "type": "cross_language",
+      "language": "ru",
+      "answerable": true,
+      "reciprocal_rank": 0.0,
+      "work_recall_at_k": 0.0,
+      "hit_at_k": false,
+      "precision_at_k": 0.0,
+      "correct_abstention": null,
+      "results": [],
+      "elapsed_ms": 0.405,
+      "warnings": []
+    },
+    {
+      "id": "dev-cross-kafka",
+      "query": "A travelling salesman wakes up transformed into a huge insect",
+      "type": "cross_language",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 0.0,
+      "work_recall_at_k": 0.0,
+      "hit_at_k": false,
+      "precision_at_k": 0.0,
+      "correct_abstention": null,
+      "results": [],
+      "elapsed_ms": 0.578,
+      "warnings": []
+    },
+    {
+      "id": "dev-cross-candide",
+      "query": "A philosopher teaches that noses were made for wearing spectacles",
+      "type": "cross_language",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 0.0,
+      "work_recall_at_k": 0.0,
+      "hit_at_k": false,
+      "precision_at_k": 0.0,
+      "correct_abstention": null,
+      "results": [],
+      "elapsed_ms": 2.921,
+      "warnings": []
+    },
+    {
+      "id": "dev-comparison-work",
+      "query": "work and labour improve society",
+      "type": "comparison",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 1.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.8,
+      "correct_abstention": null,
+      "results": [
+        42,
+        39,
+        40,
+        21
+      ],
+      "elapsed_ms": 3.42,
+      "warnings": []
+    },
+    {
+      "id": "dev-negative-quantum",
+      "query": "superconducting qubits quantum decoherence",
+      "type": "negative",
+      "language": "en",
+      "answerable": false,
+      "reciprocal_rank": 0.0,
+      "work_recall_at_k": null,
+      "hit_at_k": false,
+      "precision_at_k": 0.0,
+      "correct_abstention": true,
+      "results": [],
+      "elapsed_ms": 0.365,
+      "warnings": []
+    },
+    {
+      "id": "dev-negative-biotech",
+      "query": "CRISPR Cas9 guide RNA",
+      "type": "negative",
+      "language": "en",
+      "answerable": false,
+      "reciprocal_rank": 0.0,
+      "work_recall_at_k": null,
+      "hit_at_k": false,
+      "precision_at_k": 0.0,
+      "correct_abstention": true,
+      "results": [],
+      "elapsed_ms": 0.339,
+      "warnings": []
+    },
+    {
+      "id": "dev-negative-scoped",
+      "query": "White Rabbit pocket watch",
+      "type": "negative",
+      "language": "en",
+      "answerable": false,
+      "reciprocal_rank": 0.0,
+      "work_recall_at_k": null,
+      "hit_at_k": false,
+      "precision_at_k": 0.0,
+      "correct_abstention": true,
+      "results": [],
+      "elapsed_ms": 0.432,
+      "warnings": []
+    },
+    {
+      "id": "dev-negative-natural-question",
+      "query": "Who won the Nobel Prize in physics in 2025?",
+      "type": "negative",
+      "language": "en",
+      "answerable": false,
+      "reciprocal_rank": 0.0,
+      "work_recall_at_k": null,
+      "hit_at_k": false,
+      "precision_at_k": 0.0,
+      "correct_abstention": true,
+      "results": [],
+      "elapsed_ms": 0.411,
+      "warnings": []
+    },
+    {
+      "id": "dev-negative-modern-question",
+      "query": "How does CRISPR Cas9 edit a human genome?",
+      "type": "negative",
+      "language": "en",
+      "answerable": false,
+      "reciprocal_rank": 0.0,
+      "work_recall_at_k": null,
+      "hit_at_k": false,
+      "precision_at_k": 0.0,
+      "correct_abstention": true,
+      "results": [],
+      "elapsed_ms": 1.01,
+      "warnings": []
+    }
+  ],
+  "limitations": [
+    "Small curated excerpts; not representative of a 10–50k-work library.",
+    "Ground truth is manually authored and can be incomplete.",
+    "Quote integrity is relative to parsed text, not a facsimile or OCR audit.",
+    "Process peak RSS includes Python, imported libraries, and earlier work in this process.",
+    "No generated-answer correctness, index-build cost, or paid API spending is measured here."
+  ]
+}

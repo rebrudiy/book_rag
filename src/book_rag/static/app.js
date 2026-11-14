@@ -3,10 +3,11 @@
 (() => {
   const $ = (id) => document.getElementById(id);
   const state = {
-    view: 'search', mode: 'lexical', query: '', books: [], saved: [], results: [], stats: null,
+    view: 'search', mode: 'hybrid', query: '', books: [], saved: [], results: [], stats: null,
     currentBook: null, currentSection: null, currentPassage: null,
     saveDraft: null, searchSequence: 0, readerSequence: 0, readerSize: 20,
     previousView: 'search', researchQuery: '', toastTimer: null,
+    explore: null, exploreLoading: false, mapSelection: null,
   };
   const languageNames = { ru: 'Русский', en: 'English', fr: 'Français', de: 'Deutsch', es: 'Español', it: 'Italiano', zh: '中文', ja: '日本語', la: 'Latina', el: 'Ελληνικά', pt: 'Português', uk: 'Українська', ar: 'العربية' };
   const statusNames = { discovered: 'Найдены', downloaded: 'Скачаны', processed: 'Обработаны', indexed: 'В поиске', searchable: 'В поиске', failed: 'Требуют внимания', error: 'Требуют внимания', duplicate: 'Дубли' };
@@ -55,6 +56,7 @@
     return data;
   }
   function safeURL(value) {
+    if (typeof value !== 'string' || !value.trim()) return null;
     try {
       const url = new URL(value, location.origin);
       return ['https:', 'http:'].includes(url.protocol) ? url.href : null;
@@ -85,11 +87,11 @@
     });
   }
   function showView(view, push = true) {
-    if (!['search', 'library', 'saved', 'reader'].includes(view)) view = 'search';
+    if (!['search', 'library', 'saved', 'reader', 'explore'].includes(view)) view = 'search';
     state.view = view;
     document.querySelectorAll('.view').forEach((el) => el.classList.toggle('hidden', el.id !== `${view}-view`));
     updateNav(view === 'reader' ? '' : view);
-    document.title = `${({ search: 'Поиск и исследование', library: 'Библиотека', saved: 'Сохранённое', reader: 'Читатель' })[view]} — Атлас книг`;
+    document.title = `${({ search: 'Поиск и исследование', library: 'Библиотека', saved: 'Сохранённое', reader: 'Читатель', explore: 'Карта тем' })[view]} — Атлас книг`;
     if (push && view !== 'reader') {
       const params = new URLSearchParams();
       if (view !== 'search') params.set('view', view);
@@ -98,6 +100,7 @@
     }
     if (view === 'library') renderLibrary();
     if (view === 'saved') renderSaved();
+    if (view === 'explore') loadExplore();
     window.scrollTo({ top: 0, behavior: 'instant' });
   }
   function navigate(event) {
@@ -110,6 +113,7 @@
 
   function setMode(mode) {
     state.mode = mode;
+    $('search-extra-mode').value = mode === 'reranked' ? 'reranked' : '';
     document.querySelectorAll('[data-mode]').forEach((el) => {
       const active = el.dataset.mode === mode;
       el.classList.toggle('active', active);
@@ -173,6 +177,15 @@
     const stats = state.stats || {};
     const counts = stats.status_counts || {};
     $('stat-books').textContent = formatNumber(stats.books);
+    $('stat-works').textContent = formatNumber(stats.works);
+    const provisional = stats.work_count_is_provisional !== false;
+    const scope = provisional
+      ? `Группировка изданий предварительная: ${formatNumber(stats.works)} групп пока не подтверждают число уникальных произведений. Проверено групп: ${formatNumber(stats.curated_work_groups)}. Периодических выпусков: ${formatNumber(stats.periodical_editions)}.`
+      : `Связанные издания объединены в ${formatNumber(stats.works)} групп произведений по проверенным метаданным. Периодических выпусков: ${formatNumber(stats.periodical_editions)}.`;
+    for (const id of ['corpus-scope', 'library-scope']) {
+      $(id).textContent = scope;
+      $(id).classList.remove('hidden');
+    }
     $('stat-passages').textContent = formatNumber(stats.passages);
     const languages = stats.languages;
     $('stat-languages').textContent = formatNumber(Array.isArray(languages) ? languages.length : typeof languages === 'object' && languages ? Object.keys(languages).length : languages || 0);
@@ -188,7 +201,7 @@
     const q = $('library-query').value.trim().toLocaleLowerCase();
     const language = $('library-language').value;
     const books = state.books.filter((book) => (!language || book.language === language) && (!q || `${book.title} ${book.author}`.toLocaleLowerCase().includes(q)));
-    $('library-count').textContent = `${formatNumber(books.length)} из ${formatNumber(state.books.length)} книг`;
+    $('library-count').textContent = `${formatNumber(books.length)} из ${formatNumber(state.books.length)} изданий`;
     if (books.length) $('library-books').replaceChildren(...books.map(createBookCard));
     else empty($('library-books'), 'Книги не найдены', state.books.length ? 'Попробуйте другой фильтр или имя автора.' : 'Добавьте демонстрационный корпус командой bookrag demo.');
   }
@@ -202,6 +215,14 @@
     }
   }
 
+  function contributorLabel(section, bookAuthor) {
+    const author = section?.section_author || section?.source_author || section?.contributor || '';
+    const role = section?.section_role || section?.role || '';
+    const labels = [];
+    if (author && author !== bookAuthor) labels.push(`Автор раздела: ${author}`);
+    if (role === 'editorial') labels.push('Редакционный раздел');
+    return labels.join(' · ');
+  }
   function passageCard(passage, number) {
     const card = node('article', 'passage-card');
     const top = node('div', 'passage-topline');
@@ -211,7 +232,10 @@
     const citation = node('p', 'passage-citation', passage.citation || `${passage.section_title || ''} · ${passage.edition || ''}`);
     const actions = node('div', 'passage-actions');
     actions.append(button('Открыть в контексте ↗', () => openBook(passage.book_id, passage.section_id, passage.id)), button('＋ Сохранить', () => openSave({ kind: 'passage', passage_id: passage.id, title: `${passage.title} · ${passage.section_title || 'Фрагмент'}` }, passage.text)), button('Копировать', () => copyText(`${passage.text}\n\n${passage.citation || ''}`)));
-    card.append(top, quote, citation, actions); return card;
+    const contributor = contributorLabel(passage, passage.book_author || passage.author);
+    card.append(top);
+    if (contributor) card.append(node('p', 'contributor-label', contributor));
+    card.append(quote, citation, actions); return card;
   }
   async function search(push = true) {
     const query = $('query').value.trim();
@@ -236,7 +260,7 @@
       if (request !== state.searchSequence) return;
       state.results = result.results || [];
       const time = Number(result.elapsed_ms || 0);
-      const modeName = { lexical: 'по словам', hybrid: 'гибридный', semantic: 'по смыслу' }[result.mode || state.mode] || result.mode;
+      const modeName = { lexical: 'по словам', hybrid: 'гибридный', semantic: 'по смыслу', reranked: 'с переоценкой' }[result.mode || state.mode] || result.mode;
       $('results-meta').textContent = `${formatNumber(state.results.length)} фрагментов · ${Number.isFinite(time) ? time.toFixed(0) : '—'} мс · ${modeName}`;
       if (state.results.length) $('fragments-panel').replaceChildren(...state.results.map((result, index) => passageCard(result, index + 1)));
       else empty($('fragments-panel'), 'Точного следа пока нет', 'В этой библиотеке не найдено подходящих фрагментов. Попробуйте другие слова, снимите фильтры или расширьте корпус. Отсутствие результатов не означает, что ответа нет в книгах.');
@@ -273,6 +297,7 @@
     loading($('reader-text'), 'Открываем книгу');
     $('reader-section-title').textContent = '';
     $('reader-citation').classList.add('hidden');
+    $('reader-contributor').classList.add('hidden');
     try {
       const [book, passage] = await Promise.all([api(`/api/books/${encodeURIComponent(bookId)}`), passageId ? api(`/api/passages/${encodeURIComponent(passageId)}`) : Promise.resolve(null)]);
       if (request !== state.readerSequence) return;
@@ -313,6 +338,9 @@
     if (sourceURL) { const link = node('a', '', 'Открыть первоисточник ↗'); link.href = sourceURL; link.target = '_blank'; link.rel = 'noopener noreferrer'; const p = node('p'); p.append(link); source.append(p); }
     if (!section) { empty($('reader-text'), 'Нет доступных глав', 'Эта книга ещё не обработана. Проверьте состояние корпуса в библиотеке.'); return; }
     $('reader-section-title').textContent = section.title || 'Текст книги';
+    const contributor = contributorLabel(section, book.author);
+    $('reader-contributor').textContent = contributor;
+    $('reader-contributor').classList.toggle('hidden', !contributor);
     $('reader-text').lang = book.language || 'und';
     const fullText = String(section.text || '');
     const highlight = passage && asID(passage.section_id) === asID(section.id);
@@ -336,6 +364,125 @@
     $('prev-chapter').disabled = index <= 0;
     $('next-chapter').disabled = index < 0 || index >= sections.length - 1;
     announce(`Открыта книга ${book.title}. ${section.title || 'Текст книги'}.`);
+  }
+
+  async function loadExplore(force = false) {
+    if (state.exploreLoading) return;
+    if (state.explore && !force) { renderExplore(); return; }
+    state.exploreLoading = true;
+    $('refresh-map').disabled = true;
+    $('map-meta').textContent = 'Ищем связи между текстами…';
+    $('theme-cloud').replaceChildren(node('div', 'loading-state', 'Составляем карту слов'));
+    try {
+      state.explore = await api('/api/explore');
+      const languages = [...new Set(state.explore.books.map((book) => book.language))].sort();
+      populateSelect($('map-language'), languages.map((value) => ({ value, label: labelLanguage(value) })), 'Все языки');
+      populateMapBooks();
+      if (!state.mapSelection) {
+        const shared = [...state.explore.themes].sort((a, b) => b.count - a.count || b.weight - a.weight)[0];
+        if (shared) state.mapSelection = { kind: 'theme', term: shared.term, language: shared.language };
+      }
+      if (state.explore.snapshot_changed) toast('Во время построения карты корпус обновился. Проверьте пояснение и обновите карту после индексации.');
+      $('map-limitations').replaceChildren(...(state.explore.limitations || []).map((text) => node('li', '', text)));
+      renderExplore();
+      announce(`Карта готова. Книг: ${state.explore.books.length}, слов: ${state.explore.themes.length}.`);
+    } catch (error) {
+      showError(error, $('theme-cloud'));
+      $('map-meta').textContent = 'Не удалось построить карту. Повторите обновление.';
+    } finally { state.exploreLoading = false; $('refresh-map').disabled = false; }
+  }
+  function populateMapBooks() {
+    if (!state.explore) return;
+    const language = $('map-language').value;
+    populateSelect($('map-book'), state.explore.books.filter((book) => !language || book.language === language).map((book) => ({ value: asID(book.id), label: `${book.title} · ${book.author}` })), 'Выберите книгу');
+  }
+  function termSearch(term, language, bookId) {
+    showView('search');
+    setMode('lexical');
+    $('query').value = term;
+    $('language-filter').value = language || '';
+    $('book-filter').value = bookId || '';
+    search();
+  }
+  function focusMapBook(bookId) {
+    const book = state.explore?.books.find((item) => asID(item.id) === asID(bookId));
+    if (!book) return;
+    state.mapSelection = { kind: 'book', book_id: asID(book.id) };
+    $('map-book').value = asID(book.id);
+    renderExplore();
+    announce(`Связи книги ${book.title}.`);
+  }
+  function mapBookRow(book) {
+    const row = node('div', 'map-book-row');
+    const title = button(book.title, () => focusMapBook(book.id), 'map-book-title');
+    title.setAttribute('aria-label', `Исследовать связи: ${book.title}`);
+    row.append(title, node('p', '', book.author), button('Читать ↗', () => openBook(book.id)));
+    return row;
+  }
+  function renderExplore() {
+    const map = state.explore;
+    if (!map) return;
+    const language = $('map-language').value;
+    const books = map.books.filter((book) => !language || book.language === language);
+    const themes = map.themes.filter((theme) => !language || theme.language === language);
+    if (state.mapSelection?.kind !== 'book' && !themes.some((theme) => theme.term === state.mapSelection?.term && theme.language === state.mapSelection?.language)) {
+      const first = [...themes].sort((a, b) => b.count - a.count || b.weight - a.weight)[0];
+      state.mapSelection = first ? { kind: 'theme', term: first.term, language: first.language } : null;
+    }
+    const visibleIds = new Set(books.map((book) => asID(book.id)));
+    const edges = map.edges.filter((edge) => visibleIds.has(asID(edge.source)));
+    $('map-meta').textContent = `${formatNumber(books.length)} изданий на карте · ${formatNumber(themes.length)} характерных слов · ${formatNumber(edges.length)} связей · Сходство словаря${map.truncated ? ' · Выборка из ' + formatNumber(map.corpus_books) + ' книг' : ''}`;
+    const cloud = $('theme-cloud');
+    if (!themes.length) empty(cloud, 'Для карты пока мало текста', 'Добавьте книги или выберите другой язык. Карта строится только по реально индексированным фрагментам.');
+    else {
+      const maxCount = Math.max(...themes.map((theme) => theme.count), 1);
+      cloud.replaceChildren(...themes.map((theme) => {
+        const active = state.mapSelection?.kind === 'theme' && state.mapSelection.term === theme.term && state.mapSelection.language === theme.language;
+        const chip = button('', () => { state.mapSelection = { kind: 'theme', term: theme.term, language: theme.language }; $('map-book').value = ''; renderExplore(); announce(`Слово ${theme.term}: ${theme.count} изданий.`); }, `theme-chip${active ? ' active' : ''}`);
+        chip.style.setProperty('--theme-size', `${13 + 8 * theme.count / maxCount}px`);
+        chip.setAttribute('aria-pressed', String(active));
+        chip.setAttribute('aria-label', `${theme.term}, ${labelLanguage(theme.language)}, изданий: ${theme.count}`);
+        chip.append(node('span', '', theme.term), node('small', '', String(theme.count)));
+        chip.lang = theme.language;
+        if (!language) chip.title = labelLanguage(theme.language);
+        return chip;
+      }));
+    }
+    const evidence = $('map-evidence'); evidence.replaceChildren();
+    if (!map.books.length) { empty(evidence, 'Начните с книги', 'Импортируйте демонстрационный корпус, чтобы исследовать связи.'); return; }
+    if (state.mapSelection?.kind === 'book') {
+      const book = map.books.find((item) => asID(item.id) === state.mapSelection.book_id);
+      if (book) renderBookEvidence(evidence, book);
+      return;
+    }
+    const selected = themes.find((theme) => theme.term === state.mapSelection?.term && theme.language === state.mapSelection?.language) || themes[0];
+    if (!selected) return;
+    state.mapSelection = { kind: 'theme', term: selected.term, language: selected.language };
+    evidence.append(node('p', 'eyebrow', 'СЛОВО В ИСТОЧНИКАХ'), node('h2', '', selected.term), node('p', 'map-evidence-description', `${labelLanguage(selected.language)} · ${formatNumber(selected.count)} изданий в карте`));
+    evidence.append(button('Найти фрагменты ↗', () => termSearch(selected.term, selected.language), 'button primary'));
+    const list = node('div', 'map-book-list');
+    selected.books.forEach((id) => { const book = map.books.find((item) => asID(item.id) === asID(id)); if (book) list.append(mapBookRow(book)); });
+    evidence.append(list);
+  }
+  function renderBookEvidence(target, book) {
+    target.append(node('p', 'eyebrow', 'МАРШРУТ ОТ КНИГИ'), node('h2', '', book.title), node('p', 'map-evidence-description', `${book.author} · ${labelLanguage(book.language)}`));
+    target.append(button('Открыть книгу ↗', () => openBook(book.id), 'button primary'));
+    const terms = node('div', 'map-book-terms');
+    (book.terms || []).slice(0, 8).forEach(({ term }) => terms.append(button(term, () => termSearch(term, book.language, book.id), 'map-term-link')));
+    target.append(terms, node('h3', 'map-related-title', 'Связанные книги'));
+    const related = state.explore.edges.filter((edge) => asID(edge.source) === asID(book.id) || asID(edge.target) === asID(book.id)).sort((a, b) => b.score - a.score).slice(0, 3);
+    if (!related.length) { target.append(node('p', 'map-evidence-description', 'Достаточного совпадения словаря с другими книгами этого языка пока нет.')); return; }
+    related.forEach((edge) => {
+      const otherId = asID(edge.source) === asID(book.id) ? edge.target : edge.source;
+      const other = state.explore.books.find((item) => asID(item.id) === asID(otherId));
+      if (!other) return;
+      const relation = node('div', 'map-relation');
+      relation.append(mapBookRow(other), node('p', 'map-score', `Сходство словаря: ${Number(edge.score).toFixed(3)}`));
+      const shared = node('div', 'map-shared-terms');
+      shared.append(node('span', '', 'Общие слова: '));
+      edge.shared_terms.forEach((term) => shared.append(button(term, () => termSearch(term, book.language), 'map-term-link')));
+      relation.append(shared); target.append(relation);
+    });
   }
 
   function collectionNames() { return [...new Set(state.saved.map((item) => item.collection).filter(Boolean))].sort(); }
@@ -397,7 +544,7 @@
     }));
   }
   async function copyText(value) {
-    try { await navigator.clipboard.writeText(value); toast('Текст и ссылка на источник скопированы.'); }
+    try { await navigator.clipboard.writeText(value); toast('Скопировано в буфер обмена.'); }
     catch {
       const textarea = node('textarea'); textarea.value = value;
       textarea.style.position = 'fixed'; textarea.style.opacity = '0'; document.body.append(textarea); textarea.select();
@@ -406,10 +553,20 @@
     }
   }
   function exportSaved() {
-    const data = { app: 'Book Atlas', exported_at: new Date().toISOString(), items: state.saved };
+    const collection = $('collection-filter').value;
+    const data = { app: 'Book Atlas', exported_at: new Date().toISOString(), collection: collection || null, items: state.saved.filter((item) => !collection || item.collection === collection) };
     const url = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }));
     const link = node('a'); link.href = url; link.download = `book-atlas-notes-${new Date().toISOString().slice(0, 10)}.json`; document.body.append(link); link.click(); link.remove();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+  function exportMarkdown() {
+    const collection = $('collection-filter').value;
+    const params = new URLSearchParams();
+    if (collection) params.set('collection', collection);
+    const link = node('a');
+    link.href = `/api/saved/export${params.size ? '?' + params : ''}`;
+    link.download = 'book-atlas-collection.md';
+    document.body.append(link); link.click(); link.remove();
   }
   async function route() {
     const params = new URLSearchParams(location.search);
@@ -421,6 +578,10 @@
   $('search-form').addEventListener('submit', (event) => { event.preventDefault(); search(); });
   document.querySelectorAll('[data-mode]').forEach((el) => el.addEventListener('click', () => { setMode(el.dataset.mode); if (state.query) search(); }));
   document.querySelectorAll('[data-query]').forEach((el) => el.addEventListener('click', () => { $('query').value = el.dataset.query; search(); }));
+  $('refresh-map').addEventListener('click', () => loadExplore(true));
+  $('map-language').addEventListener('change', () => { state.mapSelection = null; populateMapBooks(); renderExplore(); });
+  $('map-book').addEventListener('change', () => { if ($('map-book').value) focusMapBook($('map-book').value); else { state.mapSelection = null; renderExplore(); } });
+  $('search-extra-mode').addEventListener('change', () => { setMode($('search-extra-mode').value || 'hybrid'); if (state.query) search(); });
   $('fragments-tab').addEventListener('click', () => setPanel('fragments'));
   $('research-tab').addEventListener('click', () => setPanel('research'));
   $('run-research').addEventListener('click', research);
@@ -433,6 +594,7 @@
   $('save-dialog').addEventListener('click', (event) => { if (event.target === $('save-dialog')) { const bounds = $('save-dialog').getBoundingClientRect(); if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) $('save-dialog').close(); } });
   $('collection-filter').addEventListener('change', renderSaved);
   $('export-saved').addEventListener('click', exportSaved);
+  $('export-markdown').addEventListener('click', exportMarkdown);
   $('library-query').addEventListener('input', renderLibrary);
   $('library-language').addEventListener('change', renderLibrary);
   $('reload-library').addEventListener('click', refreshLibrary);

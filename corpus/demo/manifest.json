@@ -14,7 +14,9 @@
     "local_path": "pg11-alice.html",
     "coverage": "excerpt",
     "retrieved_at": "2026-11-14",
-    "source_sha256": "01b38ea4c710a84bc18d0bd41271a5a1a92b94e97b2812f4dece97d4a694725e"
+    "source_sha256": "01b38ea4c710a84bc18d0bd41271a5a1a92b94e97b2812f4dece97d4a694725e",
+    "work_identity_status": "curated",
+    "work_type": "book_or_text"
   },
   {
     "id": "pg1342-pride",
@@ -31,7 +33,9 @@
     "local_path": "pg1342-pride.html",
     "coverage": "excerpt",
     "retrieved_at": "2026-11-14",
-    "source_sha256": "3f6bb9d6f78e0293b56acd4714dd68cb7d6d1d293402031ce9d5a216bcaf9d75"
+    "source_sha256": "3f6bb9d6f78e0293b56acd4714dd68cb7d6d1d293402031ce9d5a216bcaf9d75",
+    "work_identity_status": "curated",
+    "work_type": "book_or_text"
   },
   {
     "id": "pg1228-origin",
@@ -48,7 +52,9 @@
     "local_path": "pg1228-origin.html",
     "coverage": "excerpt",
     "retrieved_at": "2026-11-14",
-    "source_sha256": "362142cb7c6f90850477520cfe2a62fe423ae92ea8eb6d9cd8b30ddb39de60b9"
+    "source_sha256": "362142cb7c6f90850477520cfe2a62fe423ae92ea8eb6d9cd8b30ddb39de60b9",
+    "work_identity_status": "curated",
+    "work_type": "book_or_text"
   },
   {
     "id": "pg2680-meditations",
@@ -65,7 +71,9 @@
     "local_path": "pg2680-meditations.html",
     "coverage": "excerpt",
     "retrieved_at": "2026-11-14",
-    "source_sha256": "6977474f82a39dd88a4af31a59504821658174d33c177732c54357e4d680b96c"
+    "source_sha256": "6977474f82a39dd88a4af31a59504821658174d33c177732c54357e4d680b96c",
+    "work_identity_status": "curated",
+    "work_type": "book_or_text"
   },
   {
     "id": "pg4650-candide",
@@ -82,7 +90,9 @@
     "local_path": "pg4650-candide.html",
     "coverage": "excerpt",
     "retrieved_at": "2026-11-14",
-    "source_sha256": "1cc10ab3268a76aa01bd3f9722ae2ae0e5e36b869a18b0bb0832b75bc0327806"
+    "source_sha256": "1cc10ab3268a76aa01bd3f9722ae2ae0e5e36b869a18b0bb0832b75bc0327806",
+    "work_identity_status": "curated",
+    "work_type": "book_or_text"
   },
   {
     "id": "pg22367-metamorphosis",
@@ -99,7 +109,9 @@
     "local_path": "pg22367-metamorphosis.html",
     "coverage": "excerpt",
     "retrieved_at": "2026-11-14",
-    "source_sha256": "359d3f5983c812393f4bd7ee49a350ffffc7d476015e58d6b84b6c848dd2b0e9"
+    "source_sha256": "359d3f5983c812393f4bd7ee49a350ffffc7d476015e58d6b84b6c848dd2b0e9",
+    "work_identity_status": "curated",
+    "work_type": "book_or_text"
   },
   {
     "id": "pg5316-pushkin",
@@ -116,7 +128,9 @@
     "local_path": "pg5316-pushkin.html",
     "coverage": "complete poem",
     "retrieved_at": "2026-11-14",
-    "source_sha256": "2cc3f7cd652dce2f7e08250e9b46957575f7d96c2463a78fbde3a486ebcecffc"
+    "source_sha256": "2cc3f7cd652dce2f7e08250e9b46957575f7d96c2463a78fbde3a486ebcecffc",
+    "work_identity_status": "curated",
+    "work_type": "book_or_text"
   },
   {
     "id": "pg3300-wealth",
@@ -133,6 +147,8 @@
     "local_path": "pg3300-wealth.html",
     "coverage": "excerpt",
     "retrieved_at": "2026-11-14",
-    "source_sha256": "e91d52dca43fd0fd69baf7776b00a5d8e74b69675b6b608ca8a0378aaf3ae58d"
+    "source_sha256": "e91d52dca43fd0fd69baf7776b00a5d8e74b69675b6b608ca8a0378aaf3ae58d",
+    "work_identity_status": "curated",
+    "work_type": "book_or_text"
   }
 ]

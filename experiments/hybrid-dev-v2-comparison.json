@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "dataset_sha256": "e637ab5be3467c2cc8294f1dd8395d80bc49fdb972107da35830caaf30fe75be",
+  "split": "dev",
+  "k": 5,
+  "baseline_mode": "baseline",
+  "candidate_mode": "hybrid",
+  "metrics": {
+    "mrr_at_k": {
+      "baseline": 0.7777777777777778,
+      "candidate": 0.8935185185185185,
+      "delta": 0.1157407407407407,
+      "higher_is_better": true
+    },
+    "hit_at_k": {
+      "baseline": 0.7777777777777778,
+      "candidate": 1.0,
+      "delta": 0.2222222222222222,
+      "higher_is_better": true
+    },
+    "work_recall_at_k": {
+      "baseline": 0.7777777777777778,
+      "candidate": 1.0,
+      "delta": 0.2222222222222222,
+      "higher_is_better": true
+    },
+    "precision_at_k": {
+      "baseline": 0.3111111111111111,
+      "candidate": 0.35555555555555557,
+      "delta": 0.04444444444444445,
+      "higher_is_better": true
+    },
+    "negative_abstention_accuracy": {
+      "baseline": 0.6,
+      "candidate": 1.0,
+      "delta": 0.4,
+      "higher_is_better": true
+    },
+    "quote_exact_rate": {
+      "baseline": 1.0,
+      "candidate": 1.0,
+      "delta": 0.0,
+      "higher_is_better": true
+    },
+    "metadata_exact_rate": {
+      "baseline": 1.0,
+      "candidate": 1.0,
+      "delta": 0.0,
+      "higher_is_better": true
+    },
+    "reader_anchor_exact_rate": {
+      "baseline": 1.0,
+      "candidate": 1.0,
+      "delta": 0.0,
+      "higher_is_better": true
+    },
+    "latency_p50_ms": {
+      "baseline": 0.667,
+      "candidate": 34.443,
+      "delta": 33.775999999999996,
+      "higher_is_better": false
+    },
+    "latency_p95_ms": {
+      "baseline": 0.861,
+      "candidate": 75.968,
+      "delta": 75.107,
+      "higher_is_better": false
+    },
+    "elapsed_seconds": {
+      "baseline": 0.029,
+      "candidate": 5.558,
+      "delta": 5.529,
+      "higher_is_better": false
+    },
+    "process_peak_rss_mib": {
+      "baseline": 36.17,
+      "candidate": 841.23,
+      "delta": 805.0600000000001,
+      "higher_is_better": false
+    }
+  },
+  "corpus_sha256": "89d933ff06b8f19dd736b9c4d14a0180d81426706952a2318733adacae972270"
+}

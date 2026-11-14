@@ -1,0 +1,169 @@
+{
+  "schema_version": 1,
+  "purpose": "offline index cost; no relevance judgments",
+  "python": "3.12.12",
+  "platform": "macOS-26.6.2-arm64-arm-64bit",
+  "manifest_sha256": "11b74a5db69abd26356d585756dbdcd90fdcb43cb7d706515d38aa5ae50a5d1c",
+  "stats": {
+    "books": 20,
+    "works": 19,
+    "passages": 12106,
+    "status_counts": {
+      "indexed": 20
+    },
+    "languages": [
+      {
+        "language": "de",
+        "count": 1
+      },
+      {
+        "language": "en",
+        "count": 17
+      },
+      {
+        "language": "fr",
+        "count": 1
+      },
+      {
+        "language": "ru",
+        "count": 1
+      }
+    ]
+  },
+  "source_bytes": 35426559,
+  "index_disk_bytes_including_wal": 44572672,
+  "indexing_seconds": 2.5776793328113854,
+  "passages_per_second": 4696.472461063031,
+  "process_peak_rss_mib": 105.1875,
+  "query_p50_ms": 37.91237506084144,
+  "query_p95_ms": 81.44854102283716,
+  "query_samples": 18,
+  "independently_verified_results": 120,
+  "books": [
+    {
+      "id": "pg11-full",
+      "bytes": 189249,
+      "sha256": "4f81245d31380ac1d6eafb9a321e3691369bc70985736ae4bccf849a4f784036",
+      "seconds": 0.14736249996349216
+    },
+    {
+      "id": "pg1342-full",
+      "bytes": 24864457,
+      "sha256": "fd519471687295a8b2492d9e413bc24bee21ade9808d8af29899a16e8599064e",
+      "seconds": 0.14939504070207477
+    },
+    {
+      "id": "pg1228-full",
+      "bytes": 610265,
+      "sha256": "49bb913c0d267c786846805ce8b90a2e92bc4b2ee7cc0ab9492821bd85c6819b",
+      "seconds": 0.18185929208993912
+    },
+    {
+      "id": "pg2680-full",
+      "bytes": 454997,
+      "sha256": "62c71326bea242893ce8c3ce54bdf5fad3989a827a1462ec03f7dadf8bf5bc89",
+      "seconds": 0.07791341608390212
+    },
+    {
+      "id": "pg4650-full",
+      "bytes": 195065,
+      "sha256": "52f706dea0bad8e08913b254333901f3f6dfb1b472a90a8802b97b9604986d59",
+      "seconds": 0.04230854194611311
+    },
+    {
+      "id": "pg22367-full",
+      "bytes": 99770,
+      "sha256": "9fc9a802421caf591d674ffafa6d17eaf08b2e3d54849c081c9276a5174ee60e",
+      "seconds": 0.014967790804803371
+    },
+    {
+      "id": "pg5316-full",
+      "bytes": 87879,
+      "sha256": "b6c36094b7fc62254974a265e05aa0b17c3a4b8cc68b4c50462cf8eb0eb1e482",
+      "seconds": 0.014720290899276733
+    },
+    {
+      "id": "pg3300-full",
+      "bytes": 947727,
+      "sha256": "52c8c5b9cc2b18d1edc87a326b76f0d8aee568932995d407083b394aaa9165ab",
+      "seconds": 0.16330595780164003
+    },
+    {
+      "id": "pg2009-full",
+      "bytes": 1019278,
+      "sha256": "734ab06f61101728b42982d6032a440eb79c051f02d4a8456bbe34ea6cb293d0",
+      "seconds": 0.2538734576664865
+    },
+    {
+      "id": "pg1661-full",
+      "bytes": 379503,
+      "sha256": "310ddf29f2b98b870b0e970061d236c9ce7c65163e0e172c254a1db3d070d3f4",
+      "seconds": 0.10250491602346301
+    },
+    {
+      "id": "pg84-full",
+      "bytes": 440131,
+      "sha256": "0bfcc8cacdc72e132272844ed465c6198f1049a8d2b9e3f16806d02beee452e3",
+      "seconds": 0.0638770000077784
+    },
+    {
+      "id": "pg2701-full",
+      "bytes": 699614,
+      "sha256": "e247676589c02a65bc80ff7bf7aaaf146d7c69eadfcfb96633c5f606a08602db",
+      "seconds": 0.15783920791000128
+    },
+    {
+      "id": "pg2600-full",
+      "bytes": 1832425,
+      "sha256": "c856e9e16693084763aa3fd68f1b1b6dbc41123db6c1e5bb48af78302f2f921e",
+      "seconds": 0.6307808752171695
+    },
+    {
+      "id": "pg1232-full",
+      "bytes": 368446,
+      "sha256": "0260d6165a1558ee2e94eb37d7f1ff0cf4e30b41e094d6ff1afb094950b1be88",
+      "seconds": 0.04776412481442094
+    },
+    {
+      "id": "pg1497-full",
+      "bytes": 619155,
+      "sha256": "8c8bf2ed9bff65aaf226bf5db3879eb378a26e72489bd28666abc01c02f2a0c2",
+      "seconds": 0.2069597919471562
+    },
+    {
+      "id": "pg3207-full",
+      "bytes": 861317,
+      "sha256": "a6ccaf6bea85d46d118a5e05b0b741746027b42ec1d8c703286cecde920fa219",
+      "seconds": 0.17335045896470547
+    },
+    {
+      "id": "pg4363-full",
+      "bytes": 422742,
+      "sha256": "5be9a122841a88130130999da60ce5949f277ce603c9977081cc91a56ea53290",
+      "seconds": 0.04158195806667209
+    },
+    {
+      "id": "pg5001-full",
+      "bytes": 911209,
+      "sha256": "d72163123dab44b5c2d90fd17ac251b4b76de71ae3ebb04b3f3b5caa1334577f",
+      "seconds": 0.06286087492480874
+    },
+    {
+      "id": "pg61-full",
+      "bytes": 116175,
+      "sha256": "eb9d882661805128f3f476818a9eee328b77778b0d5ef7415fe08fcd76ecd763",
+      "seconds": 0.01660466706380248
+    },
+    {
+      "id": "pg35-full",
+      "bytes": 307155,
+      "sha256": "f52cfd0c629d87db3ef91ced77ef5fd7e8fc8f3a997c73aede05e67091d14eec",
+      "seconds": 0.027835917193442583
+    }
+  ],
+  "limitations": [
+    "No network, OCR, embedding build or model memory measured.",
+    "The host may have other workloads; not a dedicated performance environment.",
+    "RSS is process lifetime peak, not incremental allocator memory."
+  ]
+}

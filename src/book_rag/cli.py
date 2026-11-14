@@ -2,6 +2,7 @@
 
 import json
 import os
+import shutil
 import time
 from pathlib import Path
 from typing import Annotated, Any
@@ -18,31 +19,66 @@ def emit(value: Any) -> None:
     typer.echo(json.dumps(value, ensure_ascii=False, indent=2))
 
 
-def ingest_manifest(manifest: Path, limit: int | None = None) -> dict[str, Any]:
-    from book_rag.sources import download_source, load_manifest
+def ingest_manifest(
+    manifest: Path, limit: int | None = None, download_delay: float = 2.0, min_free_gib: float = 4.0
+) -> dict[str, Any]:
+    from book_rag.sources import DownloadDeferred, cached_source, download_source, load_manifest
 
     library = Library(data_dir())
     entries = load_manifest(manifest)
     report: list[dict[str, Any]] = []
     start = time.perf_counter()
+    downloaded_at = 0.0
+    stopped_reason = None
     for entry in entries:
         library.register(entry)
     for entry in entries[:limit]:
         book_id = library.register(entry)
         try:
+            if shutil.disk_usage(data_dir()).free < min_free_gib * 1024**3:
+                stopped_reason = f"Free disk is below {min_free_gib} GiB; queued books remain discovered"
+                break
             if entry.get("local_path"):
                 path = Path(entry["local_path"])
                 if not path.is_absolute():
                     path = manifest.parent / path
             else:
-                path = download_source(entry, data_dir() / "downloads")
+                # Follow Gutenberg's published two-second harvesting example by default.
+                path = cached_source(entry, data_dir() / "downloads")
+                if path is None:
+                    pending = library.source_retry_at(entry["download_url"])
+                    if pending is not None:
+                        stopped_reason = f"Provider retry deferral still active until epoch {pending}"
+                        library.stage(book_id, "deferred", stopped_reason)
+                        report.append({"id": book_id, "status": "deferred", "retry_at": pending})
+                        typer.echo(json.dumps(report[-1]), err=True)
+                        break
+                    wait = max(0.0, download_delay - (time.monotonic() - downloaded_at))
+                    if wait:
+                        time.sleep(wait)
+                    path = download_source(entry, data_dir() / "downloads")
+                    downloaded_at = time.monotonic()
             result = library.import_book(path, entry)
             report.append(result)
+        except DownloadDeferred as exc:
+            retry_at = exc.retry_at.timestamp() if exc.retry_at is not None else time.time() + exc.retry_after
+            library.defer_source(entry["download_url"], retry_at)
+            library.defer_source(str(exc.request.url), retry_at)
+            stopped_reason = str(exc)
+            library.stage(book_id, "deferred", stopped_reason)
+            report.append({"id": book_id, "status": "deferred", "retry_at": retry_at, "error": str(exc)})
+            typer.echo(json.dumps(report[-1]), err=True)
+            break
         except Exception as exc:
             library.stage(book_id, "failed", str(exc)[:1000])
             report.append({"id": book_id, "status": "failed", "error": str(exc)})
         typer.echo(json.dumps(report[-1], ensure_ascii=False), err=True)
-    return {"entries": report, "elapsed_seconds": round(time.perf_counter() - start, 3), "stats": library.stats()}
+    return {
+        "entries": report,
+        "elapsed_seconds": round(time.perf_counter() - start, 3),
+        "stopped_reason": stopped_reason,
+        "stats": library.stats(),
+    }
 
 
 @app.command()
@@ -55,9 +91,14 @@ def demo() -> None:
 
 
 @app.command()
-def ingest(manifest: Path, limit: Annotated[int | None, typer.Option(min=1)] = None) -> None:
+def ingest(
+    manifest: Path,
+    limit: Annotated[int | None, typer.Option(min=1)] = None,
+    download_delay: Annotated[float, typer.Option(min=0)] = 2.0,
+    min_free_gib: Annotated[float, typer.Option(min=1)] = 4.0,
+) -> None:
     """Discover a source catalog, then resume downloads and indexing."""
-    emit(ingest_manifest(manifest, limit))
+    emit(ingest_manifest(manifest, limit, download_delay, min_free_gib))
 
 
 @app.command("import")
@@ -109,3 +150,29 @@ def embed(model: str | None = None, batch_size: int = 32) -> None:
     from book_rag.semantic import build_index
 
     emit(build_index(Library(data_dir()), model_name=model, batch_size=batch_size))
+
+
+@app.command()
+def discover(
+    catalog: Path,
+    output: Path = Path("data/catalog/queue.json"),
+    limit: int = 200,
+    language: Annotated[list[str] | None, typer.Option()] = None,
+) -> None:
+    """Queue rights-verified books from a local official Gutenberg RDF catalog."""
+    from book_rag.catalog import discover_gutenberg
+
+    if limit < 1:
+        raise typer.BadParameter("limit must be positive")
+    emit(discover_gutenberg(catalog, output, limit=limit, languages=language))
+
+
+@app.command("export")
+def export_saved(output: Path = Path("data/exports/collection.md"), collection: str | None = None) -> None:
+    """Export saved evidence/notes as Markdown with frozen source provenance."""
+    from book_rag.exporting import export_collection
+
+    markdown = export_collection(Library(data_dir()).saved(), collection)
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(markdown, encoding="utf-8")
+    emit({"output": str(output), "collection": collection, "bytes": output.stat().st_size})

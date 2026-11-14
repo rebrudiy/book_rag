@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "dataset_sha256": "e637ab5be3467c2cc8294f1dd8395d80bc49fdb972107da35830caaf30fe75be",
+  "split": "dev",
+  "k": 5,
+  "baseline_mode": "lexical",
+  "candidate_mode": "lexical",
+  "metrics": {
+    "mrr_at_k": {
+      "baseline": 0.7777777777777778,
+      "candidate": 0.75,
+      "delta": -0.02777777777777779,
+      "higher_is_better": true
+    },
+    "hit_at_k": {
+      "baseline": 0.7777777777777778,
+      "candidate": 0.7777777777777778,
+      "delta": 0.0,
+      "higher_is_better": true
+    },
+    "work_recall_at_k": {
+      "baseline": 0.7777777777777778,
+      "candidate": 0.7777777777777778,
+      "delta": 0.0,
+      "higher_is_better": true
+    },
+    "precision_at_k": {
+      "baseline": 0.3111111111111111,
+      "candidate": 0.30000000000000004,
+      "delta": -0.011111111111111072,
+      "higher_is_better": true
+    },
+    "negative_abstention_accuracy": {
+      "baseline": 0.6,
+      "candidate": 1.0,
+      "delta": 0.4,
+      "higher_is_better": true
+    },
+    "quote_exact_rate": {
+      "baseline": 1.0,
+      "candidate": 1.0,
+      "delta": 0.0,
+      "higher_is_better": true
+    },
+    "metadata_exact_rate": {
+      "baseline": 1.0,
+      "candidate": 1.0,
+      "delta": 0.0,
+      "higher_is_better": true
+    },
+    "reader_anchor_exact_rate": {
+      "baseline": 1.0,
+      "candidate": 1.0,
+      "delta": 0.0,
+      "higher_is_better": true
+    },
+    "latency_p50_ms": {
+      "baseline": 0.547,
+      "candidate": 1.512,
+      "delta": 0.965,
+      "higher_is_better": false
+    },
+    "latency_p95_ms": {
+      "baseline": 0.733,
+      "candidate": 6.567,
+      "delta": 5.8340000000000005,
+      "higher_is_better": false
+    },
+    "elapsed_seconds": {
+      "baseline": 0.017,
+      "candidate": 0.077,
+      "delta": 0.06,
+      "higher_is_better": false
+    },
+    "process_peak_rss_mib": {
+      "baseline": 35.69,
+      "candidate": 24.02,
+      "delta": -11.669999999999998,
+      "higher_is_better": false
+    }
+  },
+  "corpus_sha256": "53356885f624411b2f26b12051b0ebd5dc43354a94022d97f29ef8a4724a5c0e"
+}

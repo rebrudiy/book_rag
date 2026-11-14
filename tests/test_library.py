@@ -164,3 +164,89 @@ def test_missing_import_is_failed(library: Library, tmp_path: Path) -> None:
     with pytest.raises(FileNotFoundError):
         library.import_book(tmp_path / "nonexistent.txt", {"id": "missing"})
     assert library.stats()["status_counts"]["failed"] == 1
+
+
+def test_saved_provenance_survives_edition_replacement(library: Library, tmp_path: Path) -> None:
+    import_text(library, tmp_path, "Original unique evidence.")
+    hit = library.search("unique")["results"][0]
+    saved = library.save({"kind": "passage", "title": "Original", "passage_id": hit["id"]})
+    assert saved["reader_url"] == hit["reader_url"]
+    assert saved["provenance"]["source_url"] == "https://example.org/book"
+    assert saved["provenance"]["artifact_sha256"]
+    import_text(library, tmp_path, "Replacement unrelated text.")
+    saved = library.saved()[0]
+    assert "reader_url" not in saved
+    assert saved["provenance"]["edition"] == "Test edition"
+    assert saved["text"] == "Original unique evidence."
+
+
+def test_parser_version_upgrade_reindexes_unchanged_artifact(library: Library, tmp_path: Path) -> None:
+    import_text(library, tmp_path, "A source with unchanged bytes.")
+    before = library.search("unchanged")["results"][0]
+    with library.connect() as conn:
+        conn.execute("UPDATE index_versions SET fingerprint='previous-parser'")
+    report = import_text(library, tmp_path, "A source with unchanged bytes.")
+    assert not report["skipped"]
+    after = library.search("unchanged")["results"][0]
+    assert after["id"] != before["id"]
+    assert after["text"] == before["text"]
+
+
+def test_invalid_end_offset_suppressed(library: Library, tmp_path: Path) -> None:
+    import_text(library, tmp_path, "Exact quotation.")
+    with library.connect() as conn:
+        conn.execute("UPDATE passages SET end=end+100")
+    result = library.search("quotation")
+    assert not result["results"] and result["warnings"]
+
+
+def test_explicit_editor_contribution_survives_reindex(library: Library, tmp_path: Path) -> None:
+    path = tmp_path / "book.html"
+    path.write_text(
+        "<h1>INTRODUCTION AND ANALYSIS</h1><p>The editor presents a critical introduction.</p>"
+        "<h1>BOOK I</h1><p>A dialogue on the meaning of justice.</p>"
+    )
+    metadata = {
+        "id": "dialogue",
+        "title": "Republic",
+        "author": "Plato",
+        "edition": "Jowett translation",
+        "section_attributions": [
+            {"title_contains": "INTRODUCTION AND ANALYSIS", "author": "Benjamin Jowett", "role": "editorial"}
+        ],
+    }
+    library.import_book(path, metadata)
+    hit = library.search("critical introduction")["results"][0]
+    assert hit["author"] == "Plato" and hit["section_author"] == "Benjamin Jowett"
+    assert hit["section_role"] == "editorial" and "Benjamin Jowett" in hit["citation"]
+    assert "Plato" in hit["citation"]
+    assert library.search("Benjamin Jowett")["results"]
+    book = library.get_book("dialogue")
+    assert book is not None and book["sections"][0]["section_author"] == "Benjamin Jowett"
+    # Changing an explicit rule invalidates the prior index even with unchanged file bytes.
+    metadata["section_attributions"][0]["author"] = "A corrected contributor"
+    assert not library.import_book(path, metadata)["skipped"]
+    assert library.search("critical")["results"][0]["section_author"] == "A corrected contributor"
+    assert not library.search("Benjamin Jowett")["results"]
+
+
+def test_api_bad_query_is_client_error(tmp_path: Path) -> None:
+    with TestClient(create_app(tmp_path / "api")) as client:
+        assert client.get("/api/search", params={"q": "   "}).status_code == 400
+        too_many = " ".join(f'"phrase{i}"' for i in range(9))
+        assert client.get("/api/search", params={"q": too_many}).status_code == 400
+        assert client.post("/api/research", json={"query": "   "}).status_code == 400
+
+
+def test_reranker_unavailable_fallback_is_labeled(
+    library: Library, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    import_text(library, tmp_path, "Curiosity encourages discovery.")
+
+    def unavailable(*args: object, **kwargs: object) -> dict:
+        return {"available": False, "results": [], "warnings": ["Reranker unavailable"]}
+
+    monkeypatch.setattr("book_rag.reranking.rerank", unavailable)
+    result = library.search("curiosity", mode="reranked")
+    assert result["mode"] == "lexical" and result["results"]
+    assert "Reranker unavailable" in result["warnings"]

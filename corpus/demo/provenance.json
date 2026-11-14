@@ -63,11 +63,12 @@
     "id": "pg5316-pushkin",
     "source_sha256": "2cc3f7cd652dce2f7e08250e9b46957575f7d96c2463a78fbde3a486ebcecffc",
     "source_char_start": 968,
-    "source_char_end": 2422,
+    "source_char_end": 2434,
     "paragraphs": 1,
     "canonical_characters": 1454,
-    "file_sha256": "d92a1499f8df63ce88da4325a49fd84c139051b202e1b9e2175b18f22178e8af",
-    "anchor": "Возможно ль? вместо роз"
+    "file_sha256": "a26899a11331aebedc3e851f1b08d1e26dd411ba829a604561d2b3ff7a45dd4f",
+    "anchor": "Возможно ль? вместо роз",
+    "lineation": "Explicit source verse line breaks retained with HTML br (normalization version 1.1)"
   },
   {
     "id": "pg3300-wealth",

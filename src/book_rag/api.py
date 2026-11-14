@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import Any, Literal
 
 from fastapi import FastAPI, HTTPException, Query
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, Response
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
@@ -29,7 +29,7 @@ class ResearchRequest(BaseModel):
 
 def create_app(directory: Path | None = None) -> FastAPI:
     library = Library(directory or data_dir())
-    app = FastAPI(title="Book Atlas", version="0.1.0")
+    app = FastAPI(title="Book Atlas", version="0.2.0")
     app.state.library = library
     static = Path(__file__).parent / "static"
 
@@ -40,6 +40,12 @@ def create_app(directory: Path | None = None) -> FastAPI:
     @app.get("/api/stats")
     def stats() -> dict[str, Any]:
         return library.stats()
+
+    @app.get("/api/explore")
+    def explore() -> dict[str, Any]:
+        from book_rag.explore import build_map
+
+        return build_map(library)
 
     @app.get("/api/books")
     def books(language: str | None = None, q: str = Query(default="", max_length=500)) -> dict[str, Any]:
@@ -62,20 +68,40 @@ def create_app(directory: Path | None = None) -> FastAPI:
     @app.get("/api/search")
     def search(
         q: str = Query(min_length=1, max_length=2000),
-        mode: Literal["lexical", "hybrid", "semantic"] = "lexical",
+        mode: Literal["baseline", "lexical", "hybrid", "semantic", "reranked"] = "lexical",
         book_id: str | None = None,
         language: str | None = None,
         limit: int = Query(default=10, ge=1, le=50),
     ) -> dict[str, Any]:
-        return library.search(q, mode, book_id, language, limit)
+        if not q.strip():
+            raise HTTPException(400, "Search query must contain text")
+        try:
+            return library.search(q, mode, book_id, language, limit)
+        except ValueError as exc:
+            raise HTTPException(400, str(exc)) from exc
 
     @app.post("/api/research")
     def research(request: ResearchRequest) -> dict[str, Any]:
-        return library.research(request.query, request.book_ids, request.limit)
+        if not request.query.strip():
+            raise HTTPException(400, "Research query must contain text")
+        try:
+            return library.research(request.query, request.book_ids, request.limit)
+        except ValueError as exc:
+            raise HTTPException(400, str(exc)) from exc
 
     @app.get("/api/saved")
     def saved() -> dict[str, Any]:
         return {"items": library.saved()}
+
+    @app.get("/api/saved/export")
+    def export_saved(collection: str | None = Query(default=None, max_length=200)) -> Response:
+        from book_rag.exporting import export_collection
+
+        return Response(
+            export_collection(library.saved(), collection),
+            media_type="text/markdown; charset=utf-8",
+            headers={"Content-Disposition": "attachment; filename=book-atlas-collection.md"},
+        )
 
     @app.post("/api/saved", status_code=201)
     def save(item: SavedItem) -> dict[str, Any]:
