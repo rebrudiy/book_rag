@@ -26,7 +26,7 @@ from book_rag.library import Library
 
 BOOK_ID = "archive-browser-cc0"
 PROVIDER = "https://example.org/book-atlas/archive-browser-fixture"
-DOWNLOAD_LABEL = "Скачать зафиксированный оригинал"
+DOWNLOAD_LABEL = "Скачать зафиксированный файл"
 FIXTURE_TITLE = "Архивный опыт · оригинальный тест CC0"
 SAVED_TITLE = "Archive browser: frozen first edition"
 

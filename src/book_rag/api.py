@@ -27,6 +27,14 @@ class ResearchRequest(BaseModel):
     limit: int = Field(default=8, ge=1, le=30)
 
 
+class SavedItemUpdate(BaseModel):
+    model_config = {"extra": "forbid"}
+
+    title: str | None = Field(default=None, max_length=500)
+    note: str | None = Field(default=None, max_length=10000)
+    collection: str | None = Field(default=None, max_length=200)
+
+
 def create_app(directory: Path | None = None) -> FastAPI:
     library = Library(directory or data_dir())
     app = FastAPI(title="Book Atlas", version="0.2.0")
@@ -153,6 +161,16 @@ def create_app(directory: Path | None = None) -> FastAPI:
         if not library.delete_saved(item_id):
             raise HTTPException(404, "Saved item not found")
         return {"deleted": True}
+
+    @app.patch("/api/saved/{item_id}")
+    def update_saved(item_id: int, item: SavedItemUpdate) -> dict[str, Any]:
+        try:
+            result = library.update_saved(item_id, item.model_dump(exclude_unset=True))
+        except ValueError as exc:
+            raise HTTPException(400, str(exc)) from exc
+        if result is None:
+            raise HTTPException(404, "Saved item not found")
+        return result
 
     @app.get("/")
     def home() -> FileResponse:

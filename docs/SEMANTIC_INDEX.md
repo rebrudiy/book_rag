@@ -244,3 +244,31 @@ comparisons and real prefix checks for `struggle for existence` and a Russian
 rabbit scene at limits 5/20/50 in both modes and model spaces. The accompanying
 patch reconstructs the control implementation with its captured SHA256. Existing
 experiment files and held-out data were not changed.
+# Frozen-source resume and resource observations
+
+`scripts/embed_frozen.py` builds or resumes vector files while opening the corpus
+SQLite file read-only, without applying the current schema. It requires a static
+database and an empty or absent WAL, checks its identity during reads and verifies
+the database SHA before and after a successful build. Use it for a frozen source;
+ordinary live libraries use `bookrag embed`.
+
+```sh
+BOOKRAG_MODEL_CACHE=./data/models \
+PYTORCH_MPS_HIGH_WATERMARK_RATIO=0.65 \
+PYTORCH_MPS_LOW_WATERMARK_RATIO=0.5 \
+uv run python scripts/embed_frozen.py data/snapshots/library1308-v1 \
+  --batch-size 32 --resources data/embedding-resources.jsonl
+```
+
+The MPS ratios are local resource settings, not retrieval parameters. The high
+watermark limits allocator memory relative to the device's recommended working
+set; the lower watermark requests earlier reclamation/command submission.
+[PyTorch documentation](https://docs.pytorch.org/docs/2.15/mps_environment_variables.html)
+describes their scope. They do not cap total system RAM or disk use. The script
+records process peak RSS and MPS allocator/driver observations every 30 seconds.
+The builder independently retains its 4 GiB disk reserve and durable checkpoints.
+
+The first 1,308-edition build stopped at 1,315,072 of 1,865,985 vectors when free
+disk briefly fell below its reserve. The cause of the host-wide observation gap
+was not established. It resumed with batch32 after free space recovered; completed
+prefixes were retained. Do not label a checkpoint as an active complete index.

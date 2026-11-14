@@ -5,7 +5,8 @@
   const state = {
     view: 'search', mode: 'hybrid', query: '', books: [], saved: [], results: [], stats: null,
     currentBook: null, currentSection: null, currentPassage: null,
-    saveDraft: null, searchSequence: 0, readerSequence: 0, readerSize: 20,
+    saveDraft: null, saveItemID: null, saveOriginal: null, savePending: false, saveReturnFocus: null,
+    searchSequence: 0, readerSequence: 0, readerSize: 20,
     previousView: 'search', researchQuery: '', toastTimer: null,
     explore: null, exploreLoading: false, mapSelection: null,
     landingTotal: 0, libraryOffset: 0, libraryTotal: 0, libraryHasMore: false, libraryRequest: 0,
@@ -55,7 +56,7 @@
     catch { throw new Error(`Сервер вернул неожиданный ответ (${response.status}).`); }
     if (!response.ok) {
       const detail = typeof data.detail === 'string' ? data.detail : data.error || `Не удалось выполнить запрос (${response.status}).`;
-      throw new Error(detail);
+      const error = new Error(detail); error.status = response.status; throw error;
     }
     return data;
   }
@@ -71,7 +72,7 @@
     try {
       const url = new URL(value, location.origin);
       if (url.origin !== location.origin || url.username || url.password || url.search || url.hash || !/^\/api\/artifacts\/[a-f0-9]{64}$/.test(url.pathname)) return null;
-      const link = node('a', 'text-button artifact-download', 'Скачать зафиксированный оригинал');
+      const link = node('a', 'text-button artifact-download', 'Скачать зафиксированный файл');
       link.href = url.pathname;
       // The verified attachment response supplies the digest and real format filename.
       link.download = '';
@@ -189,6 +190,7 @@
     const excerpt = coverageType(book) === 'excerpt' || /extract|excerpt|отрывок|фрагмент/i.test(book.edition || '');
     if (selectedChapters) info.append(node('p', 'book-excerpt-label', 'Выбранные главы'));
     else if (excerpt) info.append(node('p', 'book-excerpt-label', 'Отрывок произведения'));
+    else if (coverageType(book) === 'partial') info.append(node('p', 'book-excerpt-label', 'Полнота произведения не подтверждена'));
     if (withoutIllustrations(book)) info.append(node('p', 'book-excerpt-label', 'Без иллюстраций'));
     const attempt = ingestionNotice(book, true);
     if (attempt) info.append(attempt);
@@ -524,7 +526,7 @@
     $('reader-ingestion-warning').replaceChildren(...(attempt ? [attempt] : []));
     $('reader-ingestion-warning').classList.toggle('hidden', !attempt);
     const coverage = coverageType(book);
-    $('reader-coverage').textContent = coverage === 'selected_chapters' ? 'Выбранные главы · частичный текст произведения' : coverage === 'excerpt' || /extract|excerpt|отрывок/i.test(book.edition || '') ? 'Отрывок произведения · частичный текст' : book.source_metadata?.coverage_scope === 'original_work_only' ? 'Оригинальное произведение · без позднего редакционного аппарата' : '';
+    $('reader-coverage').textContent = coverage === 'selected_chapters' ? 'Выбранные главы · частичный текст произведения' : coverage === 'partial' ? 'Снимок текста · полнота произведения не подтверждена' : coverage === 'excerpt' || /extract|excerpt|отрывок/i.test(book.edition || '') ? 'Отрывок произведения · частичный текст' : book.source_metadata?.coverage_scope === 'original_work_only' ? 'Оригинальное произведение · без позднего редакционного аппарата' : '';
     $('reader-coverage').classList.toggle('hidden', !$('reader-coverage').textContent);
     document.title = `${book.title}${historical ? ' · сохранённое издание' : ''} — Атлас книг`;
     $('reader-toc').replaceChildren(...sections.map((item) => {
@@ -538,12 +540,29 @@
     const sourceURL = safeURL(book.source_url);
     if (sourceURL) { const link = node('a', '', 'Открыть первоисточник ↗'); link.href = sourceURL; link.target = '_blank'; link.rel = 'noopener noreferrer'; const p = node('p'); p.append(link); source.append(p); }
     const archivedOriginal = artifactDownload(book.artifact_url);
-    if (archivedOriginal) { const paragraph = node('p', 'source-artifact'); paragraph.append(archivedOriginal, node('span', 'artifact-description', 'Копия файла, полученного при загрузке этого издания.')); source.append(paragraph); }
+    if (archivedOriginal) { const paragraph = node('p', 'source-artifact'); paragraph.append(archivedOriginal, node('span', 'artifact-description', 'Файл этой версии текста.')); source.append(paragraph); }
     if (withoutIllustrations(book)) source.append(node('p', 'source-variant-note', 'В этой копии нет иллюстраций; оригинал доступен по ссылке источника'));
     const rightsURL = safeURL(book.rights_url || book.source_metadata?.rights_url);
     if (rightsURL) { const link = node('a', '', 'Условия использования источника ↗'); link.href = rightsURL; link.target = '_blank'; link.rel = 'noopener noreferrer'; const paragraph = node('p'); paragraph.append(link); source.append(paragraph); }
     const bundle = book.source_metadata?.source_bundle_sha256;
     if (typeof bundle === 'string' && /^[0-9a-f]{64}$/i.test(bundle)) source.append(node('p', 'source-revision-bundle', `Снимок версий источника: ${bundle.slice(0, 16)}…`));
+    const credits = book.source_metadata?.upstream_attribution;
+    if (Array.isArray(credits) && credits.length) {
+      const list = node('ul', 'source-upstream-credits');
+      credits.slice(0, 50).forEach((credit) => {
+        if (!credit || typeof credit !== 'object') return;
+        const item = node('li'); item.append(node('span', '', credit.author || 'Участники источника'));
+        for (const [value, label] of [[credit.source_url, 'Текст источника'], [credit.history_url, 'История участников']]) {
+          const url = safeURL(value); if (!url) continue;
+          const link = node('a', '', label); link.href = url; link.target = '_blank'; link.rel = 'noopener noreferrer'; item.append(document.createTextNode(' · '), link);
+        }
+        list.append(item);
+      });
+      source.append(list);
+    }
+    if (typeof book.source_metadata?.attribution === 'string' && book.source_metadata.attribution.trim()) {
+      const details = node('details', 'source-attribution'); details.append(node('summary', '', 'Происхождение и преобразования'), node('p', '', book.source_metadata.attribution)); source.append(details);
+    }
     const revisions = book.source_metadata?.chapter_sources;
     if (Array.isArray(revisions) && revisions.length) {
       const details = node('details', 'source-revisions');
@@ -576,6 +595,7 @@
         if (typeof edition.translator === 'string' && edition.translator.trim()) item.append(node('p', '', `Перевод: ${edition.translator}`));
         if (coverageType(edition) === 'selected_chapters') item.append(node('p', '', 'Выбранные главы'));
         else if (coverageType(edition) === 'excerpt') item.append(node('p', '', 'Отрывок произведения'));
+        else if (coverageType(edition) === 'partial') item.append(node('p', '', 'Полнота произведения не подтверждена'));
         editions.append(item);
       });
       $('reader-related-editions').append(editions);
@@ -738,34 +758,77 @@
   }
 
   function collectionNames() { return [...new Set(state.saved.map((item) => item.collection).filter(Boolean))].sort(); }
-  async function refreshSaved() {
-    const data = await api('/api/saved'); state.saved = data.items || [];
+  function syncSavedUI(preferredCollection = $('collection-filter').value) {
     $('saved-count').textContent = formatNumber(state.saved.length);
     const names = collectionNames();
     populateSelect($('collection-filter'), names.map((value) => ({ value, label: value })), 'Все коллекции');
+    $('collection-filter').value = names.includes(preferredCollection) ? preferredCollection : '';
     $('collection-options').replaceChildren(...names.map((name) => { const option = node('option'); option.value = name; return option; }));
     if (state.view === 'saved') renderSaved();
   }
+  async function refreshSaved() {
+    const data = await api('/api/saved'); state.saved = data.items || []; syncSavedUI();
+  }
+  function setSaveBusy(busy) {
+    state.savePending = busy;
+    $('save-dialog').setAttribute('aria-busy', String(busy));
+    for (const id of ['save-title', 'save-collection', 'save-note', 'close-save', 'cancel-save']) $(id).disabled = busy;
+    $('save-form').querySelector('[type="submit"]').disabled = busy;
+    $('save-status').textContent = busy ? 'Сохраняем изменения…' : '';
+  }
+  function configureSaveDialog(editing, preview, description) {
+    $('save-dialog-title').textContent = editing ? 'Редактировать запись' : 'Сохранить в коллекцию';
+    $('save-mode-description').textContent = description;
+    $('save-preview').textContent = preview;
+    $('save-title').required = !editing;
+    $('save-form').querySelector('[type="submit"]').textContent = editing ? 'Сохранить изменения' : 'Сохранить';
+    $('save-error').textContent = ''; $('save-error').classList.add('hidden');
+    setSaveBusy(false);
+    $('save-dialog').showModal(); $('save-title').focus();
+  }
   function openSave(draft, preview) {
-    state.saveDraft = draft;
+    if (state.savePending) return;
+    state.saveDraft = draft; state.saveItemID = null; state.saveOriginal = null; state.saveReturnFocus = document.activeElement;
     $('save-title').value = draft.title || '';
     $('save-collection').value = '';
     $('save-note').value = '';
-    $('save-preview').textContent = textExcerpt(preview || draft.query || '', 350);
-    $('save-error').classList.add('hidden');
-    $('save-dialog').showModal();
-    $('save-title').focus();
+    configureSaveDialog(false, textExcerpt(preview || draft.query || '', 350), 'Добавьте название, заметку и коллекцию.');
+  }
+  function editSaved(item, trigger) {
+    if (state.savePending) return;
+    state.saveDraft = null; state.saveItemID = item.id; state.saveReturnFocus = trigger;
+    state.saveOriginal = { title: item.title || '', note: item.note || '', collection: item.collection || '' };
+    $('save-title').value = state.saveOriginal.title; $('save-note').value = state.saveOriginal.note; $('save-collection').value = state.saveOriginal.collection;
+    configureSaveDialog(true, item.text || item.query || '', item.kind === 'query' ? 'Название, заметка и коллекция. Исходный сохранённый запрос:' : 'Название, заметка и коллекция. Цитата и источник зафиксированы.');
+  }
+  function closeSaveDialog() { if (!state.savePending) $('save-dialog').close(); }
+  function saveDialogClosed() {
+    const trigger = state.saveReturnFocus; const id = state.saveItemID;
+    state.saveDraft = null; state.saveItemID = null; state.saveOriginal = null; state.saveReturnFocus = null;
+    requestAnimationFrame(() => {
+      if (trigger?.isConnected && typeof trigger.focus === 'function') trigger.focus();
+      else if (id !== null) { const card = [...$('saved-items').querySelectorAll('.saved-item')].find((item) => item.dataset.savedId === asID(id)); (card?.querySelector('.edit-saved') || $('collection-filter')).focus(); }
+    });
   }
   async function saveItem(event) {
     event.preventDefault();
-    if (!state.saveDraft) return;
-    const submit = $('save-form').querySelector('[type="submit"]'); submit.disabled = true;
+    if (state.savePending || (!state.saveDraft && state.saveItemID === null)) return;
+    const editing = state.saveItemID !== null;
+    const values = { title: $('save-title').value, collection: $('save-collection').value, note: $('save-note').value };
+    const changed = editing ? Object.fromEntries(Object.entries(values).filter(([key, value]) => value !== state.saveOriginal[key])) : null;
+    if (editing && !Object.keys(changed).length) { closeSaveDialog(); toast('Изменений нет.'); return; }
+    setSaveBusy(true); $('save-error').classList.add('hidden');
     try {
-      await api('/api/saved', { method: 'POST', body: JSON.stringify({ ...state.saveDraft, title: $('save-title').value.trim(), collection: $('save-collection').value.trim(), note: $('save-note').value.trim() }) });
-      $('save-dialog').close(); state.saveDraft = null;
-      await refreshSaved(); toast('Сохранено в исследовательский блокнот.');
-    } catch (error) { $('save-error').textContent = error.message; $('save-error').classList.remove('hidden'); }
-    finally { submit.disabled = false; }
+      const updated = editing
+        ? await api(`/api/saved/${encodeURIComponent(state.saveItemID)}`, { method: 'PATCH', body: JSON.stringify(changed) })
+        : await api('/api/saved', { method: 'POST', body: JSON.stringify({ ...state.saveDraft, title: values.title.trim(), collection: values.collection.trim(), note: values.note.trim() }) });
+      const selected = editing && updated.collection !== state.saveOriginal.collection ? updated.collection : $('collection-filter').value;
+      if (editing) state.saved = state.saved.map((item) => asID(item.id) === asID(updated.id) ? updated : item);
+      else state.saved.unshift(updated);
+      syncSavedUI(selected); setSaveBusy(false); closeSaveDialog();
+      toast(editing ? 'Изменения сохранены.' : 'Сохранено в исследовательский блокнот.');
+    } catch (error) { $('save-error').textContent = editing && error.status === 404 ? 'Запись не найдена. Введённый текст остался в диалоге.' : error.message; $('save-error').classList.remove('hidden'); }
+    finally { setSaveBusy(false); }
   }
   function renderSaved() {
     const collection = $('collection-filter').value;
@@ -773,6 +836,7 @@
     if (!items.length) { empty($('saved-items'), collection ? 'В коллекции пока пусто' : 'Дайте мысли продолжение', 'Сохраните фрагмент из поисковой выдачи или читателя. Добавьте заметку и объедините находки в тематическую коллекцию.'); return; }
     $('saved-items').replaceChildren(...items.map((item) => {
       const card = node('article', 'saved-item');
+      card.dataset.savedId = asID(item.id);
       const date = item.created_at ? new Date(item.created_at).toLocaleDateString('ru-RU') : '';
       card.append(node('p', 'saved-kind', `${item.kind === 'query' ? 'ЗАПРОС' : 'ФРАГМЕНТ'}${item.collection ? ' / ' + item.collection : ''}${date && date !== 'Invalid Date' ? ' · ' + date : ''}`), node('h2', '', item.title));
       if (item.text) card.append(node('blockquote', '', item.text));
@@ -793,7 +857,7 @@
         try { const passage = await api(`/api/passages/${encodeURIComponent(item.passage_id)}`); await openBook(passage.book_id, passage.section_id, passage.id); }
         catch (error) { showError(error); }
       }));
-      actions.append(button('Копировать', () => copyText([item.text || item.query || item.title, item.citation, item.note].filter(Boolean).join('\n\n'))), button('Удалить', async (event) => {
+      actions.append(button('Редактировать', (event) => editSaved(item, event.currentTarget), 'text-button edit-saved'), button('Копировать', () => copyText([item.text || item.query || item.title, item.citation, item.note].filter(Boolean).join('\n\n'))), button('Удалить', async (event) => {
         const target = event.currentTarget;
         if (target.dataset.confirm !== 'true') { target.dataset.confirm = 'true'; target.textContent = 'Подтвердить удаление'; setTimeout(() => { if (target.isConnected) { target.dataset.confirm = ''; target.textContent = 'Удалить'; } }, 4000); return; }
         target.disabled = true;
@@ -852,6 +916,15 @@
   const wideReader = matchMedia('(min-width: 761px)'); readerRelated.open = wideReader.matches;
   wideReader.addEventListener('change', (event) => { readerRelated.open = event.matches; });
   $('reader-source').closest('details').after(readerRelated);
+  $('save-dialog').querySelector('.dialog-heading h2').id = 'save-dialog-title';
+  $('save-dialog').setAttribute('aria-labelledby', 'save-dialog-title');
+  $('save-dialog').setAttribute('aria-describedby', 'save-mode-description');
+  $('save-title').maxLength = 500; $('save-collection').maxLength = 200; $('save-note').maxLength = 10000;
+  const saveDescription = node('p'); saveDescription.id = 'save-mode-description'; $('save-preview').before(saveDescription);
+  const saveStatus = node('p'); saveStatus.id = 'save-status'; saveStatus.setAttribute('role', 'status'); $('save-error').after(saveStatus);
+  const saveSubmit = $('save-form').querySelector('[type="submit"]');
+  const saveActions = node('div', 'save-dialog-actions'); saveSubmit.before(saveActions);
+  const cancelSave = button('Отмена', closeSaveDialog); cancelSave.id = 'cancel-save'; saveActions.append(cancelSave, saveSubmit);
 
   $('search-form').addEventListener('submit', (event) => { event.preventDefault(); search(); });
   document.querySelectorAll('[data-mode]').forEach((el) => el.addEventListener('click', () => { setMode(el.dataset.mode); if (state.query) search(); }));
@@ -873,8 +946,10 @@
   $('clear-filters').addEventListener('click', () => { $('language-filter').value = ''; $('book-scope-query').value = ''; setScopeBook(null); loadScopeBooks(); if (state.query) search(); });
   $('save-query').addEventListener('click', () => { if (state.query) openSave({ kind: 'query', title: state.query, query: state.query }, state.query); });
   $('save-form').addEventListener('submit', saveItem);
-  $('close-save').addEventListener('click', () => $('save-dialog').close());
-  $('save-dialog').addEventListener('click', (event) => { if (event.target === $('save-dialog')) { const bounds = $('save-dialog').getBoundingClientRect(); if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) $('save-dialog').close(); } });
+  $('close-save').addEventListener('click', closeSaveDialog);
+  $('save-dialog').addEventListener('cancel', (event) => { if (state.savePending) event.preventDefault(); });
+  $('save-dialog').addEventListener('close', saveDialogClosed);
+  $('save-dialog').addEventListener('click', (event) => { if (event.target === $('save-dialog')) { const bounds = $('save-dialog').getBoundingClientRect(); if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) closeSaveDialog(); } });
   $('collection-filter').addEventListener('change', renderSaved);
   $('export-saved').addEventListener('click', exportSaved);
   $('export-markdown').addEventListener('click', exportMarkdown);

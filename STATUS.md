@@ -1,75 +1,42 @@
 # Status
 
-Updated 2026-11-14 17:43 MSK. Goal ACTIVE; user requested a verified hour report and explicitly said to continue. Report delivered; receipt experiments/hourly-status-2026-11-14T1224Z.json.
+Updated 2026-11-14T21:36:49.577563+00:00. Goal ACTIVE. User asked for a verified all-time/hour status and said CONTINUE; report delivered at2026-11-15 00:16MSK. Receipt experiments/status-alltime-2026-11-14T2116Z.json. Earlier hour receipt experiments/hourly-status-2026-11-14T1224Z.json.
 
-## Published / running
+## Published / services
 
-Public repository: https://github.com/rebrudiy/book_rag. Published commits a223654, 892061a, 1a1a7e1. Both test/browser CI passed for 1a1a7e1: https://github.com/rebrudiy/book_rag/actions/runs/43596986973. Iteration4 published75acbd0; bothCI jobs passed: https://github.com/rebrudiy/book_rag/actions/runs/43606359092. Iteration5 canonicalhistoricalreader nowintegrating/testing.
+Public repo https://github.com/rebrudiy/book_rag. Five published commits: a223654,892061a,1a1a7e1,75acbd0,7e86928. Both CI jobs passed for7e86928: https://github.com/rebrudiy/book_rag/actions/runs/43608473643. Iteration6 ready, publish now; root preparing exact staged scope before partial-UI agent edits.
 
-Live full library: http://127.0.0.1:8001 (lexical; whole-live semantic index unavailable). Demo: http://127.0.0.1:8000 (eight works/excerpts, four languages, 45 passages, multilingual hybrid enabled). Servers restarted with iteration4 availability/edition-link changes; bothHTTP200.
+Full interface http://127.0.0.1:8001 (exec94109/PID98259), demo http://127.0.0.1:8000 (exec65399/PID98257). Full library lexical; large semantic index NOT YET active. Demo8 works/excerpts/45passages has optional legacy hybrid. Monitoring exec30751/PID1237 writes data/runtime-observations.jsonl every60s; observed gap16:11→21:14UTC, do not invent an exact hour baseline or cause.
 
-Latest verified live probe: 2,338 indexed editions / 772,097 searchable passages; still increasing. Total distinct full works unknown. Confirmed lower bound: 24 curated complete-work groups; partial D2L separately. 60 periodical editions are not counted as confirmed unique books.
+## Corpus / recovered jobs
 
-## Background jobs / corpus
+CURRENT 3991 indexed editions / 1401120 passages; coverage {"full": 3989, "partial": 1, "selected_chapters": 1}; languages [{"language": "de", "count": 1009}, {"language": "en", "count": 1940}, {"language": "fr", "count": 1031}, {"language": "ru", "count": 11}]. All3956 files/extraction hashes physically checked atuser-report time; then resumed35pending/failed and finished ALL3991 successfully in147.696s. No pending/failures remain. Final queue receipt data/expand-text-resume2-report.json. Previous stop receipt data/expand-text-with-translations-report.json retains diskfloor stop +DNSfailure.
 
-- Initial 1,000 Gutenberg queue completed. Balanced305 queue completed, plus pinned partial D2L and five Russian originals. Oversize PG63371 botany recovered through same-ID official no-image EPUB (1,187,675 bytes,123sections,1623passages); text-only/illustration omission explicit.
-- New serial text-only queue: data/catalog/expand-text-with-translations.json (2,682 entries:2,679expansion+3translations), current exec session43016; data/expand-text-with-translations-progress.jsonl and eventual data/expand-text-with-translations-report.json. Logs append after deliberate code-reload restart. Source2s pacing; no parallel Gutenberg downloader.
-- Original-source archival and table-parser refresh of original1,308 completed. Snapshot data/snapshots/library1308-v1: 1,308 indexed editions,445,466passages; source subset data/catalog/refresh-archive-tables.json. Snapshot receipt data/snapshot-library1308-v1-report.json. Do not mutate its content during embedding.
-- Whole frozen1,308 MiniLM build STARTED17:24MSK, PID84916 / exec session40120: BOOKRAG_DATA_DIR=./data/snapshots/library1308-v1 BOOKRAG_MODEL_CACHE=./data/models .venv/bin/bookrag embed --batch-size128. Report data/library1308-embedding-report.json; stderr data/library1308-embedding-progress.log. Initial window-counting phase can take minutes before first checkpoint. Vector arrays/mapping preflight includes4GiB reserve.
-- Bounded warmed256-window MPS throughput sample experiments/batch-throughput-v1.json: batch128~291.8windows/s, all testedbatchoutputs identical; not a whole-library throughput claim.
-- Five Russian originals fully indexed (Ivan Ilyich, Underground, Overcoat, Fathers and Sons, Ward6):81 narrativechapters,87parsedsections,866434canonicalchars. Provider revision/hash/rights bundles preserved; author epigraph/dedication restored, unverifiededitorialnotes explicitly omitted.
+Full unique-work total UNKNOWN. Lower bound24 curated full works; partial D2L separate,60periodical editions. Work IDs/provisional3987groups are not verified unique books.
 
-## Implemented iteration4 (not all yet published)
+Source/embedding stopped after a5hour observation gap: embedding log showed only219,611,136Bfree duringfailure, then16GiBfree whenrootreturned; cause notestablished. Original ingest/embedding processes are DEAD, do not callthemworking.
 
-- artifacts.py immutable content-addressed originals; parse archive before indexing, preserve source filename fallback. GET /api/artifacts/{sha} verified attachment; saved quotes point to historical raw artifact even after reindex. No downloaded corpus/model/vector files in Git.
-- PRE/code XML-space and tables preserve line/row/cell fidelity. PG10912 audit50sections/all57headings/zero missingvisiblewordtokens; D2L483code/mathblocks exact. Attribution rules guarded by artifactSHA, optionalsectionordinal and actualtext phrase.
-- source_pipeline separates latest ingestion attempt from the last searchable edition. Failed/deferred/processed refresh retains exact old text, metadata, FTS, savedlinks and archive; atomic successful replacement. New ingestion_* API fields/counters, separate availabilityfilter; 13targetedchecks.
-- semantic.py/vector_reuse.py schema2 exactinput+frozenmodelspace keys reference immutable mmap rows. No speculative old-index reuse; durablekeymap sync precedes vectorcheckpoint. Real isolated183+7 experiment:183reused/7encoded, fresh190outputs identical and querytop5same. Activegeneration stays old until successfulnewgeneration.
-- corpus_planning.py --text-only selects explicitRDF no-imageEPUB/TXT/HTML, preserves original305default byte-for-byte. Plan3005EN1000/FR1000/DE1000/RU5;995RUshortage explicit.
-- work_identity.py read-only CC0 Wikidata proposals:50sample16linked/3ambiguous/31unresolved; no automatic count/DB promotion. Russian translation links verified: PG600→ru-underground, PG47935/30723→ru-fathers-and-sons. Corpusagent preparingprioritymanifest; all3downloaded/audited/indexed:77novelchapters,915exactpassages; experiments/translation-integrity-v1.json.
-- Library.get_book related_editions bounded20 only samecuratedworkid/statusindexed on BOTH sides; no provisionalidentity navigation. Added confirmed_full_works_lower_bound stats separately from cataloggroups.
+Embedding RESUMED with executable scripts/embed_frozen.py, exec25024/PID4056, source data/snapshots/library1308-v1 (1308editions/445466passages). Current checkpoint 1408224/1865985 vectors (was1315072atfailure). readonly immutable SQLite source prevents schema migration. Command: BOOKRAG_MODEL_CACHE=./data/models PYTORCH_MPS_HIGH_WATERMARK_RATIO=0.65 PYTORCH_MPS_LOW_WATERMARK_RATIO=0.5 .venv/bin/python scripts/embed_frozen.py data/snapshots/library1308-v1 --batch-size32 --resources data/library1308-resume-resources.jsonl. Reports data/library1308-embedding-resume-report.json / -resume-progress.log; memory sampler sameprocess every30s. LastGPUdriver~1.1GB/recommended12.7GB, CPUpeak~0.9GB before suffix encoding. Oldsource command/session40120 no longer running.
 
-## Experiments / truthful limitations
+## Ready iteration6 / verification
 
-Original frozen20 curated20-v3 and E5 snapshot plus old dev/heldout reports/labels remain controls. Do not open oldfrozenSQLite through normal Library constructor: schema migration changesfileSHA. Read-only directsqlite is safe; evaluation-agent implementingownedcopyworkflow.
+- Saved title/note/collection PATCH+UI; query/quote/citation/provenance/historicalversion immutable.12isolated Chromium workflows +historical11/smoke15/catalog205 passed; zeroJSerrors. Saved single-item reads avoid loading allnotes.
+- Licensed RU Regex reference indexed: ruwikibooks-regex-266423,25sections/55513chars,27literalexamples/333inlinecode/4tables44rows172cells, upstreamWikiBooks+Wikipedia credits. Explicitpartial/provisional/unverified completion. Actual GET-only browser anddownloadSHA passed; docs/WIKIBOOKS_BROWSER.md. SourceFB2sha83d7579ab5fc2a6120d14569243c5109e0d09371224138b567072214eed27737. HTMLoldid rendering may use currenttemplates; savedresponse/hash/time explicit. retrieved_at fromoriginalHTMLreceipt, packaged_atseparate;27source tests, zeroHTTPcachedrepeat.
+- Streaming RUWikiBooks pinned25,354,533B dump→168,842,618BXML/21430pages,7531ns0;8.90s/RSS79.8MB;39tests. CLI catalog-wikibooks creates REVIEW catalog only, no book-count promotion. CLI acquire-wikibooks-reference --index is bounded onepage.
+- Full integrity audit2528books/841599passages/all2528rawfiles0errors: experiments/full-integrity-iteration5.json. NEW all3991 audit PASSED:3991rawfiles/1401120passages/0errors,68.045s; experiments/full-integrity-3991-v1.json includes exact input fingerprints+UTC timestamp.
+- FTS maintenance: owned20copy252.6→44.5MB with identical8probeIDs/scores; larger1308alreadycompact1.594GB→samebytes, NOsavings. Originalcontrols unchanged. Reports experiments/fts-maintenance-v1.json and fts-maintenance1308-v1.json; scripts benchmark_fts_maintenance.py. Fixed its finaltyunion typing; global Ruff/ty pass; one docformat fixed.
+- Root global pytest728passed10.98s includes ready futureindexmodules too. Publishediteration6 expected646tests ifindexhelpersexcluded. LastpublishedCI linksabove. Browserarchive regression passed after genericdownloadlabel «Скачать зафиксированный файл» (derivedFB2 is not rawproviderHTML).
 
-Expandeddev54:44positive/10scopednegative/12crosslanguage/20editions, sourceanchorschecked but agentauthored labels. Originalexpanded baselineMRR.6144/hit.7045/negativeabstention.4; lexical.5386/.6136/.9; MiniLMhybrid.6826/.7955/.2; reranked.6686/.8182/.2; E5hybrid.6705/.7273/0. Quotes/metadata/anchors1.0. E5/reranking notdefaultpromoted.
+## Next index integration / agents
 
-Fixedcandidatepool100distinct/<=2000windows now prefixinvariant5/20/50. Pairedcandidate-pool-v1 MiniLMMRR.67121(regression), E5.67803(smallgain); reportold/new honestly. Calibration.90target rejectsmostpositives; no universalconfidence thresholdapplied. Relevance review20cases/58passages foundincompleteanchors; proposals only, oldlabelsunchanged.
+Coverage helper FROZEN: index_coverage.py /46tests /benchmark_index_coverage.py /docsINDEX_COVERAGE /experiments/index-epochs-v1.json. Explicit ensure_epoch_schema(conn) still NOT wired to live Library. Strict source bytes/headers/section ownership/bounds/slice checks; LRU4; cheapqueryguard~8.52ms for1308syntheticmetadata books vs5sfullsubsethash. Per-booktombstoneepochs+namespace+DDLcookie+inode; drift failclosed, never automatic acceptance byclaimedSHA. Writecost1.60xinsert/1.71xrefresh accepted. Root reviewed; enable in nextcommit afterpub6.
 
-Historical fullintegrity audit499originals/160338passages passed; does NOT cover allnewbooks. Frozen20audit20/12108passed. Need freshlargeaudit afteractivejobs stabilize.
+Installer FROZEN: index_installation.py /36tests /docsINDEX_INSTALLATION. install_partial_index(source,target,model_cache=...,hardlink=True) and read_installation_receipt(target,active). Complete ready ONLY; no staging/legacyunproved generations. Everyinput/window/id checked withlocalpinnedtokenizer. Schema2keychecksums cover unique keys, notallrows; currentbigbuild has~0.2%duplicates. Ifall duplicatesbitwiseequalverifiedfirstrow: hardlinks+honest reconciledproof. Otherwise deriveownmatrixfromverifiedfirstrows (100%reuse/0encode), newchecksums/receipts/windowstream proof; originalsource unchanged. Diskpreflight4GiB+scratch/materialization. repeatedsourceWAL gates, sealedmetadata fieldcompare, metadata-symlink-before-read fixes; actualtinyready190→ownedtmp sourceSHAunchanged.
 
-Knownlimits: noOCR, no generativeanswer prose, noautomaticauthorstance/argumentlabels, no full-livevectorsyet, no newsealedfinalsplit. Text-only sources can omitillustrations; explicitmetadata/UI notice. Existing savedquotes survive reindex with frozenrawsource but historicalcanonicalreader notyetimplemented.
+/root/interface now prepares partialcoverage UI in NEWpatch/tempcopies ONLY untilrootpub6push: optional semantic_coverage {indexed_books,searchable_books,active,requested_book_covered}; do not leave stalebadgeafterfallback. Root will wire semantic/Library/API/CLI; agentmustnot edit these.
+/root/corpus now independent span-only STORAGE EXPERIMENT onownedcopy, no production changes/downloads/MPS/newchildren. Goal measure deletingduplicatep.text and reconstructsection[start:end], preserveallIDs/hashes/FTS/results. ProductioncurrentlyINCOMPATIBLEuntilroot SQL changes; no accidental adoption.
+/root/interface/pipeline_review completed coverage/installer independentreview; available afterroot wiring for integrationreview.
 
-## Agents / checks / next action
+## Controls / limits
 
-Root: supervise ingestion/build, integrate/publish iteration4, then stablelargehybridserver/querymeasurements.
-/root/interface: UIavailabilitywarnings/counters and readerrelatededitionnavigation; static/docs only.
-/root/corpus: threeprioritytranslationmanifests from verifiedRDF; then offlinepermittedRU sourceplan. No secondGutenbergdownloader.
-/root/interface/pipeline_review: owned isolatedevaluationcopies + SHAimmutabilitychecks; no coreLibrary/semantic/UI edits.
-
-Latest complete suite521passed; globalRuff/format/ty pass. ActualRussian5works, archivehistorydownloads and4realrelatededitionpairs passed Chromium with0JSerrors. Newglobalpytest finalrecheck session31274. Recheck allafteragentsfreeze; browser workflows including actualRussianbooks/archive download available scripts/browser_russian.py and browser_archive.py.
-
-.venv projectonly, uv .bootstrap/bin/uv, sharedweights data/models,16GiBRAM/10CPU/MPS. No paidAPI. Authentic weeklyquota59%remaining at14:24:05UTC, reset2026-11-15T12:12:16UTC. Recheck betweeniterations with scripts/check_codex_limit.py current rollout /Users/rebrudiy/.codex/sessions/2026/11/14/rollout-2026-11-14T13-57-03-01a1d9b4-2279-7993-a084-3011527a9369.jsonl. Stop newwork<=3%, saveallstate/agents.
-
-## Current continuation
-
-- Frozen1308 vectorbuild progress atthisprobe: 231552/1865985 windows; recentdurablecheckpoint, jobrunning.
-- Livequeue restarted onceagainwithnewparser: nowcachedprevious2,682queueentriesreparse to restorebareDIVbylines and fix EPUBcontinuationchapterlabels. Existingeditionremainssearchableduringrefresh.
-- Owned evaluationcopy workflow complete; actual baseline run experiments/isolated-baseline-v1.json preserved frozen20DB SHAea1feab7c1d1c58acd7457529ef70885f2767ceeab6050ec12db0fa4f74bb4b8.
-- Interface agent now independent CPUonly vectorcompressionbenchmark; childpipeline_review preparing canonical historicalversionshelper forlazyfirst-save archival (notyetintegrated). Corpusagent finalauditdocs/thenboundedRUsourceresearch. Do notstageunfinishednextfeaturefiles.
-
-## Iteration5 progress 2026-11-14 18:03 MSK
-
-- Immutable canonicalversions helper complete: sectiongzip + smallhashedmanifest, exactUTF8/Unicode/newlines, source/indexerproof, no human notes;41unitchecks. Library.save archivesexactcurrentSQLitebook lazilyunderBEGINIMMEDIATE, saved_context returnsonecheckedhistoricalchapter+TOC+exactquote. Concurrentreindex, corruption, lowdisk and fallbackquotedata tests pass. Historicalstorage preflights4GiB+100MiBreserve; annotationstillkeptonarchivefailure. API /api/saved/{id}/context?ordinal=N; userUIagent finishingURL/saved-ID/chapter navigation/browser lifecycle.
-- Explicit per-section translators now persisted/migrated and cited; Soskice(epigraph)/Edmands(criticalessay) correctlydistinctfrommainGarnetttranslator. Threeprioritysourceeditions reimported undernewguard; standaloneAPItests pass. Oldserversnotyetreloadedwithiteration5.
-- Full live-integrity audit PASSED:2,528indexedbooks/841,599passages/all2,528rawfiles hashed,0errors,27.659s; experiments/full-integrity-iteration5.json. Scope canonicalexactness/originalintegrity, notfacsimile/completeness/unresolvedworkidentity.
-- Vectorstorageproxyexperiment actual49,738windows/256corpus-derivedqueries: float16disk38.60MBvs76.80float32, recall@100.999961; int8+scales19.70MB, recall.995156; decodep50slower6.94/25.20msvs3.76. No relevance claim/defaultpromotion. docs/VECTOR_STORAGE_EXPERIMENT.md +experiments/vector-storage-v1.json.
-- Semanticqueryguardbottleneck discovered: fullpassagefingerprintscan~8-10s/subset~5s onsharedlivehost. Childagent designingstrictcachedper-bookrevisionepochs beforepartialindexintegration. No activationfromunfinishedstaging; full1308buildstillrunning.
-- Latest authenticweeklyquota58%remaining at14:56:22UTC. Continueuntil<=3%, userstoporactualenvironmentlimit.
-
-### Iteration5 ready 18:07 MSK
-
-Historicalreaderfullyintegratedandserversrestarted(session87530demo/session25918full). Actual4editionpairs+Soskice/Edmandsreader/citationprobespassedread-onlyChromium. Isolated11historicalworkflows+15smoke+205catalogpassed; screenshotsreviewed.576pytest/Ruff/format/typass. Sourcecheckall2528rawfilesrecordedabove. Nextpublishtheneditnotes/title/collectionwithoutchangingfrozenevidence.
-
-Agents: interfacehistoricalUIcomplete; readyfornextsavedediting. Childpipeline_review nownewindex_coveragehelper/epochtriggers+benchONLY, notsemantic/Libraryuntilreview. Corpus downloadingoneverified25.35MBNov2026RUWikiBooksarchiveforstreamingmetadata/chaptergraph, nofullworkclaims/nobookingestyet; no2GBRUWikisourcedumpdownload. Authenticweeklyquota57%remaining at15:06:08UTC.
+Never mutate original curated20-v3/E5 DBs, old dev/heldout labels/reports. Owned evaluationcopies now preserve sourcebytes; realisolatedbaseline sourceSHAea1feab7c1d1c58acd7457529ef70885f2767ceeab6050ec12db0fa4f74bb4b8. Expandeddev54 originalMiniLM MRR.6826/hit.7955/negativeabstention.2; fixedpoolMRR.67121 regression recorded, E5notpromoted. No OCR/generativeprose/automaticstance, no newsealedfinalsplit, workidentity mostlyprovisional. Imagesnotrendered; sourcescopeexplicit. Runtime/model/index/notes ignoredGit, project .venv only,16GiBRAM/10CPU/MPS, diskfloor4GiB, no paidAPI. Lastauthenticweeklyquota55%remaining at21:15:23UTC, reset2026-11-15T12:12:16UTC. Recheck scripts/check_codex_limit.py currentrollout /Users/rebrudiy/.codex/sessions/2026/11/14/rollout-2026-11-14T13-57-03-01a1d9b4-2279-7993-a084-3011527a9369.jsonl; stopnewwork<=3%.

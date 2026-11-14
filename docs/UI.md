@@ -25,7 +25,7 @@ Primary workflows:
   on book cards to distinguish an extract from a complete text.
 
 When an acquired file is archived, the reader's source details offer
-**Скачать зафиксированный оригинал**. The provider page and rights links remain
+**Скачать зафиксированный файл**. The provider page and rights links remain
 separate. The attachment retains its SHA-256 filename and actual format suffix.
 Saved fragments use the saved snapshot's `artifact_url`, so their download stays
 with the captured edition even after the same book is imported again. A missing
@@ -127,6 +127,37 @@ and corrupts only its own archived chapter to verify the real 409 failure path.
 Missing/invalid contexts and a legacy metadata fixture are also checked. No API
 responses are mocked; live libraries and annotations are untouched. Screenshots
 and `report.json` are written to `artifacts/historical-browser/`.
+
+Saved passages and queries offer **Редактировать**. The native dialog is prefilled
+with the current title, note and collection; the original quotation or query is
+shown as a read-only preview. Field limits match the API: 500 title characters,
+10,000 note characters and 200 collection characters. Collection entry supports
+the existing-name datalist and a new name. Empty note/collection values clear
+those fields; query text and frozen evidence stay with the saved item.
+
+The edit dialog sends only changed `title`, `note` and `collection` fields to
+`PATCH /api/saved/{id}`. Cancel, Escape and an unchanged submission send no PATCH.
+While a request is pending, an announced status and disabled controls prevent
+duplicate submission or closing a draft during its update. Errors leave the
+dialog and typed values available. After success, focus returns to the edit
+button. Moving a record selects its new collection so it stays visible; an empty
+old collection disappears from filters and suggestions. Clearing the collection
+returns to all records. JSON and Markdown exports use the updated annotations
+with the same frozen quote, citation, source and historical-reader link.
+
+```sh
+uv run python scripts/browser_saved_editing.py
+```
+
+The real isolated CC0 browser fixture reindexes a saved book, edits its old note
+and confirms unchanged provenance and historical context. It checks prefill,
+cancel/Escape/no-op, exact PATCH subsets, pending status, new/existing/cleared
+collections, filters/counts, Markdown/JSON exports, read-only saved queries and
+resuming the original query after its title changes. Mobile focus and width are
+checked. Deleting only a disposable fixture during editing produces a real 404
+and leaves its draft intact; a direct empty PATCH verifies the server's 400 path.
+No API response is mocked and no live data is changed. Three screenshots and
+`report.json` are written to `artifacts/saved-editing-browser/`.
 
 `/` focuses search with the slash key. All navigation and actions work with a
 keyboard, dialogs use native focus handling, status changes are announced, and

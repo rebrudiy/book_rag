@@ -1,0 +1,74 @@
+{
+  "report_written_at": "2026-11-14T21:29:23.477769+00:00",
+  "user_report_observed_at": "2026-11-14T21:16:00+00:00",
+  "user_report_snapshot": {
+    "books": 3956,
+    "full_editions": 3954,
+    "partial_editions": 2,
+    "passages": 1386559,
+    "confirmed_full_works_lower_bound": 24,
+    "unique_full_work_total": null,
+    "physical_files_checked": 3956,
+    "extracted_with_content_hash": 3956,
+    "pending": 34,
+    "failed": 1
+  },
+  "one_hour_baseline": null,
+  "baseline_reason": "No observations between 2026-11-14T16:11:51Z and 2026-11-14T21:14:30Z; do not infer a precise one-hour comparison.",
+  "published_commits_at_user_report": [
+    "a223654",
+    "892061a",
+    "1a1a7e1",
+    "75acbd0",
+    "7e86928"
+  ],
+  "commits_in_previous_hour_at_user_report": 0,
+  "post_report_recovery_snapshot": {
+    "books": 3991,
+    "searchable_books": 3991,
+    "works": 3987,
+    "passages": 1401120,
+    "status_counts": {
+      "indexed": 3991
+    },
+    "ingestion_status_counts": {
+      "indexed": 3991
+    },
+    "coverage_counts": {
+      "full": 3989,
+      "partial": 1,
+      "selected_chapters": 1
+    },
+    "work_count_is_provisional": true,
+    "curated_work_groups": 25,
+    "confirmed_full_works_lower_bound": 24,
+    "periodical_editions": 60,
+    "languages": [
+      {
+        "language": "de",
+        "count": 1009
+      },
+      {
+        "language": "en",
+        "count": 1940
+      },
+      {
+        "language": "fr",
+        "count": 1031
+      },
+      {
+        "language": "ru",
+        "count": 11
+      }
+    ]
+  },
+  "recovery": {
+    "source_report": "data/expand-text-resume2-report.json",
+    "embedding_command": "BOOKRAG_MODEL_CACHE=./data/models PYTORCH_MPS_HIGH_WATERMARK_RATIO=0.65 PYTORCH_MPS_LOW_WATERMARK_RATIO=0.5 .venv/bin/python scripts/embed_frozen.py data/snapshots/library1308-v1 --batch-size 32 --resources data/library1308-resume-resources.jsonl",
+    "embedding_active_is_not_ready": true
+  },
+  "tests": {
+    "last_root_global_passed": 728,
+    "source_log": "data/checks-iteration6-final-pytest.log"
+  }
+}

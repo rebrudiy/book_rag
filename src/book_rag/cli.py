@@ -266,3 +266,36 @@ def propose_work_links(
             "proposals": len(result.get("proposals", [])),
         }
     )
+
+
+@app.command("catalog-wikibooks")
+def catalog_wikibooks(
+    output: Path = Path("data/wikimedia/ruwikibooks-2026-11-01"),
+    archive: Path | None = None,
+) -> None:
+    """Build a review catalog from a pinned Russian Wikibooks export; no books are indexed."""
+    from book_rag.wikimedia_dump import acquire_wikibooks_dump, build_wikimedia_catalog
+
+    acquisition = acquire_wikibooks_dump(output / "download") if archive is None else None
+    dump = acquisition["path"] if acquisition else archive
+    if dump is None:
+        raise typer.BadParameter("A verified archive is required", param_hint="archive")
+    result = build_wikimedia_catalog(dump, output / "catalog")
+    if acquisition:
+        result["acquisition"] = {
+            key: str(value) if isinstance(value, Path) else value for key, value in acquisition.items()
+        }
+    emit(result)
+
+
+@app.command("acquire-wikibooks-reference")
+def acquire_wikibooks_reference(
+    destination: Path = Path("data/wikimedia/wikibooks-regex-266423"), index: bool = False
+) -> None:
+    """Acquire one pinned licensed Russian reference, with explicit partial coverage."""
+    from book_rag.wikibooks_sources import acquire_wikibooks_regex
+
+    result = acquire_wikibooks_regex(destination)
+    emit({key: str(value) if isinstance(value, Path) else value for key, value in result.items()})
+    if index:
+        emit(ingest_manifest(result["manifest"]))

@@ -86,3 +86,4 @@ def test_confirmed_full_work_lower_bound_excludes_uncurated_partial_and_periodic
     stats = app.state.library.stats()
     assert stats["books"] == 5 and stats["work_count_is_provisional"]
     assert stats["confirmed_full_works_lower_bound"] == 1
+    assert stats["coverage_counts"] == {"full": 4, "selected_chapters": 1}

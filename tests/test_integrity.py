@@ -41,3 +41,24 @@ def test_changed_artifact_not_misreported_as_transcription_check(tmp_path: Path)
     assert audit_library(library)["valid"]
     report = audit_library(library, artifacts=True)
     assert not report["valid"] and report["errors"][0]["error"] == "original_artifact_hash"
+
+
+def test_audit_fingerprints_identify_actual_input_without_rewriting_library(tmp_path: Path) -> None:
+    library, source = prepare(tmp_path)
+    before = audit_library(library, artifacts=True)
+    repeated = audit_library(library, artifacts=True)
+    for field in ("canonical_input_sha256", "passage_input_sha256", "artifact_input_sha256"):
+        assert before[field] == repeated[field]
+    with library.connect() as conn:
+        conn.execute("UPDATE books SET edition='Updated catalog edition'")
+    metadata = audit_library(library, artifacts=True)
+    assert metadata["valid"] and metadata["canonical_input_sha256"] != before["canonical_input_sha256"]
+    assert metadata["passage_input_sha256"] == before["passage_input_sha256"]
+    source.write_text("Different acquired bytes.")
+    changed_artifact = audit_library(library, artifacts=True)
+    assert changed_artifact["artifact_input_sha256"] != metadata["artifact_input_sha256"]
+    assert changed_artifact["canonical_input_sha256"] == metadata["canonical_input_sha256"]
+    with library.connect() as conn:
+        conn.execute("UPDATE passages SET text='Changed text with unchanged declared hash'")
+    corrupted = audit_library(library)
+    assert not corrupted["valid"] and corrupted["passage_input_sha256"] != metadata["passage_input_sha256"]

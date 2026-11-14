@@ -385,6 +385,14 @@ class Library:
                         "LEFT JOIN source_pipeline i ON i.book_id=b.id GROUP BY COALESCE(i.stage,b.status)"
                     )
                 },
+                "coverage_counts": {
+                    r["coverage"]: r["n"]
+                    for r in conn.execute(
+                        "SELECT COALESCE(json_extract(m.metadata,'$.coverage'),'unspecified') coverage,COUNT(*) n "
+                        "FROM books b LEFT JOIN book_metadata m ON m.book_id=b.id WHERE b.status='indexed' "
+                        "GROUP BY COALESCE(json_extract(m.metadata,'$.coverage'),'unspecified')"
+                    )
+                },
                 "work_count_is_provisional": bool(
                     conn.execute(
                         "SELECT COUNT(*) FROM books b LEFT JOIN book_metadata m ON m.book_id=b.id "
@@ -715,28 +723,54 @@ class Library:
 
     def saved(self) -> list[dict[str, Any]]:
         with self.connect() as conn:
-            rows = [dict(r) for r in conn.execute("SELECT * FROM saved ORDER BY id DESC")]
-        for row in rows:
-            row["text"] = row.pop("snapshot_text")
-            row["citation"] = row.pop("snapshot_citation")
-            with self.connect() as conn:
-                provenance = conn.execute(
-                    "SELECT metadata FROM saved_provenance WHERE item_id=?", (row["id"],)
-                ).fetchone()
-            row["provenance"] = json.loads(provenance[0]) if provenance else {}
-            row["artifact_url"] = self.artifact_url(row["provenance"].get("artifact_sha256"))
-            if re.fullmatch(r"cv1-[a-f0-9]{64}", str(row["provenance"].get("canonical_version_id", ""))):
-                row["historical_reader_url"] = f"/?saved={row['id']}"
-            if row["passage_id"] is not None:
-                current = self.passage(row["passage_id"])
-                if (
-                    current
-                    and current["verified"]
-                    and current["text"] == row["text"]
-                    and current["citation"] == row["citation"]
-                ):
-                    row["reader_url"] = current["reader_url"]
-        return rows
+            rows = conn.execute(
+                "SELECT s.*,p.metadata provenance_json FROM saved s LEFT JOIN saved_provenance p ON p.item_id=s.id "
+                "ORDER BY s.id DESC"
+            ).fetchall()
+        return [self._saved_item(dict(row)) for row in rows]
+
+    def get_saved(self, item_id: int) -> dict[str, Any] | None:
+        with self.connect() as conn:
+            row = conn.execute(
+                "SELECT s.*,p.metadata provenance_json FROM saved s LEFT JOIN saved_provenance p ON p.item_id=s.id "
+                "WHERE s.id=?",
+                (item_id,),
+            ).fetchone()
+        return self._saved_item(dict(row)) if row else None
+
+    def _saved_item(self, row: dict[str, Any]) -> dict[str, Any]:
+        row["text"] = row.pop("snapshot_text")
+        row["citation"] = row.pop("snapshot_citation")
+        row["provenance"] = json.loads(row.pop("provenance_json") or "{}")
+        row["artifact_url"] = self.artifact_url(row["provenance"].get("artifact_sha256"))
+        if re.fullmatch(r"cv1-[a-f0-9]{64}", str(row["provenance"].get("canonical_version_id", ""))):
+            row["historical_reader_url"] = f"/?saved={row['id']}"
+        if row["passage_id"] is not None:
+            current = self.passage(row["passage_id"])
+            if (
+                current
+                and current["verified"]
+                and current["text"] == row["text"]
+                and current["citation"] == row["citation"]
+            ):
+                row["reader_url"] = current["reader_url"]
+        return row
+
+    def update_saved(self, item_id: int, changes: dict[str, Any]) -> dict[str, Any] | None:
+        """Edit a title, note or collection while preserving frozen evidence."""
+        limits = {"title": 500, "note": 10000, "collection": 200}
+        if not changes or set(changes) - limits.keys():
+            raise ValueError("Only title, note and collection can be edited")
+        if any(not isinstance(value, str) or len(value) > limits[key] for key, value in changes.items()):
+            raise ValueError("Edited fields must be strings within their length limits")
+        # SQL identifiers come exclusively from the fixed whitelist above.
+        fields = sorted(changes)
+        with self.connect() as conn:
+            result = conn.execute(
+                "UPDATE saved SET " + ",".join(f"{field}=?" for field in fields) + " WHERE id=?",
+                (*[changes[field] for field in fields], item_id),
+            )
+        return self.get_saved(item_id) if result.rowcount else None
 
     def save(self, item: dict[str, Any]) -> dict[str, Any]:
         kind = item.get("kind")
@@ -766,6 +800,8 @@ class Library:
                 ),
             )
             new_id = cursor.lastrowid
+            if new_id is None:
+                raise RuntimeError("Saved record did not receive an identifier")
             if passage:
                 fields = (
                     "book_id",
@@ -798,7 +834,10 @@ class Library:
                     "INSERT INTO saved_provenance(item_id,metadata) VALUES (?,?)",
                     (new_id, json.dumps(provenance, ensure_ascii=False)),
                 )
-        return next(r for r in self.saved() if r["id"] == new_id)
+        saved = self.get_saved(new_id)
+        if saved is None:
+            raise RuntimeError("Saved record disappeared before it could be read")
+        return saved
 
     def _preserve_saved_book(self, conn: sqlite3.Connection, passage: dict[str, Any]) -> str:
         import shutil

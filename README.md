@@ -26,7 +26,7 @@ Open **http://127.0.0.1:8000**. The initial demo requires no network after insta
 - Resumable discovery/download/import, artifact and normalized-content hashes, duplicate detection and explicit pipeline counts.
 - Reader with chapter navigation and highlighted source location.
 - Extractive research board across books: verified evidence, with explicit empty results. No generated prose or inferred author positions.
-- Durable fragments, queries, annotations and collections in local SQLite.
+- Durable fragments, queries, editable notes/titles and thematic collections in local SQLite. Edits preserve the exact quotation and its provenance.
 - Optional local multilingual semantic search and reciprocal-rank fusion; explicit lexical fallback when vectors are missing/stale.
 - Reproducible development and held-out evaluation, independent citation checks and CI.
 
@@ -138,3 +138,7 @@ BOOKRAG_DATA_DIR=./data/full uv run bookrag acquire-russian --index
 ```
 
 [Russian source documentation](docs/RUSSIAN_SOURCES.md) records original-body coverage, retained author notes, excluded unverified editorial annotations and the provider's access policy. This bounded connector handles five audited works; it does not crawl arbitrary Wikisource pages.
+
+For a separate Russian Wikibooks review catalog, `uv run bookrag catalog-wikibooks` downloads a pinned 25.35 MB official export, checks its SHA and streams its pages into an offline chapter graph. This is discovery and source review: it does not add books to search or assert that drafts are complete. See [dump provenance and reproducible measurements](docs/WIKIMEDIA_DUMPS.md).
+
+One audited modern Russian reference can be acquired with `BOOKRAG_DATA_DIR=./data/full uv run bookrag acquire-wikibooks-reference --index`. Its fixed revision, rendered HTML, upstream credits, literal examples and table cells are retained. It is explicitly labeled partial: the captured page is complete, while overall book completion is unverified. See [reference import and fidelity checks](docs/WIKIBOOKS_IMPORT.md).

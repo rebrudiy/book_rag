@@ -1,0 +1,22 @@
+{
+  "created_at": "2026-11-14T21:29:21.442853+00:00",
+  "input_identity_schema": "book-section-passage-artifact-v1",
+  "canonical_input_sha256": "712db9cf45ec943ad4a4728efb854097edc5437df4e0c358971a3ecd78fb3a20",
+  "passage_input_sha256": "3e6847c66aa59277c7e3532cd5b294db52d021796d785809f27edca23914fa96",
+  "artifact_input_sha256": "f8632a4fd983209baec964271db4bd4bdee9279ac0162eaa4a5f09858b873eab",
+  "read_isolation": "One SQLite read transaction; source files independently hashed when requested",
+  "valid": true,
+  "canonical_valid": true,
+  "status": "passed",
+  "books_checked": 3991,
+  "passages_checked": 1401120,
+  "artifacts_requested": true,
+  "artifacts_checked": 3991,
+  "originals_complete": true,
+  "error_count": 0,
+  "errors": [],
+  "errors_truncated": false,
+  "warnings": [],
+  "elapsed_seconds": 68.045,
+  "scope": "Canonical text/digests and optional original file digests, not source transcription accuracy"
+}
