@@ -34,6 +34,37 @@ temporary cache. `BOOKRAG_MODEL_CACHE` is restored when the context exits. The
 temporary database, metadata and links are removed on success or failure; source
 artifacts are not copied because quote checks use canonical SQLite sections.
 
+Installed subset indexes retain their target database path/inode binding and
+sealed generation receipts. They cannot be rebound implicitly to a temporary
+database or validated through a symlinked generation directory. For an explicit
+partial-index context, `EvaluationLibrary` therefore supplies the internal typed
+`semantic_reference`: a read-only reference to the **actual original** directory
+and database. Partial receipt checks, epoch guards and vector memory maps use
+that original identity; quotations, lexical retrieval and bibliographic checks
+continue reading the owned copy. The model metadata cache remains owned. No
+temporary DB claims to have the original inode, and no index binding is rewritten.
+Legacy/full-index evaluation does not receive this attribute and keeps its
+existing owned-copy path.
+
+Partial-index references require a stable checkpointed original with absent or
+empty WAL. Their SQL connections use `mode=ro&immutable=1` and `query_only=ON`,
+so SQLite cannot create or change original WAL/SHM files. Ordinary `mode=ro`
+can update shared-memory read marks; `immutable=1` would ignore committed data
+in a nonempty WAL. Such partial inputs are rejected explicitly. The evaluator
+never checkpoints, writes or repairs the source. Stop writes to the live source,
+checkpoint through its normal operational procedure, then retry. Alternatively,
+prepare a checkpointed copy and explicitly reinstall a compatible ready index
+to establish **that copy's** binding. Copying a DB and its partial active pointer
+alone is not a valid recipe. A checkpoint does not repair a stale coverage proof.
+
+Original main/WAL/SHM, selected metadata/generation and the installation receipt
+are checked around reference reads and at evaluation exit. Any source change
+discards the run, including additions outside semantic coverage: a frozen
+evaluation must still compare the same complete lexical corpus. Corrupt or stale
+partial bindings retain the explicit lexical fallback and its actual-mode report;
+they are never silently promoted or rebound. These rules add no vector copy,
+model inference, schema migration or paid API use on the original.
+
 New reports include `evaluation_input`: original SQLite main/WAL SHA-256 values,
 active metadata SHA-256, generation identity and reuse strategy. A nonempty WAL
 is part of the captured source; the main-file digest alone does not identify its
@@ -56,6 +87,9 @@ uv run pytest tests/test_evaluation_isolation.py tests/test_evaluation.py
 These checks include a pre-migration database, a committed nonempty WAL,
 semantic retrieval with read-only memory maps, CLI and calibration execution,
 cache metadata isolation, byte-hash preservation and cleanup after failure.
+Real tiny installed-partial fixtures additionally check actual hybrid execution,
+original-versus-owned identity after an owned-only schema migration, untouched
+original SHM/model/vector bytes, pending-WAL rejection and source-change discard.
 Historical reports, dataset labels and frozen source files are not rewritten.
 
 Dataset version 1 contains `split`, a list of `queries`, and optional descriptive fields. Each query has `id`, `query`, explicit `answerable`, `language`, `type`, and `relevant_work_ids` or `relevant_book_ids`. `evidence_contains` optionally requires one of the listed source phrases in a relevant passage. A correct work alone is insufficient for a scene or exact-quote hit when this condition is present. Optional `filters` select a book or language. Empty results constitute the non-generative search baseline's abstention signal.

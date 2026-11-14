@@ -335,3 +335,40 @@ option: the indexed source metadata recorded omitted illustrations, the reader
 showed the notice, and the source link remained available. The same browser run
 confirmed that all five Russian editions without such a flag displayed no
 illustration notice. The JSON report records these actual-source checks.
+
+Search results can expose a verified `semantic_coverage` object. When `active=true`
+with valid edition counts, the UI shows **Поиск по смыслу: N из M изданий** and
+states that word search covers the library. These are edition counts, separately
+from provisional work groups. `requested_book_covered=false` adds **Для выбранной
+книги доступен поиск по словам**; the displayed retrieval mode still follows the
+actual response. Existing backend warnings remain visible.
+
+The coverage panel is cleared immediately at the start of every search. Missing,
+inactive or malformed coverage objects leave it hidden, including legacy/demo
+responses. A stale/error fallback cannot retain a previous healthy badge or count.
+The UI does not display internal window counts, tokens or proof details.
+
+```sh
+uv run python scripts/browser_partial_coverage.py
+# Exercise the integrated partial-search endpoint:
+uv run python scripts/browser_partial_coverage.py --real-backend \
+  --artifacts artifacts/partial-coverage-real-api
+```
+
+The temporary fixture builds a tiny completed deterministic fake-encoder index,
+installs it through the real installer into a three-edition library and runs
+Chromium against a real HTTP app. Default mode supplies an explicitly declared
+in-process coverage-contract endpoint with actual lexical evidence; this tests
+presentation rather than semantic relevance. `--real-backend` exercises the
+integrated API unchanged. No Playwright API responses are mocked. Both modes
+check healthy coverage, a selected edition outside the index and its exact reader,
+clearing during a pending request, legacy responses without the object, invalid
+epochs, a corrupted receipt, research-panel scoping and mobile width. All writes
+and fault injection stay in the owned temporary fixture. Reports and three
+screenshots are stored under `artifacts/partial-coverage-browser/`.
+
+The integrated `--real-backend` run also passed all eight scenarios with zero
+JavaScript errors against the owned three-edition fixture. Its separate report
+and screenshots are under `artifacts/partial-coverage-real-api/`. This validates
+the actual API/installer/UI connection with a deterministic test encoder; it
+does not measure retrieval relevance or activate a large/live corpus index.

@@ -133,6 +133,9 @@ class Library:
                 "INSERT OR IGNORE INTO source_pipeline(book_id,stage,local_path,error,updated_at) "
                 "SELECT id,status,local_path,error,COALESCE(indexed_at,created_at) FROM books"
             )
+            from book_rag.index_coverage import ensure_epoch_schema
+
+            ensure_epoch_schema(conn)
 
     @contextmanager
     def connect(self) -> Generator[sqlite3.Connection]:

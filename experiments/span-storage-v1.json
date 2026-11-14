@@ -1,0 +1,1327 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-11-14T21:39:37.405134+00:00",
+  "source": "data/snapshots/library1308-v1/library.sqlite3",
+  "source_sha256": "2d77675ba2a68f63e25f507355272e3206db8f9abbe959f326cea96f774939f0",
+  "source_unchanged": true,
+  "owned_copy": "data/benchmarks/span-storage1308-v1/library.sqlite3",
+  "sqlite_version": "3.53.2",
+  "storage": {
+    "before_bytes": 1594347520,
+    "after_bytes": 940126208,
+    "saved_bytes": 654221312,
+    "saved_percent": 41.0337961951984
+  },
+  "resource": {
+    "disk_free_before": 17315454976,
+    "required_start_free": 9078009856,
+    "disk_free_before_vacuum": 15755460608,
+    "disk_free_after": 16348106752,
+    "reserve_bytes": 4294967296,
+    "clear_seconds": 5.481545333750546,
+    "vacuum_seconds": 10.8111931248568,
+    "total_seconds": 90.76117929210886,
+    "peak_rss_bytes": 200753152,
+    "sqlite_cache_kib_per_connection": 32768,
+    "python_lru_budget_bytes": 16777216,
+    "python_lru_peak_string_bytes": 16775175,
+    "python_lru_hits": 500,
+    "python_lru_misses": 770
+  },
+  "before": {
+    "passages": 445466,
+    "books": 1308,
+    "sections_with_passages": 59691,
+    "reconstructed_characters": 532605481,
+    "reconstructed_utf8_bytes": 538653017,
+    "nonascii_passages": 275696,
+    "passage_metadata_sha256": "e3e9a5131ece13a7ef41b88bf4808a2d2eb4457f7654d4919aa824dda85bbd74",
+    "passage_text_sha256": "7492d2b76e0a490770b486f6ad578540fe2b27de0dbcd6e824169c3af2b414b6",
+    "all_bounds_books_sections_and_sha_verified": true,
+    "seconds": 5.828627834096551
+  },
+  "after": {
+    "passages": 445466,
+    "books": 1308,
+    "sections_with_passages": 59691,
+    "reconstructed_characters": 532605481,
+    "reconstructed_utf8_bytes": 538653017,
+    "nonascii_passages": 275696,
+    "passage_metadata_sha256": "e3e9a5131ece13a7ef41b88bf4808a2d2eb4457f7654d4919aa824dda85bbd74",
+    "passage_text_sha256": "7492d2b76e0a490770b486f6ad578540fe2b27de0dbcd6e824169c3af2b414b6",
+    "all_bounds_books_sections_and_sha_verified": true,
+    "seconds": 5.963771208189428
+  },
+  "all_non_passage_tables_and_fts_shadows_unchanged": true,
+  "unchanged_table_fingerprints": {
+    "book_metadata": {
+      "rows": 1308,
+      "sha256": "dc39457727b5bd320f34451942740197f14f198b8cab223dcf3b30da87e36524"
+    },
+    "books": {
+      "rows": 1308,
+      "sha256": "be104c165ab1f2a525115d5593d0d47e4b122f67e7276f0a8682f33fba3280fa"
+    },
+    "events": {
+      "rows": 11509,
+      "sha256": "6145530610e7154086e2000fcadcbd0795f56f1bb28b0f40db9bdec7f9b5a480"
+    },
+    "index_versions": {
+      "rows": 1308,
+      "sha256": "b18cd959c687f536c27c362400de4b9f4c3c0bf642928625efec54be0bec8932"
+    },
+    "passage_fts_config": {
+      "rows": 1,
+      "sha256": "67efa518c53a170a554d579d90b766366989e14c527d71509f36e3ece43d81a9"
+    },
+    "passage_fts_data": {
+      "rows": 70935,
+      "sha256": "8b3efff04365d52110627921e278fdddefca1bb1b44c39d71e3b5c835cd28eb8"
+    },
+    "passage_fts_docsize": {
+      "rows": 445466,
+      "sha256": "c0633a0ecdcfbd0e0ca25f3cd3ec44d555b1971fa5591cb4a40efa5a5316a106"
+    },
+    "passage_fts_idx": {
+      "rows": 23529,
+      "sha256": "c47db4913fb1e537040d6af414029616aa91b575c2250b63b798c9d36a01a0ac"
+    },
+    "saved": {
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "saved_provenance": {
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "section_roles": {
+      "rows": 59691,
+      "sha256": "4289d0f016089dc28956c4ba80ecbe95916e4f2fa495120a1eba41b50b6876cf"
+    },
+    "sections": {
+      "rows": 59691,
+      "sha256": "6a19d3b631febd3a2b574d63419ed84835bd6fce9efcf6a405a5997e89008ff1"
+    },
+    "source_deferrals": {
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "source_pipeline": {
+      "rows": 1308,
+      "sha256": "9a06b4ac006a15af47dfc07663ec6916322b32190e2b828595167a6c907b71db"
+    },
+    "_schema": {
+      "rows": 28,
+      "sha256": "2776292d3306c2191c0a770627de011592482540f81b9d8629b1b5a6c8a97350"
+    }
+  },
+  "query_outputs_identical": true,
+  "bm25_ids_and_scores_identical": true,
+  "query_probes": [
+    {
+      "query": "ocean",
+      "hits": [
+        [
+          1078541,
+          -8.650728947751244
+        ],
+        [
+          1106816,
+          -8.464625599150324
+        ],
+        [
+          971820,
+          -8.394281266438956
+        ],
+        [
+          1165780,
+          -8.288669087538228
+        ],
+        [
+          906750,
+          -8.256102908845534
+        ],
+        [
+          877890,
+          -8.210717821204708
+        ],
+        [
+          1292512,
+          -8.141170289811676
+        ],
+        [
+          1068513,
+          -8.084796909188762
+        ],
+        [
+          1020701,
+          -8.023273789352652
+        ],
+        [
+          850289,
+          -8.019101891824327
+        ],
+        [
+          919731,
+          -8.010965007076985
+        ],
+        [
+          1292571,
+          -7.998887257514919
+        ],
+        [
+          1251776,
+          -7.986749498911089
+        ],
+        [
+          1239181,
+          -7.974648520914891
+        ],
+        [
+          1270789,
+          -7.920644827728946
+        ],
+        [
+          962491,
+          -7.898758178755665
+        ],
+        [
+          1280739,
+          -7.867367632291301
+        ],
+        [
+          1289267,
+          -7.855625443194192
+        ],
+        [
+          1112589,
+          -7.849767482916958
+        ],
+        [
+          1292570,
+          -7.843974026153561
+        ]
+      ],
+      "text_output_sha256": "9d203ee265fb46ef79297e3b794f882f27aabec963a432d803c47fa74bec3b60"
+    },
+    {
+      "query": "curiosity",
+      "hits": [
+        [
+          1104922,
+          -9.618552106227048
+        ],
+        [
+          1106557,
+          -9.505172011949604
+        ],
+        [
+          1106056,
+          -9.23551283006157
+        ],
+        [
+          1282277,
+          -8.19859666480249
+        ],
+        [
+          894426,
+          -8.008358504135478
+        ],
+        [
+          1089334,
+          -7.985379541792268
+        ],
+        [
+          1135347,
+          -7.872434808535569
+        ],
+        [
+          1039030,
+          -7.853391859221689
+        ],
+        [
+          1089608,
+          -7.762640483273702
+        ],
+        [
+          1251042,
+          -7.5212129818391835
+        ],
+        [
+          1009262,
+          -7.470896717144603
+        ],
+        [
+          1079865,
+          -7.430841841461287
+        ],
+        [
+          1093667,
+          -7.420934481019727
+        ],
+        [
+          1227778,
+          -7.4110535038866905
+        ],
+        [
+          1089344,
+          -7.352470295890284
+        ],
+        [
+          1227795,
+          -7.334323695779217
+        ],
+        [
+          922743,
+          -7.291068678240734
+        ],
+        [
+          1251561,
+          -7.269248660606372
+        ],
+        [
+          1089326,
+          -7.265934583249029
+        ],
+        [
+          1173744,
+          -7.256461796840155
+        ]
+      ],
+      "text_output_sha256": "0d33cf57dcfadecb18333c806fd8f92d0caab51cfa74b58fa6d8790865ff0406"
+    },
+    {
+      "query": "\"natural selection\"",
+      "hits": [
+        [
+          1077521,
+          -10.726164810332785
+        ],
+        [
+          1234134,
+          -10.600724374953572
+        ],
+        [
+          1077399,
+          -10.468627859644439
+        ],
+        [
+          1077523,
+          -10.35569879801534
+        ],
+        [
+          1234004,
+          -10.334356536355825
+        ],
+        [
+          1077531,
+          -10.246233987306628
+        ],
+        [
+          1077564,
+          -10.217360413911324
+        ],
+        [
+          1077545,
+          -10.216085270887739
+        ],
+        [
+          1234165,
+          -10.204954821460714
+        ],
+        [
+          1234427,
+          -10.176354958251899
+        ],
+        [
+          1234360,
+          -10.16067450440502
+        ],
+        [
+          1234137,
+          -10.101671752606924
+        ],
+        [
+          1234175,
+          -10.084101639083997
+        ],
+        [
+          1234185,
+          -10.050965113462688
+        ],
+        [
+          1077558,
+          -10.031712948593025
+        ],
+        [
+          1234403,
+          -10.0193804574312
+        ],
+        [
+          1234139,
+          -9.996692491245778
+        ],
+        [
+          1234364,
+          -9.976692580618474
+        ],
+        [
+          1234145,
+          -9.964639963328379
+        ],
+        [
+          1234006,
+          -9.961988871475967
+        ]
+      ],
+      "text_output_sha256": "425f59f4715bd3cc66eb6f468fdced794e19f0d226a3d6202e312b0543004764"
+    },
+    {
+      "query": "freedom",
+      "hits": [
+        [
+          1106322,
+          -8.655113770892763
+        ],
+        [
+          866341,
+          -8.429123142056575
+        ],
+        [
+          1305948,
+          -8.337226878068504
+        ],
+        [
+          972749,
+          -8.273743101196796
+        ],
+        [
+          1106321,
+          -8.222287137059919
+        ],
+        [
+          1124446,
+          -8.167467741077836
+        ],
+        [
+          1290188,
+          -8.078213801940286
+        ],
+        [
+          972768,
+          -7.927424446281427
+        ],
+        [
+          1137007,
+          -7.919078138715164
+        ],
+        [
+          1305942,
+          -7.886814880554142
+        ],
+        [
+          866344,
+          -7.868663541198845
+        ],
+        [
+          866358,
+          -7.861271452131562
+        ],
+        [
+          1290260,
+          -7.839722794974164
+        ],
+        [
+          1095331,
+          -7.834984826671811
+        ],
+        [
+          972750,
+          -7.824093891461787
+        ],
+        [
+          866345,
+          -7.784373585734555
+        ],
+        [
+          972756,
+          -7.779195265700638
+        ],
+        [
+          972775,
+          -7.764359242812309
+        ],
+        [
+          972754,
+          -7.753898404552234
+        ],
+        [
+          972752,
+          -7.741311570232615
+        ]
+      ],
+      "text_output_sha256": "6b5097fe1c959ccff0d5cadc09c63e2e36ef3440f23c19c36a6fc83412be3acf"
+    },
+    {
+      "query": "society",
+      "hits": [
+        [
+          1284342,
+          -7.493231640836981
+        ],
+        [
+          1284632,
+          -7.41762714058979
+        ],
+        [
+          998766,
+          -7.33531656063164
+        ],
+        [
+          854276,
+          -7.287258776240023
+        ],
+        [
+          909842,
+          -7.284028782873592
+        ],
+        [
+          862012,
+          -7.237465206873145
+        ],
+        [
+          905989,
+          -7.213490483583126
+        ],
+        [
+          1168105,
+          -7.213490483583126
+        ],
+        [
+          916093,
+          -7.202360027425679
+        ],
+        [
+          1133891,
+          -7.17145744949879
+        ],
+        [
+          1168104,
+          -7.162626601580573
+        ],
+        [
+          903437,
+          -7.160938368276014
+        ],
+        [
+          1133860,
+          -7.119604425235762
+        ],
+        [
+          1079071,
+          -7.103613263985705
+        ],
+        [
+          894518,
+          -7.093069462327322
+        ],
+        [
+          1293053,
+          -7.083551868693533
+        ],
+        [
+          893826,
+          -7.077196717655329
+        ],
+        [
+          903481,
+          -7.075078820620576
+        ],
+        [
+          1138229,
+          -7.070187528022558
+        ],
+        [
+          903445,
+          -7.053592345643159
+        ]
+      ],
+      "text_output_sha256": "4f957460b21cb56c57c2988ab882f2043ec19e045a11392c9e82ddd85cd8f1e9"
+    },
+    {
+      "query": "жизнь",
+      "hits": [
+        [
+          1320568,
+          -15.054093716648165
+        ],
+        [
+          1321400,
+          -13.75098441997342
+        ],
+        [
+          1321520,
+          -13.229385150471623
+        ],
+        [
+          1321462,
+          -13.043553148986357
+        ],
+        [
+          1321375,
+          -12.533786978417314
+        ],
+        [
+          1321430,
+          -12.285439890701275
+        ],
+        [
+          1321024,
+          -12.25306857412888
+        ],
+        [
+          1320724,
+          -12.236946803871087
+        ],
+        [
+          1321432,
+          -12.046743190887277
+        ],
+        [
+          1321522,
+          -11.89269915901471
+        ],
+        [
+          1321465,
+          -11.87751115609886
+        ],
+        [
+          1320858,
+          -11.832179015685252
+        ],
+        [
+          1321197,
+          -11.817145100640541
+        ],
+        [
+          1321402,
+          -11.712967978494508
+        ],
+        [
+          1321521,
+          -11.683539610457323
+        ],
+        [
+          1321360,
+          -11.654258747038408
+        ],
+        [
+          1321461,
+          -11.654258747038408
+        ],
+        [
+          1321473,
+          -11.625124281998
+        ],
+        [
+          1320708,
+          -11.596135120130697
+        ],
+        [
+          1320587,
+          -11.29960008895067
+        ]
+      ],
+      "text_output_sha256": "21b91e1a75feab505d19c83dff73fd3ae39018552b77578902f513a96181f42e"
+    },
+    {
+      "query": "raison",
+      "hits": [
+        [
+          1018431,
+          -9.4907704729814
+        ],
+        [
+          1018428,
+          -9.427548999239933
+        ],
+        [
+          1109611,
+          -9.411433439084853
+        ],
+        [
+          1018427,
+          -9.383363388742946
+        ],
+        [
+          1020908,
+          -9.322917329118251
+        ],
+        [
+          1018426,
+          -9.186292471257143
+        ],
+        [
+          1018432,
+          -9.165209243803266
+        ],
+        [
+          1035530,
+          -9.14560018935254
+        ],
+        [
+          1088412,
+          -9.126143600541361
+        ],
+        [
+          1050674,
+          -9.105881292960495
+        ],
+        [
+          995141,
+          -9.045429428029289
+        ],
+        [
+          1088771,
+          -9.022652727789952
+        ],
+        [
+          1088006,
+          -9.001064970751736
+        ],
+        [
+          957702,
+          -8.961993649943992
+        ],
+        [
+          1088547,
+          -8.940602481877708
+        ],
+        [
+          1018429,
+          -8.93985207666799
+        ],
+        [
+          1088552,
+          -8.937630482633919
+        ],
+        [
+          1050780,
+          -8.870585319506016
+        ],
+        [
+          995771,
+          -8.870544830075046
+        ],
+        [
+          1297880,
+          -8.865329326193926
+        ]
+      ],
+      "text_output_sha256": "5b655c893f0f6db43d87239570cffeedd96c0a9c590635991ab84149c4bfd38f"
+    },
+    {
+      "query": "Verwandlung",
+      "hits": [
+        [
+          944664,
+          -15.28081563162152
+        ],
+        [
+          944714,
+          -12.817291412884895
+        ],
+        [
+          944678,
+          -12.75498934437691
+        ],
+        [
+          944680,
+          -12.699695740816338
+        ],
+        [
+          944762,
+          -12.5545630892005
+        ],
+        [
+          944688,
+          -12.465527733029
+        ],
+        [
+          944728,
+          -12.465527733029
+        ],
+        [
+          944669,
+          -12.447871989721842
+        ],
+        [
+          944686,
+          -12.447871989721842
+        ],
+        [
+          944715,
+          -12.325668429806424
+        ],
+        [
+          944753,
+          -12.239838963454913
+        ],
+        [
+          944675,
+          -12.13840838031963
+        ],
+        [
+          944697,
+          -12.10497073341399
+        ],
+        [
+          944699,
+          -12.088320897900074
+        ],
+        [
+          944738,
+          -12.088320897900074
+        ],
+        [
+          939947,
+          -12.055158256455575
+        ],
+        [
+          944739,
+          -12.005754060388362
+        ],
+        [
+          944668,
+          -11.97304228032131
+        ],
+        [
+          944698,
+          -11.92430748342048
+        ],
+        [
+          944671,
+          -11.892037432337775
+        ]
+      ],
+      "text_output_sha256": "310edd9d5fc8b2e2ece41f37c8bdb75a0eab793a617a6b469f07196b9c4b6eb9"
+    }
+  ],
+  "query_latency": [
+    {
+      "query": "ocean",
+      "stored": {
+        "runs_ms": [
+          585.185042116791,
+          58.595667127519846,
+          56.36941595003009
+        ],
+        "median_ms": 58.595667127519846,
+        "max_ms": 585.185042116791
+      },
+      "sql_substr": {
+        "runs_ms": [
+          32.918957993388176,
+          23.974249605089426,
+          25.242958217859268
+        ],
+        "median_ms": 25.242958217859268,
+        "max_ms": 32.918957993388176
+      }
+    },
+    {
+      "query": "curiosity",
+      "stored": {
+        "runs_ms": [
+          389.9649172089994,
+          47.67716722562909,
+          47.06879099830985
+        ],
+        "median_ms": 47.67716722562909,
+        "max_ms": 389.9649172089994
+      },
+      "sql_substr": {
+        "runs_ms": [
+          31.869207974523306,
+          23.62866699695587,
+          27.30695903301239
+        ],
+        "median_ms": 27.30695903301239,
+        "max_ms": 31.869207974523306
+      }
+    },
+    {
+      "query": "\"natural selection\"",
+      "stored": {
+        "runs_ms": [
+          31.184458173811436,
+          11.211916338652372,
+          9.144749958068132
+        ],
+        "median_ms": 11.211916338652372,
+        "max_ms": 31.184458173811436
+      },
+      "sql_substr": {
+        "runs_ms": [
+          20.06274973973632,
+          15.05966717377305,
+          13.530875090509653
+        ],
+        "median_ms": 15.05966717377305,
+        "max_ms": 20.06274973973632
+      }
+    },
+    {
+      "query": "freedom",
+      "stored": {
+        "runs_ms": [
+          467.22291596233845,
+          79.57733422517776,
+          71.87470886856318
+        ],
+        "median_ms": 79.57733422517776,
+        "max_ms": 467.22291596233845
+      },
+      "sql_substr": {
+        "runs_ms": [
+          35.14866717159748,
+          28.780083172023296,
+          32.00616594403982
+        ],
+        "median_ms": 32.00616594403982,
+        "max_ms": 35.14866717159748
+      }
+    },
+    {
+      "query": "society",
+      "stored": {
+        "runs_ms": [
+          581.8914589472115,
+          134.4933328218758,
+          131.4138751477003
+        ],
+        "median_ms": 134.4933328218758,
+        "max_ms": 581.8914589472115
+      },
+      "sql_substr": {
+        "runs_ms": [
+          58.58004232868552,
+          48.56741614639759,
+          48.46266703680158
+        ],
+        "median_ms": 48.56741614639759,
+        "max_ms": 58.58004232868552
+      }
+    },
+    {
+      "query": "жизнь",
+      "stored": {
+        "runs_ms": [
+          6.116542033851147,
+          1.61687470972538,
+          0.9690830484032631
+        ],
+        "median_ms": 1.61687470972538,
+        "max_ms": 6.116542033851147
+      },
+      "sql_substr": {
+        "runs_ms": [
+          4.131916910409927,
+          3.3175828866660595,
+          2.835875377058983
+        ],
+        "median_ms": 3.3175828866660595,
+        "max_ms": 4.131916910409927
+      }
+    },
+    {
+      "query": "raison",
+      "stored": {
+        "runs_ms": [
+          216.50375006720424,
+          42.02137514948845,
+          36.11700003966689
+        ],
+        "median_ms": 42.02137514948845,
+        "max_ms": 216.50375006720424
+      },
+      "sql_substr": {
+        "runs_ms": [
+          19.213207997381687,
+          16.022915951907635,
+          14.383791945874691
+        ],
+        "median_ms": 16.022915951907635,
+        "max_ms": 19.213207997381687
+      }
+    },
+    {
+      "query": "Verwandlung",
+      "stored": {
+        "runs_ms": [
+          9.436209220439196,
+          0.853958074003458,
+          0.7940419018268585
+        ],
+        "median_ms": 0.853958074003458,
+        "max_ms": 9.436209220439196
+      },
+      "sql_substr": {
+        "runs_ms": [
+          3.6484580487012863,
+          3.5951249301433563,
+          3.167542163282633
+        ],
+        "median_ms": 3.5951249301433563,
+        "max_ms": 3.6484580487012863
+      }
+    }
+  ],
+  "reconstruction": {
+    "sample_passages": 254,
+    "sample_languages": [
+      "de",
+      "en",
+      "fr",
+      "ru"
+    ],
+    "includes_short_and_long_sections": true,
+    "all_sample_outputs_identical": true,
+    "stored": {
+      "runs_ms": [
+        16.22037496417761,
+        1.7005419358611107,
+        1.534083392471075,
+        1.2823333963751793,
+        1.3108327984809875
+      ],
+      "median_ms": 1.534083392471075,
+      "max_ms": 16.22037496417761
+    },
+    "sql_substr": {
+      "runs_ms": [
+        29.9688340164721,
+        35.42449977248907,
+        35.90262494981289,
+        31.57020825892687,
+        32.16437483206391
+      ],
+      "median_ms": 32.16437483206391,
+      "max_ms": 35.90262494981289
+    },
+    "python_lru": {
+      "runs_ms": [
+        15.99099999293685,
+        16.416375059634447,
+        14.238875359296799,
+        13.516124803572893,
+        15.571916941553354
+      ],
+      "median_ms": 15.571916941553354,
+      "max_ms": 16.416375059634447
+    }
+  },
+  "production_compatible": false,
+  "limitations": [
+    "Owned copy only; current Library/embedding consumers read passages.text and cannot use empty sentinels.",
+    "Python reconstruction checked every passage; SQL substr checked bounded actual query/sample IDs only.",
+    "Local warm-cache latency, stored then reconstructed runs; not a cold-disk or relevance benchmark.",
+    "No schema migration, production/FTS change, book acquisition or embedding run is performed."
+  ],
+  "page_accounting": {
+    "before": {
+      "page_count": 389245,
+      "page_size": 4096,
+      "freelist_count": 0,
+      "btree_pages": {
+        "book_metadata": {
+          "bytes": 1986560,
+          "payload_bytes": 1638458,
+          "unused_bytes": 333089
+        },
+        "books": {
+          "bytes": 913408,
+          "payload_bytes": 845280,
+          "unused_bytes": 56872
+        },
+        "books_content": {
+          "bytes": 98304,
+          "payload_bytes": 91432,
+          "unused_bytes": 2664
+        },
+        "books_work": {
+          "bytes": 24576,
+          "payload_bytes": 15506,
+          "unused_bytes": 5078
+        },
+        "events": {
+          "bytes": 593920,
+          "payload_bytes": 524665,
+          "unused_bytes": 9530
+        },
+        "index_versions": {
+          "bytes": 118784,
+          "payload_bytes": 104562,
+          "unused_bytes": 7359
+        },
+        "passage_fts_config": {
+          "bytes": 4096,
+          "payload_bytes": 11,
+          "unused_bytes": 4074
+        },
+        "passage_fts_data": {
+          "bytes": 284188672,
+          "payload_bytes": 280163995,
+          "unused_bytes": 1931277
+        },
+        "passage_fts_docsize": {
+          "bytes": 6250496,
+          "payload_bytes": 3535674,
+          "unused_bytes": 16118
+        },
+        "passage_fts_idx": {
+          "bytes": 458752,
+          "payload_bytes": 382981,
+          "unused_bytes": 3844
+        },
+        "passages": {
+          "bytes": 698716160,
+          "payload_bytes": 580059540,
+          "unused_bytes": 112646522
+        },
+        "passages_book": {
+          "bytes": 9359360,
+          "payload_bytes": 7959762,
+          "unused_bytes": 35784
+        },
+        "passages_section": {
+          "bytes": 5382144,
+          "payload_bytes": 4009194,
+          "unused_bytes": 20788
+        },
+        "saved": {
+          "bytes": 4096,
+          "payload_bytes": 0,
+          "unused_bytes": 4088
+        },
+        "saved_provenance": {
+          "bytes": 4096,
+          "payload_bytes": 0,
+          "unused_bytes": 4088
+        },
+        "section_roles": {
+          "bytes": 4222976,
+          "payload_bytes": 3799704,
+          "unused_bytes": 47389
+        },
+        "sections": {
+          "bytes": 572129280,
+          "payload_bytes": 542463652,
+          "unused_bytes": 28219410
+        },
+        "source_deferrals": {
+          "bytes": 4096,
+          "payload_bytes": 0,
+          "unused_bytes": 4088
+        },
+        "source_pipeline": {
+          "bytes": 229376,
+          "payload_bytes": 211816,
+          "unused_bytes": 8960
+        },
+        "sqlite_autoindex_book_metadata_1": {
+          "bytes": 32768,
+          "payload_bytes": 22030,
+          "unused_bytes": 6722
+        },
+        "sqlite_autoindex_books_1": {
+          "bytes": 32768,
+          "payload_bytes": 22030,
+          "unused_bytes": 6722
+        },
+        "sqlite_autoindex_index_versions_1": {
+          "bytes": 32768,
+          "payload_bytes": 22030,
+          "unused_bytes": 6722
+        },
+        "sqlite_autoindex_passages_1": {
+          "bytes": 8110080,
+          "payload_bytes": 6725504,
+          "unused_bytes": 24422
+        },
+        "sqlite_autoindex_sections_1": {
+          "bytes": 1392640,
+          "payload_bytes": 1197927,
+          "unused_bytes": 11564
+        },
+        "sqlite_autoindex_source_deferrals_1": {
+          "bytes": 4096,
+          "payload_bytes": 0,
+          "unused_bytes": 4088
+        },
+        "sqlite_autoindex_source_pipeline_1": {
+          "bytes": 32768,
+          "payload_bytes": 22030,
+          "unused_bytes": 6722
+        },
+        "sqlite_schema": {
+          "bytes": 12288,
+          "payload_bytes": 4175,
+          "unused_bytes": 7854
+        },
+        "sqlite_sequence": {
+          "bytes": 4096,
+          "payload_bytes": 14,
+          "unused_bytes": 4070
+        }
+      }
+    },
+    "after": {
+      "page_count": 229523,
+      "page_size": 4096,
+      "freelist_count": 0,
+      "btree_pages": {
+        "book_metadata": {
+          "bytes": 1986560,
+          "payload_bytes": 1638458,
+          "unused_bytes": 333089
+        },
+        "books": {
+          "bytes": 913408,
+          "payload_bytes": 845280,
+          "unused_bytes": 56872
+        },
+        "books_content": {
+          "bytes": 98304,
+          "payload_bytes": 91432,
+          "unused_bytes": 2664
+        },
+        "books_work": {
+          "bytes": 24576,
+          "payload_bytes": 15506,
+          "unused_bytes": 5078
+        },
+        "events": {
+          "bytes": 593920,
+          "payload_bytes": 524665,
+          "unused_bytes": 9530
+        },
+        "index_versions": {
+          "bytes": 118784,
+          "payload_bytes": 104562,
+          "unused_bytes": 7359
+        },
+        "passage_fts_config": {
+          "bytes": 4096,
+          "payload_bytes": 11,
+          "unused_bytes": 4074
+        },
+        "passage_fts_data": {
+          "bytes": 284188672,
+          "payload_bytes": 280163995,
+          "unused_bytes": 1931277
+        },
+        "passage_fts_docsize": {
+          "bytes": 6250496,
+          "payload_bytes": 3535674,
+          "unused_bytes": 16118
+        },
+        "passage_fts_idx": {
+          "bytes": 458752,
+          "payload_bytes": 382981,
+          "unused_bytes": 3844
+        },
+        "passages": {
+          "bytes": 44498944,
+          "payload_bytes": 40967760,
+          "unused_bytes": 673849
+        },
+        "passages_book": {
+          "bytes": 9359360,
+          "payload_bytes": 7959762,
+          "unused_bytes": 35784
+        },
+        "passages_section": {
+          "bytes": 5382144,
+          "payload_bytes": 4009194,
+          "unused_bytes": 20788
+        },
+        "saved": {
+          "bytes": 4096,
+          "payload_bytes": 0,
+          "unused_bytes": 4088
+        },
+        "saved_provenance": {
+          "bytes": 4096,
+          "payload_bytes": 0,
+          "unused_bytes": 4088
+        },
+        "section_roles": {
+          "bytes": 4222976,
+          "payload_bytes": 3799704,
+          "unused_bytes": 47389
+        },
+        "sections": {
+          "bytes": 572129280,
+          "payload_bytes": 542463652,
+          "unused_bytes": 28219410
+        },
+        "source_deferrals": {
+          "bytes": 4096,
+          "payload_bytes": 0,
+          "unused_bytes": 4088
+        },
+        "source_pipeline": {
+          "bytes": 229376,
+          "payload_bytes": 211816,
+          "unused_bytes": 8960
+        },
+        "sqlite_autoindex_book_metadata_1": {
+          "bytes": 32768,
+          "payload_bytes": 22030,
+          "unused_bytes": 6722
+        },
+        "sqlite_autoindex_books_1": {
+          "bytes": 32768,
+          "payload_bytes": 22030,
+          "unused_bytes": 6722
+        },
+        "sqlite_autoindex_index_versions_1": {
+          "bytes": 32768,
+          "payload_bytes": 22030,
+          "unused_bytes": 6722
+        },
+        "sqlite_autoindex_passages_1": {
+          "bytes": 8110080,
+          "payload_bytes": 6725504,
+          "unused_bytes": 24422
+        },
+        "sqlite_autoindex_sections_1": {
+          "bytes": 1392640,
+          "payload_bytes": 1197927,
+          "unused_bytes": 11564
+        },
+        "sqlite_autoindex_source_deferrals_1": {
+          "bytes": 4096,
+          "payload_bytes": 0,
+          "unused_bytes": 4088
+        },
+        "sqlite_autoindex_source_pipeline_1": {
+          "bytes": 32768,
+          "payload_bytes": 22030,
+          "unused_bytes": 6722
+        },
+        "sqlite_schema": {
+          "bytes": 12288,
+          "payload_bytes": 4175,
+          "unused_bytes": 7854
+        },
+        "sqlite_sequence": {
+          "bytes": 4096,
+          "payload_bytes": 14,
+          "unused_bytes": 4070
+        }
+      }
+    }
+  }
+}

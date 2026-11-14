@@ -64,6 +64,8 @@ Uses a local Sentence Transformers multilingual MiniLM model (first run download
 
 Interrupted builds resume from durable batch checkpoints. Later builds can [reuse exact unchanged embedding inputs](docs/VECTOR_REUSE.md) from a validated generation with the same pinned model and profile. Share model weights across separate live and experimental libraries with `BOOKRAG_MODEL_CACHE=./data/models`.
 
+A completed frozen index can also be [installed over its verified edition subset](docs/INDEX_INSTALLATION.md) in a larger live library. The interface shows semantic coverage; hybrid search still searches words across every edition. Adding an unrelated book preserves the subset index. Changes to covered text invalidate it and retain lexical search. An unfinished checkpoint cannot be installed.
+
 ## Verify
 
 ```sh

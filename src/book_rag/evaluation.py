@@ -21,6 +21,7 @@ import time
 from collections import Counter
 from collections.abc import Generator, Mapping
 from contextlib import contextmanager
+from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, Protocol
@@ -108,6 +109,96 @@ def _copy_model_cache(source: Path, destination: Path) -> dict[str, int]:
     return reused
 
 
+def _shm_identity(directory: Path) -> tuple[int, int, int, int, int] | None:
+    path = directory / "library.sqlite3-shm"
+    return _file_identity(path) if path.exists() else None
+
+
+@dataclass(frozen=True, slots=True)
+class EvaluationSemanticReference:
+    """True original identity for partial-index validation, never a Library.
+
+    Immutable SQLite reads are permitted only for checkpointed captured inputs.
+    Evidence, lexical retrieval and mutable model-cache metadata stay owned by
+    EvaluationLibrary. No copied DB is presented as the original inode/path.
+    """
+
+    data_dir: Path
+    db_path: Path
+    _database_identity: dict[str, tuple[int, int, int, int, int]]
+    _shm: tuple[int, int, int, int, int] | None
+    _active_bytes: bytes
+    _generation_path: Path | None
+    _generation_state: dict[str, tuple[int, int, int, int, int]] | None
+    _receipt_path: Path | None
+    _receipt_state: tuple[int, int, int, int, int] | None
+
+    def ensure_unchanged(self) -> None:
+        if _database_files(self.data_dir) != self._database_identity or _shm_identity(self.data_dir) != self._shm:
+            raise RuntimeError("Original partial-index SQLite input changed; discard this evaluation")
+        active = self.data_dir / "vectors" / "active.json"
+        if not active.is_file() or active.read_bytes() != self._active_bytes:
+            raise RuntimeError("Original partial-index selection changed; discard this evaluation")
+        if self._generation_path is not None and _generation_identity(self._generation_path) != self._generation_state:
+            raise RuntimeError("Original partial-index generation changed; discard this evaluation")
+        if self._receipt_path is not None:
+            current = _file_identity(self._receipt_path) if self._receipt_path.exists() else None
+            if current != self._receipt_state:
+                raise RuntimeError("Original partial-index installation receipt changed; discard this evaluation")
+
+    @contextmanager
+    def connect(self) -> Generator[sqlite3.Connection]:
+        self.ensure_unchanged()
+        connection = sqlite3.connect(self.db_path.as_uri() + "?mode=ro&immutable=1", uri=True, timeout=30)
+        connection.row_factory = sqlite3.Row
+        connection.create_function("casefold", 1, lambda value: str(value or "").casefold(), deterministic=True)
+        connection.execute("PRAGMA query_only=ON")
+        try:
+            yield connection
+        finally:
+            connection.close()
+            self.ensure_unchanged()
+
+
+def _partial_reference(
+    source: Path,
+    metadata: dict[str, Any],
+    active_bytes: bytes,
+    database_identity: dict[str, tuple[int, int, int, int, int]],
+    generation_path: Path | None,
+    generation_identity: dict[str, tuple[int, int, int, int, int]] | None,
+) -> EvaluationSemanticReference:
+    wal = database_identity.get("library.sqlite3-wal")
+    if wal is not None and wal[2]:
+        raise ValueError(
+            "Partial-index evaluation requires a checkpointed original with no pending WAL. "
+            "Stop writes to the live source, checkpoint through its normal operational procedure, then retry; "
+            "or prepare a checkpointed copy and reinstall its index binding. "
+            "Copying the DB and partial active pointer alone does not preserve inode-bound validation. "
+            "The evaluator never checkpoints or writes the source."
+        )
+    locator = metadata.get("installation_receipt")
+    relative = locator.get("path") if isinstance(locator, dict) else None
+    receipt = (
+        source / "vectors" / relative
+        if isinstance(relative, str) and re.fullmatch(r"installations/install-[a-f0-9]{32}\.json", relative)
+        else None
+    )
+    reference = EvaluationSemanticReference(
+        source,
+        source / "library.sqlite3",
+        database_identity.copy(),
+        _shm_identity(source),
+        active_bytes,
+        generation_path,
+        generation_identity.copy() if generation_identity is not None else None,
+        receipt,
+        _file_identity(receipt) if receipt is not None and receipt.exists() else None,
+    )
+    reference.ensure_unchanged()
+    return reference
+
+
 class EvaluationLibrary(Library):
     """An owned migrated database, read-only query connections and frozen vectors.
 
@@ -115,6 +206,10 @@ class EvaluationLibrary(Library):
     passed to ``Library.__init__``. Large arrays are consumed by semantic search's
     existing ``np.load(..., mmap_mode='r')`` path, without copying or rebuilding.
     """
+
+    # Deliberately absent at runtime for legacy/full-index contexts; semantic
+    # callers use getattr(library, "semantic_reference", library) only for subset.
+    semantic_reference: EvaluationSemanticReference
 
     def __init__(self, directory: Path, input_provenance: dict[str, Any]) -> None:
         migrated = Library(directory)
@@ -155,6 +250,7 @@ def evaluation_library(directory: Path, *, model_cache: Path | None = None) -> G
         generation = None
         generation_path = None
         generation_identity = None
+        metadata = None
         if active_bytes is not None:
             metadata = json.loads(active_bytes)
             generation = metadata.get("generation")
@@ -189,10 +285,21 @@ def evaluation_library(directory: Path, *, model_cache: Path | None = None) -> G
             "model_cache_reuse": cache_reuse,
         }
         library = EvaluationLibrary(working, provenance)
+        if metadata is not None and metadata.get("coverage_kind") == "subset" and active_bytes is not None:
+            library.semantic_reference = _partial_reference(
+                source, metadata, active_bytes, database_identity, generation_path, generation_identity
+            )
+            provenance["partial_index_reference"] = {
+                "validation": "original checkpointed read-only immutable reference",
+                "evidence": "owned migrated SQLite copy",
+                "generation": "original immutable files; mmap_mode=r",
+            }
         provenance["preparation_seconds"] = round(time.perf_counter() - preparation_started, 6)
         os.environ["BOOKRAG_MODEL_CACHE"] = str(working / "models")
         try:
             yield library
+            if hasattr(library, "semantic_reference"):
+                library.semantic_reference.ensure_unchanged()
             if _database_files(source) != database_identity:
                 raise RuntimeError("Source SQLite changed during evaluation; discard this run")
             current_active = active.read_bytes() if active.is_file() else None

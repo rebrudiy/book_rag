@@ -26,3 +26,4 @@
 .saved-item{overflow-wrap:anywhere}
 
 .source-attribution{margin-top:14px;font-size:11px}.source-attribution summary{cursor:pointer}.source-attribution p{margin-top:10px;white-space:pre-wrap;overflow-wrap:anywhere}.source-upstream-credits{padding-left:17px;font-size:11px;overflow-wrap:anywhere}.source-upstream-credits li{margin:9px 0}
+.semantic-coverage{border:1px solid #d3dfcf;border-left:3px solid #7d9a7a;background:#eef3e9;padding:13px 17px;margin:0 0 17px;overflow-wrap:anywhere}.semantic-coverage-title{font-size:12px;line-height:1.8;color:#315e4a}.semantic-coverage-scope{font-size:11px;line-height:1.8;color:#425d3b;margin-top:6px}.semantic-coverage-note{font-size:10px;line-height:1.8;color:#63765a;margin-top:4px}@media(max-width:760px){.semantic-coverage{padding:11px 13px}.semantic-coverage-title{font-size:11px}}

@@ -1,0 +1,91 @@
+{
+  "method": "actual Library.import_book; original synthetic CC0 TXT; fresh owned DB per run",
+  "books": 20,
+  "paragraphs_per_book": 1000,
+  "paragraph_characters": 1300,
+  "repeats_each": 3,
+  "trigger_count": 11,
+  "runs": [
+    {
+      "tracked": false,
+      "insert_seconds": 1.2054,
+      "refresh_seconds": 2.2574,
+      "passages": 20000
+    },
+    {
+      "tracked": true,
+      "insert_seconds": 3.1558,
+      "refresh_seconds": 4.0817,
+      "passages": 20000
+    },
+    {
+      "tracked": true,
+      "insert_seconds": 2.9224,
+      "refresh_seconds": 4.1388,
+      "passages": 20000
+    },
+    {
+      "tracked": false,
+      "insert_seconds": 1.8259,
+      "refresh_seconds": 2.3806,
+      "passages": 20000
+    },
+    {
+      "tracked": false,
+      "insert_seconds": 2.0268,
+      "refresh_seconds": 2.4943,
+      "passages": 20000
+    },
+    {
+      "tracked": true,
+      "insert_seconds": 2.9002,
+      "refresh_seconds": 4.0692,
+      "passages": 20000
+    }
+  ],
+  "medians": {
+    "insert_seconds": {
+      "baseline": 1.8259,
+      "tracked": 2.9224,
+      "ratio": 1.6005
+    },
+    "refresh_seconds": {
+      "baseline": 2.3806,
+      "tracked": 4.0817,
+      "ratio": 1.7146
+    }
+  },
+  "guards": [
+    {
+      "books": 20,
+      "passages": 20000,
+      "samples": 50,
+      "strict_bind_ms": 314.457,
+      "guard_p50_ms": 1.355,
+      "guard_p95_ms": 1.434
+    },
+    {
+      "books": 1308,
+      "passages": 21288,
+      "samples": 50,
+      "strict_bind_ms": 343.422,
+      "guard_p50_ms": 8.52,
+      "guard_p95_ms": 9.228
+    }
+  ],
+  "limitations": [
+    "Synthetic repetitive vocabulary differs from a broad real corpus.",
+    "Concurrent background work and warmed filesystem cache affect timings.",
+    "Guard-only extra editions are minimal SQL fixtures, not an embedding-quality experiment.",
+    "Receipt digest is an explicit test placeholder; this benchmark does not install an index.",
+    "One-time strict-bind timings predate the additional bounded canonical-span checks; the measured trigger and cheap-query-guard paths are unchanged. Counts and timings are retained."
+  ],
+  "schema_version": 1,
+  "recorded_at": "2026-11-14T15:37:15.852170+00:00",
+  "environment": {
+    "python": "3.12.12",
+    "platform": "macOS-26.6.2-arm64-arm-64bit"
+  },
+  "helper_source_sha256": "17d167226c88b5e24c305e3547ef5c8ac2ccd35445e19488b8fc2470a2e34703",
+  "reproduce": "python tests/benchmark_index_coverage.py --output <new-report-path>"
+}

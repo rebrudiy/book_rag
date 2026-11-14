@@ -146,6 +146,8 @@
     $('research-tab').classList.toggle('active', research);
     $('fragments-tab').setAttribute('aria-pressed', String(!research));
     $('research-tab').setAttribute('aria-pressed', String(research));
+    const coverage = $('semantic-coverage');
+    if (coverage) coverage.classList.toggle('hidden', research || coverage.dataset.active !== 'true');
   }
 
   function coverageType(book) { return book?.coverage || book?.source_metadata?.coverage || ''; }
@@ -388,6 +390,15 @@
     if (attempt) card.append(attempt);
     card.append(quote, citation, actions); return card;
   }
+  function renderSemanticCoverage(coverage) {
+    const target = $('semantic-coverage'); target.replaceChildren(); target.classList.add('hidden'); target.dataset.active = 'false';
+    if (!coverage || coverage.active !== true || !Number.isSafeInteger(coverage.indexed_books) || !Number.isSafeInteger(coverage.searchable_books) || coverage.indexed_books < 1 || coverage.searchable_books < coverage.indexed_books) return;
+    target.append(node('p', 'semantic-coverage-title', `Поиск по смыслу: ${formatNumber(coverage.indexed_books)} из ${formatNumber(coverage.searchable_books)} изданий`));
+    if (coverage.requested_book_covered === false) target.append(node('p', 'semantic-coverage-scope', 'Для выбранной книги доступен поиск по словам.'));
+    target.append(node('p', 'semantic-coverage-note', 'Поиск по словам доступен по всей библиотеке.'));
+    target.dataset.active = 'true';
+    target.classList.toggle('hidden', $('fragments-panel').classList.contains('hidden'));
+  }
   async function search(push = true) {
     const query = $('query').value.trim();
     if (!query) { $('query').focus(); return; }
@@ -397,6 +408,7 @@
     $('search-results').classList.remove('hidden');
     $('discovery').classList.add('hidden');
     $('search-warnings').classList.add('hidden');
+    renderSemanticCoverage(null);
     $('results-meta').textContent = 'Ищем в библиотеке…';
     setPanel('fragments');
     loading($('fragments-panel'), 'Поиск фрагментов');
@@ -410,6 +422,7 @@
       const result = await api(`/api/search?${params}`);
       if (request !== state.searchSequence) return;
       state.results = result.results || [];
+      renderSemanticCoverage(result.semantic_coverage);
       const time = Number(result.elapsed_ms || 0);
       const modeName = { lexical: 'по словам', hybrid: 'гибридный', semantic: 'по смыслу', reranked: 'с переоценкой' }[result.mode || state.mode] || result.mode;
       $('results-meta').textContent = `${formatNumber(state.results.length)} фрагментов · ${Number.isFinite(time) ? time.toFixed(0) : '—'} мс · ${modeName}`;
@@ -925,6 +938,9 @@
   const saveSubmit = $('save-form').querySelector('[type="submit"]');
   const saveActions = node('div', 'save-dialog-actions'); saveSubmit.before(saveActions);
   const cancelSave = button('Отмена', closeSaveDialog); cancelSave.id = 'cancel-save'; saveActions.append(cancelSave, saveSubmit);
+
+  const semanticCoverage = node('aside', 'semantic-coverage hidden'); semanticCoverage.id = 'semantic-coverage'; semanticCoverage.setAttribute('role', 'status'); semanticCoverage.setAttribute('aria-label', 'Покрытие поиска по смыслу');
+  $('search-warnings').before(semanticCoverage);
 
   $('search-form').addEventListener('submit', (event) => { event.preventDefault(); search(); });
   document.querySelectorAll('[data-mode]').forEach((el) => el.addEventListener('click', () => { setMode(el.dataset.mode); if (state.query) search(); }));

@@ -15,7 +15,7 @@ import shutil
 import sqlite3
 import time
 import uuid
-from collections.abc import Generator, Iterator
+from collections.abc import Generator, Iterator, Mapping
 from contextlib import contextmanager
 from functools import lru_cache
 from pathlib import Path
@@ -611,27 +611,98 @@ def semantic_search(
 ) -> dict[str, Any]:
     started = time.perf_counter()
     active = library.data_dir / "vectors" / "active.json"
+
+    def fallback(reason: str, coverage: dict[str, Any] | None = None) -> dict[str, Any]:
+        result = library.search(query, "lexical", book_id, language, limit)
+        result["warnings"].append(reason)
+        if coverage is not None:
+            result["semantic_coverage"] = coverage
+        return result
+
     if not active.exists():
-        result = library.search(query, "lexical", book_id, language, limit)
-        result["warnings"].append("Semantic index unavailable. Showing lexical search. Run bookrag embed.")
-        return result
-    metadata = json.loads(active.read_text())
-    if metadata["corpus_fingerprint"] != corpus_fingerprint(library):
-        result = library.search(query, "lexical", book_id, language, limit)
-        result["warnings"].append("Semantic index stale. Showing lexical search; run bookrag embed.")
-        return result
+        return fallback("Semantic index unavailable. Showing lexical search. Run bookrag embed.")
+    receipt: dict[str, Any] | None = None
+    coverage: dict[str, Any] | None = None
+    before_state: Mapping[str, Any] | None = None
+    reference = getattr(library, "semantic_reference", None) or library
     try:
+        if active.is_symlink() or active.stat().st_size > 32 * 1024**2:
+            raise ValueError("Invalid active metadata file")
+        metadata = json.loads(active.read_text())
+        if not isinstance(metadata, dict):
+            raise ValueError("Active metadata must be an object")
+        if metadata.get("coverage_kind") == "subset":
+            from book_rag.index_coverage import validate_coverage
+            from book_rag.index_installation import read_installation_receipt
+
+            # Isolated evaluations retain evidence in an owned DB while their
+            # immutable generation/epoch proof belongs to the original input.
+            receipt = read_installation_receipt(reference.data_dir, metadata)
+            before_state = validate_coverage(reference, receipt["coverage"], receipt["coverage_binding"])
+            if not before_state["valid"]:
+                return fallback("Смысловой индекс требует обновления. Показан актуальный поиск по словам.")
+            with library.connect() as conn:
+                searchable = conn.execute("SELECT COUNT(*) FROM books WHERE status='indexed'").fetchone()[0]
+            coverage = {
+                "indexed_books": receipt["coverage"]["books"],
+                "searchable_books": searchable,
+                "active": True,
+                "requested_book_covered": book_id in receipt["coverage"]["covered_book_ids"] if book_id else None,
+            }
+            if coverage["requested_book_covered"] is False:
+                return fallback(
+                    "Для выбранной книги доступен поиск по словам; она ещё не входит в смысловой индекс.", coverage
+                )
+            if language:
+                with library.connect() as conn:
+                    language_books = {
+                        row[0]
+                        for row in conn.execute(
+                            "SELECT id FROM books WHERE status='indexed' AND language=? AND (? IS NULL OR id=?)",
+                            (language, book_id, book_id),
+                        )
+                    }
+                if not language_books.intersection(receipt["coverage"]["covered_book_ids"]):
+                    return fallback(
+                        "Для выбранного языка доступен поиск по словам; эти издания ещё не входят в смысловой индекс.",
+                        coverage,
+                    )
+        elif metadata.get("coverage_kind") is not None:
+            raise ValueError("Unknown semantic coverage kind")
+        elif metadata.get("corpus_fingerprint") != corpus_fingerprint(library):
+            return fallback("Semantic index stale. Showing lexical search; run bookrag embed.")
+        generation = metadata.get("generation")
+        # Legacy local indexes used other simple basenames. Installed subsets
+        # have the stronger gen-* identity checked by their sealed receipt.
+        if not isinstance(generation, str) or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,180}", generation):
+            raise ValueError("Invalid vector generation name")
+        folder = (reference.data_dir / "vectors" if receipt is not None else active.parent) / generation
+        vectors = np.load(folder / "embeddings.npy", mmap_mode="r", allow_pickle=False)
+        ids = np.load(folder / "ids.npy", mmap_mode="r", allow_pickle=False)
+        if (
+            vectors.ndim != 2
+            or vectors.dtype != np.dtype("float32")
+            or ids.ndim != 1
+            or ids.dtype != np.dtype("int64")
+            or vectors.shape[0] != len(ids)
+            or not len(ids)
+            or metadata.get("vectors", len(ids)) != len(ids)
+        ):
+            raise ValueError("Vector/ID arrays have incompatible shapes or types")
+        profile = profile_from_metadata(metadata)
         model = _model(metadata["model"], str(_model_cache(library)), metadata.get("model_revision"))
+        query_vector = np.asarray(
+            model.encode([profile.query_input(query)], normalize_embeddings=True, convert_to_numpy=True)[0]
+        )
+        if query_vector.shape != (vectors.shape[1],) or not np.isfinite(query_vector).all():
+            raise ValueError("Invalid query vector")
+        scores = np.asarray(vectors @ query_vector)
+        if not np.isfinite(scores).all():
+            raise ValueError("Nonfinite semantic scores")
     except ImportError:
-        result = library.search(query, "lexical", book_id, language, limit)
-        result["warnings"].append("Install the semantic extra to enable multilingual embeddings.")
-        return result
-    folder = active.parent / metadata["generation"]
-    vectors = np.load(folder / "embeddings.npy", mmap_mode="r")
-    ids = np.load(folder / "ids.npy", mmap_mode="r")
-    profile = profile_from_metadata(metadata)
-    query_vector = model.encode([profile.query_input(query)], normalize_embeddings=True, convert_to_numpy=True)[0]
-    scores = np.asarray(vectors @ query_vector)
+        return fallback("Install the semantic extra to enable multilingual embeddings.")
+    except (OSError, ValueError, KeyError, TypeError, RuntimeError, MemoryError, sqlite3.Error):
+        return fallback("Смысловой индекс недоступен или не прошёл проверку. Показан поиск по словам.")
     if book_id or language:
         with library.connect() as conn:
             eligible = {
@@ -648,6 +719,11 @@ def semantic_search(
     evidence = {passage["id"]: passage for passage in library.passages(candidate_ids)}
     vector_results: list[dict[str, Any]] = []
     warnings: list[str] = []
+    if coverage and coverage["indexed_books"] < coverage["searchable_books"] and not book_id:
+        warnings.append(
+            f"Поиск по смыслу охватывает {coverage['indexed_books']} из {coverage['searchable_books']} изданий; "
+            "поиск по словам работает по всей библиотеке."
+        )
     from book_rag.retrieval import prepare_query, rerank_results
 
     plan = prepare_query(query)
@@ -671,11 +747,21 @@ def semantic_search(
                 merged.setdefault(item["id"], item)
                 fused[item["id"]] = fused.get(item["id"], 0) + 1 / (60 + rank)
         results = [merged[i] | {"score": score} for i, score in sorted(fused.items(), key=lambda kv: -kv[1])]
-    if corpus_fingerprint(library) != metadata["corpus_fingerprint"]:
-        result = library.search(query, "lexical", book_id, language, limit)
-        result["warnings"].append("Corpus changed during semantic search. Showing current lexical results.")
-        return result
-    return {
+    if receipt is not None:
+        try:
+            read_installation_receipt(reference.data_dir, metadata)
+            after_state = validate_coverage(reference, receipt["coverage"], receipt["coverage_binding"])
+            if (
+                not after_state["valid"]
+                or before_state is None
+                or after_state["state_token"] != before_state["state_token"]
+            ):
+                return fallback("Текст изменился во время поиска. Показаны актуальные результаты по словам.")
+        except (OSError, ValueError, KeyError, TypeError, sqlite3.Error):
+            return fallback("Смысловой индекс изменился во время поиска. Показаны результаты по словам.")
+    elif corpus_fingerprint(library) != metadata["corpus_fingerprint"]:
+        return fallback("Corpus changed during semantic search. Showing current lexical results.")
+    response = {
         "query": query,
         "mode": mode,
         "results": results[:limit],
@@ -692,3 +778,6 @@ def semantic_search(
             "lexical_limit": HYBRID_LEXICAL_CANDIDATES if mode == "hybrid" else 0,
         },
     }
+    if coverage is not None:
+        response["semantic_coverage"] = coverage
+    return response

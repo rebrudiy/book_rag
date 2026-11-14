@@ -1,0 +1,828 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-11-14T22:17:33.842154+00:00",
+  "source": "Two public Gutenberg manifests; books/book_metadata queried with mode=ro; no notes/private imports",
+  "selection": {
+    "public_manifests": [
+      {
+        "path": "data/catalog/expand-text-new.json",
+        "sha256": "f2ae7fc65fdcf94ca8d3df051189fb3324b842ee574a19d0df44ff0631622f42",
+        "entries": 2679
+      },
+      {
+        "path": "corpus/manifest.json",
+        "sha256": "e6d51d3d74e920dd59d4ab34512ff39cc9a5c927c04c60b75fd5df1b41dd2f50",
+        "entries": 20
+      }
+    ],
+    "eligible_by_language": {
+      "en": 890,
+      "de": 896,
+      "fr": 893
+    },
+    "selected_by_language": {
+      "en": 67,
+      "de": 67,
+      "fr": 66
+    },
+    "skipped": {
+      "already_reviewed": 19,
+      "outside_language_scope": 1
+    },
+    "selection_method": "seeded sha256 within language; EN/DE/FR round-robin; public manifests + ro indexed guard"
+  },
+  "requested_editions": 200,
+  "answered_editions": 50,
+  "answered_languages": {
+    "en": 17,
+    "de": 17,
+    "fr": 16
+  },
+  "answered_counts": {
+    "unresolved": 49,
+    "authority_linked": 1
+  },
+  "unavailable_editions": 150,
+  "distinct_candidate_roots": 1,
+  "network_requests_initial_attempt": 2,
+  "network_requests_this_script_run": 0,
+  "successful_response_bytes": 8378,
+  "deferred": true,
+  "failures": [
+    {
+      "error": "The read operation timed out",
+      "status": null,
+      "query_sha256": "3ff76166a9b427aa2ef95b76b4de5e1a3e023e2e85935d64659f6da64d09c40f",
+      "endpoint": "https://query.wikidata.org/sparql",
+      "retry_at_epoch": 1794697588.869486,
+      "retry_at": "2026-11-14T23:06:28.869486+00:00",
+      "automatic_retry": false
+    }
+  ],
+  "query_evidence": [
+    {
+      "query_sha256": "41698c9c241f436cd11a254dea39b698dc9e7d2a5cb1df05716db1153f797d9e",
+      "retrieved_at": "2026-11-14T22:06:01.860757+00:00",
+      "response_sha256": "b146ecfbb996fcccda0e728d91ea4f379d676869316139c295298afb4bcf03ab",
+      "response_bytes": 8378
+    }
+  ],
+  "linked_proposals": [
+    {
+      "id": "pg56156-full",
+      "gutenberg_id": "56156",
+      "title": "Venus im Pelz",
+      "author": "Sacher-Masoch, Leopold, Ritter von",
+      "language": "de",
+      "work_id": "pg56156",
+      "work_identity_status": "provisional",
+      "query_sha256": "41698c9c241f436cd11a254dea39b698dc9e7d2a5cb1df05716db1153f797d9e",
+      "mapping_query_complete": true,
+      "candidates": [
+        {
+          "item": {
+            "qid": "Q140772079",
+            "url": "https://www.wikidata.org/wiki/Q140772079",
+            "labels": {},
+            "label": null,
+            "types": [
+              "Q3331189"
+            ],
+            "classification": "edition"
+          },
+          "candidate_work": {
+            "qid": "Q677592",
+            "url": "https://www.wikidata.org/wiki/Q677592",
+            "labels": {
+              "de": "Venus im Pelz",
+              "fr": "La Vénus à la fourrure",
+              "ru": "Венера в мехах",
+              "en": "Venus in Furs"
+            },
+            "label": "Venus in Furs",
+            "types": [
+              "Q7725634"
+            ],
+            "classification": "work"
+          },
+          "path": [
+            "Q140772079",
+            "Q677592"
+          ],
+          "p629_evidence": [
+            {
+              "subject": "Q140772079",
+              "property": "P629",
+              "object": "Q677592",
+              "query_sha256": "41698c9c241f436cd11a254dea39b698dc9e7d2a5cb1df05716db1153f797d9e"
+            }
+          ],
+          "reason": "explicit_work_root",
+          "authors": [
+            {
+              "qid": "Q78474",
+              "url": "https://www.wikidata.org/wiki/Q78474",
+              "labels": {
+                "de": "Leopold von Sacher-Masoch",
+                "en": "Leopold von Sacher-Masoch",
+                "fr": "Leopold von Sacher-Masoch",
+                "ru": "Леопольд фон Захер-Мазох"
+              },
+              "label": "Leopold von Sacher-Masoch",
+              "types": [
+                "Q5"
+              ],
+              "classification": "unknown"
+            }
+          ],
+          "confidence": "authority_linked",
+          "source_scope_verified": false
+        }
+      ],
+      "p2034_evidence": [
+        {
+          "subject": "Q140772079",
+          "property": "P2034",
+          "object": "56156",
+          "query_sha256": "41698c9c241f436cd11a254dea39b698dc9e7d2a5cb1df05716db1153f797d9e"
+        }
+      ],
+      "source_scope_verified": false,
+      "confidence": "authority_linked",
+      "reason": "explicit_work_root",
+      "candidate_qid": "Q677592"
+    }
+  ],
+  "frontmatter_observations": [
+    {
+      "id": "pg21789-full",
+      "language": "en",
+      "catalog_title": "A Discourse of Life and Death, by Mornay; and Antonius by Garnier",
+      "catalog_author": "Mornay, Philippe de, seigneur du Plessis-Marly; Garnier, Robert",
+      "authority_confidence": "unresolved",
+      "authority_reason": "no_exact_p2034_claim_in_response",
+      "candidate_qid": null,
+      "cached_artifact_status": "cached_artifact_sha_verified",
+      "opf_titles": [
+        "A Discourse of Life and Death, by Mornay; and  Antonius by Garnier"
+      ],
+      "opf_authors": [
+        "seigneur du Plessis-Marly Philippe de Mornay",
+        "Robert Garnier"
+      ],
+      "catalog_title_matches_opf": true,
+      "catalog_author_surname_present": true,
+      "authority_labels": {},
+      "authority_authors": [],
+      "authority_title_label_present": false,
+      "authority_author_label_present": false,
+      "interpretation": "Lexical observations for manual review, never a fuzzy-title identity proof",
+      "work_root_verified": false
+    },
+    {
+      "id": "pg56156-full",
+      "language": "de",
+      "catalog_title": "Venus im Pelz",
+      "catalog_author": "Sacher-Masoch, Leopold, Ritter von",
+      "authority_confidence": "authority_linked",
+      "authority_reason": "explicit_work_root",
+      "candidate_qid": "Q677592",
+      "cached_artifact_status": "cached_artifact_sha_verified",
+      "opf_titles": [
+        "Venus im Pelz"
+      ],
+      "opf_authors": [
+        "Ritter von Leopold Sacher-Masoch"
+      ],
+      "catalog_title_matches_opf": true,
+      "catalog_author_surname_present": true,
+      "authority_labels": {
+        "de": "Venus im Pelz",
+        "fr": "La Vénus à la fourrure",
+        "ru": "Венера в мехах",
+        "en": "Venus in Furs"
+      },
+      "authority_authors": [
+        "Leopold von Sacher-Masoch"
+      ],
+      "authority_title_label_present": true,
+      "authority_author_label_present": true,
+      "interpretation": "Lexical observations for manual review, never a fuzzy-title identity proof",
+      "work_root_verified": false
+    },
+    {
+      "id": "pg33388-full",
+      "language": "fr",
+      "catalog_title": "Raison et sensibilité, ou les deux manières d'aimer (Tome 1)",
+      "catalog_author": "Austen, Jane",
+      "authority_confidence": "unresolved",
+      "authority_reason": "no_exact_p2034_claim_in_response",
+      "candidate_qid": null,
+      "cached_artifact_status": "cached_artifact_sha_verified",
+      "opf_titles": [
+        "Raison et sensibilité, ou les deux manières d'aimer (Tome 1)"
+      ],
+      "opf_authors": [
+        "Jane Austen"
+      ],
+      "catalog_title_matches_opf": true,
+      "catalog_author_surname_present": true,
+      "authority_labels": {},
+      "authority_authors": [],
+      "authority_title_label_present": false,
+      "authority_author_label_present": false,
+      "interpretation": "Lexical observations for manual review, never a fuzzy-title identity proof",
+      "work_root_verified": false
+    },
+    {
+      "id": "pg34771-full",
+      "language": "en",
+      "catalog_title": "The Scientific Basis of National Progress, Including that of Morality",
+      "catalog_author": "Gore, George",
+      "authority_confidence": "unresolved",
+      "authority_reason": "no_exact_p2034_claim_in_response",
+      "candidate_qid": null,
+      "cached_artifact_status": "cached_artifact_sha_verified",
+      "opf_titles": [
+        "The Scientific Basis of National Progress, Including that of Morality"
+      ],
+      "opf_authors": [
+        "George Gore"
+      ],
+      "catalog_title_matches_opf": true,
+      "catalog_author_surname_present": true,
+      "authority_labels": {},
+      "authority_authors": [],
+      "authority_title_label_present": false,
+      "authority_author_label_present": false,
+      "interpretation": "Lexical observations for manual review, never a fuzzy-title identity proof",
+      "work_root_verified": false
+    },
+    {
+      "id": "pg79789-full",
+      "language": "de",
+      "catalog_title": "Geschichte des Kriegsschiffbaues vom Altertum bis zur Einführung der Dampfkraft",
+      "catalog_author": "Altmann, Otto",
+      "authority_confidence": "unresolved",
+      "authority_reason": "no_exact_p2034_claim_in_response",
+      "candidate_qid": null,
+      "cached_artifact_status": "cached_artifact_sha_verified",
+      "opf_titles": [
+        "Geschichte des Kriegsschiffbaues vom Altertum bis zur Einführung der Dampfkraft"
+      ],
+      "opf_authors": [
+        "Otto Altmann"
+      ],
+      "catalog_title_matches_opf": true,
+      "catalog_author_surname_present": true,
+      "authority_labels": {},
+      "authority_authors": [],
+      "authority_title_label_present": false,
+      "authority_author_label_present": false,
+      "interpretation": "Lexical observations for manual review, never a fuzzy-title identity proof",
+      "work_root_verified": false
+    },
+    {
+      "id": "pg64144-full",
+      "language": "fr",
+      "catalog_title": "Femmes nouvelles",
+      "catalog_author": "Margueritte, Paul; Margueritte, V. (Victor)",
+      "authority_confidence": "unresolved",
+      "authority_reason": "no_exact_p2034_claim_in_response",
+      "candidate_qid": null,
+      "cached_artifact_status": "cached_artifact_sha_verified",
+      "opf_titles": [
+        "Femmes nouvelles"
+      ],
+      "opf_authors": [
+        "Paul Margueritte",
+        "V. Margueritte"
+      ],
+      "catalog_title_matches_opf": true,
+      "catalog_author_surname_present": true,
+      "authority_labels": {},
+      "authority_authors": [],
+      "authority_title_label_present": false,
+      "authority_author_label_present": false,
+      "interpretation": "Lexical observations for manual review, never a fuzzy-title identity proof",
+      "work_root_verified": false
+    },
+    {
+      "id": "pg27106-full",
+      "language": "en",
+      "catalog_title": "Kinematics of Mechanisms from the Time of Watt",
+      "catalog_author": "Ferguson, Eugene S.",
+      "authority_confidence": "unresolved",
+      "authority_reason": "no_exact_p2034_claim_in_response",
+      "candidate_qid": null,
+      "cached_artifact_status": "cached_artifact_sha_verified",
+      "opf_titles": [
+        "Kinematics of Mechanisms from the Time of Watt"
+      ],
+      "opf_authors": [
+        "Eugene S. Ferguson"
+      ],
+      "catalog_title_matches_opf": true,
+      "catalog_author_surname_present": true,
+      "authority_labels": {},
+      "authority_authors": [],
+      "authority_title_label_present": false,
+      "authority_author_label_present": false,
+      "interpretation": "Lexical observations for manual review, never a fuzzy-title identity proof",
+      "work_root_verified": false
+    },
+    {
+      "id": "pg53344-full",
+      "language": "de",
+      "catalog_title": "Kammweg-Führer von der Jeschkenkoppe bei Reichenberg bis zum Rosenberg bei Tetschen mit Berücksichtigung der anschliessenden Kammwege",
+      "catalog_author": "Hantschel, Franz",
+      "authority_confidence": "unresolved",
+      "authority_reason": "no_exact_p2034_claim_in_response",
+      "candidate_qid": null,
+      "cached_artifact_status": "cached_artifact_sha_verified",
+      "opf_titles": [
+        "Kammweg-Führer von der Jeschkenkoppe bei Reichenberg bis zum Rosenberg bei Tetschen / mit Berücksichtigung der anschliessenden Kammwege"
+      ],
+      "opf_authors": [
+        "Franz Hantschel"
+      ],
+      "catalog_title_matches_opf": true,
+      "catalog_author_surname_present": true,
+      "authority_labels": {},
+      "authority_authors": [],
+      "authority_title_label_present": false,
+      "authority_author_label_present": false,
+      "interpretation": "Lexical observations for manual review, never a fuzzy-title identity proof",
+      "work_root_verified": false
+    },
+    {
+      "id": "pg66995-full",
+      "language": "fr",
+      "catalog_title": "Trois Églises Eaux-fortes originales de Ch. Jouas",
+      "catalog_author": "Huysmans, J.-K. (Joris-Karl)",
+      "authority_confidence": "unresolved",
+      "authority_reason": "no_exact_p2034_claim_in_response",
+      "candidate_qid": null,
+      "cached_artifact_status": "cached_artifact_sha_verified",
+      "opf_titles": [
+        "Trois Églises / Eaux-fortes originales de Ch. Jouas"
+      ],
+      "opf_authors": [
+        "J.-K. Huysmans"
+      ],
+      "catalog_title_matches_opf": true,
+      "catalog_author_surname_present": true,
+      "authority_labels": {},
+      "authority_authors": [],
+      "authority_title_label_present": false,
+      "authority_author_label_present": false,
+      "interpretation": "Lexical observations for manual review, never a fuzzy-title identity proof",
+      "work_root_verified": false
+    },
+    {
+      "id": "pg7923-full",
+      "language": "en",
+      "catalog_title": "American Historical and Literary Curiosities, Series One",
+      "catalog_author": "Smith, J. Jay (John Jay); Watson, John F. (John Fanning)",
+      "authority_confidence": "unresolved",
+      "authority_reason": "no_exact_p2034_claim_in_response",
+      "candidate_qid": null,
+      "cached_artifact_status": "cached_artifact_sha_verified",
+      "opf_titles": [
+        "American Historical and Literary Curiosities, Series One"
+      ],
+      "opf_authors": [
+        "J. Jay Smith",
+        "John F. Watson"
+      ],
+      "catalog_title_matches_opf": true,
+      "catalog_author_surname_present": true,
+      "authority_labels": {},
+      "authority_authors": [],
+      "authority_title_label_present": false,
+      "authority_author_label_present": false,
+      "interpretation": "Lexical observations for manual review, never a fuzzy-title identity proof",
+      "work_root_verified": false
+    },
+    {
+      "id": "pg6503-full",
+      "language": "de",
+      "catalog_title": "Der Neffe als Onkel Lustspiel in drei Aufzuegen. Aus dem Franzoesischen des Picard",
+      "catalog_author": "Schiller, Friedrich",
+      "authority_confidence": "unresolved",
+      "authority_reason": "no_exact_p2034_claim_in_response",
+      "candidate_qid": null,
+      "cached_artifact_status": "cached_artifact_sha_verified",
+      "opf_titles": [
+        "Der Neffe als Onkel / Lustspiel in drei Aufzuegen. Aus dem Franzoesischen des Picard"
+      ],
+      "opf_authors": [
+        "Friedrich Schiller"
+      ],
+      "catalog_title_matches_opf": true,
+      "catalog_author_surname_present": true,
+      "authority_labels": {},
+      "authority_authors": [],
+      "authority_title_label_present": false,
+      "authority_author_label_present": false,
+      "interpretation": "Lexical observations for manual review, never a fuzzy-title identity proof",
+      "work_root_verified": false
+    },
+    {
+      "id": "pg26336-full",
+      "language": "fr",
+      "catalog_title": "Rapport sur l'Instruction Publique, les 10, 11 et 19 Septembre 1791 fait au nom du Comité de Constitution à l'Assemblée Nationale",
+      "catalog_author": "Talleyrand-Périgord, Charles Maurice de, prince de Bénévent",
+      "authority_confidence": "unresolved",
+      "authority_reason": "no_exact_p2034_claim_in_response",
+      "candidate_qid": null,
+      "cached_artifact_status": "cached_artifact_sha_verified",
+      "opf_titles": [
+        "Rapport sur l'Instruction Publique, les 10, 11 et 19 Septembre 1791 / fait au nom du Comité de Constitution à l'Assemblée Nationale"
+      ],
+      "opf_authors": [
+        "prince de Bénévent Charles Maurice de Talleyrand-Périgord"
+      ],
+      "catalog_title_matches_opf": true,
+      "catalog_author_surname_present": true,
+      "authority_labels": {},
+      "authority_authors": [],
+      "authority_title_label_present": false,
+      "authority_author_label_present": false,
+      "interpretation": "Lexical observations for manual review, never a fuzzy-title identity proof",
+      "work_root_verified": false
+    },
+    {
+      "id": "pg36523-full",
+      "language": "en",
+      "catalog_title": "The Last Straw",
+      "catalog_author": "Titus, Harold",
+      "authority_confidence": "unresolved",
+      "authority_reason": "no_exact_p2034_claim_in_response",
+      "candidate_qid": null,
+      "cached_artifact_status": "cached_artifact_sha_verified",
+      "opf_titles": [
+        "The Last Straw"
+      ],
+      "opf_authors": [
+        "Harold Titus"
+      ],
+      "catalog_title_matches_opf": true,
+      "catalog_author_surname_present": true,
+      "authority_labels": {},
+      "authority_authors": [],
+      "authority_title_label_present": false,
+      "authority_author_label_present": false,
+      "interpretation": "Lexical observations for manual review, never a fuzzy-title identity proof",
+      "work_root_verified": false
+    },
+    {
+      "id": "pg60845-full",
+      "language": "de",
+      "catalog_title": "Helianth. Band 3 Bilder aus dem Leben zweier Menschen von heute und aus der norddeutschen Tiefebene",
+      "catalog_author": "Schaeffer, Albrecht",
+      "authority_confidence": "unresolved",
+      "authority_reason": "no_exact_p2034_claim_in_response",
+      "candidate_qid": null,
+      "cached_artifact_status": "cached_artifact_sha_verified",
+      "opf_titles": [
+        "Helianth. Band 3 / Bilder aus dem Leben zweier Menschen von heute und aus der norddeutschen Tiefebene"
+      ],
+      "opf_authors": [
+        "Albrecht Schaeffer"
+      ],
+      "catalog_title_matches_opf": true,
+      "catalog_author_surname_present": true,
+      "authority_labels": {},
+      "authority_authors": [],
+      "authority_title_label_present": false,
+      "authority_author_label_present": false,
+      "interpretation": "Lexical observations for manual review, never a fuzzy-title identity proof",
+      "work_root_verified": false
+    },
+    {
+      "id": "pg36260-full",
+      "language": "fr",
+      "catalog_title": "Histoire d'Attila et de ses successeurs (2/2) jusqu'à l'établissement des Hongrois en Europe",
+      "catalog_author": "Thierry, Amédée",
+      "authority_confidence": "unresolved",
+      "authority_reason": "no_exact_p2034_claim_in_response",
+      "candidate_qid": null,
+      "cached_artifact_status": "cached_artifact_sha_verified",
+      "opf_titles": [
+        "Histoire d'Attila et de ses successeurs (2/2) / jusqu'à l'établissement des Hongrois en Europe"
+      ],
+      "opf_authors": [
+        "Amédée Thierry"
+      ],
+      "catalog_title_matches_opf": true,
+      "catalog_author_surname_present": true,
+      "authority_labels": {},
+      "authority_authors": [],
+      "authority_title_label_present": false,
+      "authority_author_label_present": false,
+      "interpretation": "Lexical observations for manual review, never a fuzzy-title identity proof",
+      "work_root_verified": false
+    },
+    {
+      "id": "pg9591-full",
+      "language": "en",
+      "catalog_title": "Old Portraits and Modern Sketches Part 1 from Volume VI of The Works of John Greenleaf Whittier",
+      "catalog_author": "Whittier, John Greenleaf",
+      "authority_confidence": "unresolved",
+      "authority_reason": "no_exact_p2034_claim_in_response",
+      "candidate_qid": null,
+      "cached_artifact_status": "cached_artifact_sha_verified",
+      "opf_titles": [
+        "Old Portraits and Modern Sketches / Part 1 from Volume VI of The Works of John Greenleaf Whittier"
+      ],
+      "opf_authors": [
+        "John Greenleaf Whittier"
+      ],
+      "catalog_title_matches_opf": true,
+      "catalog_author_surname_present": true,
+      "authority_labels": {},
+      "authority_authors": [],
+      "authority_title_label_present": false,
+      "authority_author_label_present": false,
+      "interpretation": "Lexical observations for manual review, never a fuzzy-title identity proof",
+      "work_root_verified": false
+    },
+    {
+      "id": "pg13805-full",
+      "language": "de",
+      "catalog_title": "Todsünden",
+      "catalog_author": "Heiberg, Hermann",
+      "authority_confidence": "unresolved",
+      "authority_reason": "no_exact_p2034_claim_in_response",
+      "candidate_qid": null,
+      "cached_artifact_status": "cached_artifact_sha_verified",
+      "opf_titles": [
+        "Todsünden"
+      ],
+      "opf_authors": [
+        "Hermann Heiberg"
+      ],
+      "catalog_title_matches_opf": true,
+      "catalog_author_surname_present": true,
+      "authority_labels": {},
+      "authority_authors": [],
+      "authority_title_label_present": false,
+      "authority_author_label_present": false,
+      "interpretation": "Lexical observations for manual review, never a fuzzy-title identity proof",
+      "work_root_verified": false
+    },
+    {
+      "id": "pg64721-full",
+      "language": "fr",
+      "catalog_title": "Les grandes chroniques de France (6/6) selon que elles sont conservées en l'Eglise de Saint-Denis en France",
+      "catalog_author": "Paris, Paulin",
+      "authority_confidence": "unresolved",
+      "authority_reason": "no_exact_p2034_claim_in_response",
+      "candidate_qid": null,
+      "cached_artifact_status": "cached_artifact_sha_verified",
+      "opf_titles": [
+        "Les grandes chroniques de France (6/6) / selon que elles sont conservées en l'Eglise de Saint-Denis en France"
+      ],
+      "opf_authors": [
+        "Paulin Paris"
+      ],
+      "catalog_title_matches_opf": true,
+      "catalog_author_surname_present": true,
+      "authority_labels": {},
+      "authority_authors": [],
+      "authority_title_label_present": false,
+      "authority_author_label_present": false,
+      "interpretation": "Lexical observations for manual review, never a fuzzy-title identity proof",
+      "work_root_verified": false
+    },
+    {
+      "id": "pg6476-full",
+      "language": "en",
+      "catalog_title": "Himalayan Journals — Volume 1 Or, Notes of a Naturalist in Bengal, the Sikkim and Nepal Himalayas, the Khasia Mountains, etc.",
+      "catalog_author": "Hooker, Joseph Dalton",
+      "authority_confidence": "unresolved",
+      "authority_reason": "no_exact_p2034_claim_in_response",
+      "candidate_qid": null,
+      "cached_artifact_status": "cached_artifact_sha_verified",
+      "opf_titles": [
+        "Himalayan Journals — Volume 1 / Or, Notes of a Naturalist in Bengal, the Sikkim and Nepal Himalayas, the Khasia Mountains, etc."
+      ],
+      "opf_authors": [
+        "Joseph Dalton Hooker"
+      ],
+      "catalog_title_matches_opf": true,
+      "catalog_author_surname_present": true,
+      "authority_labels": {},
+      "authority_authors": [],
+      "authority_title_label_present": false,
+      "authority_author_label_present": false,
+      "interpretation": "Lexical observations for manual review, never a fuzzy-title identity proof",
+      "work_root_verified": false
+    },
+    {
+      "id": "pg50187-full",
+      "language": "de",
+      "catalog_title": "Aus zwei Welttheilen. Erster Band. Gesammelte Erzählungen",
+      "catalog_author": "Gerstäcker, Friedrich",
+      "authority_confidence": "unresolved",
+      "authority_reason": "no_exact_p2034_claim_in_response",
+      "candidate_qid": null,
+      "cached_artifact_status": "cached_artifact_sha_verified",
+      "opf_titles": [
+        "Aus zwei Welttheilen. Erster Band. / Gesammelte Erzählungen"
+      ],
+      "opf_authors": [
+        "Friedrich Gerstäcker"
+      ],
+      "catalog_title_matches_opf": true,
+      "catalog_author_surname_present": true,
+      "authority_labels": {},
+      "authority_authors": [],
+      "authority_title_label_present": false,
+      "authority_author_label_present": false,
+      "interpretation": "Lexical observations for manual review, never a fuzzy-title identity proof",
+      "work_root_verified": false
+    }
+  ],
+  "frontmatter_manual_reviews": [
+    {
+      "id": "pg21789-full",
+      "artifact_sha256": "c73826bd5b400c68e071680d8c86400ce426ee1f68302bf425cf74cf224f0fff",
+      "work_scope": "combined_works_and_translation",
+      "review_note": "Два явно раздельных французских оригинала Mornay и Garnier; оба переведены Countess of Pembroke. Нельзя слить весь ebook в один из этих оригиналов.",
+      "decision": "review_only_no_merge_or_count_promotion",
+      "work_root_verified": false
+    },
+    {
+      "id": "pg56156-full",
+      "artifact_sha256": "c0d1deca89679bd6780d66c81377ce47475b991f7b16c9db20da2b6643bfc5ee",
+      "work_scope": "novella_with_later_editorial_frontmatter",
+      "review_note": "1920 edition; title/author согласованы с Q677592 через P2034→P629. Отдельный Vorwort говорит об авторе после его смерти; нужна отдельная атрибуция, а не автоматический verified-work increment.",
+      "decision": "review_only_no_merge_or_count_promotion",
+      "work_root_verified": false
+    },
+    {
+      "id": "pg33388-full",
+      "artifact_sha256": "b4e96c591e5bef10a9690e7a0e375a5e630da938e87bb2a7f13b330f3fa8f4f1",
+      "work_scope": "freely_translated_volume",
+      "review_note": "Tome premier, Paris 1815; явно TRADUIT LIBREMENT, Isabelle de Montolieu, d’après Austen. Не считать автоматически буквальным переводом или полным многотомным произведением.",
+      "decision": "review_only_no_merge_or_count_promotion",
+      "work_root_verified": false
+    },
+    {
+      "id": "pg34771-full",
+      "artifact_sha256": "82a15e505b3e3462ac6ad0f8ee01fe5c7d67b3ea2f0acd1816638c2e303cf2d5",
+      "work_scope": "single_publication_scope_unverified",
+      "review_note": "Титульный лист G. Gore, Williams and Norgate, 1882; OPF согласован. Authority mapping не найден в полном ответе; scope проверен только по frontmatter.",
+      "decision": "review_only_no_merge_or_count_promotion",
+      "work_root_verified": false
+    },
+    {
+      "id": "pg79789-full",
+      "artifact_sha256": "ab491c7f10f1ce727adf267ff72cc8991f894161f942f5f96a00971257482233",
+      "work_scope": "illustrated_technical_publication",
+      "review_note": "Печатное издание Berlin 1919, 34 Originalaufnahmen. Otto Altmann указан в OPF/provider metadata; текстовая копия не доказывает полноту изображений.",
+      "decision": "review_only_no_merge_or_count_promotion",
+      "work_root_verified": false
+    },
+    {
+      "id": "pg64144-full",
+      "artifact_sha256": "1c6133d7e1ef191bc526dda735c212d15e12688f7b2faa687e3abca614cd62b4",
+      "work_scope": "joint_authorship",
+      "review_note": "На титуле Paul et Victor Margueritte, Femmes nouvelles; оба автора сохранены в OPF. Каталог произведений после титула не является списком отдельных включённых works.",
+      "decision": "review_only_no_merge_or_count_promotion",
+      "work_root_verified": false
+    },
+    {
+      "id": "pg27106-full",
+      "artifact_sha256": "8fe774da766f52764a52ffc54a892591b245ae81783c9edfc33e0f386b7a0ecc",
+      "work_scope": "paper_in_series",
+      "review_note": "Явно CONTRIBUTIONS FROM THE MUSEUM OF HISTORY AND TECHNOLOGY, PAPER 27; Ferguson. Это самостоятельная публикация в серии, не вся серия или автоматически монография.",
+      "decision": "review_only_no_merge_or_count_promotion",
+      "work_root_verified": false
+    },
+    {
+      "id": "pg53344-full",
+      "artifact_sha256": "b58e156ff3234877de5697891029c06262463a3e417769912539158fce198853",
+      "work_scope": "guide_with_separate_visual_material",
+      "review_note": "Титул Dr. F. Hantschel, Prag-Smichow 1905, Mit 1 Wegekarte und 4 Ansichts-Postkarten. OPF согласован, визуальные материалы требуют отдельной оценки.",
+      "decision": "review_only_no_merge_or_count_promotion",
+      "work_root_verified": false
+    },
+    {
+      "id": "pg66995-full",
+      "artifact_sha256": "5798537a71d493e0c6682ff33e7356ce4fbdba9793f7092d2e4d814d2d2f5935",
+      "work_scope": "collected_essays_with_illustrations",
+      "review_note": "Trois Eglises, Huysmans, René Kieffer Paris 1920; три названных церковных очерка и eaux-fortes Ch. Jouas. Нельзя слить/посчитать все компоненты как один подтверждённый work.",
+      "decision": "review_only_no_merge_or_count_promotion",
+      "work_root_verified": false
+    },
+    {
+      "id": "pg7923-full",
+      "artifact_sha256": "f15bdc672abe1ec107c4380e0abe164dc64b243a66d063bd52bc159741e0986a",
+      "work_scope": "facsimile_collection",
+      "review_note": "Smith и Watson, Part One; оглавление состоит из Plate 1–69. Полнота text-only копии для содержания репродукций не доказана.",
+      "decision": "review_only_no_merge_or_count_promotion",
+      "work_root_verified": false
+    },
+    {
+      "id": "pg6503-full",
+      "artifact_sha256": "92f8254a1c1834c15b4c27bc6119c353d9b183479ddf05e3766f2527c490733a",
+      "work_scope": "translation_or_adaptation",
+      "review_note": "Schiller, Der Neffe als Onkel, Aus dem Französischen des Picard. Нельзя переносить каталоговое creator на авторство французского оригинала.",
+      "decision": "review_only_no_merge_or_count_promotion",
+      "work_root_verified": false
+    },
+    {
+      "id": "pg26336-full",
+      "artifact_sha256": "64088d8a9928857f08a17c358b7a06899aa370142651bf0a78eb21031cfce22c",
+      "work_scope": "official_report_with_later_digital_apparatus",
+      "review_note": "Talleyrand-Périgord, Imprimerie Nationale 1791; цифровая заметка говорит о добавленном оглавлении, есть рамка Research Collection. Аппарат не отождествлять с оригинальным текстом.",
+      "decision": "review_only_no_merge_or_count_promotion",
+      "work_root_verified": false
+    },
+    {
+      "id": "pg36523-full",
+      "artifact_sha256": "99c756576312256a58d1e6044c9befed3515fe92a10e5e6b205bdd12617181eb",
+      "work_scope": "novel_edition",
+      "review_note": "The Last Straw, Harold Titus, Small Maynard; copyright 1920, second printing June 1920. Каталог/OPF согласованы; authority root отсутствует в ответе.",
+      "decision": "review_only_no_merge_or_count_promotion",
+      "work_root_verified": false
+    },
+    {
+      "id": "pg60845-full",
+      "artifact_sha256": "c26b3505eb8d7749b13b6afaaaf4ab9414293f839543d2cbefbf7376c7c26b45",
+      "work_scope": "volume_of_larger_work",
+      "review_note": "Helianth, Albrecht Schaeffer, 1920: Der drei Bände dritter, книга начинается с Siebentes Buch. Нельзя считать этот том полным многотомным work.",
+      "decision": "review_only_no_merge_or_count_promotion",
+      "work_root_verified": false
+    },
+    {
+      "id": "pg36260-full",
+      "artifact_sha256": "1c7257795038804066443e45290a4e54f43098a8ae4a2e9407e01a9164406641",
+      "work_scope": "volume_of_larger_work",
+      "review_note": "Amédée Thierry, Paris 1856, TOME SECOND; текст начинается третьей частью. Это второй том, а не автоматически отдельное уникальное произведение.",
+      "decision": "review_only_no_merge_or_count_promotion",
+      "work_root_verified": false
+    },
+    {
+      "id": "pg9591-full",
+      "artifact_sha256": "6aaa725b4b005a628ab7de00e391cd3f1aedb4b7a9f32573a563f3dbd4f84b4e",
+      "work_scope": "collected_work_component",
+      "review_note": "Part 1 from Volume VI; несколько групп биографических очерков и исторических статей. Exact ebook identity не решает границы отдельных works.",
+      "decision": "review_only_no_merge_or_count_promotion",
+      "work_root_verified": false
+    },
+    {
+      "id": "pg13805-full",
+      "artifact_sha256": "5f81e07a9b3d971a06dc72bf9eea3987b2934f7b5255b605555bff64ce3efcfb",
+      "work_scope": "novel_with_editorial_introduction",
+      "review_note": "Титул Todsünden, Roman von Hermann Heiberg, Berlin 1891; последующий текст Hermann Heiberg описывает автора в третьем лице. Нужна отдельная атрибуция вводного аппарата.",
+      "decision": "review_only_no_merge_or_count_promotion",
+      "work_root_verified": false
+    },
+    {
+      "id": "pg64721-full",
+      "artifact_sha256": "a33f2a1551d5ff898863b810ea077b4d27a95f2f354dac3f8a53020d72892bf0",
+      "work_scope": "edited_chronicle_volume",
+      "review_note": "Том шестой, Paris 1838, PUBLIÉES PAR M. PAULIN PARIS. OPF creator Paris здесь подтверждает издательскую/редакторскую роль, а не авторство средневековой хроники.",
+      "decision": "review_only_no_merge_or_count_promotion",
+      "work_root_verified": false
+    },
+    {
+      "id": "pg6476-full",
+      "artifact_sha256": "ada0e95679a9cf9b7c44196c33a47902f975ca0b56b06708d04496e918314f6e",
+      "work_scope": "volume_of_larger_work",
+      "review_note": "Himalayan Journals, J. D. Hooker, Volume I, first published 1854. Посвящение Darwin не делает Darwin автором; том не равен полному многотомному work.",
+      "decision": "review_only_no_merge_or_count_promotion",
+      "work_root_verified": false
+    },
+    {
+      "id": "pg50187-full",
+      "artifact_sha256": "42646f46e463fdc9f6e3d2f1d62661bd5865f952b553223b520da8748fbfe146",
+      "work_scope": "collected_stories_volume",
+      "review_note": "Gerstäcker, Leipzig 1854, Erster Band, Gesammelte Erzählungen с несколькими заголовками рассказов. Отдельно разрешать collection, volume и constituent works.",
+      "decision": "review_only_no_merge_or_count_promotion",
+      "work_root_verified": false
+    }
+  ],
+  "offline_control_counts": {
+    "authority_linked": 16,
+    "unresolved": 31,
+    "ambiguous": 3
+  },
+  "offline_controls_verified_query_caches": 4,
+  "database_modified": false,
+  "source_manifests_modified": false,
+  "identity_count_promotion_allowed": false,
+  "confirmed_work_count_increment": 0,
+  "scope": "Authority assertions and lexical/manual-review evidence only; no unique-work verification or merge",
+  "bounds": {
+    "max_requests": 4,
+    "max_response_bytes_each": 2097152,
+    "max_total_response_bytes": 8388608,
+    "deadline_seconds": 120.0,
+    "max_p629_edges": 3
+  }
+}

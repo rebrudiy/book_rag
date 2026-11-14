@@ -299,3 +299,22 @@ def acquire_wikibooks_reference(
     emit({key: str(value) if isinstance(value, Path) else value for key, value in result.items()})
     if index:
         emit(ingest_manifest(result["manifest"]))
+
+
+@app.command("install-semantic-index")
+def install_semantic_index(source: Path, model_cache: Path | None = None, copy_arrays: bool = False) -> None:
+    """Install a completed frozen index with explicit coverage in the current library."""
+    from book_rag.index_installation import install_partial_index
+
+    result = install_partial_index(source, data_dir(), model_cache=model_cache, hardlink=not copy_arrays)
+    emit(
+        {
+            "generation": result["generation"],
+            "coverage_kind": result["coverage_kind"],
+            "covered_editions": result["coverage"]["books"],
+            "covered_passages": result["coverage"]["passages"],
+            "vectors": result["vectors"],
+            "model": result["model"],
+            "installation_receipt": result["installation_receipt"],
+        }
+    )
