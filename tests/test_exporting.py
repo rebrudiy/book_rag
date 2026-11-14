@@ -69,6 +69,20 @@ def test_invalidated_snapshot_retains_source_but_never_reader_link() -> None:
     assert "Открыть в локальном читателе" not in export_collection([ITEM | {"reader_url": None}])
 
 
+def test_historical_export_link_survives_removed_live_passage() -> None:
+    item = ITEM | {
+        "passage_id": None,
+        "reader_url": None,
+        "historical_reader_url": "/?saved=1",
+        "provenance": ITEM["provenance"] | {"canonical_version_id": "cv1-" + "a" * 64},
+    }
+    output = export_collection([item])
+    assert "[Читать сохранённое издание](</?saved=1>)" in output
+    assert "текущая ссылка в читателе недоступна" not in output
+    for bad in ("/?saved=2", "https://example.org/?saved=1", "/?saved=1&book=other"):
+        assert "[Читать сохранённое издание]" not in export_collection([item | {"historical_reader_url": bad}])
+
+
 @pytest.mark.parametrize(
     "url",
     [

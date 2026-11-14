@@ -71,6 +71,20 @@ def _quoted(value: Any) -> list[str]:
     return ["> " + _escape(line) for line in str(value).splitlines()]
 
 
+def _historical_reader_url(item: Mapping[str, Any], provenance: Mapping[str, Any]) -> str | None:
+    version = provenance.get("canonical_version_id")
+    identity = item.get("id")
+    value = item.get("historical_reader_url")
+    if type(identity) is not int or identity < 1 or not isinstance(version, str):
+        return None
+    if not re.fullmatch(r"cv1-[a-f0-9]{64}", version) or not isinstance(value, str):
+        return None
+    # The saved record, rather than old passage/section row IDs, owns this URL.
+    if value != f"/?saved={identity}":
+        return None
+    return value
+
+
 def export_collection(items: list[dict[str, Any]], collection: str | None = None) -> str:
     """Export saved queries, notes and exact quotation snapshots as Markdown.
 
@@ -102,10 +116,13 @@ def export_collection(items: list[dict[str, Any]], collection: str | None = None
         source_url = _external_url(provenance.get("source_url", item.get("source_url")))
         if source_url:
             lines.extend([f"[Открыть оригинальный источник](<{source_url}>)", ""])
+        historical_url = _historical_reader_url(item, provenance)
+        if historical_url:
+            lines.extend([f"[Читать сохранённое издание](<{historical_url}>)", ""])
         reader_url = _reader_url(item, provenance)
         if reader_url:
             lines.extend([f"[Открыть в локальном читателе](<{reader_url}>)", ""])
-        elif kind == "passage":
+        elif kind == "passage" and not historical_url:
             lines.extend(["Сохранён снимок фрагмента; текущая ссылка в читателе недоступна.", ""])
         if provenance.get("rights"):
             lines.extend(["Условия использования: " + _escape(provenance["rights"], single_line=True), ""])

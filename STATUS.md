@@ -4,7 +4,7 @@ Updated 2026-11-14 17:43 MSK. Goal ACTIVE; user requested a verified hour report
 
 ## Published / running
 
-Public repository: https://github.com/rebrudiy/book_rag. Published commits a223654, 892061a, 1a1a7e1. Both test/browser CI passed for 1a1a7e1: https://github.com/rebrudiy/book_rag/actions/runs/43596986973. Iteration 4 currently uncommitted; integrate, verify and publish next.
+Public repository: https://github.com/rebrudiy/book_rag. Published commits a223654, 892061a, 1a1a7e1. Both test/browser CI passed for 1a1a7e1: https://github.com/rebrudiy/book_rag/actions/runs/43596986973. Iteration4 published75acbd0; bothCI jobs passed: https://github.com/rebrudiy/book_rag/actions/runs/43606359092. Iteration5 canonicalhistoricalreader nowintegrating/testing.
 
 Live full library: http://127.0.0.1:8001 (lexical; whole-live semantic index unavailable). Demo: http://127.0.0.1:8000 (eight works/excerpts, four languages, 45 passages, multilingual hybrid enabled). Servers restarted with iteration4 availability/edition-link changes; bothHTTP200.
 
@@ -58,3 +58,18 @@ Latest complete suite521passed; globalRuff/format/ty pass. ActualRussian5works, 
 - Livequeue restarted onceagainwithnewparser: nowcachedprevious2,682queueentriesreparse to restorebareDIVbylines and fix EPUBcontinuationchapterlabels. Existingeditionremainssearchableduringrefresh.
 - Owned evaluationcopy workflow complete; actual baseline run experiments/isolated-baseline-v1.json preserved frozen20DB SHAea1feab7c1d1c58acd7457529ef70885f2767ceeab6050ec12db0fa4f74bb4b8.
 - Interface agent now independent CPUonly vectorcompressionbenchmark; childpipeline_review preparing canonical historicalversionshelper forlazyfirst-save archival (notyetintegrated). Corpusagent finalauditdocs/thenboundedRUsourceresearch. Do notstageunfinishednextfeaturefiles.
+
+## Iteration5 progress 2026-11-14 18:03 MSK
+
+- Immutable canonicalversions helper complete: sectiongzip + smallhashedmanifest, exactUTF8/Unicode/newlines, source/indexerproof, no human notes;41unitchecks. Library.save archivesexactcurrentSQLitebook lazilyunderBEGINIMMEDIATE, saved_context returnsonecheckedhistoricalchapter+TOC+exactquote. Concurrentreindex, corruption, lowdisk and fallbackquotedata tests pass. Historicalstorage preflights4GiB+100MiBreserve; annotationstillkeptonarchivefailure. API /api/saved/{id}/context?ordinal=N; userUIagent finishingURL/saved-ID/chapter navigation/browser lifecycle.
+- Explicit per-section translators now persisted/migrated and cited; Soskice(epigraph)/Edmands(criticalessay) correctlydistinctfrommainGarnetttranslator. Threeprioritysourceeditions reimported undernewguard; standaloneAPItests pass. Oldserversnotyetreloadedwithiteration5.
+- Full live-integrity audit PASSED:2,528indexedbooks/841,599passages/all2,528rawfiles hashed,0errors,27.659s; experiments/full-integrity-iteration5.json. Scope canonicalexactness/originalintegrity, notfacsimile/completeness/unresolvedworkidentity.
+- Vectorstorageproxyexperiment actual49,738windows/256corpus-derivedqueries: float16disk38.60MBvs76.80float32, recall@100.999961; int8+scales19.70MB, recall.995156; decodep50slower6.94/25.20msvs3.76. No relevance claim/defaultpromotion. docs/VECTOR_STORAGE_EXPERIMENT.md +experiments/vector-storage-v1.json.
+- Semanticqueryguardbottleneck discovered: fullpassagefingerprintscan~8-10s/subset~5s onsharedlivehost. Childagent designingstrictcachedper-bookrevisionepochs beforepartialindexintegration. No activationfromunfinishedstaging; full1308buildstillrunning.
+- Latest authenticweeklyquota58%remaining at14:56:22UTC. Continueuntil<=3%, userstoporactualenvironmentlimit.
+
+### Iteration5 ready 18:07 MSK
+
+Historicalreaderfullyintegratedandserversrestarted(session87530demo/session25918full). Actual4editionpairs+Soskice/Edmandsreader/citationprobespassedread-onlyChromium. Isolated11historicalworkflows+15smoke+205catalogpassed; screenshotsreviewed.576pytest/Ruff/format/typass. Sourcecheckall2528rawfilesrecordedabove. Nextpublishtheneditnotes/title/collectionwithoutchangingfrozenevidence.
+
+Agents: interfacehistoricalUIcomplete; readyfornextsavedediting. Childpipeline_review nownewindex_coveragehelper/epochtriggers+benchONLY, notsemantic/Libraryuntilreview. Corpus downloadingoneverified25.35MBNov2026RUWikiBooksarchiveforstreamingmetadata/chaptergraph, nofullworkclaims/nobookingestyet; no2GBRUWikisourcedumpdownload. Authenticweeklyquota57%remaining at15:06:08UTC.

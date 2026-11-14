@@ -59,3 +59,30 @@ def test_edition_navigation_is_bounded(tmp_path: Path) -> None:
     assert book is not None
     assert book["related_editions_total"] == 22
     assert len(book["related_editions"]) == 20
+
+
+def test_confirmed_full_work_lower_bound_excludes_uncurated_partial_and_periodicals(tmp_path: Path) -> None:
+    app = create_app(tmp_path / "library")
+    entries = [
+        ("first", "same-work", "curated", "full", "book"),
+        ("translation", "same-work", "curated", "full", "book"),
+        ("unknown", "provisional-work", "provisional", "full", "book"),
+        ("selection", "partial-work", "curated", "selected_chapters", "book"),
+        ("issue", "periodical-work", "curated", "full", "periodical_issue"),
+    ]
+    for book_id, work_id, identity, coverage, work_type in entries:
+        path = tmp_path / f"{book_id}.txt"
+        path.write_text(f"Separate source text for {book_id}.")
+        app.state.library.import_book(
+            path,
+            {
+                "id": book_id,
+                "work_id": work_id,
+                "work_identity_status": identity,
+                "coverage": coverage,
+                "work_type": work_type,
+            },
+        )
+    stats = app.state.library.stats()
+    assert stats["books"] == 5 and stats["work_count_is_provisional"]
+    assert stats["confirmed_full_works_lower_bound"] == 1

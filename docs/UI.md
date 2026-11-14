@@ -88,6 +88,46 @@ the visible counters, follow an indexed card into its reader, check mobile width
 and assert that all browser requests use GET. No live annotation or corpus writes
 are made. Reports/screenshots are saved to `artifacts/pipeline-browser/`.
 
+Saved passages with `historical_reader_url` offer **Читать сохранённое издание**
+as a real link, supporting native new tabs and copied addresses. The historical
+reader uses `/?saved=ID`; optional `chapter=N` selects the zero-based archived
+chapter. Without a chapter parameter it opens the chapter originally saved with
+that item. Its visible **Сохранённое издание · сохранено …** label identifies the
+mode and save date, interpreted from SQLite UTC and displayed locally.
+
+Historical chapter navigation requests `GET /api/saved/{id}/context?ordinal=N`.
+Only the selected chapter text is retained; the remaining entries are a TOC.
+Edition, source, rights, contributor, translator and original-download metadata
+come from that historical response. The UI does not supplement them from the
+current book or claim that the captured context is a complete critical edition.
+Unicode codepoint offsets are checked before highlighting the frozen quote.
+Other chapters have no quotation highlight; returning to the saved chapter
+restores it. Historical passages have no current passage ID, so the reader offers
+copying and does not submit them as new passage saves.
+
+Back/forward, reload and direct links preserve the historical item/chapter.
+Leaving the reader invalidates pending responses. A missing or corrupt context
+clears prior text, highlighting, source links, title, contributor and TOC, then
+offers a return to saved fragments. The saved excerpt and note remain available.
+Legacy items without a canonical context do not acquire an invented historical
+link; a reported archival failure leaves a short explanation alongside the
+retained quote/note. An independently verified current-context action is labeled
+**Открыть текущее издание**, separately from the saved edition.
+
+```sh
+uv run python scripts/browser_historical.py
+```
+
+The real isolated CC0 fixture saves a nonzero Unicode-offset quotation, reimports
+different current text and checks the old two-chapter reader, frozen attribution,
+source download, notes, two saved-chapter defaults, lazy TOC/prev/next, history,
+reload, native middle-click new tab and mobile layout. It then removes only its
+own current catalog entry, tests a late response with actual network latency,
+and corrupts only its own archived chapter to verify the real 409 failure path.
+Missing/invalid contexts and a legacy metadata fixture are also checked. No API
+responses are mocked; live libraries and annotations are untouched. Screenshots
+and `report.json` are written to `artifacts/historical-browser/`.
+
 `/` focuses search with the slash key. All navigation and actions work with a
 keyboard, dialogs use native focus handling, status changes are announced, and
 390 px mobile layouts support the complete search/save/read workflow.

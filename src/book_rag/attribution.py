@@ -34,7 +34,7 @@ def section_attribution(title: str, metadata: dict[str, Any]) -> dict[str, str]:
     if not isinstance(rules, list):
         raise ValueError("section_attributions must be a list of explicit contributor rules")
     normalized_title = _normalized(title)
-    matches: list[tuple[int, str, str]] = []
+    matches: list[tuple[int, str, str, str]] = []
     for index, rule in enumerate(rules):
         if not isinstance(rule, dict):
             raise ValueError(f"section_attributions[{index}] must be an object")
@@ -47,6 +47,9 @@ def section_attribution(title: str, metadata: dict[str, Any]) -> dict[str, str]:
                 raise ValueError(f"section_attributions[{index}].source_artifact_sha256 must be a SHA-256 digest")
         if rule["role"] not in EXPLICIT_ROLES:
             raise ValueError(f"section_attributions[{index}].role must be main_text or editorial")
+        translator = rule.get("translator", "")
+        if "translator" in rule and (not isinstance(translator, str) or not translator.strip()):
+            raise ValueError(f"section_attributions[{index}].translator must be a nonempty string")
         required_ordinal = rule.get("section_ordinal")
         if required_ordinal is not None and (type(required_ordinal) is not int or required_ordinal < 0):
             raise ValueError(f"section_attributions[{index}].section_ordinal must be a nonnegative integer")
@@ -62,12 +65,16 @@ def section_attribution(title: str, metadata: dict[str, Any]) -> dict[str, str]:
         if expected_artifact is not None and metadata.get("_artifact_sha256") != expected_artifact:
             continue
         if _normalized(rule["title_contains"]) in normalized_title:
-            matches.append((index, rule["author"].strip(), rule["role"]))
+            matches.append((index, rule["author"].strip(), rule["role"], translator.strip()))
     if not matches:
         return default
-    identities = {(_normalized(author), role) for _, author, role in matches}
-    if len(identities) > 1:
+    identities = {(_normalized(author), role) for _, author, role, _ in matches}
+    translators = {_normalized(translator) for _, _, _, translator in matches if translator}
+    if len(identities) > 1 or len(translators) > 1:
         return {**default, "attribution_basis": "conflicting_explicit_section_attributions"}
-    indices = ",".join(str(index) for index, _, _ in matches)
-    _, author, role = matches[0]
-    return {"role": role, "author": author, "attribution_basis": f"explicit_section_attributions[{indices}]"}
+    indices = ",".join(str(index) for index, _, _, _ in matches)
+    _, author, role, _ = matches[0]
+    result = {"role": role, "author": author, "attribution_basis": f"explicit_section_attributions[{indices}]"}
+    if translators:
+        result["translator"] = next(translator for _, _, _, translator in matches if translator)
+    return result

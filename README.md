@@ -50,6 +50,8 @@ Imports register the entire manifest as discovered, then process books independe
 
 Imports preserve the exact acquired bytes in a [content-addressed original archive](docs/ARTIFACTS.md). Reader and saved-fragment source links can download the verified original; older saved fragments retain their original artifact after an edition is replaced. Chapters, code blocks, verse and table rows are retained during extraction. This does not establish the correctness of the provider's transcription.
 
+Newly saved quotations also preserve the exact canonical book version. **Читать сохранённое издание** opens its original chapter, highlight, contributor attribution and source after the live book is replaced or removed. Historical chapters load individually and are verified before display. This archive is created when saving, rather than for every downloaded book; earlier notes without an archived version keep their quotation snapshot. See [historical versions](docs/CANONICAL_VERSIONS.md).
+
 ## Optional multilingual retrieval
 
 ```sh
@@ -101,6 +103,8 @@ The theme map shows shared vocabulary and lexical similarity within a language. 
 For an optional, slower local cross-encoder ordering pass, use `uv run bookrag search 'your research query' --mode reranked`. The model is revision-pinned and downloaded locally on first use. [Paired development measurements](docs/RERANKING.md) show a small ranking gain with higher memory/latency and an observed regression; this is an explicit option, not the default.
 
 Contributor attribution can be supplied through audited `section_attributions` metadata rules. The curated Republic marks Jowett's introduction as editorial rather than attributing its prose to Plato. Unclassified sections retain catalog authorship as context, without claiming verified section authorship.
+
+An explicit section rule can also identify that section's translator. For example, a poem quoted as an epigraph can have a different translator from the surrounding novel; citations, the reader and saved provenance retain that distinction.
 
 ## Modern texts, frozen experiments and integrity
 

@@ -104,6 +104,7 @@
   }
   function showView(view, push = true) {
     if (!['search', 'library', 'saved', 'reader', 'explore'].includes(view)) view = 'search';
+    if (view !== 'reader') state.readerSequence++;
     state.view = view;
     document.querySelectorAll('.view').forEach((el) => el.classList.toggle('hidden', el.id !== `${view}-view`));
     updateNav(view === 'reader' ? '' : view);
@@ -365,6 +366,7 @@
     const role = section?.section_role || section?.role || '';
     const labels = [];
     if (author && author !== bookAuthor) labels.push(`Автор раздела: ${author}`);
+    if (section?.section_translator) labels.push(`Перевод фрагмента: ${section.section_translator}`);
     if (role === 'editorial') labels.push('Редакционный раздел');
     return labels.join(' · ');
   }
@@ -437,16 +439,24 @@
     finally { run.disabled = false; }
   }
 
+  function prepareReader(message) {
+    showView('reader', false);
+    state.currentBook = null; state.currentSection = null; state.currentPassage = null;
+    loading($('reader-text'), message);
+    $('reader-sidebar-title').textContent = ''; $('reader-book-meta').textContent = '';
+    $('reader-section-title').textContent = '';
+    $('reader-toc').replaceChildren(); $('reader-source').replaceChildren();
+    $('reader-source').closest('details').classList.add('hidden');
+    for (const id of ['reader-citation', 'reader-contributor', 'reader-coverage', 'reader-historical-label']) { $(id).replaceChildren(); $(id).classList.add('hidden'); }
+    $('reader-ingestion-warning').classList.add('hidden');
+    $('reader-related-editions').classList.add('hidden');
+    $('prev-chapter').disabled = true; $('next-chapter').disabled = true;
+    $('reader-back').textContent = state.previousView === 'saved' ? '← К сохранённому' : state.previousView === 'library' ? '← К библиотеке' : '← К результатам';
+  }
   async function openBook(bookId, sectionId, passageId, push = true) {
     const request = ++state.readerSequence;
     if (state.view !== 'reader') state.previousView = state.view;
-    showView('reader', false);
-    loading($('reader-text'), 'Открываем книгу');
-    $('reader-section-title').textContent = '';
-    $('reader-citation').classList.add('hidden');
-    $('reader-contributor').classList.add('hidden');
-    $('reader-ingestion-warning').classList.add('hidden');
-    $('reader-related-editions').classList.add('hidden');
+    prepareReader('Открываем книгу');
     try {
       const [book, passage] = await Promise.all([api(`/api/books/${encodeURIComponent(bookId)}`), passageId ? api(`/api/passages/${encodeURIComponent(passageId)}`) : Promise.resolve(null)]);
       if (request !== state.readerSequence) return;
@@ -458,7 +468,36 @@
       if (push) updateReaderURL();
     } catch (error) { if (request === state.readerSequence) showError(error, $('reader-text')); }
   }
-  function updateReaderURL() {
+  async function openSaved(itemID, ordinal = null, push = true) {
+    const request = ++state.readerSequence;
+    state.previousView = 'saved';
+    prepareReader('Открываем сохранённый контекст');
+    try {
+      const id = asID(itemID);
+      if (!/^[1-9]\d*$/.test(id) || !Number.isSafeInteger(Number(id))) throw new Error('Некорректная ссылка на сохранённый фрагмент.');
+      const hasChapter = ordinal !== null && ordinal !== undefined;
+      if (hasChapter && (!/^\d+$/.test(String(ordinal)) || !Number.isSafeInteger(Number(ordinal)))) throw new Error('Некорректный номер сохранённой главы.');
+      const params = new URLSearchParams();
+      if (hasChapter) params.set('ordinal', String(Number(ordinal)));
+      if (push) { const url = new URLSearchParams({ saved: id }); if (hasChapter) url.set('chapter', String(Number(ordinal))); history.pushState({}, '', `/?${url}`); }
+      const context = await api(`/api/saved/${encodeURIComponent(id)}/context${params.size ? '?' + params : ''}`);
+      if (request !== state.readerSequence) return;
+      if (!context.book || !context.section || typeof context.section.text !== 'string' || asID(context.book.historical_saved_id) !== id) throw new Error('Сервер вернул неполный сохранённый контекст.');
+      state.currentBook = context.book; state.currentSection = context.section; state.currentPassage = context.passage || null;
+      renderReader();
+      if (push) updateReaderURL(true);
+    } catch (error) {
+      if (request !== state.readerSequence) return;
+      showError(error, $('reader-text'));
+      $('reader-text').append(button('К сохранённым фрагментам', () => { showView('saved'); refreshSaved().catch(showError); }, 'button secondary'));
+      document.title = 'Сохранённый контекст недоступен — Атлас книг';
+    }
+  }
+  function updateReaderURL(replace = false) {
+    if (state.currentBook?.historical_saved_id) {
+      const params = new URLSearchParams({ saved: asID(state.currentBook.historical_saved_id), chapter: String(state.currentSection.ordinal) });
+      history[replace ? 'replaceState' : 'pushState']({}, '', `/?${params}`); return;
+    }
     const params = new URLSearchParams({ book: asID(state.currentBook.id) });
     if (state.currentSection) params.set('section', asID(state.currentSection.id));
     if (state.currentPassage && asID(state.currentPassage.section_id) === asID(state.currentSection?.id)) params.set('passage', asID(state.currentPassage.id));
@@ -467,6 +506,7 @@
   function selectChapter(sectionId) {
     const section = sectionList(state.currentBook).find((item) => asID(item.id) === asID(sectionId));
     if (!section) return;
+    if (state.currentBook.historical_saved_id) { openSaved(state.currentBook.historical_saved_id, section.ordinal); return; }
     state.currentSection = section;
     renderReader(); updateReaderURL(); window.scrollTo({ top: 0, behavior: 'instant' });
   }
@@ -475,19 +515,25 @@
     const sections = sectionList(book);
     $('reader-sidebar-title').textContent = book.title || '';
     $('reader-book-meta').textContent = `${book.author || ''} · ${book.title || ''} · ${book.edition || ''}`;
+    const historical = Boolean(book.historical_saved_id);
+    const savedAt = String(book.historical_saved_at || '');
+    const savedDate = new Date(/(?:Z|[+-]\d\d:\d\d)$/.test(savedAt) ? savedAt : savedAt.replace(' ', 'T') + 'Z');
+    $('reader-historical-label').replaceChildren(node('strong', '', `Сохранённое издание${savedAt && !Number.isNaN(savedDate.getTime()) ? ' · сохранено ' + savedDate.toLocaleString('ru-RU') : ''}`), node('span', '', 'Контекст зафиксирован вместе с сохранённым фрагментом.'));
+    $('reader-historical-label').classList.toggle('hidden', !historical);
     const attempt = ingestionNotice(book);
     $('reader-ingestion-warning').replaceChildren(...(attempt ? [attempt] : []));
     $('reader-ingestion-warning').classList.toggle('hidden', !attempt);
     const coverage = coverageType(book);
     $('reader-coverage').textContent = coverage === 'selected_chapters' ? 'Выбранные главы · частичный текст произведения' : coverage === 'excerpt' || /extract|excerpt|отрывок/i.test(book.edition || '') ? 'Отрывок произведения · частичный текст' : book.source_metadata?.coverage_scope === 'original_work_only' ? 'Оригинальное произведение · без позднего редакционного аппарата' : '';
     $('reader-coverage').classList.toggle('hidden', !$('reader-coverage').textContent);
-    document.title = `${book.title} — Атлас книг`;
+    document.title = `${book.title}${historical ? ' · сохранённое издание' : ''} — Атлас книг`;
     $('reader-toc').replaceChildren(...sections.map((item) => {
       const btn = button(item.title || `Глава ${Number(item.ordinal || 0) + 1}`, () => selectChapter(item.id), asID(item.id) === asID(section?.id) ? 'active' : '');
       if (asID(item.id) === asID(section?.id)) btn.setAttribute('aria-current', 'true');
       return btn;
     }));
     const source = $('reader-source'); source.replaceChildren();
+    source.closest('details').classList.remove('hidden');
     source.append(node('p', '', book.edition || 'Издание не указано'), node('p', '', book.rights || 'Условия использования не указаны'));
     const sourceURL = safeURL(book.source_url);
     if (sourceURL) { const link = node('a', '', 'Открыть первоисточник ↗'); link.href = sourceURL; link.target = '_blank'; link.rel = 'noopener noreferrer'; const p = node('p'); p.append(link); source.append(p); }
@@ -545,25 +591,27 @@
     const fullText = String(section.text || '');
     const highlight = passage && asID(passage.section_id) === asID(section.id);
     const start = Number(passage?.start); const end = Number(passage?.end);
-    const exact = highlight && Number.isInteger(start) && Number.isInteger(end) && start >= 0 && end > start && end <= [...fullText].length;
+    const exact = highlight && passage.verified === true && Number.isInteger(start) && Number.isInteger(end) && start >= 0 && end > start && end <= [...fullText].length;
     // API offsets count Unicode code points; JavaScript slice counts UTF-16 code units.
     const characters = exact ? Array.from(fullText) : null;
     if (exact && characters.slice(start, end).join('') === passage.text) {
       const mark = node('mark', '', characters.slice(start, end).join('')); mark.id = 'found-passage'; mark.tabIndex = -1;
       $('reader-text').replaceChildren(document.createTextNode(characters.slice(0, start).join('')), mark, document.createTextNode(characters.slice(end).join('')));
       const citation = $('reader-citation'); citation.replaceChildren(node('p', '', passage.citation || 'Найденный фрагмент выделен в тексте.'));
-      citation.append(button('＋ Сохранить фрагмент', () => openSave({ kind: 'passage', passage_id: passage.id, title: `${book.title} · ${section.title || 'Фрагмент'}` }, passage.text)), button('Копировать цитату', () => copyText(`${passage.text}\n\n${passage.citation || ''}`)));
+      if (!historical && !passage.historical && Number.isSafeInteger(Number(passage.id)) && Number(passage.id) > 0) citation.append(button('＋ Сохранить фрагмент', () => openSave({ kind: 'passage', passage_id: passage.id, title: `${book.title} · ${section.title || 'Фрагмент'}` }, passage.text)));
+      citation.append(button('Копировать цитату', () => copyText(`${passage.text}\n\n${passage.citation || ''}`)));
       citation.classList.remove('hidden');
       requestAnimationFrame(() => mark.scrollIntoView({ block: 'center', behavior: 'instant' }));
     } else {
       $('reader-text').textContent = fullText;
+      $('reader-citation').replaceChildren();
       $('reader-citation').classList.toggle('hidden', !highlight);
       if (highlight) $('reader-citation').textContent = 'Не удалось подтвердить положение фрагмента в этой версии главы. Прочитайте источник и проверьте цитату.';
     }
     const index = sections.findIndex((item) => asID(item.id) === asID(section.id));
     $('prev-chapter').disabled = index <= 0;
     $('next-chapter').disabled = index < 0 || index >= sections.length - 1;
-    announce(`Открыта книга ${book.title}. ${section.title || 'Текст книги'}.`);
+    announce(`${historical ? 'Открыто сохранённое издание' : 'Открыта книга'} ${book.title}. ${section.title || 'Текст книги'}.`);
   }
 
   async function loadExplore(force = false) {
@@ -732,10 +780,16 @@
       if (item.citation) card.append(node('p', 'passage-citation', item.citation));
       if (item.note) card.append(node('p', 'saved-note', item.note));
       const actions = node('div', 'saved-actions');
+      if (item.historical_reader_url === '/?saved=' + asID(item.id) && /^[1-9]\d*$/.test(asID(item.id))) {
+        const link = node('a', 'text-button historical-reader-link', 'Читать сохранённое издание');
+        link.href = item.historical_reader_url;
+        link.addEventListener('click', (event) => { if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return; event.preventDefault(); openSaved(item.id); });
+        actions.append(link);
+      } else if (item.provenance?.historical_context_error) card.append(node('p', 'saved-context-note', 'Цитата и заметка сохранены. Контекст издания сохранить не удалось.'));
       const archivedOriginal = artifactDownload(item.artifact_url);
       if (archivedOriginal) actions.append(archivedOriginal);
       if (item.kind === 'query') actions.append(button('Продолжить поиск ↗', () => { showView('search'); $('query').value = item.query || item.title; search(); }));
-      else if (item.passage_id) actions.append(button('Открыть в контексте ↗', async () => {
+      else if (item.passage_id && item.reader_url) actions.append(button('Открыть текущее издание ↗', async () => {
         try { const passage = await api(`/api/passages/${encodeURIComponent(item.passage_id)}`); await openBook(passage.book_id, passage.section_id, passage.id); }
         catch (error) { showError(error); }
       }));
@@ -776,6 +830,7 @@
   }
   async function route() {
     const params = new URLSearchParams(location.search);
+    if (params.has('saved')) { await openSaved(params.get('saved'), params.has('chapter') ? params.get('chapter') : null, false); return; }
     if (params.get('book')) { await openBook(params.get('book'), params.get('section'), params.get('passage'), false); return; }
     showView(params.get('view') || 'search', false);
     if (params.has('q')) { $('query').value = params.get('q'); await search(false); }
@@ -791,6 +846,8 @@
   if (!$('library-status').querySelector('option[value="deferred"]')) { const option = node('option', '', 'Недоступны · отложены'); option.value = 'deferred'; $('library-status').append(option); }
   const readerAttempt = node('div', 'hidden'); readerAttempt.id = 'reader-ingestion-warning'; readerAttempt.setAttribute('role', 'status');
   $('reader-citation').before(readerAttempt);
+  const historicalLabel = node('div', 'reader-historical-label hidden'); historicalLabel.id = 'reader-historical-label';
+  $('reader-book-meta').after(historicalLabel);
   const readerRelated = node('details', 'reader-related-editions hidden'); readerRelated.id = 'reader-related-editions'; readerRelated.setAttribute('aria-label', 'Другие издания и переводы');
   const wideReader = matchMedia('(min-width: 761px)'); readerRelated.open = wideReader.matches;
   wideReader.addEventListener('change', (event) => { readerRelated.open = event.matches; });
@@ -828,7 +885,7 @@
   $('library-prev').addEventListener('click', () => loadLibrary(Math.max(0, state.libraryOffset - 48)));
   $('library-next').addEventListener('click', () => loadLibrary(state.libraryOffset + 48));
   $('reload-library').addEventListener('click', refreshLibrary);
-  $('reader-back').addEventListener('click', () => showView(state.previousView));
+  $('reader-back').addEventListener('click', () => { const previous = state.previousView; showView(previous); if (previous === 'saved') refreshSaved().catch(showError); });
   $('prev-chapter').addEventListener('click', () => { const sections = sectionList(state.currentBook); const index = sections.findIndex((item) => asID(item.id) === asID(state.currentSection?.id)); if (index > 0) selectChapter(sections[index - 1].id); });
   $('next-chapter').addEventListener('click', () => { const sections = sectionList(state.currentBook); const index = sections.findIndex((item) => asID(item.id) === asID(state.currentSection?.id)); if (index >= 0 && index < sections.length - 1) selectChapter(sections[index + 1].id); });
   $('font-smaller').addEventListener('click', () => { state.readerSize = Math.max(15, state.readerSize - 1); document.documentElement.style.setProperty('--reader-size', `${state.readerSize}px`); });

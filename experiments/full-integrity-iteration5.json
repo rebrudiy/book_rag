@@ -1,0 +1,16 @@
+{
+  "valid": true,
+  "canonical_valid": true,
+  "status": "passed",
+  "books_checked": 2528,
+  "passages_checked": 841599,
+  "artifacts_requested": true,
+  "artifacts_checked": 2528,
+  "originals_complete": true,
+  "error_count": 0,
+  "errors": [],
+  "errors_truncated": false,
+  "warnings": [],
+  "elapsed_seconds": 27.659,
+  "scope": "Canonical text/digests and optional original file digests, not source transcription accuracy"
+}

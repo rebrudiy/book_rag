@@ -119,6 +119,18 @@ def create_app(directory: Path | None = None) -> FastAPI:
     def saved() -> dict[str, Any]:
         return {"items": library.saved()}
 
+    @app.get("/api/saved/{item_id}/context")
+    def saved_context(item_id: int, ordinal: int | None = Query(default=None, ge=0)) -> dict[str, Any]:
+        try:
+            result = library.saved_context(item_id, ordinal)
+        except (FileNotFoundError, IndexError) as exc:
+            raise HTTPException(404, "Сохранённая глава недоступна; снимок цитаты сохранён.") from exc
+        except (OSError, ValueError) as exc:
+            raise HTTPException(409, "Сохранённый контекст не прошёл проверку целостности.") from exc
+        if result is None:
+            raise HTTPException(404, "Сохранённый фрагмент не найден.")
+        return result
+
     @app.get("/api/saved/export")
     def export_saved(collection: str | None = Query(default=None, max_length=200)) -> Response:
         from book_rag.exporting import export_collection

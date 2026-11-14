@@ -1,0 +1,193 @@
+{
+  "experiment": "vector-storage-v1",
+  "kind": "retrieval approximation, not relevance evaluation",
+  "source": {
+    "directory": "data/snapshots/curated20-v3/vectors",
+    "generation": "gen-21fc38dd40f4735f4f66cb65a2af851b0c871e26e8f6f150fa1da24733974393-f9727198a8a9",
+    "model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+    "model_revision": "e8f8c211226b894fcb81acc59f3b34ba3efd5f42",
+    "corpus_fingerprint": "526909cfd6f8ff2ef0203f17c59f7e4e49d7a80b45303c18214ee6d0a1531f12",
+    "strategy": "token-windows-v2",
+    "vectors": 49738,
+    "dimensions": 384,
+    "file_sha256_before_and_after": {
+      "active.json": "85b6aeea3d081cce139e504f348f2032cf1590180ff16e4a5d7f4f628e144e2c",
+      "embeddings.npy": "05ec42b62a55e4255235ec74ba9f4a34c732d0539e8390e0755c7a913c205133",
+      "ids.npy": "e971eadecc2be954b71458b17635be1351f0edbea2a1592cb3c5a64badf4dc5c"
+    },
+    "source_unchanged": true
+  },
+  "method": {
+    "query_count": 256,
+    "seed": 20261114,
+    "block_rows": 4096,
+    "sampling": "uniform distinct passage IDs; first window per selected passage; sorted row order",
+    "queries": "unquantized corpus-derived fp32 unit vectors; identical for every encoding",
+    "candidate_exclusion": "all windows sharing the query passage ID, including overlapping windows",
+    "ranking": "max cosine across windows per distinct passage; score descending then passage ID",
+    "cosine": "fp32 decoded rows dot unit fp32 query, divided by decoded fp32 row norms",
+    "int8": "symmetric row scale=max(abs(row))/127, zero scale=1, rint, clip[-127,127], fp32 scales",
+    "latency": "warm-cache sequential full scan, decode, cosine, passage aggregation and top100 sort",
+    "rss": "fresh performance subprocess per encoding; includes NumPy/startup/resident mmap pages",
+    "accuracy_worker_memory_excluded": "reference-score mmap resides only in separate accuracy workers",
+    "cold_io_measured": false,
+    "ann_used": false,
+    "production_changed": false,
+    "query_rows_sha256": "52c89a10ae7b8e71709bf2f611db02e5ced14278e6641079d736eb96a15bd56d"
+  },
+  "environment": {
+    "platform": "macOS-26.6.2-arm64-arm-64bit",
+    "python": "3.12.12",
+    "numpy": "2.5.4",
+    "blas_thread_env": {
+      "OPENBLAS_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1",
+      "OMP_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1"
+    },
+    "shared_host": true
+  },
+  "preparation": {
+    "queries": 256,
+    "distinct_passages": 12108,
+    "source_zero_rows": 0,
+    "source_max_norm_deviation_from_one": 1.1920928955078125e-07,
+    "seconds": 0.17165012517943978,
+    "peak_rss_bytes": 182976512
+  },
+  "results": {
+    "float32": {
+      "storage_file_bytes": 76795728,
+      "storage_files": {
+        "vectors": 76397696,
+        "passage_ids": 398032
+      },
+      "performance": {
+        "queries": 256,
+        "startup_seconds": 0.030502582900226116,
+        "latency_p50_ms": 3.7631040904670954,
+        "latency_p95_ms": 4.965927102603018,
+        "latency_mean_ms": 3.8383914215955883,
+        "peak_rss_bytes": 122208256,
+        "import_peak_rss_bytes": 34963456,
+        "peak_minus_import_baseline_bytes": 87244800,
+        "zero_rows": 0
+      },
+      "approximation": {
+        "recall": {
+          "10": {
+            "mean": 1.0,
+            "minimum": 1.0,
+            "tie_aware_mean_tolerance_1e-7": 1.0,
+            "reference_boundary_tie_queries": 0
+          },
+          "100": {
+            "mean": 1.0,
+            "minimum": 1.0,
+            "tie_aware_mean_tolerance_1e-7": 1.0,
+            "reference_boundary_tie_queries": 0
+          }
+        },
+        "max_abs_cosine_error": 0.0,
+        "mean_abs_cosine_error": 0.0,
+        "compared_query_window_pairs": 12731880,
+        "fp64_sanity_max_error": 1.013895840618062e-07,
+        "accuracy_worker_peak_rss_bytes_not_query_memory": 176898048
+      },
+      "storage_ratio_vs_float32": 1.0,
+      "storage_reduction_pct": 0.0
+    },
+    "float16": {
+      "storage_file_bytes": 38596944,
+      "storage_files": {
+        "vectors": 38198912,
+        "passage_ids": 398032
+      },
+      "performance": {
+        "queries": 256,
+        "startup_seconds": 0.048038292210549116,
+        "latency_p50_ms": 6.93697901442647,
+        "latency_p95_ms": 11.593770468607545,
+        "latency_mean_ms": 7.587423937366111,
+        "peak_rss_bytes": 90619904,
+        "import_peak_rss_bytes": 35012608,
+        "peak_minus_import_baseline_bytes": 55607296,
+        "zero_rows": 0
+      },
+      "approximation": {
+        "recall": {
+          "10": {
+            "mean": 0.99921875,
+            "minimum": 0.9,
+            "tie_aware_mean_tolerance_1e-7": 0.99921875,
+            "reference_boundary_tie_queries": 0
+          },
+          "100": {
+            "mean": 0.9999609375,
+            "minimum": 0.99,
+            "tie_aware_mean_tolerance_1e-7": 0.9999609375,
+            "reference_boundary_tie_queries": 0
+          }
+        },
+        "max_abs_cosine_error": 5.7816505432128906e-05,
+        "mean_abs_cosine_error": 8.126058331148823e-06,
+        "compared_query_window_pairs": 12731880,
+        "fp64_sanity_max_error": null,
+        "accuracy_worker_peak_rss_bytes_not_query_memory": 144244736
+      },
+      "storage_ratio_vs_float32": 0.5025923316984507,
+      "storage_reduction_pct": 49.740766830154925
+    },
+    "int8_row_symmetric": {
+      "storage_file_bytes": 19696632,
+      "storage_files": {
+        "vectors": 19099520,
+        "scales": 199080,
+        "passage_ids": 398032
+      },
+      "performance": {
+        "queries": 256,
+        "startup_seconds": 0.06745825009420514,
+        "latency_p50_ms": 25.20233322866261,
+        "latency_p95_ms": 30.116042005829513,
+        "latency_mean_ms": 25.286213378421962,
+        "peak_rss_bytes": 72581120,
+        "import_peak_rss_bytes": 35143680,
+        "peak_minus_import_baseline_bytes": 37437440,
+        "zero_rows": 0
+      },
+      "approximation": {
+        "recall": {
+          "10": {
+            "mean": 0.992578125,
+            "minimum": 0.9,
+            "tie_aware_mean_tolerance_1e-7": 0.992578125,
+            "reference_boundary_tie_queries": 0
+          },
+          "100": {
+            "mean": 0.99515625,
+            "minimum": 0.97,
+            "tie_aware_mean_tolerance_1e-7": 0.99515625,
+            "reference_boundary_tie_queries": 0
+          }
+        },
+        "max_abs_cosine_error": 0.0025776326656341553,
+        "mean_abs_cosine_error": 0.00028617566793282673,
+        "compared_query_window_pairs": 12731880,
+        "fp64_sanity_max_error": null,
+        "accuracy_worker_peak_rss_bytes_not_query_memory": 125960192
+      },
+      "storage_ratio_vs_float32": 0.2564808292461268,
+      "storage_reduction_pct": 74.35191707538732
+    }
+  },
+  "limitations": [
+    "Corpus-vector queries are not natural user questions or a relevance test.",
+    "Nearby passages, translations and duplicate editions beyond the same passage may remain.",
+    "No threshold, hybrid fusion, citation verification or end-to-end API latency is evaluated.",
+    "Linear scanning cost remains proportional to window count; compression is not ANN.",
+    "RSS and latency include this NumPy implementation and shared-host noise, not a backend guarantee.",
+    "A 20-edition snapshot does not establish capacity or quality for 10,000–50,000 works."
+  ]
+}

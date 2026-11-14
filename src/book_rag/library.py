@@ -47,7 +47,8 @@ CREATE TABLE IF NOT EXISTS sections (
 );
 CREATE TABLE IF NOT EXISTS section_roles (
  section_id INTEGER PRIMARY KEY REFERENCES sections(id) ON DELETE CASCADE,
- section_author TEXT NOT NULL, section_role TEXT NOT NULL, attribution_basis TEXT NOT NULL
+ section_author TEXT NOT NULL, section_role TEXT NOT NULL, attribution_basis TEXT NOT NULL,
+ section_translator TEXT NOT NULL DEFAULT ''
 );
 CREATE TABLE IF NOT EXISTS source_deferrals (
  host TEXT PRIMARY KEY, retry_at REAL NOT NULL
@@ -124,6 +125,9 @@ class Library:
         self.db_path = data_dir / "library.sqlite3"
         with self.connect() as conn:
             conn.executescript(SCHEMA)
+            conn.execute("BEGIN IMMEDIATE")
+            if "section_translator" not in {row["name"] for row in conn.execute("PRAGMA table_info(section_roles)")}:
+                conn.execute("ALTER TABLE section_roles ADD COLUMN section_translator TEXT NOT NULL DEFAULT ''")
             # Legacy failed rows are intentionally not inferred to be searchable.
             conn.execute(
                 "INSERT OR IGNORE INTO source_pipeline(book_id,stage,local_path,error,updated_at) "
@@ -204,7 +208,14 @@ class Library:
             indexer_version = digest(
                 PARSER_FINGERPRINT
                 + CHUNKER_VERSION
-                + "explicit-contributors-v1"
+                + (
+                    "explicit-contributors-v2-translators"
+                    if isinstance(metadata.get("section_attributions"), list)
+                    and any(
+                        isinstance(rule, dict) and "translator" in rule for rule in metadata["section_attributions"]
+                    )
+                    else "explicit-contributors-v1"
+                )
                 + json.dumps(metadata.get("section_attributions", []), ensure_ascii=False, sort_keys=True)
             )
             original_filename = str(metadata.get("original_filename") or path.name)
@@ -291,9 +302,15 @@ class Library:
                         },
                     )
                     conn.execute(
-                        "INSERT INTO section_roles(section_id,section_author,section_role,attribution_basis) "
-                        "VALUES (?,?,?,?)",
-                        (section_id, attribution["author"], attribution["role"], attribution["attribution_basis"]),
+                        "INSERT INTO section_roles(section_id,section_author,section_role,attribution_basis,"
+                        "section_translator) VALUES (?,?,?,?,?)",
+                        (
+                            section_id,
+                            attribution["author"],
+                            attribution["role"],
+                            attribution["attribution_basis"],
+                            attribution.get("translator", ""),
+                        ),
                     )
                     indexed_author = (
                         author if attribution["author"] == author else author + "; " + attribution["author"]
@@ -383,7 +400,8 @@ class Library:
                 "confirmed_full_works_lower_bound": conn.execute(
                     "SELECT COUNT(DISTINCT b.work_id) FROM books b JOIN book_metadata m ON m.book_id=b.id "
                     "WHERE b.status='indexed' AND json_extract(m.metadata,'$.work_identity_status')='curated' "
-                    "AND json_extract(m.metadata,'$.coverage')='full'"
+                    "AND json_extract(m.metadata,'$.coverage')='full' "
+                    "AND COALESCE(json_extract(m.metadata,'$.work_type'),'')!='periodical_issue'"
                 ).fetchone()[0],
                 "periodical_editions": conn.execute(
                     "SELECT COUNT(*) FROM books b JOIN book_metadata m ON m.book_id=b.id "
@@ -485,7 +503,8 @@ class Library:
             book["sections"] = [
                 dict(r)
                 for r in conn.execute(
-                    "SELECT s.id,s.ordinal,s.title,s.text,a.section_author,a.section_role,a.attribution_basis "
+                    "SELECT s.id,s.ordinal,s.title,s.text,a.section_author,a.section_role,a.attribution_basis,"
+                    "a.section_translator "
                     "FROM sections s LEFT JOIN section_roles a ON a.section_id=s.id WHERE s.book_id=? ORDER BY ordinal",
                     (book_id,),
                 )
@@ -515,6 +534,8 @@ class Library:
         )
         if r.get("section_author") and r["section_author"] != r["author"]:
             r["citation"] = f"{r['section_author']} ({r.get('section_role', 'contributor')}). В: " + r["citation"]
+        if r.get("section_translator"):
+            r["citation"] = f"Перевод фрагмента: {r['section_translator']}. " + r["citation"]
         from urllib.parse import urlencode
 
         r["reader_url"] = "/?" + urlencode({"book": r["book_id"], "section": r["section_id"], "passage": r["id"]})
@@ -537,7 +558,7 @@ class Library:
                 "SELECT p.*,b.title,b.author,b.language,b.edition,b.work_id,b.source_url,b.rights,"
                 "b.rights_url,b.artifact_sha256,b.content_sha256,s.title section_title,"
                 "substr(s.text,p.start+1,p.end-p.start) section_quote,"
-                "a.section_author,a.section_role,a.attribution_basis,0.0 score,"
+                "a.section_author,a.section_role,a.attribution_basis,a.section_translator,0.0 score,"
                 "COALESCE(i.stage,b.status) ingestion_status,i.error ingestion_error "
                 "FROM passages p JOIN books b ON b.id=p.book_id JOIN sections s ON s.id=p.section_id "
                 "LEFT JOIN source_pipeline i ON i.book_id=b.id "
@@ -550,21 +571,26 @@ class Library:
 
     def passage(self, passage_id: int) -> dict[str, Any] | None:
         with self.connect() as conn:
-            row = conn.execute(
-                "SELECT p.*,b.title,b.author,b.language,b.edition,b.work_id,b.source_url,b.rights,"
-                "b.rights_url,b.artifact_sha256,b.content_sha256,"
-                "s.title section_title,s.text section_text,a.section_author,a.section_role,a.attribution_basis,"
-                "0.0 score,COALESCE(i.stage,b.status) ingestion_status,i.error ingestion_error FROM passages p "
-                "JOIN books b ON p.book_id=b.id JOIN sections s ON p.section_id=s.id "
-                "LEFT JOIN source_pipeline i ON i.book_id=b.id "
-                "LEFT JOIN section_roles a ON a.section_id=s.id WHERE p.id=?",
-                (passage_id,),
-            ).fetchone()
-            if row is None:
-                return None
-            result = self._result(row)
-            result["context"] = row["section_text"][max(0, row["start"] - 800) : row["end"] + 800]
-            return result
+            return self._passage(conn, passage_id)
+
+    def _passage(self, conn: sqlite3.Connection, passage_id: int) -> dict[str, Any] | None:
+        """Read evidence inside the caller's transaction when saving a version."""
+        row = conn.execute(
+            "SELECT p.*,b.title,b.author,b.language,b.edition,b.work_id,b.source_url,b.rights,"
+            "b.rights_url,b.artifact_sha256,b.content_sha256,s.ordinal section_ordinal,"
+            "s.title section_title,s.text section_text,a.section_author,a.section_role,a.attribution_basis,"
+            "a.section_translator,"
+            "0.0 score,COALESCE(i.stage,b.status) ingestion_status,i.error ingestion_error FROM passages p "
+            "JOIN books b ON p.book_id=b.id JOIN sections s ON p.section_id=s.id "
+            "LEFT JOIN source_pipeline i ON i.book_id=b.id "
+            "LEFT JOIN section_roles a ON a.section_id=s.id WHERE p.id=? AND b.status='indexed'",
+            (passage_id,),
+        ).fetchone()
+        if row is None:
+            return None
+        result = self._result(row)
+        result["context"] = row["section_text"][max(0, row["start"] - 800) : row["end"] + 800]
+        return result
 
     def search(
         self,
@@ -621,7 +647,7 @@ class Library:
                     "SELECT p.*,b.title,b.author,b.language,b.edition,b.work_id,b.source_url,b.rights,"
                     "b.rights_url,b.artifact_sha256,b.content_sha256,"
                     "s.title section_title,substr(s.text,p.start+1,p.end-p.start) section_quote,"
-                    "a.section_author,a.section_role,a.attribution_basis,"
+                    "a.section_author,a.section_role,a.attribution_basis,a.section_translator,"
                     "bm25(passage_fts,1.0,2.0,1.5,1.2) score,"
                     "COALESCE(i.stage,b.status) ingestion_status,i.error ingestion_error "
                     "FROM passage_fts JOIN passages p ON p.id=passage_fts.rowid JOIN books b ON b.id=p.book_id "
@@ -699,6 +725,8 @@ class Library:
                 ).fetchone()
             row["provenance"] = json.loads(provenance[0]) if provenance else {}
             row["artifact_url"] = self.artifact_url(row["provenance"].get("artifact_sha256"))
+            if re.fullmatch(r"cv1-[a-f0-9]{64}", str(row["provenance"].get("canonical_version_id", ""))):
+                row["historical_reader_url"] = f"/?saved={row['id']}"
             if row["passage_id"] is not None:
                 current = self.passage(row["passage_id"])
                 if (
@@ -714,12 +742,15 @@ class Library:
         kind = item.get("kind")
         if kind not in ("passage", "query"):
             raise ValueError("kind must be passage or query")
-        passage = self.passage(item["passage_id"]) if kind == "passage" and item.get("passage_id") else None
-        if kind == "passage" and (not passage or not passage["verified"]):
-            raise ValueError("A verified passage is required")
         if kind == "query" and not str(item.get("query", "")).strip():
             raise ValueError("A nonempty query is required")
         with self.connect() as conn:
+            # Keep passage, edition, chapter metadata and its extraction identity
+            # coherent while a concurrent ingestion process replaces a book.
+            conn.execute("BEGIN IMMEDIATE")
+            passage = self._passage(conn, item["passage_id"]) if kind == "passage" and item.get("passage_id") else None
+            if kind == "passage" and (not passage or not passage["verified"]):
+                raise ValueError("A verified passage is required")
             cursor = conn.execute(
                 "INSERT INTO saved(kind,title,query,passage_id,collection,note,"
                 "snapshot_text,snapshot_citation) VALUES (?,?,?,?,?,?,?,?)",
@@ -745,9 +776,11 @@ class Library:
                     "rights",
                     "rights_url",
                     "section_id",
+                    "section_ordinal",
                     "section_title",
                     "section_author",
                     "section_role",
+                    "section_translator",
                     "attribution_basis",
                     "start",
                     "end",
@@ -755,11 +788,115 @@ class Library:
                     "content_sha256",
                 )
                 provenance = {key: passage.get(key) for key in fields}
+                try:
+                    provenance["canonical_version_id"] = self._preserve_saved_book(conn, passage)
+                except (OSError, ValueError) as exc:
+                    # A full disk or unavailable historical store must not lose
+                    # the user's verified excerpt and annotation.
+                    provenance["historical_context_error"] = str(exc)[:500]
                 conn.execute(
                     "INSERT INTO saved_provenance(item_id,metadata) VALUES (?,?)",
                     (new_id, json.dumps(provenance, ensure_ascii=False)),
                 )
         return next(r for r in self.saved() if r["id"] == new_id)
+
+    def _preserve_saved_book(self, conn: sqlite3.Connection, passage: dict[str, Any]) -> str:
+        import shutil
+
+        from book_rag.canonical_versions import MAX_CANONICAL_BYTES, preserve_canonical
+        from book_rag.parsers import ParsedBook, Section
+
+        if shutil.disk_usage(self.data_dir).free < 4 * 1024**3 + MAX_CANONICAL_BYTES:
+            raise OSError("Insufficient free disk for historical context; the quotation and note are retained")
+        rows = conn.execute(
+            "SELECT s.title,s.text,a.section_author,a.section_role,a.section_translator,a.attribution_basis "
+            "FROM sections s LEFT JOIN section_roles a ON a.section_id=s.id WHERE s.book_id=? ORDER BY s.ordinal",
+            (passage["book_id"],),
+        ).fetchall()
+        version = conn.execute(
+            "SELECT fingerprint FROM index_versions WHERE book_id=?", (passage["book_id"],)
+        ).fetchone()
+        result = preserve_canonical(
+            ParsedBook(
+                passage["title"], passage["author"], passage["language"], [Section(r["title"], r["text"]) for r in rows]
+            ),
+            self.data_dir,
+            artifact_sha256=passage["artifact_sha256"],
+            indexer_fingerprint=version[0] if version else None,
+            edition=passage["edition"],
+            source_url=passage["source_url"],
+            rights=passage["rights"],
+            rights_url=passage["rights_url"],
+            section_metadata=[
+                {
+                    key: r[key] or ""
+                    for key in ("section_author", "section_role", "section_translator", "attribution_basis")
+                }
+                for r in rows
+            ],
+        )
+        return result["version_id"]
+
+    def saved_context(self, item_id: int, ordinal: int | None = None) -> dict[str, Any] | None:
+        """Read one exact historical chapter, independently of the current index."""
+        from book_rag.canonical_versions import read_canonical_manifest, read_canonical_section
+
+        with self.connect() as conn:
+            row = conn.execute(
+                "SELECT s.*,p.metadata FROM saved s JOIN saved_provenance p ON p.item_id=s.id "
+                "WHERE s.id=? AND s.kind='passage'",
+                (item_id,),
+            ).fetchone()
+        if row is None:
+            return None
+        provenance = json.loads(row["metadata"])
+        version_id = provenance.get("canonical_version_id")
+        if not version_id:
+            raise FileNotFoundError("Historical chapter was not archived; the saved quotation is retained")
+        selected = provenance.get("section_ordinal") if ordinal is None else ordinal
+        if type(selected) is not int or selected < 0:
+            raise ValueError("Historical chapter ordinal is invalid")
+        manifest = read_canonical_manifest(self.data_dir, version_id)
+        if manifest["artifact_sha256"] != provenance.get("artifact_sha256"):
+            raise ValueError("Historical source differs from saved provenance")
+        chapter = read_canonical_section(self.data_dir, version_id, selected)["section"]
+        section_id = f"canonical-{selected}"
+        quote = None
+        if selected == provenance.get("section_ordinal"):
+            start, end = provenance.get("start"), provenance.get("end")
+            if not (
+                type(start) is int
+                and type(end) is int
+                and 0 <= start < end <= len(chapter["text"])
+                and chapter["text"][start:end] == row["snapshot_text"]
+            ):
+                raise ValueError("Saved quotation differs from its historical chapter")
+            quote = provenance | {
+                "id": None,
+                "section_id": section_id,
+                "text": row["snapshot_text"],
+                "citation": row["snapshot_citation"],
+                "verified": True,
+                "historical": True,
+            }
+        sections = [
+            {"id": f"canonical-{s['ordinal']}", "ordinal": s["ordinal"], "title": s["title"], **s["metadata"]}
+            for s in manifest["sections"]
+        ]
+        sections[selected] |= {"text": chapter["text"]}
+        book = manifest["book"] | {
+            "id": provenance["book_id"],
+            "historical_saved_id": item_id,
+            "canonical_version_id": version_id,
+            "historical_saved_at": row["created_at"],
+            "status": "archived",
+            "artifact_sha256": manifest["artifact_sha256"],
+            "artifact_url": self.artifact_url(manifest["artifact_sha256"]),
+            "source_metadata": {"coverage": "saved_canonical_version"},
+            "sections": sections,
+            "related_editions": [],
+        }
+        return {"book": book, "section": sections[selected], "passage": quote}
 
     def delete_saved(self, item_id: int) -> bool:
         with self.connect() as conn:
