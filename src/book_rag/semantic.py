@@ -645,6 +645,28 @@ def _score_vectors(
     return scores
 
 
+def _scoped_passage_query(book_id: str | None, language: str | None) -> tuple[str, tuple[str, ...]]:
+    """Filter the small books table first, then seek its passage index.
+
+    CROSS JOIN fixes this eligibility-only join order: language scopes must not
+    scan every passage before checking book metadata. It does not change ranks.
+    """
+    predicates = ["b.status='indexed'"]
+    parameters: list[str] = []
+    if book_id is not None:
+        predicates.append("b.id=?")
+        parameters.append(book_id)
+    if language is not None:
+        predicates.append("b.language=?")
+        parameters.append(language)
+    return (
+        "SELECT p.id FROM books b CROSS JOIN passages p ON p.book_id=b.id "
+        "JOIN sections s ON s.id=p.section_id AND s.book_id=p.book_id "
+        "WHERE " + " AND ".join(predicates) + " ORDER BY p.id",
+        tuple(parameters),
+    )
+
+
 def semantic_search(
     library: Library, query: str, mode: str, book_id: str | None, language: str | None, limit: int
 ) -> dict[str, Any]:
@@ -731,16 +753,9 @@ def semantic_search(
         eligible = None
         if book_id is not None or language is not None:
             with library.connect() as conn:
+                eligibility_sql, eligibility_parameters = _scoped_passage_query(book_id, language)
                 eligible = np.fromiter(
-                    (
-                        row[0]
-                        for row in conn.execute(
-                            "SELECT p.id FROM passages p JOIN books b ON b.id=p.book_id "
-                            "JOIN sections s ON s.id=p.section_id AND s.book_id=p.book_id "
-                            "WHERE (? IS NULL OR b.id=?) AND (? IS NULL OR b.language=?) AND b.status='indexed'",
-                            (book_id, book_id, language, language),
-                        )
-                    ),
+                    (row[0] for row in conn.execute(eligibility_sql, eligibility_parameters)),
                     dtype=np.int64,
                 )
         profile = profile_from_metadata(metadata)

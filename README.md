@@ -4,7 +4,7 @@ An open, local-first library for finding passages, reading books in context and 
 
 **Current scope:** functional prototype, not yet a 10–50k-work library. Includes eight small public-domain demo works/excerpts in English, French, German and Russian. Runtime books, models, indexes and user notes stay outside Git.
 
-[Measured large-library MVP](docs/LARGE_LIBRARY.md): the maintained local instance has 4,001 searchable editions and a verified semantic subset of 1,308. The report includes actual queries, timings and a known global-description failure; these runtime data are acquired separately from the demo. [Development measurements](docs/LARGE_RETRIEVAL.md) keep both gains and regressions visible.
+[Measured large-library MVP](docs/LARGE_LIBRARY.md): the 4,001-edition checkpoint has a verified semantic subset of 1,308. A [resumable acquisition queue](docs/CORPUS_SCALE.md) is expanding the local corpus toward10,000 candidate works; live counts are in `/api/stats`, and provisional identities do not establish unique-work totals. Runtime books are acquired separately from the demo. [Development measurements](docs/LARGE_RETRIEVAL.md) keep gains, regressions and a known global-description failure visible.
 
 ## Run
 
@@ -30,6 +30,7 @@ Open **http://127.0.0.1:8000**. The initial demo requires no network after insta
 - Extractive research board across books: verified evidence, with explicit empty results. No generated prose or inferred author positions.
 - Durable fragments, queries, editable notes/titles and thematic collections in local SQLite. Edits preserve the exact quotation and its provenance.
 - Optional local multilingual semantic search and reciprocal-rank fusion; explicit lexical fallback when vectors are missing/stale.
+- Optional [local generated answers](docs/ANSWERS.md) from retrieved evidence, with mandatory exact supporting quotations, source links, abstention and source-version checks. Generated paraphrases can still be wrong; only source quotations are verified.
 - Reproducible development and held-out evaluation, independent citation checks and CI.
 
 ## Corpus

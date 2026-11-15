@@ -449,3 +449,72 @@ JavaScript errors against the owned three-edition fixture. Its separate report
 and screenshots are under `artifacts/partial-coverage-real-api/`. This validates
 the actual API/installer/UI connection with a deterministic test encoder; it
 does not measure retrieval relevance or activate a large/live corpus index.
+
+## Cited answers
+
+The **Ответ** tab sits beside **Фрагменты** and **Исследование**. The landing
+entry **Задать вопрос** opens its question form without requesting generation.
+Only submitting **Получить ответ** posts `/api/ask`; opening the tab, selecting
+filters, visiting a source, going back, or refreshing an answer link never does.
+The existing title/author scope picker and source-language filter constrain the
+request. Answer requests use hybrid retrieval and up to eight evidence sources.
+
+Each displayed claim has source chips such as **S1**, followed by the exact
+`supporting_quotes` supplied by the API. These short quotations preserve source
+spelling, punctuation and spacing, with their own verification marker and source
+chip. The UI independently requires each supporting quote to be a literal substring
+of its verified source and to cover the claim's cited aliases before showing it.
+The browser checks the rendered text against raw API data, the full source card
+and the reader. The paraphrase itself has no quote-verification marker.
+
+Each source chip connects the claim to its evidence. A chip focuses the exact
+source card; **Открыть в контексте** uses the existing Unicode-offset reader.
+The quote-verification marker appears on source text. A separate explanation
+identifies answer prose as a retelling of those sources. Missing/unknown source
+aliases or unverified evidence cannot produce a displayed cited claim.
+
+The view distinguishes insufficient evidence, an unavailable answer, an output
+that failed validation, changed sources, transport failure and pending work.
+Available verified fragments remain useful when an answer cannot be supplied;
+a `sources_changed` response suppresses both claims and obsolete source cards.
+Question edits, scope changes, leaving the tab and navigation cancel the current
+wait and ignore late responses. **Остановить ожидание** cancels transport without
+claiming to terminate a server-side worker. Failures retain the question for an
+explicit retry. No model/backend details are exposed in the product flow.
+
+`/?panel=answer&q=...&scope=...&language=...` restores a question and its optional
+scope without running generation. Refreshing clears transient answer prose;
+returning from the reader within the same session preserves the completed view.
+The form, citations and source cards support keyboard focus; the layout wraps
+at mobile widths without adding a separate application or external assets.
+
+```sh
+uv run python scripts/browser_answer.py
+```
+
+The scenario uses a real temporary API/library/retrieval/citation validator and
+Chromium, substituting only the generator through `create_app`'s test hook.
+Its original two-edition source fixture is CC0. It checks explicit requests,
+claim-to-source-to-reader navigation, back/refresh/scope restoration, status
+fallbacks, HTML-like text safety, canceled stale output, network failure and an
+actual fixture reindex during generation. Reports and screenshots are ignored
+under `artifacts/browser-answer/`; live corpus files and notes are untouched.
+
+The integrated real-API fixture passed **17 workflows**, all five response states,
+13 deterministic answer calls, nine separate judgement calls and zero JavaScript errors. Both 320 px and
+390 px layouts were checked. A failed/nonsearchable book scope stays blocked
+until explicit removal or reselection; it never silently becomes an unrestricted
+question. A delayed real-transport 404 was also checked against a newer pending
+answer, and could not clear its scope, change its panel or re-enable its submit.
+Returning through browser Back to a canceled valid-scope lookup revalidates that scope before enabling the form. Keyboard activation of **Остановить ожидание** returns focus to the question.
+This verifies UI/API integration with a fake generator, not real-model answer
+quality. The script's deliberate unavailable-generator exception appears only in
+server logs; the interface receives the normal unavailable state.
+
+The fake generator recognizes the internal `verify_claims` task separately from
+answer generation. The actual API's second-check path is exercised with both
+true verdicts and an explicit false verdict: rejection produces public
+`abstained`, removes generated claims/support quotations and keeps independently
+verified source cards available. Empty retrieval invokes neither stage. This
+checks the API/UI control flow with deterministic verdicts; it does not measure
+the real model's ability to judge entailment or certify its factual accuracy.

@@ -1,0 +1,270 @@
+{
+  "kind": "bounded_frozen_scope_SQL_equivalence_not_relevance_or_end_to_end_latency",
+  "created_at": "2026-11-15T01:38:57.586710+00:00",
+  "source_sha256_before": "2d77675ba2a68f63e25f507355272e3206db8f9abbe959f326cea96f774939f0",
+  "source_identity_before": [
+    16777229,
+    23173638,
+    1594347520,
+    1794665920442618298,
+    1794665920442618298
+  ],
+  "source_name": "library1308-v1",
+  "script_sha256": "b27a8c9e775c44464a3a4bd774b377646cd4ba3c411dd58c87014d8a791b8dd3",
+  "scoped_SQL_builder_sha256": "33ae5e981ed666b873163b4c1701a2dd3b00181cb28c661fd289ff375b36a38b",
+  "sqlite_version": "3.53.2",
+  "query_deadline_seconds": 15,
+  "cases": [
+    {
+      "book_id": "pg11-full",
+      "language": null,
+      "methods": {
+        "old_OR_predicates": {
+          "status": "completed",
+          "elapsed_ms": 171.972,
+          "VM_progress_steps_lower_bound": 5346000,
+          "query_plan": [
+            "SCAN p",
+            "SEARCH s USING INTEGER PRIMARY KEY (rowid=?)",
+            "SEARCH b USING INDEX sqlite_autoindex_books_1 (id=?)"
+          ],
+          "ordered_ID_sha256": "496fd1351873ec8bb4422b53272fc4c29cb41d48a5bec24dba2a9ecc4172a62d"
+        },
+        "direct_books_first": {
+          "status": "completed",
+          "elapsed_ms": 0.131,
+          "VM_progress_steps_lower_bound": 1000,
+          "query_plan": [
+            "SEARCH b USING INDEX sqlite_autoindex_books_1 (id=?)",
+            "SEARCH p USING INDEX passages_book (book_id=?)",
+            "SEARCH s USING INTEGER PRIMARY KEY (rowid=?)"
+          ],
+          "ordered_ID_sha256": "496fd1351873ec8bb4422b53272fc4c29cb41d48a5bec24dba2a9ecc4172a62d"
+        }
+      },
+      "selected_book_header_sha256": "8ed4edc0875d8e65cc3f4c882dc05b99a2060dce62394282c3a25707197138bf",
+      "equivalence": "exact",
+      "ordered_IDs_equal": true,
+      "sorted_IDs_equal": true,
+      "passages": 117,
+      "ID_range": [
+        884911,
+        885027
+      ]
+    },
+    {
+      "book_id": "pg2680-full",
+      "language": null,
+      "methods": {
+        "old_OR_predicates": {
+          "status": "completed",
+          "elapsed_ms": 169.032,
+          "VM_progress_steps_lower_bound": 5348000,
+          "query_plan": [
+            "SCAN p",
+            "SEARCH s USING INTEGER PRIMARY KEY (rowid=?)",
+            "SEARCH b USING INDEX sqlite_autoindex_books_1 (id=?)"
+          ],
+          "ordered_ID_sha256": "87e063e482b10a7b56c3f867387239b9091f69015a537cd3163e91dcd5612e1d"
+        },
+        "direct_books_first": {
+          "status": "completed",
+          "elapsed_ms": 0.232,
+          "VM_progress_steps_lower_bound": 3000,
+          "query_plan": [
+            "SEARCH b USING INDEX sqlite_autoindex_books_1 (id=?)",
+            "SEARCH p USING INDEX passages_book (book_id=?)",
+            "SEARCH s USING INTEGER PRIMARY KEY (rowid=?)"
+          ],
+          "ordered_ID_sha256": "87e063e482b10a7b56c3f867387239b9091f69015a537cd3163e91dcd5612e1d"
+        }
+      },
+      "selected_book_header_sha256": "aef18af47899514ec6afa801e6e4d46277176701375566f639bf0c0fdce82fd0",
+      "equivalence": "exact",
+      "ordered_IDs_equal": true,
+      "sorted_IDs_equal": true,
+      "passages": 342,
+      "ID_range": [
+        1050963,
+        1051304
+      ]
+    },
+    {
+      "book_id": null,
+      "language": "de",
+      "methods": {
+        "old_OR_predicates": {
+          "status": "completed",
+          "elapsed_ms": 195.383,
+          "VM_progress_steps_lower_bound": 7323000,
+          "query_plan": [
+            "SCAN p",
+            "SEARCH s USING INTEGER PRIMARY KEY (rowid=?)",
+            "SEARCH b USING INDEX sqlite_autoindex_books_1 (id=?)"
+          ],
+          "ordered_ID_sha256": "e5a5188ccc9853f370602f60a14a88030b41288dff92ec0aa14c4d5eba305f83"
+        },
+        "direct_books_first": {
+          "status": "completed",
+          "elapsed_ms": 26.054,
+          "VM_progress_steps_lower_bound": 738000,
+          "query_plan": [
+            "SCAN b",
+            "SEARCH p USING INDEX passages_book (book_id=?)",
+            "SEARCH s USING INTEGER PRIMARY KEY (rowid=?)",
+            "USE TEMP B-TREE FOR ORDER BY"
+          ],
+          "ordered_ID_sha256": "e5a5188ccc9853f370602f60a14a88030b41288dff92ec0aa14c4d5eba305f83"
+        }
+      },
+      "equivalence": "exact",
+      "ordered_IDs_equal": true,
+      "sorted_IDs_equal": true,
+      "passages": 48745,
+      "ID_range": [
+        885517,
+        1316953
+      ]
+    }
+  ],
+  "source_guards_passed": true,
+  "source_sha256_after": "2d77675ba2a68f63e25f507355272e3206db8f9abbe959f326cea96f774939f0",
+  "source_identity_after": [
+    16777229,
+    23173638,
+    1594347520,
+    1794665920442618298,
+    1794665920442618298
+  ],
+  "elapsed_seconds": 1.171,
+  "status": "passed",
+  "limitations": [
+    "One old-then-new pair per scope; full initial SHA warms cache and concurrent host work is not isolated.",
+    "This measures metadata eligibility SQL only, not query encoding, scoring, retrieval or answer generation.",
+    "Read-only pinned1308 input; no whole-live-catalogue freeze, Library construction, model or source text.",
+    "Progress-step counts are lower bounds at1000VM-instruction intervals, not row-read or byte counters.",
+    "Timeout/wall overrun receives no equivalence or speedup credit; complete input SHA/identity guards are mandatory.",
+    "The final trial follows an initial three-scope measurement; both are retained without pooling or selecting best timings."
+  ],
+  "initial_trial": {
+    "reason_for_followup": "Formatting and bound progress-callback deadline; SQL implementation and input unchanged.",
+    "script_sha256": "d5495b1a89df08a83c4089cdbd1845dba6f6c94447d67eac22806a6879cac911",
+    "source_guards_passed": true,
+    "cases": [
+      {
+        "book_id": "pg11-full",
+        "language": null,
+        "methods": {
+          "old_OR_predicates": {
+            "status": "completed",
+            "elapsed_ms": 168.312,
+            "VM_progress_steps_lower_bound": 5346000,
+            "query_plan": [
+              "SCAN p",
+              "SEARCH s USING INTEGER PRIMARY KEY (rowid=?)",
+              "SEARCH b USING INDEX sqlite_autoindex_books_1 (id=?)"
+            ],
+            "ordered_ID_sha256": "496fd1351873ec8bb4422b53272fc4c29cb41d48a5bec24dba2a9ecc4172a62d"
+          },
+          "direct_books_first": {
+            "status": "completed",
+            "elapsed_ms": 0.131,
+            "VM_progress_steps_lower_bound": 1000,
+            "query_plan": [
+              "SEARCH b USING INDEX sqlite_autoindex_books_1 (id=?)",
+              "SEARCH p USING INDEX passages_book (book_id=?)",
+              "SEARCH s USING INTEGER PRIMARY KEY (rowid=?)"
+            ],
+            "ordered_ID_sha256": "496fd1351873ec8bb4422b53272fc4c29cb41d48a5bec24dba2a9ecc4172a62d"
+          }
+        },
+        "selected_book_header_sha256": "8ed4edc0875d8e65cc3f4c882dc05b99a2060dce62394282c3a25707197138bf",
+        "equivalence": "exact",
+        "ordered_IDs_equal": true,
+        "sorted_IDs_equal": true,
+        "passages": 117,
+        "ID_range": [
+          884911,
+          885027
+        ]
+      },
+      {
+        "book_id": "pg2680-full",
+        "language": null,
+        "methods": {
+          "old_OR_predicates": {
+            "status": "completed",
+            "elapsed_ms": 171.149,
+            "VM_progress_steps_lower_bound": 5348000,
+            "query_plan": [
+              "SCAN p",
+              "SEARCH s USING INTEGER PRIMARY KEY (rowid=?)",
+              "SEARCH b USING INDEX sqlite_autoindex_books_1 (id=?)"
+            ],
+            "ordered_ID_sha256": "87e063e482b10a7b56c3f867387239b9091f69015a537cd3163e91dcd5612e1d"
+          },
+          "direct_books_first": {
+            "status": "completed",
+            "elapsed_ms": 0.212,
+            "VM_progress_steps_lower_bound": 3000,
+            "query_plan": [
+              "SEARCH b USING INDEX sqlite_autoindex_books_1 (id=?)",
+              "SEARCH p USING INDEX passages_book (book_id=?)",
+              "SEARCH s USING INTEGER PRIMARY KEY (rowid=?)"
+            ],
+            "ordered_ID_sha256": "87e063e482b10a7b56c3f867387239b9091f69015a537cd3163e91dcd5612e1d"
+          }
+        },
+        "selected_book_header_sha256": "aef18af47899514ec6afa801e6e4d46277176701375566f639bf0c0fdce82fd0",
+        "equivalence": "exact",
+        "ordered_IDs_equal": true,
+        "sorted_IDs_equal": true,
+        "passages": 342,
+        "ID_range": [
+          1050963,
+          1051304
+        ]
+      },
+      {
+        "book_id": null,
+        "language": "de",
+        "methods": {
+          "old_OR_predicates": {
+            "status": "completed",
+            "elapsed_ms": 195.46,
+            "VM_progress_steps_lower_bound": 7323000,
+            "query_plan": [
+              "SCAN p",
+              "SEARCH s USING INTEGER PRIMARY KEY (rowid=?)",
+              "SEARCH b USING INDEX sqlite_autoindex_books_1 (id=?)"
+            ],
+            "ordered_ID_sha256": "e5a5188ccc9853f370602f60a14a88030b41288dff92ec0aa14c4d5eba305f83"
+          },
+          "direct_books_first": {
+            "status": "completed",
+            "elapsed_ms": 25.555,
+            "VM_progress_steps_lower_bound": 738000,
+            "query_plan": [
+              "SCAN b",
+              "SEARCH p USING INDEX passages_book (book_id=?)",
+              "SEARCH s USING INTEGER PRIMARY KEY (rowid=?)",
+              "USE TEMP B-TREE FOR ORDER BY"
+            ],
+            "ordered_ID_sha256": "e5a5188ccc9853f370602f60a14a88030b41288dff92ec0aa14c4d5eba305f83"
+          }
+        },
+        "equivalence": "exact",
+        "ordered_IDs_equal": true,
+        "sorted_IDs_equal": true,
+        "passages": 48745,
+        "ID_range": [
+          885517,
+          1316953
+        ]
+      }
+    ]
+  },
+  "reproduction_command": "uv run python scripts/benchmark_semantic_eligibility.py --report data/semantic-eligibility-reproduction.json",
+  "_score_vectors_unchanged_from_HEAD": true,
+  "score_function_control_commit": "963ddf2de80fe386cd717506755e8e2763342548"
+}

@@ -6,8 +6,9 @@ from typing import Any, Literal
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.responses import FileResponse, Response
 from fastapi.staticfiles import StaticFiles
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
+from book_rag.answers import AnswerGenerator
 from book_rag.config import data_dir
 from book_rag.library import Library
 
@@ -27,6 +28,22 @@ class ResearchRequest(BaseModel):
     limit: int = Field(default=8, ge=1, le=30)
 
 
+class AnswerRequest(BaseModel):
+    model_config = {"extra": "forbid"}
+    query: str = Field(min_length=1, max_length=2000)
+    book_ids: list[str] = Field(default_factory=list, max_length=10)
+    language: str | None = Field(default=None, max_length=20)
+    mode: Literal["lexical", "semantic", "hybrid"] = "hybrid"
+    limit: int = Field(default=8, ge=1, le=12)
+
+    @field_validator("book_ids")
+    @classmethod
+    def valid_book_ids(cls, identities: list[str]) -> list[str]:
+        if any(not identity.strip() or identity != identity.strip() or len(identity) > 200 for identity in identities):
+            raise ValueError("Book IDs must be nonempty and bounded, without surrounding whitespace")
+        return identities
+
+
 class SavedItemUpdate(BaseModel):
     model_config = {"extra": "forbid"}
 
@@ -35,7 +52,7 @@ class SavedItemUpdate(BaseModel):
     collection: str | None = Field(default=None, max_length=200)
 
 
-def create_app(directory: Path | None = None) -> FastAPI:
+def create_app(directory: Path | None = None, *, answer_generator: AnswerGenerator | None = None) -> FastAPI:
     library = Library(directory or data_dir())
     app = FastAPI(title="Book Atlas", version="0.2.0")
     app.state.library = library
@@ -122,6 +139,22 @@ def create_app(directory: Path | None = None) -> FastAPI:
             return library.research(request.query, request.book_ids, request.limit)
         except ValueError as exc:
             raise HTTPException(400, str(exc)) from exc
+
+    @app.post("/api/ask")
+    def answer(request: AnswerRequest) -> dict[str, Any]:
+        from book_rag.answers import ask
+
+        if not request.query.strip():
+            raise HTTPException(400, "Question must contain text")
+        return ask(
+            library,
+            request.query,
+            book_ids=request.book_ids,
+            language=request.language,
+            mode=request.mode,
+            limit=request.limit,
+            generator=answer_generator,
+        )
 
     @app.get("/api/saved")
     def saved() -> dict[str, Any]:

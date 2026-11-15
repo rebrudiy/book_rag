@@ -1,0 +1,119 @@
+{
+  "experiment": "local-rag-baseline-v1",
+  "recorded_at": "2026-11-15T01:50:44.405889+00:00",
+  "split": "development",
+  "closed_final_used": false,
+  "scope": "Small local Qwen baseline; literal source integrity is not semantic entailment or factual accuracy",
+  "candidate": {
+    "candidate": "local-rag-evidence-ids-2perbook-context-judge-v1",
+    "recorded_at": "2026-11-15T01:40:42.496589+00:00",
+    "split": "development",
+    "closed_final_used": false,
+    "sha256": {
+      "src/book_rag/answers.py": "59fc51da226a986a201c47ea0edd989c139d818cae7c66ce4b613b04f40697e8",
+      "src/book_rag/local_generation.py": "844b705a7de86dba5512b0eae430575dabae9c3c9e578e39a3c5be3ac63ac592",
+      "src/book_rag/semantic.py": "ab9fe83ea1d4f1310d37c321bc7b5064fcf5589504b8a97135d5b5128d275949",
+      "src/book_rag/library.py": "75d9aab99522bc53a00b773ad3df1b9fd48c31a22fddb0f1d7affc370efd8284",
+      "src/book_rag/api.py": "b49b02e01e6a3f60a773d848ce25f6b5f9fa0500869c477bcdf76b41c93d89c5",
+      "scripts/evaluate_rag_answers.py": "99dd0133681033b105fb82b8407f6f42b572df47570142065a407fc0a232c0fb",
+      "evals/rag-dev-v1.json": "573155bfea71d0086b37f622e3bc24598bd1dd6595535436c05ae59bf7fdf92d"
+    },
+    "server_pid": 44840,
+    "server_log": "data/server-full-20261115T0140Z.log"
+  },
+  "runtime_reports": {
+    "data/evaluations/rag-dev-v1/run-01.responses.json": "ba2eb6063fcddd6fed49daa987d2926c102d99f25573e1ad32e287552c2cabea",
+    "data/evaluations/rag-dev-v1/run-01.report.json": "4a6d101f16b26594c9c29bfacb3e1c062f3257799692a153d7428c6ed14ae652",
+    "artifacts/live-answer-scoped-v1/report.json": "6e18e0e370ab1e8bae9cbb048f311e037e76eb2d8a1c20b65dd814e1830e31d4"
+  },
+  "fixture_validation": {
+    "valid": true,
+    "books_checked": 10,
+    "anchors_checked": 16,
+    "issues": []
+  },
+  "summary": {
+    "cases": 14,
+    "statuses": {
+      "answered": 3,
+      "abstained": 10,
+      "invalid_output": 1
+    },
+    "scored_answerability_cases": 13,
+    "observed_answerability_matches": 4,
+    "not_run_cases": 0,
+    "operational_failure_cases": 1,
+    "structure_error_cases": 1,
+    "sources_checked": 26,
+    "invalid_sources": 0,
+    "claims_checked": 4,
+    "invalid_claim_citations": 0,
+    "reference_anchors_observed": 16,
+    "reference_anchors_retrieved": 8,
+    "reference_anchors_in_cited_passages": 4,
+    "human_factual_reviewed_cases": 0,
+    "human_entailment_reviewed_cases": 0,
+    "quality_note": "Literal evidence integrity and answerability are separate from factual correctness/entailment; semantic checks remain unreviewed."
+  },
+  "real_browser": {
+    "started_at": "2026-11-15T01:40:01.905427+00:00",
+    "real_model": true,
+    "closed_final_used": false,
+    "quality_benchmark": false,
+    "cases": [
+      {
+        "name": "watch",
+        "expected_status": "answered",
+        "observed_status": "answered",
+        "elapsed_ms": 8794.67,
+        "source_count": 2,
+        "raw_sha256": "e4358e243f0fe092fb9ddddcb80590ae82e0f7be2ea1f3ebb66e2937569c6d21",
+        "reader_exact": true
+      },
+      {
+        "name": "wrong-topic",
+        "expected_status": "abstained",
+        "observed_status": "abstained",
+        "elapsed_ms": 5466.89,
+        "source_count": 2,
+        "raw_sha256": "e976992b487d4d33d19930860f9653d9e09272e55a3957f9695eb934126dd14e"
+      }
+    ],
+    "javascript_errors": [],
+    "completed_at": "2026-11-15T01:40:20.285061+00:00",
+    "passed": true
+  },
+  "known_failures": [
+    "Global description returned related facts rather than a direct answer.",
+    "The small model can invent facts while citing exact but unrelated excerpts; the same-model judgement is fallible.",
+    "Discarding every claim when only one fails produces excessive abstention.",
+    "Russian scoped questions with quoted inflected book titles can return zero lexical evidence outside the semantic subset."
+  ],
+  "earlier_exploratory_failures": [
+    {
+      "receipt": "data/bench/local-rag-smoke.json",
+      "failure": "Long bounded string grammar exceeded native parser budget; worker exited; response unavailable."
+    },
+    {
+      "receipt": "data/bench/local-rag-smoke-v2.json",
+      "failure": "Generated watch answer added unsupported fan claim."
+    },
+    {
+      "receipt": "data/bench/local-rag-smoke-v4.json",
+      "failure": "Copying entire paragraphs caused token-limit truncation."
+    },
+    {
+      "receipt": "data/bench/local-rag-smoke-v5.json",
+      "failure": "Model changed words/punctuation in copied quote; exact validator rejected."
+    },
+    {
+      "receipt": "data/bench/local-rag-smoke-v7.json",
+      "failure": "Invented quantum-encryption explanation despite attached exact Alice excerpts."
+    },
+    {
+      "receipt": "data/bench/local-rag-smoke-v8.json",
+      "failure": "Narrow quotation-only judge also rejected a correct watch answer; full source context restored."
+    }
+  ],
+  "next_experiment": "Retain independently accepted claims with explicit partial-answer warning; improve natural-question retrieval separately from exact quote search."
+}

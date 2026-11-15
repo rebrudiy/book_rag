@@ -1,0 +1,726 @@
+{
+  "version": "rag-dev-v1",
+  "split": "development",
+  "created_at": "2026-11-15T01:18:10.624033+00:00",
+  "description": "Open RAG development probes over selected editions from the curated20 pool and three audited Russian original short works. Never a closed/final benchmark. Facts need human review; exact source integrity is separately measurable.",
+  "licenses": "Software evaluation code is MIT. Quoted fragments retain the rights/license and attribution of their source records, including Wikisource transcription CC BY-SA 4.0.",
+  "source_manifests": [
+    "corpus/manifest.json",
+    "data/russian/short-works-v1/manifest.json"
+  ],
+  "source_snapshot_policy": "Bind edition artifact SHA, canonical book SHA, exact evidence section SHA/offset/quote and contributor metadata; fail closed on mismatched source snapshots.",
+  "automatic_checks": [
+    "observed answerability status (answered/abstained only)",
+    "canonical citation text/span/hash and bibliographic metadata",
+    "supporting quote membership and cited source IDs",
+    "scope and reader URL identity",
+    "reference anchor presence in retrieved/cited passages, not semantic entailment"
+  ],
+  "manual_checks": [
+    "every expected fact is correct and sufficiently supported",
+    "claim/quote semantic entailment, omissions and overgeneralization",
+    "answer-language appropriateness and nuanced speaker/contributor attribution"
+  ],
+  "books": [
+    {
+      "book_id": "pg11-full",
+      "work_id": "pg11-alice",
+      "title": "Alice's Adventures in Wonderland",
+      "author": "Carroll, Lewis, 1832-1898",
+      "language": "en",
+      "edition": "Project Gutenberg #11, full electronic edition; updated Jun 26, 2025",
+      "source_url": "https://www.gutenberg.org/ebooks/11",
+      "rights": "Public domain in the USA. Project Gutenberg trademark license applies; check local law outside the USA.",
+      "rights_url": "https://www.gutenberg.org/policy/license.html",
+      "artifact_sha256": "4f81245d31380ac1d6eafb9a321e3691369bc70985736ae4bccf849a4f784036",
+      "content_sha256": "59973727d567a184d17a7c765c05fd922350b9fa8b609211b35491fc312feac4",
+      "artifact_retrieval": "See public corpus manifest/provider URL and runtime content-addressed original; provider current download URLs can change, SHA mismatches require re-audit."
+    },
+    {
+      "book_id": "pg1342-full",
+      "work_id": "pg1342-pride",
+      "title": "Pride and Prejudice",
+      "author": "Austen, Jane, 1775-1817",
+      "language": "en",
+      "edition": "Project Gutenberg #1342, full electronic edition; updated Sep 29, 2026",
+      "source_url": "https://www.gutenberg.org/ebooks/1342",
+      "rights": "Public domain in the USA. Project Gutenberg trademark license applies; check local law outside the USA.",
+      "rights_url": "https://www.gutenberg.org/policy/license.html",
+      "artifact_sha256": "fd519471687295a8b2492d9e413bc24bee21ade9808d8af29899a16e8599064e",
+      "content_sha256": "e8e8ea412c3ccca5f52d94a655c1b3db056fe3f59afcb14616fa9fc75f20ed6e",
+      "artifact_retrieval": "See public corpus manifest/provider URL and runtime content-addressed original; provider current download URLs can change, SHA mismatches require re-audit."
+    },
+    {
+      "book_id": "pg3300-full",
+      "work_id": "pg3300-wealth",
+      "title": "An Inquiry into the Nature and Causes of the Wealth of Nations",
+      "author": "Smith, Adam, 1723-1790",
+      "language": "en",
+      "edition": "Project Gutenberg #3300, full electronic edition; updated Jul 3, 2025",
+      "source_url": "https://www.gutenberg.org/ebooks/3300",
+      "rights": "Public domain in the USA. Project Gutenberg trademark license applies; check local law outside the USA.",
+      "rights_url": "https://www.gutenberg.org/policy/license.html",
+      "artifact_sha256": "52c8c5b9cc2b18d1edc87a326b76f0d8aee568932995d407083b394aaa9165ab",
+      "content_sha256": "da5946d31a0e131f1ff9c772b4831fd06cfb55a23bb137f180ffe1a6f905d6fd",
+      "artifact_retrieval": "See public corpus manifest/provider URL and runtime content-addressed original; provider current download URLs can change, SHA mismatches require re-audit."
+    },
+    {
+      "book_id": "pg1228-full",
+      "work_id": "pg1228-origin",
+      "title": "On the Origin of Species By Means of Natural Selection Or, the Preservation of Favoured Races in the Struggle for Life",
+      "author": "Darwin, Charles, 1809-1882",
+      "language": "en",
+      "edition": "Project Gutenberg #1228, full electronic edition; updated Oct 6, 2026; 1859 first edition",
+      "source_url": "https://www.gutenberg.org/ebooks/1228",
+      "rights": "Public domain in the USA. Project Gutenberg trademark license applies; check local law outside the USA.",
+      "rights_url": "https://www.gutenberg.org/policy/license.html",
+      "artifact_sha256": "49bb913c0d267c786846805ce8b90a2e92bc4b2ee7cc0ab9492821bd85c6819b",
+      "content_sha256": "37153a1d3173fe51834aff0ec91a0a7ae796dbfba5f81958fbd18a27f08babe4",
+      "artifact_retrieval": "See public corpus manifest/provider URL and runtime content-addressed original; provider current download URLs can change, SHA mismatches require re-audit."
+    },
+    {
+      "book_id": "pg1497-full",
+      "work_id": "pg1497",
+      "title": "The Republic",
+      "author": "Plato, 428? BCE-348? BCE",
+      "language": "en",
+      "edition": "Project Gutenberg #1497, full electronic edition; updated Oct 3, 2026; translator Jowett, Benjamin, 1817-1893",
+      "source_url": "https://www.gutenberg.org/ebooks/1497",
+      "rights": "Public domain in the USA. Project Gutenberg trademark license applies; check local law outside the USA.",
+      "rights_url": "https://www.gutenberg.org/policy/license.html",
+      "artifact_sha256": "8c8bf2ed9bff65aaf226bf5db3879eb378a26e72489bd28666abc01c02f2a0c2",
+      "content_sha256": "4455ea42dfd963c7e02fa5559ac1f4cd3e9dafde3975bcc0aacae210dd08bc27",
+      "artifact_retrieval": "See public corpus manifest/provider URL and runtime content-addressed original; provider current download URLs can change, SHA mismatches require re-audit."
+    },
+    {
+      "book_id": "pg61-full",
+      "work_id": "pg61",
+      "title": "The Communist Manifesto",
+      "author": "Marx, Karl, 1818-1883; Engels, Friedrich, 1820-1895",
+      "language": "en",
+      "edition": "Project Gutenberg #61, full electronic edition; updated Mar 2, 2022",
+      "source_url": "https://www.gutenberg.org/ebooks/61",
+      "rights": "Public domain in the USA. Project Gutenberg trademark license applies; check local law outside the USA.",
+      "rights_url": "https://www.gutenberg.org/policy/license.html",
+      "artifact_sha256": "eb9d882661805128f3f476818a9eee328b77778b0d5ef7415fe08fcd76ecd763",
+      "content_sha256": "30738896b98b4adc0881feb58013408908b74438810eed97f32fb0e5e457af5b",
+      "artifact_retrieval": "See public corpus manifest/provider URL and runtime content-addressed original; provider current download URLs can change, SHA mismatches require re-audit."
+    },
+    {
+      "book_id": "pg2009-full",
+      "work_id": "pg1228-origin",
+      "title": "The Origin of Species by Means of Natural Selection Or, the Preservation of Favoured Races in the Struggle for Life, 6th Edition",
+      "author": "Darwin, Charles, 1809-1882",
+      "language": "en",
+      "edition": "Project Gutenberg #2009, full electronic edition; updated Oct 7, 2026; sixth edition",
+      "source_url": "https://www.gutenberg.org/ebooks/2009",
+      "rights": "Public domain in the USA. Project Gutenberg trademark license applies; check local law outside the USA.",
+      "rights_url": "https://www.gutenberg.org/policy/license.html",
+      "artifact_sha256": "734ab06f61101728b42982d6032a440eb79c051f02d4a8456bbe34ea6cb293d0",
+      "content_sha256": "31984b3327add4ee6f9a5f5d49e37cf7aaf1190cdc00d8ee1d997095960bbcb8",
+      "artifact_retrieval": "See public corpus manifest/provider URL and runtime content-addressed original; provider current download URLs can change, SHA mismatches require re-audit."
+    },
+    {
+      "book_id": "wsru-chameleon-6a5f80896084",
+      "work_id": "ru-chameleon",
+      "title": "Хамелеон",
+      "author": "Антон Павлович Чехов",
+      "language": "ru",
+      "edition": "Викитека/ФЭБ; вариант журнала Осколки, 1884, № 36, с. 4; восстановлен по аппарату ПСС, Наука, 1975, т. 3, с. 52–55, 487; captured wiki revision 5321506",
+      "source_url": "https://ru.wikisource.org/w/index.php?oldid=5321506",
+      "rights": "Original work: public domain; Wikisource contributor transcription: CC BY-SA 4.0. Source/history/modification credits retained.",
+      "rights_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "artifact_sha256": "742870899417a17df01d42785b1f24ddf3a3392f9bf77f070ec85dcb6b86a8a2",
+      "content_sha256": "bab00ec65db8d6c9c930912f36e394cceb386a8cc62895b51e4105c71dbf6660",
+      "artifact_retrieval": "See public corpus manifest/provider URL and runtime content-addressed original; provider current download URLs can change, SHA mismatches require re-audit."
+    },
+    {
+      "book_id": "wsru-lefty-45ef2537b9d9",
+      "work_id": "ru-lefty",
+      "title": "Левша",
+      "author": "Николай Семёнович Лесков",
+      "language": "ru",
+      "edition": "Викитека; Лесков, ПСС, 3-е изд., Типография А. Ф. Маркса, 1902, т. 4, с. 109–141; редакция ВТ с обновлённой орфографией; captured wiki revision 2297917",
+      "source_url": "https://ru.wikisource.org/w/index.php?oldid=2297917",
+      "rights": "Original work: public domain; Wikisource contributor transcription: CC BY-SA 4.0. Source/history/modification credits retained.",
+      "rights_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "artifact_sha256": "7c6f7469e7406bd72fac8f2bcd64d43dabd96ec28f386359619b1ce9e9338b5d",
+      "content_sha256": "119c31080f2721368b615f39d90abf45253cd6557d780800507ec71da9bf1269",
+      "artifact_retrieval": "See public corpus manifest/provider URL and runtime content-addressed original; provider current download URLs can change, SHA mismatches require re-audit."
+    },
+    {
+      "book_id": "wsru-how-much-land-285bf7cc584e",
+      "work_id": "ru-how-much-land",
+      "title": "Много ли человеку земли нужно",
+      "author": "Лев Николаевич Толстой",
+      "language": "ru",
+      "edition": "Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293",
+      "source_url": "https://ru.wikisource.org/w/index.php?oldid=1071293",
+      "rights": "Original work: public domain; Wikisource contributor transcription: CC BY-SA 4.0. Source/history/modification credits retained.",
+      "rights_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "artifact_sha256": "0ebd281360393ff0d9dbf15d5e01f41dc8d4cb44ac7020ba9d1887126769fc68",
+      "content_sha256": "ccc134c7cab15ebae59a82b9ee6a5da946e8e697a104d264228cc0e299d2fb18",
+      "artifact_retrieval": "See public corpus manifest/provider URL and runtime content-addressed original; provider current download URLs can change, SHA mismatches require re-audit."
+    }
+  ],
+  "cases": [
+    {
+      "id": "alice-watch",
+      "kind": "book_factual",
+      "question": "What does the White Rabbit take out of its waistcoat-pocket before Alice follows it?",
+      "language": "en",
+      "book_ids": [
+        "pg11-full"
+      ],
+      "expected_facts": [
+        "The Rabbit takes out a watch, looks at it and hurries on."
+      ],
+      "expected_answerability": true,
+      "evidence": [
+        {
+          "id": "watch",
+          "book_id": "pg11-full",
+          "section_ordinal": 1,
+          "section_title": "CHAPTER I. Down the Rabbit-Hole",
+          "section_sha256": "7ca5f18f91024fa1bca09d7eca810d5a0cd20c6fd98e83c53657a74793c2aca8",
+          "quote": "when the Rabbit actually took a watch out of its waistcoat-pocket, and looked at it, and then hurried on",
+          "quote_start": 911,
+          "quote_end": 1015,
+          "quote_sha256": "40224746d95f9f22a5c521cc936d57118474e6c8187cfd11954d99fd797e29bd",
+          "expected_attribution": {
+            "section_author": "Carroll, Lewis, 1832-1898",
+            "section_role": "unclassified",
+            "section_translator": ""
+          },
+          "audit": "Manually read surrounding canonical paragraph(s); quote copied from exact indexed source section, not generated."
+        }
+      ],
+      "required_cited_book_ids": [
+        "pg11-full"
+      ],
+      "automatic_semantic_entailment": "unreviewed"
+    },
+    {
+      "id": "alice-court",
+      "kind": "book_factual",
+      "question": "Who demands sentence before verdict, and how does Alice respond?",
+      "language": "en",
+      "book_ids": [
+        "pg11-full"
+      ],
+      "expected_facts": [
+        "The Queen demands sentence before verdict.",
+        "Alice calls this stuff and nonsense and objects to having the sentence first."
+      ],
+      "expected_answerability": true,
+      "evidence": [
+        {
+          "id": "queen",
+          "book_id": "pg11-full",
+          "section_ordinal": 12,
+          "section_title": "CHAPTER XII. Alice’s Evidence",
+          "section_sha256": "11d4f22f72e2dd4f10b762d353c31d6619fba99c9a933721d54cbc2a548815be",
+          "quote": "“No, no!” said the Queen. “Sentence first—verdict afterwards.”",
+          "quote_start": 7736,
+          "quote_end": 7798,
+          "quote_sha256": "4d861371d96b700c8dfcc0f60dc6d3c6354ef6693dea490812c2677e3871093c",
+          "expected_attribution": {
+            "section_author": "Carroll, Lewis, 1832-1898",
+            "section_role": "unclassified",
+            "section_translator": ""
+          },
+          "audit": "Manually read surrounding canonical paragraph(s); quote copied from exact indexed source section, not generated."
+        },
+        {
+          "id": "alice-objection",
+          "book_id": "pg11-full",
+          "section_ordinal": 12,
+          "section_title": "CHAPTER XII. Alice’s Evidence",
+          "section_sha256": "11d4f22f72e2dd4f10b762d353c31d6619fba99c9a933721d54cbc2a548815be",
+          "quote": "“Stuff and nonsense!” said Alice loudly. “The idea of having the sentence first!”",
+          "quote_start": 7800,
+          "quote_end": 7881,
+          "quote_sha256": "ec21e567e0eed230e2ec14ab78cce28e5e1ffd428de327bf11d760e77dcf27f2",
+          "expected_attribution": {
+            "section_author": "Carroll, Lewis, 1832-1898",
+            "section_role": "unclassified",
+            "section_translator": ""
+          },
+          "audit": "Manually read surrounding canonical paragraph(s); quote copied from exact indexed source section, not generated."
+        }
+      ],
+      "required_cited_book_ids": [
+        "pg11-full"
+      ],
+      "automatic_semantic_entailment": "unreviewed"
+    },
+    {
+      "id": "austen-opener",
+      "kind": "book_factual",
+      "question": "What does the opening of Pride and Prejudice say a single man with a good fortune must want?",
+      "language": "en",
+      "book_ids": [
+        "pg1342-full"
+      ],
+      "expected_facts": [
+        "The opening narrator says that a wealthy single man must be in want of a wife."
+      ],
+      "review_cautions": [
+        "Report the opening proposition; do not present its ironic social assumption as an established universal fact."
+      ],
+      "expected_answerability": true,
+      "evidence": [
+        {
+          "id": "wife",
+          "book_id": "pg1342-full",
+          "section_ordinal": 2,
+          "section_title": "Chapter I.",
+          "section_sha256": "d222ee164cbaf8748f24a34287a8a316ea415eeb6295660ccd699680299c0098",
+          "quote": "a single man in possession of a good fortune must be in want of a wife.",
+          "quote_start": 45,
+          "quote_end": 116,
+          "quote_sha256": "ccaa3247f172ab17786306cc605c5a00620b3f9f624bc92b296ec56b5a07f558",
+          "expected_attribution": {
+            "section_author": "Austen, Jane, 1775-1817",
+            "section_role": "unclassified",
+            "section_translator": ""
+          },
+          "audit": "Manually read surrounding canonical paragraph(s); quote copied from exact indexed source section, not generated."
+        }
+      ],
+      "required_cited_book_ids": [
+        "pg1342-full"
+      ],
+      "automatic_semantic_entailment": "unreviewed"
+    },
+    {
+      "id": "smith-pins",
+      "kind": "book_factual",
+      "question": "In Adam Smith’s pin-making example, how many pins could the ten workers make together in a day?",
+      "language": "en",
+      "book_ids": [
+        "pg3300-full"
+      ],
+      "expected_facts": [
+        "Smith says ten persons could make upwards of forty-eight thousand pins in a day."
+      ],
+      "expected_answerability": true,
+      "evidence": [
+        {
+          "id": "output",
+          "book_id": "pg3300-full",
+          "section_ordinal": 3,
+          "section_title": "CHAPTER I. OF THE DIVISION OF LABOUR.",
+          "section_sha256": "79dd197f3df4a42681a29044456d1b9475d2818fe1e39ccfa2cfb56c86794b19",
+          "quote": "Those ten persons, therefore, could make among them upwards of forty-eight thousand pins in a day.",
+          "quote_start": 3214,
+          "quote_end": 3312,
+          "quote_sha256": "c30609aa171589dcfa2a0473598dcffa1d2b259512fdaaec94b0248ce16e8e90",
+          "expected_attribution": {
+            "section_author": "Smith, Adam, 1723-1790",
+            "section_role": "unclassified",
+            "section_translator": ""
+          },
+          "audit": "Manually read surrounding canonical paragraph(s); quote copied from exact indexed source section, not generated."
+        }
+      ],
+      "required_cited_book_ids": [
+        "pg3300-full"
+      ],
+      "automatic_semantic_entailment": "unreviewed"
+    },
+    {
+      "id": "darwin-struggle",
+      "kind": "book_explanation",
+      "question": "Does Darwin use struggle for existence only for direct combat, or in a broader sense? What does he include?",
+      "language": "en",
+      "book_ids": [
+        "pg1228-full"
+      ],
+      "expected_facts": [
+        "Darwin explicitly uses the term in a large and metaphorical sense, including dependence of one being on another.",
+        "He includes success in leaving progeny, not only individual life."
+      ],
+      "expected_answerability": true,
+      "evidence": [
+        {
+          "id": "metaphorical",
+          "book_id": "pg1228-full",
+          "section_ordinal": 7,
+          "section_title": "CHAPTER III. STRUGGLE FOR EXISTENCE.",
+          "section_sha256": "2986986502eefbb61b10a98c0d3b4c32c17e61c60b0f74a687c937941ebe48a4",
+          "quote": "I use the term Struggle for Existence in a large and metaphorical sense, including dependence of one being on another",
+          "quote_start": 4972,
+          "quote_end": 5089,
+          "quote_sha256": "c21ccbea6ad50d71a36b208594eed37d1e4602ed924e7203b4fb7278ac86cfb1",
+          "expected_attribution": {
+            "section_author": "Darwin, Charles, 1809-1882",
+            "section_role": "unclassified",
+            "section_translator": ""
+          },
+          "audit": "Manually read surrounding canonical paragraph(s); quote copied from exact indexed source section, not generated."
+        },
+        {
+          "id": "progeny",
+          "book_id": "pg1228-full",
+          "section_ordinal": 7,
+          "section_title": "CHAPTER III. STRUGGLE FOR EXISTENCE.",
+          "section_sha256": "2986986502eefbb61b10a98c0d3b4c32c17e61c60b0f74a687c937941ebe48a4",
+          "quote": "not only the life of the individual, but success in leaving progeny",
+          "quote_start": 5131,
+          "quote_end": 5198,
+          "quote_sha256": "0abff23cee379f2e366a71048e6ccb33541c09be9f8c91a1b5a8bc74a18e510f",
+          "expected_attribution": {
+            "section_author": "Darwin, Charles, 1809-1882",
+            "section_role": "unclassified",
+            "section_translator": ""
+          },
+          "audit": "Manually read surrounding canonical paragraph(s); quote copied from exact indexed source section, not generated."
+        }
+      ],
+      "required_cited_book_ids": [
+        "pg1228-full"
+      ],
+      "automatic_semantic_entailment": "unreviewed"
+    },
+    {
+      "id": "jowett-introduction",
+      "kind": "editorial_attribution",
+      "question": "In INTRODUCTION AND ANALYSIS to the Republic, which work is excepted when the Republic is called Plato’s longest work, and whose introduction is this?",
+      "language": "en",
+      "book_ids": [
+        "pg1497-full"
+      ],
+      "expected_facts": [
+        "The exception is the Laws.",
+        "This introductory assessment belongs to Benjamin Jowett’s editorial introduction, not to a speech by Plato in the dialogue."
+      ],
+      "expected_answerability": true,
+      "evidence": [
+        {
+          "id": "laws",
+          "book_id": "pg1497-full",
+          "section_ordinal": 2,
+          "section_title": "INTRODUCTION AND ANALYSIS.",
+          "section_sha256": "9b3b69e78281c8f81cc781381a6a6ec73bd4ab0651ac5222feeb70d101a55d29",
+          "quote": "The Republic of Plato is the longest of his works with the exception of the Laws, and is certainly the greatest of them.",
+          "quote_start": 0,
+          "quote_end": 120,
+          "quote_sha256": "54f35b465c9d66335399aa7ff3c33c136c88318c26ba7ea4400a53f2260ccce6",
+          "expected_attribution": {
+            "section_author": "Benjamin Jowett",
+            "section_role": "editorial",
+            "section_translator": ""
+          },
+          "audit": "Manually read surrounding canonical paragraph(s); quote copied from exact indexed source section, not generated."
+        }
+      ],
+      "required_cited_book_ids": [
+        "pg1497-full"
+      ],
+      "automatic_semantic_entailment": "unreviewed"
+    },
+    {
+      "id": "ru-query-smith-dinner",
+      "kind": "crosslingual_ru_to_en",
+      "question": "Почему, по Адаму Смиту, мясник, пивовар и булочник обеспечивают нам обед: из благожелательности или из собственного интереса?",
+      "language": "ru",
+      "book_ids": [
+        "pg3300-full"
+      ],
+      "expected_facts": [
+        "В этом фрагменте Смит говорит об их собственном интересе, а не о благожелательности."
+      ],
+      "review_cautions": [
+        "The answer should be in Russian; the exact supporting quotation remains English. Do not require a translated quotation to occur in the English source."
+      ],
+      "expected_answerability": true,
+      "evidence": [
+        {
+          "id": "interest",
+          "book_id": "pg3300-full",
+          "section_ordinal": 4,
+          "section_title": "CHAPTER II. OF THE PRINCIPLE WHICH GIVES OCCASION TO THE DIVISION OF LABOUR.",
+          "section_sha256": "a9360abc7d88879986f875174f1f715e75cad9a89683e7f1d308a1aa5ffb87aa",
+          "quote": "It is not from the benevolence of the butcher, the brewer, or the baker that we expect our dinner, but from their regard to their own interest.",
+          "quote_start": 3062,
+          "quote_end": 3205,
+          "quote_sha256": "e7224feb60e2d57cf5e7b62cbfad4df493415eb1c677f959a000268801988e8b",
+          "expected_attribution": {
+            "section_author": "Smith, Adam, 1723-1790",
+            "section_role": "unclassified",
+            "section_translator": ""
+          },
+          "audit": "Manually read surrounding canonical paragraph(s); quote copied from exact indexed source section, not generated."
+        }
+      ],
+      "required_cited_book_ids": [
+        "pg3300-full"
+      ],
+      "automatic_semantic_entailment": "unreviewed"
+    },
+    {
+      "id": "compare-property",
+      "kind": "two_book_comparison",
+      "question": "Compare Smith’s description of property in a person’s own labour with Marx and Engels’ distinction between property generally and bourgeois property. What kinds of property do these passages discuss?",
+      "language": "en",
+      "book_ids": [
+        "pg3300-full",
+        "pg61-full"
+      ],
+      "expected_facts": [
+        "Smith calls a person’s property in their own labour the original foundation of other property and sacred/inviolable.",
+        "Marx and Engels distinguish abolition of bourgeois property from abolition of property generally."
+      ],
+      "review_cautions": [
+        "Both books must support the comparison. Do not infer a complete agreement or disagreement on every form of property from these short passages."
+      ],
+      "expected_answerability": true,
+      "evidence": [
+        {
+          "id": "labour",
+          "book_id": "pg3300-full",
+          "section_ordinal": 14,
+          "section_title": "PART II.—Inequalities occasioned by the Policy of Europe.",
+          "section_sha256": "1b85a18e9e390e8e45b3d56921bcd24b92aefa7381dd1d0581d7377820accc34",
+          "quote": "The property which every man has in his own labour, as it is the original foundation of all other property, so it is the most sacred and inviolable.",
+          "quote_start": 7423,
+          "quote_end": 7571,
+          "quote_sha256": "5bf6b0d9dc590516c2f6b8bfd6300b73a98c5e6fea083c8d450e6c601bec3fba",
+          "expected_attribution": {
+            "section_author": "Smith, Adam, 1723-1790",
+            "section_role": "unclassified",
+            "section_translator": ""
+          },
+          "audit": "Manually read surrounding canonical paragraph(s); quote copied from exact indexed source section, not generated."
+        },
+        {
+          "id": "bourgeois",
+          "book_id": "pg61-full",
+          "section_ordinal": 4,
+          "section_title": "II. PROLETARIANS AND COMMUNISTS",
+          "section_sha256": "69d463f541b0c19f9c95027a696f83956a5065843df04e7ed9a17072a29bd13d",
+          "quote": "The distinguishing feature of Communism is not the abolition of property generally, but the abolition of bourgeois property.",
+          "quote_start": 2143,
+          "quote_end": 2267,
+          "quote_sha256": "e875e6fcbb80c508447cb3ca0d677d24610e9bc1171c9d045447120e03057bc0",
+          "expected_attribution": {
+            "section_author": "Marx, Karl, 1818-1883; Engels, Friedrich, 1820-1895",
+            "section_role": "unclassified",
+            "section_translator": ""
+          },
+          "audit": "Manually read surrounding canonical paragraph(s); quote copied from exact indexed source section, not generated."
+        }
+      ],
+      "required_cited_book_ids": [
+        "pg3300-full",
+        "pg61-full"
+      ],
+      "automatic_semantic_entailment": "unreviewed"
+    },
+    {
+      "id": "compare-origin-editions",
+      "kind": "two_edition_comparison",
+      "question": "How does the wording about life’s original powers differ in the concluding paragraphs of the 1859 and sixth editions of Origin of Species? Quote the difference and identify the editions.",
+      "language": "en",
+      "book_ids": [
+        "pg1228-full",
+        "pg2009-full"
+      ],
+      "expected_facts": [
+        "The 1859 first-edition conclusion says having been originally breathed into a few forms or into one.",
+        "The sixth-edition conclusion inserts by the Creator after breathed."
+      ],
+      "review_cautions": [
+        "This is a comparison of these two quoted concluding passages, not a claim that the word Creator is absent from the whole 1859 book. The two editions belong to one work."
+      ],
+      "expected_answerability": true,
+      "evidence": [
+        {
+          "id": "first-edition",
+          "book_id": "pg1228-full",
+          "section_ordinal": 18,
+          "section_title": "CHAPTER XIV. RECAPITULATION AND CONCLUSION.",
+          "section_sha256": "e98455e7b9d64f6fb127fa680be7159de8ceba7d23eff31cc661c2e2b93d2f60",
+          "quote": "having been originally breathed into a few forms or into one",
+          "quote_start": 57491,
+          "quote_end": 57551,
+          "quote_sha256": "6afd8d880b650dc2a3a0e428d8e8592da79a31af0f3d0d4ac838cbef6bcf041c",
+          "expected_attribution": {
+            "section_author": "Darwin, Charles, 1809-1882",
+            "section_role": "unclassified",
+            "section_translator": ""
+          },
+          "audit": "Manually read surrounding canonical paragraph(s); quote copied from exact indexed source section, not generated."
+        },
+        {
+          "id": "sixth-edition",
+          "book_id": "pg2009-full",
+          "section_ordinal": 20,
+          "section_title": "CHAPTER XV. RECAPITULATION AND CONCLUSION.",
+          "section_sha256": "755e57bf36b6442cfc7cbbbfa9b49eb6ea378b27993d23fbd6064e61c3408d67",
+          "quote": "having been originally breathed by the Creator into a few forms or into one",
+          "quote_start": 68580,
+          "quote_end": 68655,
+          "quote_sha256": "0c6f198389ffe2c140cca8c294bd9cab42066edd17fc24d9a046cbcf9de274ec",
+          "expected_attribution": {
+            "section_author": "Darwin, Charles, 1809-1882",
+            "section_role": "unclassified",
+            "section_translator": ""
+          },
+          "audit": "Manually read surrounding canonical paragraph(s); quote copied from exact indexed source section, not generated."
+        }
+      ],
+      "required_cited_book_ids": [
+        "pg1228-full",
+        "pg2009-full"
+      ],
+      "automatic_semantic_entailment": "unreviewed"
+    },
+    {
+      "id": "wrong-topic-alice",
+      "kind": "wrong_topic_scoped",
+      "question": "What mathematical formula for mass–energy equivalence does Alice’s Adventures in Wonderland derive?",
+      "language": "en",
+      "book_ids": [
+        "pg11-full"
+      ],
+      "expected_answerability": false,
+      "expected_facts": [],
+      "review_cautions": [
+        "Abstain on the available book evidence. Do not supply a remembered formula or claim that no book in the library discusses the topic."
+      ],
+      "evidence": [],
+      "required_cited_book_ids": [],
+      "automatic_semantic_entailment": "unreviewed"
+    },
+    {
+      "id": "wrong-topic-smith",
+      "kind": "wrong_topic_scoped",
+      "question": "Which Python function for SHA-256 hashing does Adam Smith recommend in The Wealth of Nations?",
+      "language": "en",
+      "book_ids": [
+        "pg3300-full"
+      ],
+      "expected_answerability": false,
+      "expected_facts": [],
+      "review_cautions": [
+        "Abstain on the selected-book evidence. An unavailable generator or invalid output does not count as a correct abstention."
+      ],
+      "evidence": [],
+      "required_cited_book_ids": [],
+      "automatic_semantic_entailment": "unreviewed"
+    },
+    {
+      "id": "ru-chameleon-owner",
+      "kind": "ru_original_factual",
+      "question": "Что повар Прохор в конце концов говорит о владельце собаки в «Хамелеоне»?",
+      "language": "ru",
+      "book_ids": [
+        "wsru-chameleon-6a5f80896084"
+      ],
+      "expected_facts": [
+        "Прохор говорит, что собака принадлежит брату генерала, который недавно приехал, а не самому генералу."
+      ],
+      "expected_answerability": true,
+      "evidence": [
+        {
+          "id": "owner",
+          "book_id": "wsru-chameleon-6a5f80896084",
+          "section_ordinal": 1,
+          "section_title": "Хамелеон",
+          "section_sha256": "41744770a3ec13a47da1d0b8dc8465203bce7453d7d95cd0fe4e3fc8234a6ec1",
+          "quote": "— Это не наша, — продолжает Прохор. — Это генералова брата, что намеднись приехал.",
+          "quote_start": 5038,
+          "quote_end": 5120,
+          "quote_sha256": "dee03051525b6861824a7b32909f179381879ecfa57d71566dc1ed26661fb8f9",
+          "expected_attribution": {
+            "section_author": "Антон Павлович Чехов",
+            "section_role": "unclassified",
+            "section_translator": ""
+          },
+          "audit": "Manually read surrounding canonical paragraph(s); quote copied from exact indexed source section, not generated."
+        }
+      ],
+      "required_cited_book_ids": [
+        "wsru-chameleon-6a5f80896084"
+      ],
+      "automatic_semantic_entailment": "unreviewed"
+    },
+    {
+      "id": "ru-lefty-warning",
+      "kind": "ru_original_factual",
+      "question": "Какое предупреждение о чистке ружей Левша просит передать государю перед смертью?",
+      "language": "ru",
+      "book_ids": [
+        "wsru-lefty-45ef2537b9d9"
+      ],
+      "expected_facts": [
+        "Левша просит сообщить, что англичане не чистят ружья кирпичом и у нас тоже не следует этого делать, иначе ружья не будут годны стрелять."
+      ],
+      "review_cautions": [
+        "Attribute this to the character’s reported warning; do not turn it into independently verified modern technical advice."
+      ],
+      "expected_answerability": true,
+      "evidence": [
+        {
+          "id": "brick",
+          "book_id": "wsru-lefty-45ef2537b9d9",
+          "section_ordinal": 20,
+          "section_title": "ГЛАВА ДЕВЯТНАДЦАТАЯ.",
+          "section_sha256": "f6b87e944c5cbef3a43678f1f15ffff160d682fb4675d37276aa11547af1042e",
+          "quote": "Скажите государю, что у англичан ружья кирпичом не чистят: пусть чтобы и у нас не чистили, а то, храни Бог войны, они стрелять не годятся.",
+          "quote_start": 1487,
+          "quote_end": 1625,
+          "quote_sha256": "18ca8b26bf2c52dfceb213034bac374eaa99761876cdd8613550540e54eb39a4",
+          "expected_attribution": {
+            "section_author": "Николай Семёнович Лесков",
+            "section_role": "unclassified",
+            "section_translator": ""
+          },
+          "audit": "Manually read surrounding canonical paragraph(s); quote copied from exact indexed source section, not generated."
+        }
+      ],
+      "required_cited_book_ids": [
+        "wsru-lefty-45ef2537b9d9"
+      ],
+      "automatic_semantic_entailment": "unreviewed"
+    },
+    {
+      "id": "ru-land-grave",
+      "kind": "ru_original_factual",
+      "question": "Сколько земли в итоге занимает могила Пахома в рассказе Толстого «Много ли человеку земли нужно»?",
+      "language": "ru",
+      "book_ids": [
+        "wsru-how-much-land-285bf7cc584e"
+      ],
+      "expected_facts": [
+        "Работник выкапывает могилу длиной три аршина, от ног до головы Пахома."
+      ],
+      "expected_answerability": true,
+      "evidence": [
+        {
+          "id": "grave",
+          "book_id": "wsru-how-much-land-285bf7cc584e",
+          "section_ordinal": 9,
+          "section_title": "IX",
+          "section_sha256": "205cb6ed31cc6907c88cbf800c59c4947d0d724683be8698206c72780ccb46ea",
+          "quote": "Поднял работник скребку, выкопал Пахому могилу, ровно насколько он от ног до головы захватил — три аршина, и закопал его.",
+          "quote_start": 2555,
+          "quote_end": 2676,
+          "quote_sha256": "6f1b45bed51ed8af18c3122589470d7d89a04d38720fdab73bf23b2af950fc1a",
+          "expected_attribution": {
+            "section_author": "Лев Николаевич Толстой",
+            "section_role": "unclassified",
+            "section_translator": ""
+          },
+          "audit": "Manually read surrounding canonical paragraph(s); quote copied from exact indexed source section, not generated."
+        }
+      ],
+      "required_cited_book_ids": [
+        "wsru-how-much-land-285bf7cc584e"
+      ],
+      "automatic_semantic_entailment": "unreviewed"
+    }
+  ]
+}

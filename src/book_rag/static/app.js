@@ -13,6 +13,8 @@
     scopeBook: null, scopeBooks: [], scopeTotal: 0, scopeLoaded: false, scopeRequest: 0,
     compareBooks: [], compareTotal: 0, compareLoaded: false, compareRequest: 0, researchSelection: new Map(),
     starterLanguage: '', starterCache: new Map(), starterPending: new Map(), starterVersion: 0,
+    panel: 'fragments', answerSequence: 0, answerController: null, answerResponse: null,
+    answerRouteSequence: 0, answerScopeBlocked: null, answerScopeLoading: false,
   };
   const languageNames = { ru: 'Русский', en: 'English', fr: 'Français', de: 'Deutsch', es: 'Español', it: 'Italiano', zh: '中文', ja: '日本語', la: 'Latina', el: 'Ελληνικά', pt: 'Português', uk: 'Українська', ar: 'العربية' };
   const statusNames = { discovered: 'Найдены', downloaded: 'Скачаны', processed: 'Обработаны', indexed: 'В поиске', searchable: 'В поиске', failed: 'Пока недоступны · ошибка', deferred: 'Пока недоступны · отложены', error: 'Требуют внимания', duplicate: 'Дубли' };
@@ -83,7 +85,7 @@
   async function api(path, options = {}) {
     let response;
     try { response = await fetch(path, { ...options, headers: { 'Content-Type': 'application/json', ...options.headers } }); }
-    catch { throw new Error('Не удалось связаться с библиотекой. Проверьте, запущен ли сервер, и повторите действие.'); }
+    catch (error) { if (error.name === 'AbortError') throw error; throw new Error('Не удалось связаться с библиотекой. Проверьте, запущен ли сервер, и повторите действие.'); }
     let data;
     try { data = await response.json(); }
     catch { throw new Error(`Сервер вернул неожиданный ответ (${response.status}).`); }
@@ -139,6 +141,8 @@
   function showView(view, push = true) {
     if (!['search', 'library', 'saved', 'reader', 'explore'].includes(view)) view = 'search';
     if (view !== 'reader') state.readerSequence++;
+    if (push || view !== 'search') stopScopeRestore();
+    if (view !== 'search') cancelAnswer('Ожидание остановлено. Отправьте вопрос, чтобы повторить.');
     state.view = view;
     document.querySelectorAll('.view').forEach((el) => el.classList.toggle('hidden', el.id !== `${view}-view`));
     updateNav(view === 'reader' ? '' : view);
@@ -147,6 +151,9 @@
       const params = new URLSearchParams();
       if (view !== 'search') params.set('view', view);
       if (view === 'search' && state.query) params.set('q', state.query);
+      if (view === 'search' && state.panel === 'answer') params.set('panel', 'answer');
+      if (view === 'search' && state.panel === 'answer' && $('book-filter').value) params.set('scope', $('book-filter').value);
+      if (view === 'search' && state.panel === 'answer' && $('language-filter').value) params.set('language', $('language-filter').value);
       history.pushState({}, '', params.size ? `/?${params}` : '/');
     }
     if (view === 'library') loadLibrary();
@@ -172,16 +179,32 @@
       el.setAttribute('aria-pressed', String(active));
     });
   }
-  function setPanel(panel) {
-    const research = panel === 'research';
-    $('fragments-panel').classList.toggle('hidden', research);
-    $('research-panel').classList.toggle('hidden', !research);
-    $('fragments-tab').classList.toggle('active', !research);
-    $('research-tab').classList.toggle('active', research);
-    $('fragments-tab').setAttribute('aria-pressed', String(!research));
-    $('research-tab').setAttribute('aria-pressed', String(research));
+  function setPanel(panel, updateURL = true) {
+    if (!['fragments', 'research', 'answer'].includes(panel)) panel = 'fragments';
+    if (updateURL) stopScopeRestore();
+    if (panel !== 'answer') cancelAnswer('Ожидание остановлено. Отправьте вопрос, чтобы повторить.');
+    state.panel = panel;
+    for (const name of ['fragments', 'research', 'answer']) {
+      $(`${name}-panel`).classList.toggle('hidden', panel !== name);
+      $(`${name}-tab`).classList.toggle('active', panel === name);
+      $(`${name}-tab`).setAttribute('aria-pressed', String(panel === name));
+    }
+    $('results-meta').classList.toggle('hidden', panel === 'answer');
+    $('search-warnings').classList.toggle('hidden', panel === 'answer' || !$('search-warnings').textContent.trim());
     const coverage = $('semantic-coverage');
-    if (coverage) coverage.classList.toggle('hidden', research || coverage.dataset.active !== 'true');
+    if (coverage) coverage.classList.toggle('hidden', panel !== 'fragments' || coverage.dataset.active !== 'true');
+    if (panel === 'answer') {
+      $('search-results').classList.remove('hidden'); $('discovery').classList.add('hidden');
+      if (!$('answer-query').value.trim()) $('answer-query').value = $('query').value.trim();
+      updateAnswerScope();
+    }
+    if (updateURL && state.view === 'search') {
+      const params = new URLSearchParams(location.search);
+      params.delete('book'); params.delete('section'); params.delete('passage'); params.delete('view');
+      if (panel === 'answer') { updateAnswerURL(); return; }
+      params.delete('panel'); params.delete('scope'); params.delete('language');
+      history.replaceState({}, '', params.size ? `/?${params}` : '/');
+    }
   }
 
   function coverageType(book) { return book?.coverage || book?.source_metadata?.coverage || ''; }
@@ -335,15 +358,21 @@
     const matches = [...state.scopeBooks];
     if (selected && !matches.some((book) => asID(book.id) === asID(selected.id))) matches.unshift(selected);
     populateSelect($('book-filter'), matches.map((book) => ({ value: asID(book.id), label: `${book.title} · ${book.author}` })), 'Вся библиотека');
-    $('book-filter').value = selected ? asID(selected.id) : '';
+    if (state.answerScopeBlocked) { const unresolved = node('option', '', state.answerScopeLoading ? 'Проверяем книгу из ссылки…' : 'Книга из ссылки не подтверждена'); unresolved.value = state.answerScopeBlocked; unresolved.disabled = true; $('book-filter').prepend(unresolved); }
+    $('book-filter').value = state.answerScopeBlocked || (selected ? asID(selected.id) : '');
     $('book-scope-status').textContent = state.scopeTotal > state.scopeBooks.length
       ? `Показаны ${formatNumber(state.scopeBooks.length)} из ${formatNumber(state.scopeTotal)} изданий. Уточните название или автора.`
       : `Подходящих изданий: ${formatNumber(state.scopeTotal)}.`;
     const selection = $('book-scope-selection'); selection.replaceChildren();
-    selection.classList.toggle('hidden', !selected);
-    if (selected) selection.append(node('span', '', `Поиск в книге: ${selected.title} · ${selected.author}`), button('Снять ограничение ×', () => { setScopeBook(null); if (state.query) search(); }));
+    selection.classList.toggle('hidden', !selected && !state.answerScopeBlocked);
+    if (state.answerScopeBlocked) selection.append(node('span', '', 'Ограничение по книге пока не подтверждено. Выберите книгу или явно снимите ограничение.'), button('Снять ограничение ×', () => { setScopeBook(null); scopeChanged(); }));
+    if (selected) selection.append(node('span', '', `Поиск в книге: ${selected.title} · ${selected.author}`), button('Снять ограничение ×', () => { setScopeBook(null); scopeChanged(); }));
   }
-  function setScopeBook(book) { state.scopeBook = book; renderScopeBooks(); }
+  function setScopeBook(book, invalidateRoute = true) {
+    if (invalidateRoute) stopScopeRestore();
+    state.answerScopeBlocked = null; state.answerScopeLoading = false;
+    state.scopeBook = book; renderScopeBooks(); answerBusy(Boolean(state.answerController));
+  }
   async function loadScopeBooks() {
     const request = ++state.scopeRequest;
     const params = new URLSearchParams({ status: 'indexed', q: $('book-scope-query').value.trim(), limit: '50', offset: '0' });
@@ -504,24 +533,170 @@
     if (attempt) card.append(attempt);
     card.append(quote, citation, actions); return card;
   }
-  function renderSemanticCoverage(coverage) {
-    const target = $('semantic-coverage'); target.replaceChildren(); target.classList.add('hidden'); target.dataset.active = 'false';
+  function renderSemanticCoverage(coverage, target = $('semantic-coverage')) {
+    target.replaceChildren(); target.classList.add('hidden'); target.dataset.active = 'false';
     if (!coverage || coverage.active !== true || !Number.isSafeInteger(coverage.indexed_books) || !Number.isSafeInteger(coverage.searchable_books) || coverage.indexed_books < 1 || coverage.searchable_books < coverage.indexed_books) return;
     target.append(node('p', 'semantic-coverage-title', `Поиск по смыслу: ${formatNumber(coverage.indexed_books)} из ${formatNumber(coverage.searchable_books)} изданий`));
     if (coverage.requested_book_covered === false) target.append(node('p', 'semantic-coverage-scope', 'Для выбранной книги доступен поиск по словам.'));
     target.append(node('p', 'semantic-coverage-note', 'Поиск по словам доступен по всей библиотеке.'));
     target.dataset.active = 'true';
-    target.classList.toggle('hidden', $('fragments-panel').classList.contains('hidden'));
+    target.classList.toggle('hidden', state.panel !== (target.id === 'answer-coverage' ? 'answer' : 'fragments'));
+  }
+  function updateAnswerScope() {
+    if (state.answerScopeBlocked) { $('answer-scope').textContent = state.answerScopeLoading ? 'Проверяем выбранную книгу из ссылки…' : 'Книга из ссылки не подтверждена. Выберите другую книгу или явно снимите ограничение.'; return; }
+    const book = state.scopeBook;
+    const scope = $('book-filter').value ? `Книга: ${book?.title || 'выбранное издание'}${book?.author ? ' · ' + book.author : ''}` : 'Вся библиотека';
+    $('answer-scope').textContent = `${scope}. Язык источников: ${$('language-filter').value ? labelLanguage($('language-filter').value) : 'все языки'}.`;
+  }
+  function updateAnswerURL() {
+    if (state.view !== 'search' || state.panel !== 'answer') return;
+    const params = new URLSearchParams({ panel: 'answer' });
+    if (state.query) params.set('q', state.query);
+    if ($('book-filter').value) params.set('scope', $('book-filter').value);
+    if ($('language-filter').value) params.set('language', $('language-filter').value);
+    history.replaceState({}, '', `/?${params}`);
+  }
+  function answerBusy(busy) {
+    const restoreFocus = !busy && document.activeElement === $('cancel-answer');
+    $('answer-panel').setAttribute('aria-busy', String(busy));
+    $('run-answer').disabled = busy || Boolean(state.answerScopeBlocked);
+    $('cancel-answer').classList.toggle('hidden', !busy || !state.answerController);
+    if (restoreFocus && state.view === 'search' && state.panel === 'answer') $('answer-query').focus();
+  }
+  function stopScopeRestore() {
+    state.answerRouteSequence++;
+    if (state.answerScopeLoading) { state.answerScopeLoading = false; answerBusy(Boolean(state.answerController)); renderScopeBooks(); updateAnswerScope(); }
+  }
+  function cancelAnswer(message) {
+    if (!state.answerController) return;
+    state.answerSequence++;
+    state.answerController.abort(); state.answerController = null;
+    answerBusy(false);
+    $('answer-status').textContent = message || 'Ожидание остановлено.';
+  }
+  function invalidateAnswer(message = 'Вопрос или область поиска изменились. Отправьте вопрос снова.') {
+    const hadAnswer = state.answerResponse || state.answerController;
+    cancelAnswer(message); state.answerResponse = null;
+    $('answer-output').replaceChildren(); $('answer-warnings').replaceChildren(); $('answer-warnings').classList.add('hidden');
+    renderSemanticCoverage(null, $('answer-coverage'));
+    $('answer-status').textContent = hadAnswer ? message : '';
+    if (hadAnswer) announce(message);
+  }
+  function scopeChanged() {
+    stopScopeRestore();
+    invalidateAnswer(); updateAnswerScope();
+    if (state.panel === 'answer') {
+      clearFragmentContext('Область поиска изменилась'); updateAnswerURL();
+    }
+    else if (state.query) search();
+  }
+  function clearFragmentContext(title) {
+    state.searchSequence++; state.results = [];
+    $('search-form').querySelector('[type="submit"]').disabled = false;
+    $('search-warnings').textContent = ''; $('search-warnings').classList.add('hidden');
+    $('results-meta').textContent = '';
+    renderSemanticCoverage(null);
+    empty($('fragments-panel'), title, 'Нажмите «Найти» в строке поиска, чтобы получить отдельную выдачу для текущего запроса и области.');
+  }
+  function answerSourceLink(id, sourceMap) {
+    const source = sourceMap.get(id);
+    const link = node('a', 'answer-source-chip', id);
+    link.href = '/?' + new URLSearchParams({ book: asID(source.book_id), section: asID(source.section_id), passage: asID(source.id) });
+    link.setAttribute('aria-label', `Источник ${id}: ${source.title}`);
+    link.addEventListener('click', (event) => { if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return; event.preventDefault(); const target = $('answer-source-' + id); target.scrollIntoView({ behavior: 'smooth', block: 'start' }); target.focus({ preventScroll: true }); });
+    return link;
+  }
+  function renderAnswer(data) {
+    const output = $('answer-output'); output.replaceChildren();
+    const sourceMap = new Map();
+    for (const source of Array.isArray(data.sources) ? data.sources : []) {
+      if (source && /^S[1-9]\d{0,2}$/.test(source.source_id) && source.verified === true && typeof source.text === 'string' && source.book_id && !sourceMap.has(source.source_id)) sourceMap.set(source.source_id, source);
+    }
+    const claims = Array.isArray(data.claims) ? data.claims : [];
+    let status = data.status;
+    const validClaim = (claim) => claim && typeof claim.text === 'string' && claim.text.trim() &&
+      Array.isArray(claim.source_ids) && claim.source_ids.length && claim.source_ids.every((id) => sourceMap.has(id)) &&
+      Array.isArray(claim.supporting_quotes) && claim.supporting_quotes.length &&
+      claim.supporting_quotes.every((support) => support && claim.source_ids.includes(support.source_id) && typeof support.quote === 'string' && support.quote.trim() && sourceMap.get(support.source_id)?.text.includes(support.quote)) &&
+      claim.source_ids.every((id) => claim.supporting_quotes.some((support) => support.source_id === id));
+    if (status === 'answered' && (!claims.length || !claims.every(validClaim))) status = 'invalid_output';
+    const messages = {
+      abstained: ['Недостаточно оснований для ответа', 'В найденных источниках недостаточно свидетельств. Попробуйте уточнить вопрос или изменить область поиска.'],
+      unavailable: ['Ответ пока недоступен', 'Сейчас можно искать и читать точные фрагменты. Попробуйте получить ответ позже.'],
+      invalid_output: ['Ответ не прошёл проверку', 'Показаны доступные фрагменты. Проверьте их в контексте книги или повторите вопрос.'],
+      sources_changed: ['Источники изменились во время подготовки ответа', 'Ответ не показан. Отправьте вопрос снова, чтобы использовать актуальные фрагменты.'],
+    };
+    if (status === 'answered') {
+      const answer = node('section', 'answer-claims'); answer.setAttribute('aria-label', 'Ответ с указанием источников');
+      answer.append(node('p', 'eyebrow', 'ОТВЕТ ПО ИСТОЧНИКАМ'), node('p', 'answer-verification-note', 'Ответ пересказывает источники. Метка проверки ниже относится к точному тексту фрагмента.'));
+      for (const claim of claims) {
+        const group = node('article', 'answer-claim-group');
+        const paragraph = node('p', 'answer-claim'); paragraph.append(node('span', '', claim.text));
+        const citations = node('span', 'answer-citations');
+        [...new Set(claim.source_ids)].forEach((id) => citations.append(answerSourceLink(id, sourceMap)));
+        paragraph.append(citations); group.append(paragraph);
+        const supports = node('div', 'answer-supports');
+        for (const support of claim.supporting_quotes) {
+          const figure = node('figure', 'answer-support');
+          const quote = node('blockquote', 'answer-support-quote', support.quote);
+          if (sourceMap.get(support.source_id).language) quote.lang = sourceMap.get(support.source_id).language;
+          const caption = node('figcaption'); caption.append(node('span', 'verified-label', '✓ ЦИТАТА ПРОВЕРЕНА'), answerSourceLink(support.source_id, sourceMap));
+          figure.append(quote, caption); supports.append(figure);
+        }
+        group.append(supports); answer.append(group);
+      }
+      output.append(answer);
+      $('answer-status').textContent = `Ответ готов. Проверяемых источников: ${sourceMap.size}.`;
+    } else {
+      const message = messages[status] || messages.invalid_output;
+      empty(output, message[0], message[1]); $('answer-status').textContent = message[0];
+    }
+    if (status === 'sources_changed') clearFragmentContext('Источники изменились');
+    if (sourceMap.size && status !== 'sources_changed') {
+      const sources = node('section', 'answer-sources'); sources.setAttribute('aria-label', 'Проверяемые фрагменты ответа');
+      sources.append(node('h3', '', status === 'answered' ? 'Фрагменты, на которые опирается ответ' : 'Найденные фрагменты'));
+      for (const [id, source] of sourceMap) { const card = passageCard(source); card.id = 'answer-source-' + id; card.tabIndex = -1; card.prepend(node('p', 'answer-source-id', `ИСТОЧНИК ${id}`)); sources.append(card); }
+      output.append(sources);
+    }
+    const warnings = Array.isArray(data.warnings) ? data.warnings.filter((value) => typeof value === 'string') : [];
+    $('answer-warnings').textContent = warnings.join('\n'); $('answer-warnings').classList.toggle('hidden', !warnings.length);
+    renderSemanticCoverage(status === 'sources_changed' ? null : data.retrieval?.semantic_coverage, $('answer-coverage'));
+    announce($('answer-status').textContent);
+  }
+  async function ask(event) {
+    event.preventDefault();
+    if (state.answerScopeBlocked) { $('book-filter').focus(); announce('Подтвердите книгу или снимите ограничение перед отправкой вопроса.'); return; }
+    const query = $('answer-query').value.trim();
+    if (!query) { $('answer-query').focus(); return; }
+    cancelAnswer();
+    const request = ++state.answerSequence; const controller = new AbortController(); state.answerController = controller;
+    state.answerResponse = null; state.searchSequence++; $('search-form').querySelector('[type="submit"]').disabled = false;
+    if (state.query !== query) { state.researchQuery = ''; $('research-output').replaceChildren(); clearFragmentContext('Этот вопрос можно исследовать по фрагментам'); }
+    state.query = query; $('query').value = query; updateAnswerURL();
+    $('answer-output').replaceChildren(); $('answer-warnings').replaceChildren(); $('answer-warnings').classList.add('hidden'); renderSemanticCoverage(null, $('answer-coverage'));
+    answerBusy(true); $('answer-status').textContent = 'Ищем фрагменты и готовим ответ с источниками…';
+    announce($('answer-status').textContent);
+    try {
+      const data = await api('/api/ask', { method: 'POST', signal: controller.signal, body: JSON.stringify({ query, book_ids: $('book-filter').value ? [$('book-filter').value] : [], language: $('language-filter').value || null, mode: 'hybrid', limit: 8 }) });
+      if (request !== state.answerSequence || state.view !== 'search' || state.panel !== 'answer') return;
+      state.answerResponse = data; renderAnswer(data);
+    } catch (error) {
+      if (request !== state.answerSequence || error.name === 'AbortError') return;
+      showError(error, $('answer-output')); $('answer-status').textContent = 'Не удалось получить ответ. Вопрос сохранён в форме; попробуйте снова.';
+    } finally {
+      if (request === state.answerSequence) { state.answerController = null; answerBusy(false); }
+    }
   }
   async function search(push = true) {
     const query = $('query').value.trim();
     if (!query) { $('query').focus(); return; }
-    if (state.query !== query) { state.researchQuery = ''; $('research-output').replaceChildren(); }
+    invalidateAnswer();
+    if (state.query !== query) { state.researchQuery = ''; $('research-output').replaceChildren(); $('answer-query').value = query; }
     state.query = query;
     const request = ++state.searchSequence;
     $('search-results').classList.remove('hidden');
     $('discovery').classList.add('hidden');
-    $('search-warnings').classList.add('hidden');
+    $('search-warnings').textContent = ''; $('search-warnings').classList.add('hidden');
     renderSemanticCoverage(null);
     $('results-meta').textContent = 'Ищем в библиотеке…';
     setPanel('fragments');
@@ -1021,11 +1196,35 @@
     document.body.append(link); link.click(); link.remove();
   }
   async function route() {
+    const navigation = ++state.answerRouteSequence;
+    const routeKey = location.search;
+    const currentRoute = () => navigation === state.answerRouteSequence && location.search === routeKey && state.view === 'search';
     const params = new URLSearchParams(location.search);
     if (params.has('saved')) { await openSaved(params.get('saved'), params.has('chapter') ? params.get('chapter') : null, false); return; }
     if (params.get('book')) { await openBook(params.get('book'), params.get('section'), params.get('passage'), false); return; }
     if (params.get('view') === 'library' && [...$('library-language').options].some((option) => option.value === params.get('language'))) shelfCatalogFilters(params.get('language'));
     showView(params.get('view') || 'search', false);
+    if (params.get('panel') === 'answer' && state.view === 'search') {
+      const query = params.get('q') || '';
+      if (state.query !== query) { invalidateAnswer(); state.query = query; $('answer-query').value = query; }
+      $('query').value = query;
+      const scope = params.get('scope') || '';
+      const language = params.get('language') || '';
+      setPanel('answer', false);
+      if ($('language-filter').value !== language) { invalidateAnswer(); $('language-filter').value = language; }
+      if (scope !== $('book-filter').value || (scope && state.answerScopeBlocked === scope)) {
+        invalidateAnswer();
+        if (scope) {
+          state.answerScopeBlocked = scope; state.answerScopeLoading = true; state.scopeBook = null;
+          renderScopeBooks(); updateAnswerScope();
+          answerBusy(true);
+          try { const book = await api(`/api/books/${encodeURIComponent(scope)}`); if (!currentRoute()) return; if (!bookSearchable(book)) throw new Error('Выбранное издание сейчас недоступно в поиске.'); setScopeBook(book, false); }
+          catch (error) { if (currentRoute()) { state.answerScopeLoading = false; renderScopeBooks(); updateAnswerScope(); showError(error, $('answer-output')); } }
+          finally { if (currentRoute()) { state.answerScopeLoading = false; answerBusy(false); } }
+        } else setScopeBook(null, false);
+      }
+      if (currentRoute()) setPanel('answer', false); return;
+    }
     if (params.has('q')) { $('query').value = params.get('q'); await search(false); }
   }
 
@@ -1069,16 +1268,21 @@
   $('search-extra-mode').addEventListener('change', () => { setMode($('search-extra-mode').value || 'hybrid'); if (state.query) search(); });
   $('fragments-tab').addEventListener('click', () => setPanel('fragments'));
   $('research-tab').addEventListener('click', () => setPanel('research'));
+  $('answer-tab').addEventListener('click', () => setPanel('answer'));
+  $('open-answer').addEventListener('click', () => { setPanel('answer'); $('answer-query').focus(); $('search-results').scrollIntoView({ block: 'start' }); });
+  $('answer-form').addEventListener('submit', ask);
+  $('answer-query').addEventListener('input', () => invalidateAnswer('Вопрос изменён. Отправьте его снова.'));
+  $('cancel-answer').addEventListener('click', () => cancelAnswer('Ожидание остановлено. Вопрос остался в форме.'));
   $('run-research').addEventListener('click', research);
-  $('language-filter').addEventListener('change', () => { loadScopeBooks(); if (state.query) search(); });
-  $('book-filter').addEventListener('change', () => { const id = $('book-filter').value; setScopeBook(id ? state.scopeBooks.find((book) => asID(book.id) === id) || state.scopeBook : null); if (state.query) search(); });
+  $('language-filter').addEventListener('change', () => { loadScopeBooks(); scopeChanged(); });
+  $('book-filter').addEventListener('change', () => { const id = $('book-filter').value; setScopeBook(id ? state.scopeBooks.find((book) => asID(book.id) === id) || state.scopeBook : null); scopeChanged(); });
   $('book-scope-query').addEventListener('input', debounce(loadScopeBooks));
   $('book-scope-query').addEventListener('focus', () => { if (!state.scopeLoaded) loadScopeBooks(); });
   $('book-filter').addEventListener('focus', () => { if (!state.scopeLoaded) loadScopeBooks(); });
   $('compare-query').addEventListener('input', debounce(loadCompareBooks));
   $('compare-query').addEventListener('focus', () => { if (!state.compareLoaded) loadCompareBooks(); });
-  $('clear-filters').addEventListener('click', () => { $('language-filter').value = ''; $('book-scope-query').value = ''; setScopeBook(null); loadScopeBooks(); if (state.query) search(); });
-  $('save-query').addEventListener('click', () => { if (state.query) openSave({ kind: 'query', title: state.query, query: state.query }, state.query); });
+  $('clear-filters').addEventListener('click', () => { $('language-filter').value = ''; $('book-scope-query').value = ''; setScopeBook(null); loadScopeBooks(); scopeChanged(); });
+  $('save-query').addEventListener('click', () => { const query = state.panel === 'answer' ? $('answer-query').value.trim() : state.query; if (query) openSave({ kind: 'query', title: query, query }, query); });
   $('save-form').addEventListener('submit', saveItem);
   $('close-save').addEventListener('click', closeSaveDialog);
   $('save-dialog').addEventListener('cancel', (event) => { if (state.savePending) event.preventDefault(); });
