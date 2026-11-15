@@ -368,7 +368,7 @@ def _worker_main(connection: Connection, settings: dict[str, Any]) -> None:
         path = Path(settings["model_path"])
         expected = tuple(settings["model_stamp"])
         _verify_model(path, expected)
-        import llama_cpp
+        llama_cpp = importlib.import_module("llama_cpp")
 
         if llama_cpp.__version__ != RUNTIME_VERSION:
             raise ModelUnavailable("Optional local runtime does not match the pinned package version")
