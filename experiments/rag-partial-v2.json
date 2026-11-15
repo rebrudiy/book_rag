@@ -1,0 +1,52 @@
+{
+  "experiment": "rag-open-dev-partial-v2",
+  "candidate": {
+    "candidate": "soft-question-quotes-partial-judge-scoped-russian-morphology-v2",
+    "recorded_at": "2026-11-15T02:21:56.840775+00:00",
+    "split": "development",
+    "closed_final_used": false,
+    "sha256": {
+      "src/book_rag/answers.py": "862683a6d4a078be8ba9e979c13f5e44fd2ca944dd5c22d27b9045a98ea132a5",
+      "src/book_rag/local_generation.py": "91e337c46f43b29594d39e08d72f64faacf5fc49d89445d9014f59f4f6c9a00f",
+      "src/book_rag/generation_profiles.py": "57af29d9b8c52568b41f0c0eb318d5e71e151ca894c9e0dfa07143e7ed32fa80",
+      "src/book_rag/semantic.py": "ab9fe83ea1d4f1310d37c321bc7b5064fcf5589504b8a97135d5b5128d275949",
+      "src/book_rag/library.py": "9c3e1320c8a1e1b2435bb1536776c7c229b94930c8f59b138c456d34057145af",
+      "src/book_rag/russian_retrieval.py": "20964a9785a6d117631ebd1dfdd34b61f9cba0bb335bf9d41180c10ea085b26c",
+      "scripts/evaluate_rag_answers.py": "99dd0133681033b105fb82b8407f6f42b572df47570142065a407fc0a232c0fb",
+      "evals/rag-dev-v1.json": "573155bfea71d0086b37f622e3bc24598bd1dd6595535436c05ae59bf7fdf92d",
+      "uv.lock": "9de5e0ec99fcd7dd3970f779ac7bbd7f73d9063ed82dfb96d9144120c92fdd5b"
+    },
+    "default_model": "qwen2.5-1.5b",
+    "server_log": "data/server-full-20261115T0220Z.log"
+  },
+  "summary": {
+    "cases": 14,
+    "statuses": {
+      "answered": 8,
+      "abstained": 5,
+      "invalid_output": 1
+    },
+    "scored_answerability_cases": 13,
+    "observed_answerability_matches": 9,
+    "not_run_cases": 0,
+    "operational_failure_cases": 1,
+    "structure_error_cases": 1,
+    "sources_checked": 30,
+    "invalid_sources": 0,
+    "claims_checked": 9,
+    "invalid_claim_citations": 0,
+    "reference_anchors_observed": 16,
+    "reference_anchors_retrieved": 10,
+    "reference_anchors_in_cited_passages": 6,
+    "human_factual_reviewed_cases": 0,
+    "human_entailment_reviewed_cases": 0,
+    "quality_note": "Literal evidence integrity and answerability are separate from factual correctness/entailment; semantic checks remain unreviewed."
+  },
+  "source_guard_all_files_unchanged_at_end": true,
+  "decision": "reject_partial_claim_release",
+  "reason": "Independent AI-agent review found wrong actor, missing division-of-labour context and off-topic/one-sided comparison outputs; exact quotations did not establish entailment. Larger answer count is not factual improvement.",
+  "human_rated": false,
+  "transcript_sha256": "0c9d03d70433c19a021863b4c14582cd3226ddbefbc137fafa195653b1063fa8",
+  "reproduction_patch": "experiments/rag-partial-v2.patch",
+  "patch_sha256": "836ecf2b7215aaf08bab4cfd527b3beff1e9bd78dcc155fc71c7b87faeecc98d"
+}

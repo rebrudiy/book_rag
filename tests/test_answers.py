@@ -305,3 +305,34 @@ def test_selectable_evidence_preserves_canonical_text_and_unicode_offsets(text: 
     assert units and len({unit["evidence_id"] for unit in units}) == len(units)
     assert all(unit["text"] == text[unit["start"] : unit["end"]] for unit in units)
     assert "".join("".join(unit["text"].split()) for unit in units) == "".join(text.split())
+
+
+def test_question_quotes_are_soft_but_original_question_and_exact_search_are_preserved(library: Library) -> None:
+    question = 'What does the "amber bookmark memory" help preserve?'
+    assert not library.search(question, "lexical")["results"]
+    fake = Fake()
+    answer = ask(library, question, mode="lexical", generator=fake)
+    assert answer["status"] == "answered" and fake.calls[0]["question"] == question
+    assert '"' not in answer["retrieval"]["query"]
+    assert not library.search(question, "lexical")["results"]
+
+
+def test_mixed_grounding_verdict_discards_the_answer_including_unreliably_accepted_claim(library: Library) -> None:
+    class PartialJudge(Fake):
+        def generate(self, messages: Any, limits: Any = None, *, response_schema: Any = None) -> dict[str, Any]:
+            if json.loads(messages[-1]["content"]).get("task") == "verify_claims":
+                return {"text": json.dumps({"supported": [False, True]}), "finish_reason": "stop"}
+            return super().generate(messages, limits, response_schema=response_schema)
+
+    fake = PartialJudge(
+        {
+            "answerable": True,
+            "claims": [
+                {"text": "An unsupported conclusion.", "source_ids": ["S1"]},
+                {"text": "The bookmark helps memory.", "source_ids": ["S1"]},
+            ],
+        }
+    )
+    answer = ask(library, "amber bookmark", mode="lexical", generator=fake)
+    assert answer["status"] == "abstained" and not answer["claims"]
+    assert answer["sources"][0]["verified"]

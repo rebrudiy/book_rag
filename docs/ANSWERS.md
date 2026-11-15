@@ -19,6 +19,13 @@ search results are merged by rank, not incomparable score magnitudes. Generated
 BookRAG editorial credits are excluded; genuine introductions remain attributed
 to their actual contributor.
 
+A question is interpreted as natural language: quotation marks around a title
+or paraphrase do not impose an exact-phrase retrieval constraint. Its original
+wording still reaches generation and the evidence check. The separate search
+API retains exact quoted-phrase semantics. A compact limit of two passages per
+book reduces distraction for the baseline local model. Empty scoped Russian
+lexical results can use the bounded [word-form fallback](RUSSIAN_RETRIEVAL.md).
+
 Each claim includes `text`, `source_ids` and `supporting_quotes` from its
 cited canonical sources. The model selects evidence IDs; the server inserts
 their original text and exact section offsets. Ordered spans retain all
@@ -43,6 +50,13 @@ evidence and answer the question. It also sees the full cited passages for
 pronoun/name context. Rejected claims suppress the answer. This is an additional
 model judgement, with possible false positives/negatives; it is not independent
 ground-truth validation. Source versions are checked again after this stage.
+
+An open development experiment that retained individually accepted claims
+produced more answers but also released wrong actors, off-topic comparisons and
+misleading numerical qualifications. That policy was rejected: a mixed grounding
+verdict suppresses the complete answer. The failed experiment and reproduction
+patch are retained in `experiments/rag-partial-v2.json` and `.patch`; independent
+AI-agent review is recorded separately from human evaluation.
 
 No retrieved evidence means no model call. A model abstention means insufficient
 evidence in the retrieved excerpts, not proof that no answer exists anywhere in

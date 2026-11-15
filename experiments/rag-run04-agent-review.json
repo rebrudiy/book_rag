@@ -1,0 +1,1298 @@
+{
+  "schema_version": 1,
+  "kind": "AI_AGENT_QUALITATIVE_REVIEW_NOT_HUMAN_RATINGS",
+  "created_at": "2026-11-15T02:47:43.738656+00:00",
+  "reviewer": {
+    "type": "AI_agent",
+    "task_agent": "/root/interface",
+    "human_rating": false,
+    "requires_human_validation": true
+  },
+  "scope": {
+    "open_development_only": true,
+    "cases": 14,
+    "sealed_files_accessed": false,
+    "local_generation_or_embedding_invoked": false,
+    "source_code_edited": false,
+    "automated_metrics_or_unreviewed_fields_modified": false
+  },
+  "inputs": {
+    "fixture": {
+      "path": "evals/rag-dev-v1.json",
+      "sha256": "573155bfea71d0086b37f622e3bc24598bd1dd6595535436c05ae59bf7fdf92d"
+    },
+    "run04_responses": {
+      "path": "data/evaluations/rag-dev-v1/run-04.responses.json",
+      "sha256": "4709e7d4d7753c6e4309a6a0ee32222563a8ad71262f7d07a0ed22aed61329c6"
+    },
+    "run03_responses": {
+      "path": "data/evaluations/rag-dev-v1/run-03.responses.json",
+      "sha256": "7f23ce28bcc689efcd03afded66b37424ae562917160af004ecba66890684b5a"
+    },
+    "run04_automated_report": {
+      "path": "data/evaluations/rag-dev-v1/run-04.report.json",
+      "sha256": "737886aff0fd0b0053467a2dc99be56b0c27581d08cf0fc6dd2b2799f8386f6e"
+    },
+    "run03_automated_report": {
+      "path": "data/evaluations/rag-dev-v1/run-03.report.json",
+      "sha256": "79e1072bbc9494c060c38bc86813fb77b49a76881dbff09f319cddb8fe51998e"
+    },
+    "candidate_conditions": {
+      "path": "data/evaluations/rag-dev-v1/strict-v3.candidate.json",
+      "sha256": "b4323f5409204805d5dd2a21893606603db7d501156e2bb3a593d21e33386e7b"
+    }
+  },
+  "method": [
+    "Read all 14 open questions, expected facts and canonical reference quotations, every released run04 claim and selected quotation, and all 30 captured source records.",
+    "Separately assess factual correctness, selected-quote entailment, source attribution, response directness, completeness and response language. A correct familiar fact can still fail grounding.",
+    "Compare all 14 run03 and run04 source arrays directly; they are equal. Read all released run03 claims; do not infer contents of rejected drafts.",
+    "Recompute every run04 selected quotation slice against captured source text using stored Unicode offsets. This checks 22 literal spans, not semantic entailment.",
+    "Use categorical AI assessments without assigning human rubric scores or changing the existing automated report. No model, live service, source database or sealed evaluation files were accessed."
+  ],
+  "comparison_conditions": {
+    "candidate_name": "strict-claims-soft-question-scoped-russian-v3",
+    "candidate_conditions": {
+      "run-03": {
+        "profile": "qwen2.5-1.5b",
+        "url": "http://127.0.0.1:8001"
+      },
+      "run-04": {
+        "profile": "qwen3-4b-instruct-2507",
+        "url": "http://127.0.0.1:8002"
+      }
+    },
+    "candidate_declares_shared_code_and_sources": true,
+    "captured_source_arrays_equal_all_cases": true,
+    "cases_compared": 14,
+    "reported_model_run04": {
+      "profile": "qwen3-4b-instruct-2507",
+      "repository": "unsloth/Qwen3-4B-Instruct-2507-GGUF",
+      "revision": "a06e946bb6b655725eafa393f4a9745d460374c9",
+      "sha256": "3605803b982cb64aead44f6c1b2ae36e3acdb41d8e46c8a94c6533bc4c67e597",
+      "quantization": "Q4_K_M",
+      "upstream_repository": "Qwen/Qwen3-4B-Instruct-2507",
+      "reviewed_upstream_revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+      "conversion_base_revision": null,
+      "conversion": "Unsloth GGUF conversion of Qwen weights; not an official Qwen GGUF release"
+    },
+    "run03_reported_model_profiles": [
+      "qwen2.5-1.5b"
+    ],
+    "timings_not_isolated": true,
+    "timing_or_cost_advantage_claimed": false,
+    "loaded_server_code_attestation": "Unavailable; observed per-response generation/model metadata is retained, not assumed to attest loaded server code.",
+    "note": "Recorded candidate conditions state shared code/source; captured source equality is independently checked. Per-response metadata is not loaded-code attestation. This is one open-development paired run, not a final quality guarantee."
+  },
+  "automated_report_summary_preserved": {
+    "run03": {
+      "cases": 14,
+      "statuses": {
+        "answered": 3,
+        "abstained": 10,
+        "invalid_output": 1
+      },
+      "scored_answerability_cases": 13,
+      "observed_answerability_matches": 4,
+      "not_run_cases": 0,
+      "operational_failure_cases": 1,
+      "structure_error_cases": 1,
+      "sources_checked": 30,
+      "invalid_sources": 0,
+      "claims_checked": 4,
+      "invalid_claim_citations": 0,
+      "reference_anchors_observed": 16,
+      "reference_anchors_retrieved": 10,
+      "reference_anchors_in_cited_passages": 4,
+      "human_factual_reviewed_cases": 0,
+      "human_entailment_reviewed_cases": 0,
+      "quality_note": "Literal evidence integrity and answerability are separate from factual correctness/entailment; semantic checks remain unreviewed."
+    },
+    "run04": {
+      "cases": 14,
+      "statuses": {
+        "answered": 11,
+        "abstained": 3
+      },
+      "scored_answerability_cases": 14,
+      "observed_answerability_matches": 13,
+      "not_run_cases": 0,
+      "operational_failure_cases": 0,
+      "structure_error_cases": 0,
+      "sources_checked": 30,
+      "invalid_sources": 0,
+      "claims_checked": 13,
+      "invalid_claim_citations": 0,
+      "reference_anchors_observed": 16,
+      "reference_anchors_retrieved": 10,
+      "reference_anchors_in_cited_passages": 10,
+      "human_factual_reviewed_cases": 0,
+      "human_entailment_reviewed_cases": 0,
+      "quality_note": "Literal evidence integrity and answerability are separate from factual correctness/entailment; semantic checks remain unreviewed."
+    }
+  },
+  "capture_consistency": {
+    "response_source_records": 30,
+    "all_response_sources_reported_verified": true,
+    "released_claims": 13,
+    "selected_quote_span_checks": 22,
+    "selected_quote_span_checks_passed": 22,
+    "raw_artifact_or_live_database_revalidation_performed": false,
+    "note": "The automated 30-source/13-claim-citation validity result remains unchanged. Literal source integrity does not certify the answer or its entailment."
+  },
+  "observed_status_counts": {
+    "run03": {
+      "answered": 3,
+      "abstained": 10,
+      "invalid_output": 1
+    },
+    "run04": {
+      "answered": 11,
+      "abstained": 3
+    }
+  },
+  "agent_category_counts": {
+    "fully_supported_direct_answer": 5,
+    "supported_direct_answer_minor_quantifier_loss": 1,
+    "mostly_supported_answer_reproductive_success_imprecision": 1,
+    "correct_expected_fact_without_captured_entailment_and_wrong_language": 1,
+    "partially_relevant_comparison_wrong_smith_subtopic": 1,
+    "safe_abstention_with_captured_retrieval_gap": 1,
+    "correct_negative_abstention": 2,
+    "partially_correct_answer_observation_instruction_shift": 1,
+    "false_whole_text_absence_from_incomplete_evidence": 1
+  },
+  "summary": {
+    "run04_answered_cases": 11,
+    "run04_fully_supported_direct_answers_by_this_agent": 5,
+    "run04_supported_direct_answers_with_minor_quantifier_loss": 1,
+    "run04_mostly_correct_with_reproductive_success_imprecision": 1,
+    "run04_correct_expected_fact_without_captured_entailment_and_wrong_language": 1,
+    "run04_partially_relevant_wrong_comparison": 1,
+    "run04_partial_observation_instruction_shift": 1,
+    "run04_false_whole_text_absence": 1,
+    "run04_correct_negative_abstentions": 2,
+    "run04_safe_abstention_with_captured_retrieval_gap": 1,
+    "run03_answered_cases": 3,
+    "run03_fully_supported_direct_answers_by_this_agent": 2,
+    "run03_partially_correct_with_extra_qualification_issue": 1,
+    "new_fully_supported_direct_answers": [
+      "alice-court",
+      "austen-opener",
+      "jowett-introduction",
+      "ru-chameleon-owner"
+    ],
+    "other_improvements": [
+      "smith-pins removes the unnecessary unqualified 4,800-per-person claim.",
+      "wrong-topic-alice changes invalid_output to clean abstained."
+    ],
+    "regressions_or_failed_gains": [
+      "ru-land-grave turns safe abstention into a false whole-work absence claim.",
+      "ru-query-smith-dinner gives the expected fact with non-entailing evidence and the wrong response language.",
+      "compare-property substitutes a different Smith topic for the requested own-labour comparison.",
+      "darwin-struggle is less precise about reproductive success than the run03 answer."
+    ],
+    "metric_status": "AI-agent interpretation only; not human labels and not replacements for automated metrics."
+  },
+  "decision": {
+    "meaningfully_better_than_strict_1_5b_on_this_open_run": true,
+    "main_default_promotion_recommended_now": false,
+    "candidate_experiment_continuation_recommended": true,
+    "reason": "Four newly direct, supported answers and a cleaner negative refusal are meaningful gains on the identical captured sources. However, a false whole-work absence claim, an unsupported familiar fact and a wrong-topic comparison still pass the strict same-model judge. The higher answered count is not a sufficient basis for default promotion.",
+    "blocking_cases": [
+      "ru-land-grave",
+      "ru-query-smith-dinner",
+      "compare-property"
+    ],
+    "additional_semantic_precision_cases": [
+      "ru-lefty-warning",
+      "darwin-struggle"
+    ],
+    "statistical_generalisation_claimed": false,
+    "heldout_or_final_used": false
+  },
+  "cases": [
+    {
+      "id": "alice-watch",
+      "question": "What does the White Rabbit take out of its waistcoat-pocket before Alice follows it?",
+      "expected_answerable": true,
+      "response_status": "answered",
+      "warnings": [],
+      "required_reference_books": [
+        "pg11-full"
+      ],
+      "released_claim_cited_books": [
+        "pg11-full"
+      ],
+      "captured_reference_coverage": [
+        {
+          "reference_id": "watch",
+          "book_id": "pg11-full",
+          "present_in_captured_sources": true
+        }
+      ],
+      "same_model_judge_supported": [
+        true
+      ],
+      "source_arrays_equal_to_run03": true,
+      "agent_review": {
+        "category": "fully_supported_direct_answer",
+        "correctness": "correct",
+        "directness": "direct",
+        "completeness": "sufficient",
+        "assessment": "A watch directly answers the requested object. S1:E4 explicitly links it to the waistcoat-pocket before Alice follows. The concise answer need not repeat the subsequent looking and hurrying to answer what item.",
+        "claim_reviews": [
+          {
+            "correctness": "correct",
+            "selected_quote_entailment": "directly_supported",
+            "directness": "direct",
+            "notes": "No unsupported extra assertion; the selected evidence unit contains the requested event.",
+            "index": 1,
+            "claim_text": "A watch",
+            "source_ids": [
+              "S1"
+            ],
+            "support_references": [
+              {
+                "source_id": "S1",
+                "evidence_id": "S1:E4",
+                "start": 907,
+                "end": 1321,
+                "quote_sha256": "7bc631c7f7100d3687cf032d8567717cf9c0bd0339909bdb7e7238a0127f2638"
+              }
+            ]
+          }
+        ],
+        "expected_fact_coverage": [
+          "Requested object present; the reference paragraph also contains looking at the watch and hurrying."
+        ],
+        "concerns": [],
+        "paired_run03_assessment": {
+          "run03_status": "answered",
+          "run03_category": "fully_supported_direct_answer",
+          "change": "Essential quality unchanged; 4B selects only the directly relevant evidence instead of also quoting nearby late exclamation."
+        }
+      },
+      "human_reviewed": false
+    },
+    {
+      "id": "alice-court",
+      "question": "Who demands sentence before verdict, and how does Alice respond?",
+      "expected_answerable": true,
+      "response_status": "answered",
+      "warnings": [],
+      "required_reference_books": [
+        "pg11-full"
+      ],
+      "released_claim_cited_books": [
+        "pg11-full"
+      ],
+      "captured_reference_coverage": [
+        {
+          "reference_id": "queen",
+          "book_id": "pg11-full",
+          "present_in_captured_sources": true
+        },
+        {
+          "reference_id": "alice-objection",
+          "book_id": "pg11-full",
+          "present_in_captured_sources": true
+        }
+      ],
+      "same_model_judge_supported": [
+        true
+      ],
+      "source_arrays_equal_to_run03": true,
+      "agent_review": {
+        "category": "fully_supported_direct_answer",
+        "correctness": "correct",
+        "directness": "direct",
+        "completeness": "sufficient",
+        "assessment": "Correctly names the Queen as demanding sentence first and quotes Alice objection. Both parts occur in selected S1:E2. This fixes the actor reversal seen in the earlier partial-policy run; the strict 1.5B run03 had safely abstained.",
+        "claim_reviews": [
+          {
+            "correctness": "correct",
+            "selected_quote_entailment": "directly_supported",
+            "directness": "direct",
+            "notes": "The Queen and Alice roles are bound correctly. Omitting the preceding Stuff and nonsense exclamation does not remove the substance of Alice objection.",
+            "index": 1,
+            "claim_text": "The Queen demands sentence before verdict, and Alice responds by saying, 'The idea of having the sentence first!'",
+            "source_ids": [
+              "S1"
+            ],
+            "support_references": [
+              {
+                "source_id": "S1",
+                "evidence_id": "S1:E2",
+                "start": 7569,
+                "end": 7980,
+                "quote_sha256": "bb686a17d89154f451de8f999d2c2955ecf22240b60db05d21f5eeeaffbe8db9"
+              }
+            ]
+          }
+        ],
+        "expected_fact_coverage": [
+          "Queen demands sentence before verdict.",
+          "Alice objects to the idea of having the sentence first."
+        ],
+        "concerns": [],
+        "paired_run03_assessment": {
+          "run03_status": "abstained",
+          "run03_category": "safe_abstention_with_adequate_captured_evidence",
+          "change": "Meaningful gain: a supported two-part answer replaces an abstention. The unseen rejected 1.5B draft is not assessable."
+        }
+      },
+      "human_reviewed": false
+    },
+    {
+      "id": "austen-opener",
+      "question": "What does the opening of Pride and Prejudice say a single man with a good fortune must want?",
+      "expected_answerable": true,
+      "response_status": "answered",
+      "warnings": [],
+      "required_reference_books": [
+        "pg1342-full"
+      ],
+      "released_claim_cited_books": [
+        "pg1342-full"
+      ],
+      "captured_reference_coverage": [
+        {
+          "reference_id": "wife",
+          "book_id": "pg1342-full",
+          "present_in_captured_sources": true
+        }
+      ],
+      "same_model_judge_supported": [
+        true
+      ],
+      "source_arrays_equal_to_run03": true,
+      "agent_review": {
+        "category": "fully_supported_direct_answer",
+        "correctness": "correct_in_question_context",
+        "directness": "direct",
+        "completeness": "sufficient",
+        "assessment": "The wife proposition answers the opening-narrator question and is directly present in selected S1:E1. The question supplies literary framing; the answer does not explicitly discuss irony, so it should not be reused as an independently established social generalisation.",
+        "claim_reviews": [
+          {
+            "correctness": "correct_in_question_context",
+            "selected_quote_entailment": "directly_supported",
+            "directness": "direct",
+            "notes": "The selected opening and following family-assumption paragraph now substantiate the answer, unlike the unrelated Netherfield evidence selected in run02.",
+            "index": 1,
+            "claim_text": "A single man with a good fortune must be in want of a wife.",
+            "source_ids": [
+              "S1"
+            ],
+            "support_references": [
+              {
+                "source_id": "S1",
+                "evidence_id": "S1:E1",
+                "start": 0,
+                "end": 392,
+                "quote_sha256": "2711491edefe225532acc82cc41389e39829e2dc8d403b1b4c32e44811ea5838"
+              }
+            ]
+          }
+        ],
+        "expected_fact_coverage": [
+          "The opening proposition says a wealthy single man must want a wife."
+        ],
+        "concerns": [
+          {
+            "severity": "minor",
+            "code": "literary_framing_implicit",
+            "detail": "Prefer explicit opening/narrator framing when displaying this sentence outside its question; no additional interpretive irony analysis was requested."
+          }
+        ],
+        "paired_run03_assessment": {
+          "run03_status": "abstained",
+          "run03_category": "safe_abstention_with_adequate_captured_evidence",
+          "change": "Meaningful gain: correct fact with the correct selected quotation replaces abstention."
+        }
+      },
+      "human_reviewed": false
+    },
+    {
+      "id": "smith-pins",
+      "question": "In Adam Smith’s pin-making example, how many pins could the ten workers make together in a day?",
+      "expected_answerable": true,
+      "response_status": "answered",
+      "warnings": [],
+      "required_reference_books": [
+        "pg3300-full"
+      ],
+      "released_claim_cited_books": [
+        "pg3300-full"
+      ],
+      "captured_reference_coverage": [
+        {
+          "reference_id": "output",
+          "book_id": "pg3300-full",
+          "present_in_captured_sources": true
+        }
+      ],
+      "same_model_judge_supported": [
+        true
+      ],
+      "source_arrays_equal_to_run03": true,
+      "agent_review": {
+        "category": "supported_direct_answer_minor_quantifier_loss",
+        "correctness": "substantially_correct_minor_precision_loss",
+        "directness": "direct",
+        "completeness": "sufficient_core_answer",
+        "assessment": "The answer gives the correct group and approximately correct scale, with the right selected S1:E2. Smith says upwards of forty-eight thousand, so about loses the explicit lower-bound wording. The unnecessary 4,800-per-person statement from 1.5B is absent.",
+        "claim_reviews": [
+          {
+            "correctness": "substantially_correct_minor_quantifier_loss",
+            "selected_quote_entailment": "supported_except_lower_bound_precision",
+            "directness": "direct",
+            "notes": "Upwards of should be preserved when feasible. This is a minor precision loss, not a wrong magnitude. No claim of independent individual 4,800-pin capacity is released.",
+            "index": 1,
+            "claim_text": "The ten workers could make about forty-eight thousand pins in a day.",
+            "source_ids": [
+              "S1"
+            ],
+            "support_references": [
+              {
+                "source_id": "S1",
+                "evidence_id": "S1:E2",
+                "start": 3143,
+                "end": 3459,
+                "quote_sha256": "6c045859a14769bed72bac8138f62a4a588a55c1f8bc8e8061fdd66aa2e6182e"
+              }
+            ]
+          }
+        ],
+        "expected_fact_coverage": [
+          "Group output at least above forty-eight thousand per day is represented approximately, without its exact lower-bound qualifier."
+        ],
+        "concerns": [
+          {
+            "severity": "minor",
+            "code": "quantifier_precision",
+            "detail": "About forty-eight thousand softens upwards of forty-eight thousand."
+          }
+        ],
+        "paired_run03_assessment": {
+          "run03_status": "answered",
+          "run03_category": "partially_correct_with_unsupported_extra_qualification_issue",
+          "change": "Improvement: drops the unrequested unqualified 4,800-per-person claim whose selected quote describes independent untrained workers producing fewer than twenty, perhaps one. The aggregate claim remains about rather than upwards."
+        }
+      },
+      "human_reviewed": false
+    },
+    {
+      "id": "darwin-struggle",
+      "question": "Does Darwin use struggle for existence only for direct combat, or in a broader sense? What does he include?",
+      "expected_answerable": true,
+      "response_status": "answered",
+      "warnings": [],
+      "required_reference_books": [
+        "pg1228-full"
+      ],
+      "released_claim_cited_books": [
+        "pg1228-full"
+      ],
+      "captured_reference_coverage": [
+        {
+          "reference_id": "metaphorical",
+          "book_id": "pg1228-full",
+          "present_in_captured_sources": true
+        },
+        {
+          "reference_id": "progeny",
+          "book_id": "pg1228-full",
+          "present_in_captured_sources": true
+        }
+      ],
+      "same_model_judge_supported": [
+        true,
+        true
+      ],
+      "source_arrays_equal_to_run03": true,
+      "agent_review": {
+        "category": "mostly_supported_answer_reproductive_success_imprecision",
+        "correctness": "mostly_correct_with_conceptual_imprecision",
+        "directness": "direct",
+        "completeness": "core_partially_complete",
+        "assessment": "The answer correctly rejects a direct-combat-only meaning, includes dependence, and accurately describes the drought/moisture example. Its phrase competition for reproduction is less faithful than Darwin success in leaving progeny: success is an outcome and need not imply reproductive rivalry in every case. The source makes that requested distinction explicitly, so the answer should preserve it.",
+        "claim_reviews": [
+          {
+            "correctness": "mostly_correct_with_conceptual_imprecision",
+            "selected_quote_entailment": "partially_supported",
+            "directness": "direct",
+            "notes": "Broader sense and dependence are directly supported by E1. Competition for reproduction is a model paraphrase, not the precise success-in-leaving-progeny criterion, and may narrow or alter it.",
+            "index": 1,
+            "claim_text": "Darwin uses struggle for existence in a broader sense, not only for direct combat but also including dependence of one being on another and the competition for reproduction.",
+            "source_ids": [
+              "S1"
+            ],
+            "support_references": [
+              {
+                "source_id": "S1",
+                "evidence_id": "S1:E1",
+                "start": 4950,
+                "end": 5316,
+                "quote_sha256": "0abbe23e25668b5f83ae019207d7b055b3ba433601ab181c146c89386cd9b661"
+              }
+            ]
+          },
+          {
+            "correctness": "correct",
+            "selected_quote_entailment": "directly_supported",
+            "directness": "relevant_explanatory_example",
+            "notes": "E2 explicitly supplies both the informal struggle-against-drought formulation and the more proper dependence-on-moisture clarification.",
+            "index": 2,
+            "claim_text": "He includes the struggle of a plant against drought as a form of struggle for existence, though more properly it is dependent on moisture.",
+            "source_ids": [
+              "S1"
+            ],
+            "support_references": [
+              {
+                "source_id": "S1",
+                "evidence_id": "S1:E2",
+                "start": 5317,
+                "end": 5688,
+                "quote_sha256": "fb3ef597d52cd93eceef343fbfaf6202eb8a89a0f0e7161dd6eb9e0a39f76873"
+              }
+            ]
+          }
+        ],
+        "expected_fact_coverage": [
+          "Broad meaning and dependence are correctly covered.",
+          "Reproductive success is approximated as competition for reproduction rather than stated precisely."
+        ],
+        "concerns": [
+          {
+            "severity": "moderate",
+            "code": "success_competition_concept_shift",
+            "detail": "Do not replace a requested outcome criterion by a related competitive mechanism when the exact distinction is in evidence."
+          }
+        ],
+        "paired_run03_assessment": {
+          "run03_status": "answered",
+          "run03_category": "fully_supported_direct_answer",
+          "change": "Small precision regression: 1.5B explicitly said success in leaving progeny. 4B adds a valid plant example but weakens that central wording."
+        }
+      },
+      "human_reviewed": false
+    },
+    {
+      "id": "jowett-introduction",
+      "question": "In INTRODUCTION AND ANALYSIS to the Republic, which work is excepted when the Republic is called Plato’s longest work, and whose introduction is this?",
+      "expected_answerable": true,
+      "response_status": "answered",
+      "warnings": [],
+      "required_reference_books": [
+        "pg1497-full"
+      ],
+      "released_claim_cited_books": [
+        "pg1497-full"
+      ],
+      "captured_reference_coverage": [
+        {
+          "reference_id": "laws",
+          "book_id": "pg1497-full",
+          "present_in_captured_sources": true
+        }
+      ],
+      "same_model_judge_supported": [
+        true
+      ],
+      "source_arrays_equal_to_run03": true,
+      "agent_review": {
+        "category": "fully_supported_direct_answer",
+        "correctness": "correct",
+        "directness": "direct",
+        "completeness": "sufficient",
+        "assessment": "Laws is the correct exception, and Benjamin Jowett is correctly identified as the introduction author rather than Plato as dialogue speaker. S2:E1 gives the exception; both source records carry Benjamin Jowett, editorial, INTRODUCTION AND ANALYSIS metadata. The extra S1:E2 on the Statesman is unnecessary but does not contradict the answer.",
+        "claim_reviews": [
+          {
+            "correctness": "correct",
+            "selected_quote_entailment": "supported_by_selected_quote_plus_source_attribution_metadata",
+            "directness": "direct",
+            "notes": "Do not demand that the prose quotation itself name its editor when the canonical section attribution supplies Jowett. S1:E2 adds no needed support.",
+            "index": 1,
+            "claim_text": "The work excepted when the Republic is called Plato’s longest work is the Laws, and the introduction referred to is Benjamin Jowett's INTRODUCTION AND ANALYSIS.",
+            "source_ids": [
+              "S1",
+              "S2"
+            ],
+            "support_references": [
+              {
+                "source_id": "S1",
+                "evidence_id": "S1:E2",
+                "start": 54543,
+                "end": 54962,
+                "quote_sha256": "2bb59f786ce6c7430ff6af78cca020198213f02639be9ab824ffb8742b2ed614"
+              },
+              {
+                "source_id": "S2",
+                "evidence_id": "S2:E1",
+                "start": 0,
+                "end": 403,
+                "quote_sha256": "a9685b12c162122b11ba00e9e4b37fa51073e275a249c88634f38f78f22de9af"
+              }
+            ]
+          }
+        ],
+        "expected_fact_coverage": [
+          "Laws exception answered.",
+          "Benjamin Jowett editorial introduction attribution answered."
+        ],
+        "concerns": [
+          {
+            "severity": "minor",
+            "code": "unnecessary_evidence_unit",
+            "detail": "The Statesman discussion is not needed for this answer; tighter evidence selection would improve readability."
+          }
+        ],
+        "paired_run03_assessment": {
+          "run03_status": "abstained",
+          "run03_category": "safe_abstention_with_adequate_captured_evidence",
+          "change": "Meaningful gain: both factual and attribution subquestions are now answered from the already available evidence/metadata."
+        }
+      },
+      "human_reviewed": false
+    },
+    {
+      "id": "ru-query-smith-dinner",
+      "question": "Почему, по Адаму Смиту, мясник, пивовар и булочник обеспечивают нам обед: из благожелательности или из собственного интереса?",
+      "expected_answerable": true,
+      "response_status": "answered",
+      "warnings": [],
+      "required_reference_books": [
+        "pg3300-full"
+      ],
+      "released_claim_cited_books": [
+        "pg3300-full"
+      ],
+      "captured_reference_coverage": [
+        {
+          "reference_id": "interest",
+          "book_id": "pg3300-full",
+          "present_in_captured_sources": false
+        }
+      ],
+      "same_model_judge_supported": [
+        true
+      ],
+      "source_arrays_equal_to_run03": true,
+      "agent_review": {
+        "category": "correct_expected_fact_without_captured_entailment_and_wrong_language",
+        "correctness": "correct_against_open_reference_but_unsupported_by_response_sources",
+        "directness": "direct_content_wrong_response_language",
+        "completeness": "requested_fact_covered_without_valid_grounding",
+        "assessment": "Self-interest rather than kindness matches the open reference, but neither selected quote nor either complete captured passage states that contrast. These Chapter IV money/exchange passages merely contain the same occupations and discuss their exchange difficulties. A correct familiar answer is not a grounded answer when displayed citations do not entail it. The Russian question is also answered in English.",
+        "claim_reviews": [
+          {
+            "correctness": "correct_against_open_reference",
+            "selected_quote_entailment": "not_supported_by_selected_or_full_captured_sources",
+            "directness": "direct_content_wrong_language",
+            "notes": "The self-interest/benevolence passage is absent. S1:E4 identifies the traders; S2:E2 concerns keeping a generally acceptable commodity, not the motive contrast. Familiarity with Smith cannot repair the citation gap.",
+            "index": 1,
+            "claim_text": "According to Adam Smith, the butcher, brewer, and baker ensure our meals out of self-interest, not kindness.",
+            "source_ids": [
+              "S1",
+              "S2"
+            ],
+            "support_references": [
+              {
+                "source_id": "S1",
+                "evidence_id": "S1:E4",
+                "start": 1052,
+                "end": 1203,
+                "quote_sha256": "0a87e591f211158d52f4c625e28a6233a6cb200ce850345ee1c57b463ace616e"
+              },
+              {
+                "source_id": "S2",
+                "evidence_id": "S2:E2",
+                "start": 1588,
+                "end": 2001,
+                "quote_sha256": "aadd40d28f3d3712edc8def08d8f0600688160c604037cd67c3a7c5b58aba017"
+              }
+            ]
+          }
+        ],
+        "expected_fact_coverage": [
+          "The requested motive contrast is stated, but the reference anchor is absent from all captured sources."
+        ],
+        "concerns": [
+          {
+            "severity": "blocking",
+            "code": "correct_fact_unrelated_support",
+            "detail": "Selected and captured evidence do not support the motive contrast; same-model true is a false positive for grounding."
+          },
+          {
+            "severity": "moderate",
+            "code": "answer_language_mismatch",
+            "detail": "The user question is Russian while the generated answer prose is English; original English source quotations can remain unchanged."
+          }
+        ],
+        "paired_run03_assessment": {
+          "run03_status": "abstained",
+          "run03_category": "safe_abstention_with_captured_retrieval_gap",
+          "change": "Not a verified-answer gain. 4B supplies the expected fact without supporting evidence where strict 1.5B safely abstained."
+        }
+      },
+      "human_reviewed": false
+    },
+    {
+      "id": "compare-property",
+      "question": "Compare Smith’s description of property in a person’s own labour with Marx and Engels’ distinction between property generally and bourgeois property. What kinds of property do these passages discuss?",
+      "expected_answerable": true,
+      "response_status": "answered",
+      "warnings": [],
+      "required_reference_books": [
+        "pg3300-full",
+        "pg61-full"
+      ],
+      "released_claim_cited_books": [
+        "pg3300-full",
+        "pg61-full"
+      ],
+      "captured_reference_coverage": [
+        {
+          "reference_id": "labour",
+          "book_id": "pg3300-full",
+          "present_in_captured_sources": false
+        },
+        {
+          "reference_id": "bourgeois",
+          "book_id": "pg61-full",
+          "present_in_captured_sources": false
+        }
+      ],
+      "same_model_judge_supported": [
+        true,
+        true
+      ],
+      "source_arrays_equal_to_run03": true,
+      "agent_review": {
+        "category": "partially_relevant_comparison_wrong_smith_subtopic",
+        "correctness": "locally_supported_propositions_but_wrong_requested_comparison",
+        "directness": "wrong_smith_subtopic",
+        "completeness": "incomplete_requested_comparison",
+        "assessment": "The Smith claim accurately summarises retrieved land/stock and taxation material, but the question expressly asks about a person property in their own labour. That passage is absent and never answered. The Marx/Engels claim is broadly compatible with selected capital/appropriation/subjugation text, yet it does not explicitly supply the requested abolition-of-bourgeois-property versus property-generally distinction. Two cited authors do not make this the requested comparison.",
+        "claim_reviews": [
+          {
+            "correctness": "supported_as_a_summary_of_different_smith_passages",
+            "selected_quote_entailment": "supported_by_selected_material",
+            "directness": "unresponsive_to_requested_own_labour_topic",
+            "notes": "S3 supports immobile land/mobile stock and industry effects; S1 supports estate improvement. Those locally valid facts substitute a different subject for the named own-labour passage.",
+            "index": 1,
+            "claim_text": "Smith discusses property in the context of land and stock, emphasizing how land is tied to a specific location and how stock can be moved across countries, affecting economic activity and improvement.",
+            "source_ids": [
+              "S1",
+              "S3"
+            ],
+            "support_references": [
+              {
+                "source_id": "S1",
+                "evidence_id": "S1:E3",
+                "start": 8400,
+                "end": 8767,
+                "quote_sha256": "4b949bdf016091b2a39a90530c735b591ee444aaac429ccd356a8ba02a222f9f"
+              },
+              {
+                "source_id": "S1",
+                "evidence_id": "S1:E4",
+                "start": 8768,
+                "end": 8999,
+                "quote_sha256": "4611f9ac00e72a6ae7ba8a974b43c0448840bce9bf4df5f9e31b1d41649c3d1c"
+              },
+              {
+                "source_id": "S3",
+                "evidence_id": "S3:E1",
+                "start": 61676,
+                "end": 61973,
+                "quote_sha256": "a3c029a524b408ec639a3edcbc87404074756718f31ea82786c3f30bf914d76b"
+              },
+              {
+                "source_id": "S3",
+                "evidence_id": "S3:E2",
+                "start": 61974,
+                "end": 62383,
+                "quote_sha256": "eec95e36592129dc4a25dae6fd9aa09138595ce2241ddcdebc6dbb45207b03ef"
+              }
+            ]
+          },
+          {
+            "correctness": "broadly_supported_but_requested_distinction_incomplete",
+            "selected_quote_entailment": "broadly_supported_by_E3_E4",
+            "directness": "partially_responsive",
+            "notes": "Capital and subjugating others labour are supported. The answer should not be mistaken for a complete account of the explicit abolition-versus-generally distinction, whose reference anchor is not retrieved.",
+            "index": 2,
+            "claim_text": "Marx and Engels distinguish between property generally and bourgeois property, identifying bourgeois property as individual property that is transformed into capital and used to subjugate the labour of others.",
+            "source_ids": [
+              "S2"
+            ],
+            "support_references": [
+              {
+                "source_id": "S2",
+                "evidence_id": "S2:E3",
+                "start": 6882,
+                "end": 7181,
+                "quote_sha256": "1870dc92f472fd09ff61fc1864af80f717fea8276bf58d0e8c77d26a10b4d1d2"
+              },
+              {
+                "source_id": "S2",
+                "evidence_id": "S2:E4",
+                "start": 7183,
+                "end": 7584,
+                "quote_sha256": "75fbcc6b64f59f691e499c1c5f5c1577c4896f7a695b067ec94afd485a56a203"
+              }
+            ]
+          }
+        ],
+        "expected_fact_coverage": [
+          "Smith own-labour as foundation/sacred property is omitted.",
+          "Marx/Engels bourgeois-capital/social power idea is partly addressed, but the explicit requested abolition distinction is omitted."
+        ],
+        "concerns": [
+          {
+            "severity": "blocking",
+            "code": "question_topic_substitution",
+            "detail": "A correct summary of a different Smith topic is released as the requested comparison."
+          },
+          {
+            "severity": "moderate",
+            "code": "comparison_axis_incomplete",
+            "detail": "Both authors appear, but the named conceptual axis is not covered."
+          }
+        ],
+        "paired_run03_assessment": {
+          "run03_status": "abstained",
+          "run03_category": "safe_abstention_with_captured_reference_gap",
+          "change": "4B avoids run02 cross-author contamination and cites both authors, but still does not answer the requested comparison; not a complete quality success over safe abstention."
+        }
+      },
+      "human_reviewed": false
+    },
+    {
+      "id": "compare-origin-editions",
+      "question": "How does the wording about life’s original powers differ in the concluding paragraphs of the 1859 and sixth editions of Origin of Species? Quote the difference and identify the editions.",
+      "expected_answerable": true,
+      "response_status": "abstained",
+      "warnings": [],
+      "required_reference_books": [
+        "pg1228-full",
+        "pg2009-full"
+      ],
+      "released_claim_cited_books": [],
+      "captured_reference_coverage": [
+        {
+          "reference_id": "first-edition",
+          "book_id": "pg1228-full",
+          "present_in_captured_sources": false
+        },
+        {
+          "reference_id": "sixth-edition",
+          "book_id": "pg2009-full",
+          "present_in_captured_sources": false
+        }
+      ],
+      "same_model_judge_supported": null,
+      "source_arrays_equal_to_run03": true,
+      "agent_review": {
+        "category": "safe_abstention_with_captured_retrieval_gap",
+        "correctness": "safe_no_released_claim",
+        "directness": "not_answered",
+        "completeness": "unanswered_due_to_evidence_gap",
+        "assessment": "Neither edition conclusion reference occurs in the captured sources: the passages are domestication, provider edition listings and secondary sexual characters. Abstention is appropriate for those excerpts. It does not claim that the books lack the wording and avoids the unrelated cattle comparison from partial-policy run02.",
+        "claim_reviews": [],
+        "expected_fact_coverage": [
+          "Neither required conclusion anchor retrieved; no edition wording comparison released."
+        ],
+        "concerns": [
+          {
+            "severity": "moderate",
+            "code": "captured_retrieval_gap",
+            "detail": "Retrieve the requested passages in both editions before attempting a two-edition quotation comparison; provider metadata alone does not supply their prose."
+          }
+        ],
+        "paired_run03_assessment": {
+          "run03_status": "abstained",
+          "run03_category": "safe_abstention_with_captured_retrieval_gap",
+          "change": "Safe behaviour retained. 4B directly declines without a failed same-model judge round; no supported answer improvement."
+        }
+      },
+      "human_reviewed": false
+    },
+    {
+      "id": "wrong-topic-alice",
+      "question": "What mathematical formula for mass–energy equivalence does Alice’s Adventures in Wonderland derive?",
+      "expected_answerable": false,
+      "response_status": "abstained",
+      "warnings": [],
+      "required_reference_books": [],
+      "released_claim_cited_books": [],
+      "captured_reference_coverage": [],
+      "same_model_judge_supported": null,
+      "source_arrays_equal_to_run03": true,
+      "agent_review": {
+        "category": "correct_negative_abstention",
+        "correctness": "correct_safe_abstention",
+        "directness": "appropriate_scope_refusal",
+        "completeness": "appropriate_negative_result",
+        "assessment": "The model abstains instead of supplying a remembered mass-energy formula or asserting it is derived in Alice. This is the expected scoped negative behaviour. No claim about having exhaustively searched every passage is released.",
+        "claim_reviews": [],
+        "expected_fact_coverage": [
+          "Negative question correctly receives abstained status and no claims."
+        ],
+        "concerns": [],
+        "paired_run03_assessment": {
+          "run03_status": "invalid_output",
+          "run03_category": "safe_invalid_output_not_correct_abstention",
+          "change": "Operational and answerability improvement: a clean abstention replaces a rejected invalid output. The rejected draft is not visible and is not assessed."
+        }
+      },
+      "human_reviewed": false
+    },
+    {
+      "id": "wrong-topic-smith",
+      "question": "Which Python function for SHA-256 hashing does Adam Smith recommend in The Wealth of Nations?",
+      "expected_answerable": false,
+      "response_status": "abstained",
+      "warnings": [],
+      "required_reference_books": [],
+      "released_claim_cited_books": [],
+      "captured_reference_coverage": [],
+      "same_model_judge_supported": null,
+      "source_arrays_equal_to_run03": true,
+      "agent_review": {
+        "category": "correct_negative_abstention",
+        "correctness": "correct_safe_abstention",
+        "directness": "appropriate_scope_refusal",
+        "completeness": "appropriate_negative_result",
+        "assessment": "Correctly abstains from attributing a Python SHA-256 function to Smith. No code answer or whole-library absence claim is released.",
+        "claim_reviews": [],
+        "expected_fact_coverage": [
+          "Negative question correctly receives abstained status and no claims."
+        ],
+        "concerns": [],
+        "paired_run03_assessment": {
+          "run03_status": "abstained",
+          "run03_category": "correct_negative_abstention",
+          "change": "Safe behaviour retained; no qualitative factual gain needed."
+        }
+      },
+      "human_reviewed": false
+    },
+    {
+      "id": "ru-chameleon-owner",
+      "question": "Что повар Прохор в конце концов говорит о владельце собаки в «Хамелеоне»?",
+      "expected_answerable": true,
+      "response_status": "answered",
+      "warnings": [
+        "У поиска есть ограничения; ответ основан только на показанных найденных фрагментах.",
+        "Для части выбранных книг использован доступный поиск по словам."
+      ],
+      "required_reference_books": [
+        "wsru-chameleon-6a5f80896084"
+      ],
+      "released_claim_cited_books": [
+        "wsru-chameleon-6a5f80896084"
+      ],
+      "captured_reference_coverage": [
+        {
+          "reference_id": "owner",
+          "book_id": "wsru-chameleon-6a5f80896084",
+          "present_in_captured_sources": true
+        }
+      ],
+      "same_model_judge_supported": [
+        true
+      ],
+      "source_arrays_equal_to_run03": true,
+      "agent_review": {
+        "category": "fully_supported_direct_answer",
+        "correctness": "correct",
+        "directness": "direct",
+        "completeness": "sufficient",
+        "assessment": "Correctly identifies the visiting general brother, not the general, as owner. S1:E3 contains that identification and the visit exchange, so recently arrived to visit is supported. The response is in Russian.",
+        "claim_reviews": [
+          {
+            "correctness": "correct",
+            "selected_quote_entailment": "directly_supported",
+            "directness": "direct",
+            "notes": "Source context identifies Prokhor as speaker; the answer does not confuse the owner with the general.",
+            "index": 1,
+            "claim_text": "Повар Прохор в конце концов говорит, что собака принадлежит брату генерала, который недавно приехал в гости.",
+            "source_ids": [
+              "S1"
+            ],
+            "support_references": [
+              {
+                "source_id": "S1",
+                "evidence_id": "S1:E3",
+                "start": 5074,
+                "end": 5433,
+                "quote_sha256": "66a13a04d485d9f8659ac7f3b62724fd76e961ac3494c5c9e5ab65e1b7b3ef67"
+              }
+            ]
+          }
+        ],
+        "expected_fact_coverage": [
+          "General brother owns the dog.",
+          "He recently arrived to visit, as the supporting exchange states."
+        ],
+        "concerns": [],
+        "paired_run03_assessment": {
+          "run03_status": "abstained",
+          "run03_category": "safe_abstention_with_adequate_captured_evidence",
+          "change": "Meaningful gain: directly supported Russian factual answer replaces abstention."
+        }
+      },
+      "human_reviewed": false
+    },
+    {
+      "id": "ru-lefty-warning",
+      "question": "Какое предупреждение о чистке ружей Левша просит передать государю перед смертью?",
+      "expected_answerable": true,
+      "response_status": "answered",
+      "warnings": [
+        "У поиска есть ограничения; ответ основан только на показанных найденных фрагментах.",
+        "Для части выбранных книг использован доступный поиск по словам."
+      ],
+      "required_reference_books": [
+        "wsru-lefty-45ef2537b9d9"
+      ],
+      "released_claim_cited_books": [
+        "wsru-lefty-45ef2537b9d9"
+      ],
+      "captured_reference_coverage": [
+        {
+          "reference_id": "brick",
+          "book_id": "wsru-lefty-45ef2537b9d9",
+          "present_in_captured_sources": true
+        }
+      ],
+      "same_model_judge_supported": [
+        true
+      ],
+      "source_arrays_equal_to_run03": true,
+      "agent_review": {
+        "category": "partially_correct_answer_observation_instruction_shift",
+        "correctness": "partially_correct_with_agent_and_modality_distortion",
+        "directness": "direct_but_distorted",
+        "completeness": "domestic_warning_and_consequence_present",
+        "assessment": "The answer recovers the important domestic instruction not to clean guns with brick and the risk to firing. However, чтобы у англичан ... не чистили turns Lefty observation that the English do not do this into an instruction about English practice. Lefty asks that the Russian sovereign be told an observed English practice and that Russia follow it; he is not asking the sovereign to direct English gun cleaning. The selected quote makes the distinction explicit.",
+        "claim_reviews": [
+          {
+            "correctness": "partially_correct",
+            "selected_quote_entailment": "partially_supported_with_observation_to_instruction_shift",
+            "directness": "direct_but_distorted",
+            "notes": "The domestic instruction/consequence is supported. The English clause changes declarative не чистят into normative чтобы не чистили. The character-warning framing is retained, so this is not unqualified modern technical advice.",
+            "index": 1,
+            "claim_text": "Левша предупреждает государю, чтобы у англичан ружья кирпичом не чистили, и чтобы у нас тоже не чистили, иначе ружья не годятся к стрельбе.",
+            "source_ids": [
+              "S1"
+            ],
+            "support_references": [
+              {
+                "source_id": "S1",
+                "evidence_id": "S1:E2",
+                "start": 1485,
+                "end": 1803,
+                "quote_sha256": "616bce0a0d826f00a669ab90226c12809a80aa6dd7240f38a5516cf30670e2d4"
+              }
+            ]
+          }
+        ],
+        "expected_fact_coverage": [
+          "Domestic no-brick instruction and consequence covered.",
+          "English practice is misstated as an instruction rather than reported observation."
+        ],
+        "concerns": [
+          {
+            "severity": "moderate",
+            "code": "agent_modality_shift",
+            "detail": "Preserve who observes, who requests, who should act, and declarative versus imperative content in paraphrase."
+          }
+        ],
+        "paired_run03_assessment": {
+          "run03_status": "abstained",
+          "run03_category": "safe_abstention_with_adequate_captured_evidence",
+          "change": "Useful partial recovery over abstention, but not fully correct. Much better than run02 wrong Chernyshev rebuke; still needs semantic correction before treating as complete success."
+        }
+      },
+      "human_reviewed": false
+    },
+    {
+      "id": "ru-land-grave",
+      "question": "Сколько земли в итоге занимает могила Пахома в рассказе Толстого «Много ли человеку земли нужно»?",
+      "expected_answerable": true,
+      "response_status": "answered",
+      "warnings": [
+        "У поиска есть ограничения; ответ основан только на показанных найденных фрагментах.",
+        "Для части выбранных книг использован доступный поиск по словам."
+      ],
+      "required_reference_books": [
+        "wsru-how-much-land-285bf7cc584e"
+      ],
+      "released_claim_cited_books": [
+        "wsru-how-much-land-285bf7cc584e"
+      ],
+      "captured_reference_coverage": [
+        {
+          "reference_id": "grave",
+          "book_id": "wsru-how-much-land-285bf7cc584e",
+          "present_in_captured_sources": false
+        }
+      ],
+      "same_model_judge_supported": [
+        true
+      ],
+      "source_arrays_equal_to_run03": true,
+      "agent_review": {
+        "category": "false_whole_text_absence_from_incomplete_evidence",
+        "correctness": "incorrect",
+        "directness": "purports_to_answer_but_false_absence",
+        "completeness": "fails_requested_quantity",
+        "assessment": "The statement that the text specifies no concrete quantity is false: the open canonical reference explicitly gives three arshins in the ending. The selected and captured sources are only middle-story land gifts and the day-walking purchase arrangement; neither mentions the grave. Their silence cannot substantiate a whole-story absence assertion. This is a new unsafe answer relative to the strict 1.5B abstention.",
+        "claim_reviews": [
+          {
+            "correctness": "incorrect",
+            "selected_quote_entailment": "not_supported_and_contradicted_by_open_canonical_reference",
+            "directness": "unresponsive_quantity_replaced_by_false_absence",
+            "notes": "The indefinite purchase/day measure in mid-story does not describe the eventual grave. No absence claim is licensed by those excerpts; the reference supplies a definite three-arshin length.",
+            "index": 1,
+            "claim_text": "Могила Пахома в рассказе Толстого «Много ли человеку земли нужно» занимает неопределённое количество земли, так как в тексте не указано конкретное количество.",
+            "source_ids": [
+              "S1",
+              "S2"
+            ],
+            "support_references": [
+              {
+                "source_id": "S1",
+                "evidence_id": "S1:E1",
+                "start": 1318,
+                "end": 1725,
+                "quote_sha256": "1c3075342390b2b2ef170231bd269f60dd5fa045c5f6180d135711e0b6b838e2"
+              },
+              {
+                "source_id": "S1",
+                "evidence_id": "S1:E2",
+                "start": 1727,
+                "end": 2127,
+                "quote_sha256": "79c25da4ae0b584771a7e5c9b2d26eac840c7ecd2ce0ed5754cc741947ff39f1"
+              },
+              {
+                "source_id": "S2",
+                "evidence_id": "S2:E1",
+                "start": 1202,
+                "end": 1545,
+                "quote_sha256": "fd45e8294d7b060fcefd32dfa73f0523db6826025786986b83e94a75db9a70c1"
+              },
+              {
+                "source_id": "S2",
+                "evidence_id": "S2:E2",
+                "start": 1546,
+                "end": 1888,
+                "quote_sha256": "a01b0d0967580ede58dc7468bd868793f097956ebfe603b172a8a840e99fed2b"
+              }
+            ]
+          }
+        ],
+        "expected_fact_coverage": [
+          "Required three-arshin grave measure omitted and falsely declared unspecified."
+        ],
+        "concerns": [
+          {
+            "severity": "blocking",
+            "code": "false_absence_from_partial_evidence",
+            "detail": "Missing information in retrieved excerpts is promoted into false absence in the whole work."
+          },
+          {
+            "severity": "blocking",
+            "code": "same_model_judge_false_positive",
+            "detail": "Judge supported=true despite irrelevant evidence and an incorrect whole-text claim."
+          }
+        ],
+        "paired_run03_assessment": {
+          "run03_status": "abstained",
+          "run03_category": "safe_abstention_with_captured_retrieval_gap",
+          "change": "Clear regression in grounded safety: 1.5B safely abstained from the same inadequate captured evidence; 4B invents a false absence answer."
+        }
+      },
+      "human_reviewed": false
+    }
+  ],
+  "prioritized_actions": [
+    {
+      "priority": "P0",
+      "action": "Prevent claims of whole-book absence from incomplete retrieved excerpts. Missing requested information should lead to evidence-bounded abstention, without saying the work does not specify it.",
+      "evidence_cases": [
+        "ru-land-grave"
+      ],
+      "general_constraint": "No author/title/question exception; distinguish evidence not found from fact absent."
+    },
+    {
+      "priority": "P0",
+      "action": "Validate whether the released answer covers the requested subject, entity and comparison axis, separately from whether each sentence is locally compatible with a quote.",
+      "evidence_cases": [
+        "compare-property",
+        "ru-query-smith-dinner"
+      ],
+      "general_constraint": "Named own-labour property must not be replaced by land/stock; occupation overlap must not count as evidence for a motive contrast."
+    },
+    {
+      "priority": "P0",
+      "action": "Keep the same-model judge labelled a heuristic and evaluate its false positives independently. Require adequate selected evidence for the released proposition, not just a familiar correct answer or general topical overlap.",
+      "evidence_cases": [
+        "ru-land-grave",
+        "ru-query-smith-dinner",
+        "compare-property"
+      ],
+      "general_constraint": "A larger generator and its own true verdict do not constitute independent entailment evidence."
+    },
+    {
+      "priority": "P1",
+      "action": "Preserve actor, recipient, observation versus instruction, quantified bounds and outcome versus mechanism in paraphrases. Prefer fewer faithful claims over extra loosely related explanation.",
+      "evidence_cases": [
+        "ru-lefty-warning",
+        "darwin-struggle",
+        "smith-pins"
+      ],
+      "general_constraint": "General semantic roles and qualifiers; no memorised fixes for these questions."
+    },
+    {
+      "priority": "P1",
+      "action": "Improve passage coverage for the requested subtopics and edition locations before generation; keep source gaps visible rather than filling them with background knowledge.",
+      "evidence_cases": [
+        "ru-query-smith-dinner",
+        "compare-property",
+        "compare-origin-editions",
+        "ru-land-grave"
+      ],
+      "general_constraint": "Compare exact relevant passages for each requested author/edition; provider edition lists do not replace authorial text."
+    },
+    {
+      "priority": "P1",
+      "action": "Follow the question language for generated prose while preserving original-language source quotations.",
+      "evidence_cases": [
+        "ru-query-smith-dinner"
+      ],
+      "general_constraint": "Do not translate or alter canonical quotations to satisfy prose-language preferences."
+    },
+    {
+      "priority": "P2",
+      "action": "After general fixes, use a paired open-development comparison and independent human review of correctness, directness and selected-quote entailment. Retain original reports and separately record AI review; do not treat answered/anchor counts as correctness.",
+      "evidence_cases": [
+        "alice-court",
+        "jowett-introduction",
+        "ru-land-grave"
+      ],
+      "general_constraint": "No sealed-case tuning or default promotion from this 14-case review alone."
+    }
+  ],
+  "limitations": [
+    "This is an AI-agent interpretation of 14 open development cases, not human ratings, a statistical estimate, or a final validation.",
+    "The review checks captured quotations and the supplied open canonical references; it does not re-read raw artifacts or live databases.",
+    "Equality of captured sources removes one visible comparison confound but cannot attest all loaded-server code or internal model determinism.",
+    "Rejected drafts are not present. Safe abstention with sufficient evidence is a missed supported question, not proof that the rejected draft was correct.",
+    "Timing conditions are not isolated; no latency, cost or resource comparison is inferred.",
+    "A reference anchor missing from captured sources identifies an evidence coverage gap here, not the exact internal retrieval stage responsible."
+  ]
+}

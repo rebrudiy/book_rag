@@ -247,10 +247,15 @@ def ask(
         not identity.strip() or identity != identity.strip() or len(identity) > 200 for identity in scopes
     ):
         raise ValueError("Select at most ten nonempty book IDs without surrounding whitespace")
-    searches = [library.search(query, mode, scope, language, 40) for scope in (scopes or [None])]
+    # A natural-language question may quote a book title or a paraphrase.
+    # Exact-phrase constraints remain available in the separate search API;
+    # the original question still reaches generation and the grounding judge.
+    retrieval_query = query.translate(str.maketrans(dict.fromkeys('"«»“”„', " "))).strip()
+    searches = [library.search(retrieval_query, mode, scope, language, 40) for scope in (scopes or [None])]
     retrieval: dict[str, Any] = {
         "requested_mode": mode,
         "actual_modes": sorted({item["mode"] for item in searches}),
+        "query": retrieval_query,
     }
     coverages = [item["semantic_coverage"] for item in searches if "semantic_coverage" in item]
     if coverages:

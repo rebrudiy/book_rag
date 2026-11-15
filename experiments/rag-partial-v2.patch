@@ -1,0 +1,17 @@
+--- a/src/book_rag/answers.py
++++ b/src/book_rag/answers.py
+@@ -480,7 +480,13 @@
+             "elapsed_ms": verdict.get("elapsed_ms"),
+             "usage": verdict.get("usage"),
+         }
+-        if not all(checked.supported):
++        accepted = [claim for claim, supported in zip(claims, checked.supported, strict=True) if supported]
++        if not accepted:
+             warnings.append("Модель не подтвердила выводы по опорным цитатам. Проверьте найденные фрагменты.")
+             return response("abstained", generation=metadata)
++        if len(accepted) != len(claims):
++            warnings.append(
++                "Часть выводов не подтвердилась и была исключена. Показана только поддержанная часть ответа."
++            )
++        claims = accepted
+     return response("answered" if answerable else "abstained", claims, metadata)
