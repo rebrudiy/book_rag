@@ -239,7 +239,9 @@ def _validated_claims(text: str, sources: list[dict[str, Any]]) -> tuple[bool, l
         cited = [indexed[identity] for identity in source_ids]
         # Quotations must be literal substrings, including punctuation/spacing.
         # Bibliographic titles/names may also legitimately be quoted.
-        pattern = r'"([^"]*)"|«([^»]*)»|“([^”]*)”|„([^“]*)“|‘([^’]*)’'
+        # ASCII apostrophes inside words are not quotation delimiters. Paired
+        # standalone single quotes still promise a literal contiguous quotation.
+        pattern = r'"([^"]*)"|«([^»]*)»|“([^”]*)”|„([^“]*)“|‘([^’]*)’' + r"|(?<!\w)'(.*?)'(?!\w)"
         quotes = re.findall(pattern, claim.text, flags=re.DOTALL)
         remainder = re.sub(pattern, "", claim.text, flags=re.DOTALL)
         if re.search('["«»“”„‘]', remainder):
@@ -419,22 +421,26 @@ def ask(
             sources.append(current)
             counts[candidate["book_id"]] = counts.get(candidate["book_id"], 0) + 1
     retrieval["requested_book_ids"] = scopes
-    retrieval["evidence_book_ids"] = list(counts)
-    if scopes and any(identity not in counts for identity in scopes):
-        warnings.append(
-            f"Опорные фрагменты отобраны для {len(counts)} из {len(scopes)} выбранных книг. "
-            "Ответ не охватывает книги без показанных источников."
-        )
 
     def response(
         status: str, claims: list[dict[str, Any]] | None = None, generation: dict[str, Any] | None = None
     ) -> dict[str, Any]:
+        final_books = list(dict.fromkeys(source["book_id"] for source in sources))
+        retrieval["evidence_book_ids"] = final_books
+        final_warnings = list(warnings)
+        if planning["requested"] and not planning["used"]:
+            final_warnings.append("Уточнение поиска не применено; использован исходный запрос.")
+        if scopes and any(identity not in final_books for identity in scopes):
+            final_warnings.append(
+                f"Опорные фрагменты отобраны для {len(final_books)} из {len(scopes)} выбранных книг. "
+                "Ответ не охватывает книги без показанных источников."
+            )
         return {
             "query": query,
             "status": status,
             "claims": claims or [],
             "sources": sources,
-            "warnings": list(dict.fromkeys(warnings)),
+            "warnings": list(dict.fromkeys(final_warnings)),
             "retrieval": retrieval,
             "generation": generation,
             "elapsed_ms": round((time.monotonic() - started) * 1000, 2),

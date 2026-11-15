@@ -1,0 +1,2224 @@
+{
+  "schema_version": 1,
+  "kind": "AI_AGENT_QUALITATIVE_REVIEW_NOT_HUMAN_RATINGS",
+  "created_at": "2026-11-15T04:29:18.347949+00:00",
+  "status": "complete_14_open_development_cases",
+  "reviewer": "Codex /root/corpus AI agent; no human ratings, no independent truth oracle",
+  "scope": {
+    "open_development_only": true,
+    "sealed_files_accessed": false,
+    "model_calls": 0,
+    "gpu_jobs": 0,
+    "production_mutations": 0,
+    "core_edits": 0,
+    "reviewed_cases": 14,
+    "expected_cases": 14
+  },
+  "inputs": {
+    "fixture": {
+      "path": "evals/rag-dev-v1.json",
+      "sha256": "573155bfea71d0086b37f622e3bc24598bd1dd6595535436c05ae59bf7fdf92d",
+      "split": "development"
+    },
+    "transcript": {
+      "path": "data/evaluations/rag-dev-v1/run-05.responses.json",
+      "sha256": "11ddf0762e063896915a3084894b2844273710a147d4fa8a9a73e39558dab531",
+      "bytes": 162544,
+      "immutable_snapshot": "data/evaluations/rag-dev-v1/review-run05/11ddf0762e063896915a3084894b2844273710a147d4fa8a9a73e39558dab531.responses.json",
+      "created_at": "2026-11-15T04:18:46.653301+00:00",
+      "request_config": {
+        "mode": "hybrid",
+        "limit": 8,
+        "origin": "http://127.0.0.1:8002",
+        "plan_retrieval": true
+      },
+      "server_code_attestation": "Unavailable; observed per-response generation/model metadata is retained, not assumed to attest loaded server code."
+    },
+    "source_canonical_db": {
+      "path": "data/full/library.sqlite3",
+      "access_mode": "SQLite URI mode=ro; no Library construction",
+      "data_version_before": 2,
+      "data_version_after": 2,
+      "involved_section_guards_rechecked": 24,
+      "guards_unchanged": true
+    },
+    "review_started_at": "2026-11-15T04:29:18.331179+00:00"
+  },
+  "method": [
+    "Read each actual public response and its specifically selected supporting_quotes; compare actors, recipients, modality, numerical bounds, requested comparison axis and attribution against the selected text.",
+    "Check every captured source span and selected quote against current canonical sections, book identity, immutable artifact/content SHA, section ordinal/title and requested book scope. Check every open fixture anchor and attribution independently.",
+    "Use neighboring canonical context only when explicitly marked; it cannot silently replace the support actually selected for a claim. In particular review Darwin scarcity context, Chameleon ownership/name context, and Lefty’s unsuccessful transmission chain.",
+    "Separate exact supporting_quotes checks from inline quotation fidelity in claim.text. No automatic entailment score or answer-status match is treated as factual accuracy.",
+    "Capture-provided HTTP-body SHA and independently computed canonical JSON SHA have different serializations; this review preserves both and does not claim to reproduce the unavailable original HTTP bytes."
+  ],
+  "comparison_conditions": {
+    "run05_only_verdicts": true,
+    "prior_review_used_as_format_only": "experiments/rag-run04-agent-review.json",
+    "not_an_isolated_ablation": true,
+    "reason": "This capture combines opt-in query planning/reranking and writer instruction changes. It does not isolate their individual contribution, and timing must not be treated as a paired performance experiment."
+  },
+  "capture_consistency": {
+    "final_transcript_unchanged_during_check": true,
+    "case_count": 14,
+    "source_cards": 32,
+    "source_card_guard_failures": 0,
+    "released_claims": 13,
+    "selected_supporting_quotes": 17,
+    "selected_quote_exact_failures": 0,
+    "reference_anchors": 16,
+    "whole_reference_anchors_present_in_captured_sources": 15,
+    "whole_reference_anchors_present_in_selected_quotes": 12,
+    "whole_anchor_metric_note": "Strict complete-substring containment, not citation overlap. Chameleon’s selected unit starts after \"Это не наша\"; both Origin anchors are retrieved but no claims are released. This stricter selected metric differs from the runner’s cited-overlap metric.",
+    "noncontiguous_inline_quote_claims": [
+      "alice-court"
+    ]
+  },
+  "observed_status_counts": {
+    "answered": 11,
+    "abstained": 3
+  },
+  "agent_category_counts": {
+    "supported_direct_answer": 4,
+    "supported_answer_with_nonliteral_inline_quotation": 1,
+    "supported_number_with_quantifier_loss": 1,
+    "largely_supported_with_interpretive_resource_gloss": 1,
+    "partly_supported_comparison_wrong_smith_axis": 1,
+    "answerable_but_abstained_after_grounding_gate": 1,
+    "appropriate_scoped_abstention": 2,
+    "supported_answer_with_contextual_resolution": 1,
+    "supported_warning_with_recipient_wording_caveat": 1,
+    "supported_number_with_dimension_omission": 1
+  },
+  "summary": [
+    "All 32 captured source cards and all 17 specifically selected supporting quote spans match canonical section text, immutable source/content identity and requested book scope. Literal span integrity does not establish entailment.",
+    "Major remaining failures: Smith’s half of the property comparison is a wrong-axis unsupported synthesis; the Darwin-editions comparison abstains despite both requested concluding passages being captured.",
+    "The direct Smith dinner answer in Russian, the own-interest contrast, Marx/Engels distinction, the final Chameleon owner and Lefty’s prohibition are grounded in actual retrieved source context. Minor caveats remain in quotation punctuation, numerical bounds, selected-versus-neighboring context, indirect-recipient wording and the grave’s length dimension.",
+    "Both wrong-topic cases abstain on scoped evidence and do not invent facts or assert exhaustive whole-library absence."
+  ],
+  "decision": "Useful open development evidence with concrete remaining failures; not sufficient to claim human-verified factual accuracy or final quality. No production integration decision is made by this review.",
+  "cases": [
+    {
+      "id": "alice-watch",
+      "question": "What does the White Rabbit take out of its waistcoat-pocket before Alice follows it?",
+      "expected_answerable": true,
+      "response_status": "answered",
+      "capture_http_response_sha256": "d1a4cbc321b45925022b34b74839ffcf28bd068ad7651aaf647dac4fad775e5c",
+      "capture_timestamp": "2026-11-15T04:19:28.813700+00:00",
+      "parsed_response_canonical_json_sha256": "09815152b814c25d6ad4d8d052de6d5da95735dd4873555413ff1bbfd499e3d1",
+      "category": "supported_direct_answer",
+      "severity": "none",
+      "question_axis": "The object the Rabbit takes from its waistcoat-pocket before Alice follows it.",
+      "claims": [
+        {
+          "claim_index": 1,
+          "text": "A watch",
+          "source_ids": [
+            "S1"
+          ],
+          "agent_verdict": "supported",
+          "reason": "The selected quote explicitly names a watch taken by the Rabbit. Actor, object and sequence match the question.",
+          "exact_supporting_quote_checks": [
+            {
+              "case_id": "alice-watch",
+              "claim_index": 1,
+              "source_id": "S1",
+              "evidence_id": "S1:E4",
+              "section_id": 119761,
+              "start": 907,
+              "end": 1321,
+              "quote_sha256": "7bc631c7f7100d3687cf032d8567717cf9c0bd0339909bdb7e7238a0127f2638",
+              "quote_characters": 414,
+              "checks": {
+                "within_captured_source": true,
+                "captured_source_slice_exact": true,
+                "live_section_slice_exact": true,
+                "source_is_claim_citation": true
+              }
+            }
+          ]
+        }
+      ],
+      "notes": [
+        "The bounded evidence unit ends mid-sentence at \"under the\"; this does not affect identification of the watch."
+      ],
+      "warnings": [],
+      "same_model_judge_supported": [
+        true
+      ],
+      "planning": {
+        "requested": true,
+        "used": true,
+        "reason": "validated_plan_candidates",
+        "ranking_strategy": "body-coverage-proximity-v1",
+        "response_language_hint": "en"
+      },
+      "reference_checks": [
+        {
+          "case_id": "alice-watch",
+          "reference_id": "watch",
+          "book_id": "pg11-full",
+          "section_id": 119761,
+          "canonical_reference_checks": {
+            "section_sha256_exact": true,
+            "anchor_offsets_exact": true,
+            "anchor_sha256_exact": true
+          },
+          "whole_anchor_in_captured_sources": [
+            "S1"
+          ],
+          "whole_anchor_in_selected_quotes": [
+            "S1:E4"
+          ],
+          "source_attribution_checks": [
+            {
+              "source_id": "S1",
+              "checks": {
+                "section_author": true,
+                "section_role": true,
+                "section_translator": true
+              }
+            }
+          ]
+        }
+      ],
+      "source_checks": [
+        {
+          "case_id": "alice-watch",
+          "source_id": "S1",
+          "passage_id": 884912,
+          "book_id": "pg11-full",
+          "section_id": 119761,
+          "section_ordinal": 1,
+          "start": 0,
+          "end": 1328,
+          "text_sha256": "89d41d4106acb5fe1a9637ba120ce59468f261c679e06d687756b0f68fdb66d6",
+          "reader_url": "/?book=pg11-full&section=119761&passage=884912",
+          "checks": {
+            "canonical_span_exact": true,
+            "bounds_valid": true,
+            "book_id_exact": true,
+            "section_ordinal_exact": true,
+            "section_title_exact": true,
+            "artifact_sha256_exact": true,
+            "content_sha256_exact": true,
+            "book_searchable": true,
+            "scope_allowed": true
+          }
+        },
+        {
+          "case_id": "alice-watch",
+          "source_id": "S2",
+          "passage_id": 885013,
+          "book_id": "pg11-full",
+          "section_id": 119771,
+          "section_ordinal": 11,
+          "start": 2533,
+          "end": 3837,
+          "text_sha256": "b2793553717f60a80384b44839bd2742cfa62a8d9776f37666d7724ea32548d5",
+          "reader_url": "/?book=pg11-full&section=119771&passage=885013",
+          "checks": {
+            "canonical_span_exact": true,
+            "bounds_valid": true,
+            "book_id_exact": true,
+            "section_ordinal_exact": true,
+            "section_title_exact": true,
+            "artifact_sha256_exact": true,
+            "content_sha256_exact": true,
+            "book_searchable": true,
+            "scope_allowed": true
+          }
+        }
+      ],
+      "human_reviewed": false
+    },
+    {
+      "id": "alice-court",
+      "question": "Who demands sentence before verdict, and how does Alice respond?",
+      "expected_answerable": true,
+      "response_status": "answered",
+      "capture_http_response_sha256": "c3763fe6c4429609748858bfedd85e6ffbdd610ef3ceb046a8c9d0f92ceb98b5",
+      "capture_timestamp": "2026-11-15T04:20:09.656815+00:00",
+      "parsed_response_canonical_json_sha256": "84252ebd285a2fc4728698a3e1eecf2d2f1aa6c8b562015da302424fa0396a4f",
+      "category": "supported_answer_with_nonliteral_inline_quotation",
+      "severity": "minor_literal_quotation_defect",
+      "question_axis": "The Queen orders sentence before verdict; Alice objects.",
+      "claims": [
+        {
+          "claim_index": 1,
+          "text": "The Queen demands sentence before verdict, and Alice responds by saying, 'Stuff and nonsense! The idea of having the sentence first!'",
+          "source_ids": [
+            "S1"
+          ],
+          "agent_verdict": "substantively_supported_but_inline_quote_not_contiguous",
+          "reason": "Both actors and speech content match the selected source. However the claim encloses two separate spoken segments in one ASCII-single-quoted string, omitting the intervening narrator words without an ellipsis.",
+          "exact_supporting_quote_checks": [
+            {
+              "case_id": "alice-court",
+              "claim_index": 1,
+              "source_id": "S1",
+              "evidence_id": "S1:E2",
+              "section_id": 119772,
+              "start": 7569,
+              "end": 7980,
+              "quote_sha256": "bb686a17d89154f451de8f999d2c2955ecf22240b60db05d21f5eeeaffbe8db9",
+              "quote_characters": 411,
+              "checks": {
+                "within_captured_source": true,
+                "captured_source_slice_exact": true,
+                "live_section_slice_exact": true,
+                "source_is_claim_citation": true
+              }
+            }
+          ]
+        }
+      ],
+      "notes": [
+        "The supporting_quotes object itself is exact. The separately quoted string in claim.text, \"Stuff and nonsense! The idea of having the sentence first!\", is not a contiguous substring of the source: the original inserts \"said Alice loudly.\" between the spoken segments. This is a literal-quotation-format failure, not a reversal of the events."
+      ],
+      "warnings": [],
+      "same_model_judge_supported": [
+        true
+      ],
+      "planning": {
+        "requested": true,
+        "used": true,
+        "reason": "validated_plan_candidates",
+        "ranking_strategy": "body-coverage-proximity-v1",
+        "response_language_hint": "en"
+      },
+      "reference_checks": [
+        {
+          "case_id": "alice-court",
+          "reference_id": "queen",
+          "book_id": "pg11-full",
+          "section_id": 119772,
+          "canonical_reference_checks": {
+            "section_sha256_exact": true,
+            "anchor_offsets_exact": true,
+            "anchor_sha256_exact": true
+          },
+          "whole_anchor_in_captured_sources": [
+            "S1"
+          ],
+          "whole_anchor_in_selected_quotes": [
+            "S1:E2"
+          ],
+          "source_attribution_checks": [
+            {
+              "source_id": "S1",
+              "checks": {
+                "section_author": true,
+                "section_role": true,
+                "section_translator": true
+              }
+            }
+          ]
+        },
+        {
+          "case_id": "alice-court",
+          "reference_id": "alice-objection",
+          "book_id": "pg11-full",
+          "section_id": 119772,
+          "canonical_reference_checks": {
+            "section_sha256_exact": true,
+            "anchor_offsets_exact": true,
+            "anchor_sha256_exact": true
+          },
+          "whole_anchor_in_captured_sources": [
+            "S1"
+          ],
+          "whole_anchor_in_selected_quotes": [
+            "S1:E2"
+          ],
+          "source_attribution_checks": [
+            {
+              "source_id": "S1",
+              "checks": {
+                "section_author": true,
+                "section_role": true,
+                "section_translator": true
+              }
+            }
+          ]
+        }
+      ],
+      "source_checks": [
+        {
+          "case_id": "alice-court",
+          "source_id": "S1",
+          "passage_id": 885025,
+          "book_id": "pg11-full",
+          "section_id": 119772,
+          "section_ordinal": 12,
+          "start": 7159,
+          "end": 8498,
+          "text_sha256": "f06e92a1af362c7383c3b3eadf0b4a7af762bc34931daad66da7dc3c61e4bfae",
+          "reader_url": "/?book=pg11-full&section=119772&passage=885025",
+          "checks": {
+            "canonical_span_exact": true,
+            "bounds_valid": true,
+            "book_id_exact": true,
+            "section_ordinal_exact": true,
+            "section_title_exact": true,
+            "artifact_sha256_exact": true,
+            "content_sha256_exact": true,
+            "book_searchable": true,
+            "scope_allowed": true
+          }
+        },
+        {
+          "case_id": "alice-court",
+          "source_id": "S2",
+          "passage_id": 885013,
+          "book_id": "pg11-full",
+          "section_id": 119771,
+          "section_ordinal": 11,
+          "start": 2533,
+          "end": 3837,
+          "text_sha256": "b2793553717f60a80384b44839bd2742cfa62a8d9776f37666d7724ea32548d5",
+          "reader_url": "/?book=pg11-full&section=119771&passage=885013",
+          "checks": {
+            "canonical_span_exact": true,
+            "bounds_valid": true,
+            "book_id_exact": true,
+            "section_ordinal_exact": true,
+            "section_title_exact": true,
+            "artifact_sha256_exact": true,
+            "content_sha256_exact": true,
+            "book_searchable": true,
+            "scope_allowed": true
+          }
+        }
+      ],
+      "human_reviewed": false
+    },
+    {
+      "id": "austen-opener",
+      "question": "What does the opening of Pride and Prejudice say a single man with a good fortune must want?",
+      "expected_answerable": true,
+      "response_status": "answered",
+      "capture_http_response_sha256": "c87871efedfb10442da211ee7f1cf3ed09dae60fefae91f6b40adc262474836f",
+      "capture_timestamp": "2026-11-15T04:20:49.145741+00:00",
+      "parsed_response_canonical_json_sha256": "7cbd68f4a60e3a91bf0169ea514662d3ee0306e6b6718b8d2f290377e08ec7cc",
+      "category": "supported_direct_answer",
+      "severity": "none",
+      "question_axis": "What the opening sentence says a wealthy single man must want.",
+      "claims": [
+        {
+          "claim_index": 1,
+          "text": "A single man with a good fortune must be in want of a wife.",
+          "source_ids": [
+            "S1"
+          ],
+          "agent_verdict": "supported",
+          "reason": "The selected opening states that a single man with a good fortune must be in want of a wife.",
+          "exact_supporting_quote_checks": [
+            {
+              "case_id": "austen-opener",
+              "claim_index": 1,
+              "source_id": "S1",
+              "evidence_id": "S1:E1",
+              "section_id": 148284,
+              "start": 0,
+              "end": 392,
+              "quote_sha256": "2711491edefe225532acc82cc41389e39829e2dc8d403b1b4c32e44811ea5838",
+              "quote_characters": 392,
+              "checks": {
+                "within_captured_source": true,
+                "captured_source_slice_exact": true,
+                "live_section_slice_exact": true,
+                "source_is_claim_citation": true
+              }
+            }
+          ]
+        }
+      ],
+      "notes": [
+        "The response reports the opening assertion; it does not establish this satirical narrative statement as a fact about all real people."
+      ],
+      "warnings": [],
+      "same_model_judge_supported": [
+        true
+      ],
+      "planning": {
+        "requested": true,
+        "used": true,
+        "reason": "validated_plan_candidates",
+        "ranking_strategy": "body-coverage-proximity-v1",
+        "response_language_hint": "en"
+      },
+      "reference_checks": [
+        {
+          "case_id": "austen-opener",
+          "reference_id": "wife",
+          "book_id": "pg1342-full",
+          "section_id": 148284,
+          "canonical_reference_checks": {
+            "section_sha256_exact": true,
+            "anchor_offsets_exact": true,
+            "anchor_sha256_exact": true
+          },
+          "whole_anchor_in_captured_sources": [
+            "S1"
+          ],
+          "whole_anchor_in_selected_quotes": [
+            "S1:E1"
+          ],
+          "source_attribution_checks": [
+            {
+              "source_id": "S1",
+              "checks": {
+                "section_author": true,
+                "section_role": true,
+                "section_translator": true
+              }
+            },
+            {
+              "source_id": "S2",
+              "checks": {
+                "section_author": true,
+                "section_role": true,
+                "section_translator": true
+              }
+            }
+          ]
+        }
+      ],
+      "source_checks": [
+        {
+          "case_id": "austen-opener",
+          "source_id": "S1",
+          "passage_id": 1093752,
+          "book_id": "pg1342-full",
+          "section_id": 148284,
+          "section_ordinal": 2,
+          "start": 0,
+          "end": 1278,
+          "text_sha256": "7f617797d504542791702ad2c8c44963f32b8a7eb1928f29f68b62fd97671fe9",
+          "reader_url": "/?book=pg1342-full&section=148284&passage=1093752",
+          "checks": {
+            "canonical_span_exact": true,
+            "bounds_valid": true,
+            "book_id_exact": true,
+            "section_ordinal_exact": true,
+            "section_title_exact": true,
+            "artifact_sha256_exact": true,
+            "content_sha256_exact": true,
+            "book_searchable": true,
+            "scope_allowed": true
+          }
+        },
+        {
+          "case_id": "austen-opener",
+          "source_id": "S2",
+          "passage_id": 1093753,
+          "book_id": "pg1342-full",
+          "section_id": 148284,
+          "section_ordinal": 2,
+          "start": 1280,
+          "end": 2482,
+          "text_sha256": "a5f53239d97fb41eb6f47847907274453a15d2f3e858d990f4d989323439b04a",
+          "reader_url": "/?book=pg1342-full&section=148284&passage=1093753",
+          "checks": {
+            "canonical_span_exact": true,
+            "bounds_valid": true,
+            "book_id_exact": true,
+            "section_ordinal_exact": true,
+            "section_title_exact": true,
+            "artifact_sha256_exact": true,
+            "content_sha256_exact": true,
+            "book_searchable": true,
+            "scope_allowed": true
+          }
+        }
+      ],
+      "human_reviewed": false
+    },
+    {
+      "id": "smith-pins",
+      "question": "In Adam Smith’s pin-making example, how many pins could the ten workers make together in a day?",
+      "expected_answerable": true,
+      "response_status": "answered",
+      "capture_http_response_sha256": "41d124569aea96e488027f1d0fa0f21467e7267d82ec1ecc42c2b5f6b2873b69",
+      "capture_timestamp": "2026-11-15T04:21:25.388407+00:00",
+      "parsed_response_canonical_json_sha256": "33b26604870877f8322102119e1eb9f0b3af9de76f211661cc5b86f4d1115a21",
+      "category": "supported_number_with_quantifier_loss",
+      "severity": "minor_precision_loss",
+      "question_axis": "Daily joint output of ten workers in Smith’s example.",
+      "claims": [
+        {
+          "claim_index": 1,
+          "text": "The ten workers could make among them about forty-eight thousand pins in a day.",
+          "source_ids": [
+            "S2"
+          ],
+          "agent_verdict": "supported_number_but_lower_bound_softened",
+          "reason": "Ten workers, a day, and forty-eight thousand pins are grounded. The source says \"upwards of forty-eight thousand\"; the answer substitutes \"about forty-eight thousand\", losing the directional lower bound.",
+          "exact_supporting_quote_checks": [
+            {
+              "case_id": "smith-pins",
+              "claim_index": 1,
+              "source_id": "S2",
+              "evidence_id": "S2:E2",
+              "section_id": 120659,
+              "start": 3143,
+              "end": 3459,
+              "quote_sha256": "6c045859a14769bed72bac8138f62a4a588a55c1f8bc8e8061fdd66aa2e6182e",
+              "quote_characters": 316,
+              "checks": {
+                "within_captured_source": true,
+                "captured_source_slice_exact": true,
+                "live_section_slice_exact": true,
+                "source_is_claim_citation": true
+              }
+            }
+          ]
+        }
+      ],
+      "notes": [
+        "No tenfold/individual-output error appears here. Prefer retaining \"upwards of\" rather than treating an approximate count as identical to a lower-bound claim."
+      ],
+      "warnings": [],
+      "same_model_judge_supported": [
+        true
+      ],
+      "planning": {
+        "requested": true,
+        "used": true,
+        "reason": "validated_plan_candidates",
+        "ranking_strategy": "body-coverage-proximity-v1",
+        "response_language_hint": "en"
+      },
+      "reference_checks": [
+        {
+          "case_id": "smith-pins",
+          "reference_id": "output",
+          "book_id": "pg3300-full",
+          "section_id": 120659,
+          "canonical_reference_checks": {
+            "section_sha256_exact": true,
+            "anchor_offsets_exact": true,
+            "anchor_sha256_exact": true
+          },
+          "whole_anchor_in_captured_sources": [
+            "S2"
+          ],
+          "whole_anchor_in_selected_quotes": [
+            "S2:E2"
+          ],
+          "source_attribution_checks": [
+            {
+              "source_id": "S2",
+              "checks": {
+                "section_author": true,
+                "section_role": true,
+                "section_translator": true
+              }
+            }
+          ]
+        }
+      ],
+      "source_checks": [
+        {
+          "case_id": "smith-pins",
+          "source_id": "S1",
+          "passage_id": 893066,
+          "book_id": "pg3300-full",
+          "section_id": 120661,
+          "section_ordinal": 5,
+          "start": 1205,
+          "end": 2405,
+          "text_sha256": "2f11b4c8a272b7bae7fb3472e17450fc9d278d7568a04e6a98a7f6f0fc1edbc5",
+          "reader_url": "/?book=pg3300-full&section=120661&passage=893066",
+          "checks": {
+            "canonical_span_exact": true,
+            "bounds_valid": true,
+            "book_id_exact": true,
+            "section_ordinal_exact": true,
+            "section_title_exact": true,
+            "artifact_sha256_exact": true,
+            "content_sha256_exact": true,
+            "book_searchable": true,
+            "scope_allowed": true
+          }
+        },
+        {
+          "case_id": "smith-pins",
+          "source_id": "S2",
+          "passage_id": 893045,
+          "book_id": "pg3300-full",
+          "section_id": 120659,
+          "section_ordinal": 3,
+          "start": 2780,
+          "end": 3915,
+          "text_sha256": "d232b31b399269b716a81fa8c34a265a2200767ea52f12e6200d390377758c8f",
+          "reader_url": "/?book=pg3300-full&section=120659&passage=893045",
+          "checks": {
+            "canonical_span_exact": true,
+            "bounds_valid": true,
+            "book_id_exact": true,
+            "section_ordinal_exact": true,
+            "section_title_exact": true,
+            "artifact_sha256_exact": true,
+            "content_sha256_exact": true,
+            "book_searchable": true,
+            "scope_allowed": true
+          }
+        }
+      ],
+      "human_reviewed": false
+    },
+    {
+      "id": "darwin-struggle",
+      "question": "Does Darwin use struggle for existence only for direct combat, or in a broader sense? What does he include?",
+      "expected_answerable": true,
+      "response_status": "answered",
+      "capture_http_response_sha256": "2bb768522796267aba885f35123c0f781d7309f157bd496a90f63a707a809846",
+      "capture_timestamp": "2026-11-15T04:21:55.302741+00:00",
+      "parsed_response_canonical_json_sha256": "e3acd4754c95942f29ec040a7c9c74db6d46680454e2ba0f00140f65a72ca434",
+      "category": "largely_supported_with_interpretive_resource_gloss",
+      "severity": "minor_selected_quote_entailment_gap",
+      "question_axis": "Darwin’s broad/metaphorical use, including dependence and reproductive success, rather than combat alone.",
+      "claims": [
+        {
+          "claim_index": 1,
+          "text": "Darwin uses the term struggle for existence in a broad and metaphorical sense, including dependence of one being on another and not only individual survival but also success in leaving progeny.",
+          "source_ids": [
+            "S1"
+          ],
+          "agent_verdict": "supported",
+          "reason": "The selected first unit explicitly includes dependence and success in leaving progeny, in addition to individual life.",
+          "exact_supporting_quote_checks": [
+            {
+              "case_id": "darwin-struggle",
+              "claim_index": 1,
+              "source_id": "S1",
+              "evidence_id": "S1:E1",
+              "section_id": 145834,
+              "start": 4950,
+              "end": 5316,
+              "quote_sha256": "0abbe23e25668b5f83ae019207d7b055b3ba433601ab181c146c89386cd9b661",
+              "quote_characters": 366,
+              "checks": {
+                "within_captured_source": true,
+                "captured_source_slice_exact": true,
+                "live_section_slice_exact": true,
+                "source_is_claim_citation": true
+              }
+            }
+          ]
+        },
+        {
+          "claim_index": 2,
+          "text": "He includes cases such as a plant struggling against drought, which is more properly seen as dependence on moisture, and a plant struggling with other plants for limited resources.",
+          "source_ids": [
+            "S1"
+          ],
+          "agent_verdict": "mostly_supported_with_interpretive_gloss",
+          "reason": "Drought/dependence on moisture and competition with plants already covering the ground are explicit. The added phrase \"limited resources\" is an interpretive ecological gloss, rather than an explicit statement in this selected unit.",
+          "exact_supporting_quote_checks": [
+            {
+              "case_id": "darwin-struggle",
+              "claim_index": 2,
+              "source_id": "S1",
+              "evidence_id": "S1:E2",
+              "section_id": 145834,
+              "start": 5317,
+              "end": 5688,
+              "quote_sha256": "fb3ef597d52cd93eceef343fbfaf6202eb8a89a0f0e7161dd6eb9e0a39f76873",
+              "quote_characters": 371,
+              "checks": {
+                "within_captured_source": true,
+                "captured_source_slice_exact": true,
+                "live_section_slice_exact": true,
+                "source_is_claim_citation": true
+              }
+            }
+          ]
+        }
+      ],
+      "notes": [
+        "The next unselected canonical paragraphs discuss overproduction, inability of all offspring to survive, no artificial increase of food and insufficient room. They make a scarcity interpretation reasonable in chapter context, but they must not be silently substituted for the selected supporting quote.",
+        "One retrieval hypothesis contains a list-like apostrophe/comma fragment. This is a planner-format observation only; it does not prove that retrieval hypotheses were supplied to the answer writer as facts."
+      ],
+      "warnings": [],
+      "same_model_judge_supported": [
+        true,
+        true
+      ],
+      "planning": {
+        "requested": true,
+        "used": true,
+        "reason": "validated_plan_candidates",
+        "ranking_strategy": "body-coverage-proximity-v1",
+        "response_language_hint": "en"
+      },
+      "reference_checks": [
+        {
+          "case_id": "darwin-struggle",
+          "reference_id": "metaphorical",
+          "book_id": "pg1228-full",
+          "section_id": 145834,
+          "canonical_reference_checks": {
+            "section_sha256_exact": true,
+            "anchor_offsets_exact": true,
+            "anchor_sha256_exact": true
+          },
+          "whole_anchor_in_captured_sources": [
+            "S1"
+          ],
+          "whole_anchor_in_selected_quotes": [
+            "S1:E1"
+          ],
+          "source_attribution_checks": [
+            {
+              "source_id": "S1",
+              "checks": {
+                "section_author": true,
+                "section_role": true,
+                "section_translator": true
+              }
+            }
+          ]
+        },
+        {
+          "case_id": "darwin-struggle",
+          "reference_id": "progeny",
+          "book_id": "pg1228-full",
+          "section_id": 145834,
+          "canonical_reference_checks": {
+            "section_sha256_exact": true,
+            "anchor_offsets_exact": true,
+            "anchor_sha256_exact": true
+          },
+          "whole_anchor_in_captured_sources": [
+            "S1"
+          ],
+          "whole_anchor_in_selected_quotes": [
+            "S1:E1"
+          ],
+          "source_attribution_checks": [
+            {
+              "source_id": "S1",
+              "checks": {
+                "section_author": true,
+                "section_role": true,
+                "section_translator": true
+              }
+            }
+          ]
+        }
+      ],
+      "source_checks": [
+        {
+          "case_id": "darwin-struggle",
+          "source_id": "S1",
+          "passage_id": 1077493,
+          "book_id": "pg1228-full",
+          "section_id": 145834,
+          "section_ordinal": 7,
+          "start": 4950,
+          "end": 6415,
+          "text_sha256": "4cd090ace39500c8e2acd46824c0470255e603341813796db744e4fb15d6ed20",
+          "reader_url": "/?book=pg1228-full&section=145834&passage=1077493",
+          "checks": {
+            "canonical_span_exact": true,
+            "bounds_valid": true,
+            "book_id_exact": true,
+            "section_ordinal_exact": true,
+            "section_title_exact": true,
+            "artifact_sha256_exact": true,
+            "content_sha256_exact": true,
+            "book_searchable": true,
+            "scope_allowed": true
+          }
+        },
+        {
+          "case_id": "darwin-struggle",
+          "source_id": "S2",
+          "passage_id": 1078038,
+          "book_id": "pg1228-full",
+          "section_id": 145844,
+          "section_ordinal": 17,
+          "start": 40784,
+          "end": 42698,
+          "text_sha256": "9c2b95ea4b29580414566527c183d2711230a98c2f88713dd8dd57af09498264",
+          "reader_url": "/?book=pg1228-full&section=145844&passage=1078038",
+          "checks": {
+            "canonical_span_exact": true,
+            "bounds_valid": true,
+            "book_id_exact": true,
+            "section_ordinal_exact": true,
+            "section_title_exact": true,
+            "artifact_sha256_exact": true,
+            "content_sha256_exact": true,
+            "book_searchable": true,
+            "scope_allowed": true
+          }
+        }
+      ],
+      "human_reviewed": false
+    },
+    {
+      "id": "jowett-introduction",
+      "question": "In INTRODUCTION AND ANALYSIS to the Republic, which work is excepted when the Republic is called Plato’s longest work, and whose introduction is this?",
+      "expected_answerable": true,
+      "response_status": "answered",
+      "capture_http_response_sha256": "247bbc3f60b46b7ad6d15a8eccd6bd78c1cdf2851fe0622fe310e1ecf97b158e",
+      "capture_timestamp": "2026-11-15T04:22:15.719598+00:00",
+      "parsed_response_canonical_json_sha256": "32ec325f412ba6b75c8664616777710c5be861ac97251595076ac1031e209c75",
+      "category": "supported_direct_answer",
+      "severity": "none",
+      "question_axis": "The exception to the longest-work claim, and the editorial contributor who makes it.",
+      "claims": [
+        {
+          "claim_index": 1,
+          "text": "The Laws is excepted when the Republic is called Plato’s longest work, and the introduction in question is by Benjamin Jowett in the INTRODUCTION AND ANALYSIS section of the Republic.",
+          "source_ids": [
+            "S1"
+          ],
+          "agent_verdict": "supported_by_quote_and_contributor_metadata",
+          "reason": "The Laws is explicit in the quote. Benjamin Jowett is established by the source card’s guarded editorial attribution, not by the quote body alone; the answer correctly distinguishes him from book author Plato.",
+          "exact_supporting_quote_checks": [
+            {
+              "case_id": "jowett-introduction",
+              "claim_index": 1,
+              "source_id": "S1",
+              "evidence_id": "S1:E1",
+              "section_id": 167014,
+              "start": 0,
+              "end": 403,
+              "quote_sha256": "a9685b12c162122b11ba00e9e4b37fa51073e275a249c88634f38f78f22de9af",
+              "quote_characters": 403,
+              "checks": {
+                "within_captured_source": true,
+                "captured_source_slice_exact": true,
+                "live_section_slice_exact": true,
+                "source_is_claim_citation": true
+              }
+            }
+          ]
+        }
+      ],
+      "notes": [
+        "Attribution check uses the fixture’s expected section_author/section_role and matching canonical section."
+      ],
+      "warnings": [],
+      "same_model_judge_supported": [
+        true
+      ],
+      "planning": {
+        "requested": true,
+        "used": true,
+        "reason": "validated_plan_candidates",
+        "ranking_strategy": "body-coverage-proximity-v1",
+        "response_language_hint": "en"
+      },
+      "reference_checks": [
+        {
+          "case_id": "jowett-introduction",
+          "reference_id": "laws",
+          "book_id": "pg1497-full",
+          "section_id": 167014,
+          "canonical_reference_checks": {
+            "section_sha256_exact": true,
+            "anchor_offsets_exact": true,
+            "anchor_sha256_exact": true
+          },
+          "whole_anchor_in_captured_sources": [
+            "S1"
+          ],
+          "whole_anchor_in_selected_quotes": [
+            "S1:E1"
+          ],
+          "source_attribution_checks": [
+            {
+              "source_id": "S1",
+              "checks": {
+                "section_author": true,
+                "section_role": true,
+                "section_translator": true
+              }
+            },
+            {
+              "source_id": "S2",
+              "checks": {
+                "section_author": true,
+                "section_role": true,
+                "section_translator": true
+              }
+            }
+          ]
+        }
+      ],
+      "source_checks": [
+        {
+          "case_id": "jowett-introduction",
+          "source_id": "S1",
+          "passage_id": 1246962,
+          "book_id": "pg1497-full",
+          "section_id": 167014,
+          "section_ordinal": 2,
+          "start": 0,
+          "end": 1080,
+          "text_sha256": "105c0d25572177f996225a1f766c0d135fe44222ecf915c1c95cb81f163d2156",
+          "reader_url": "/?book=pg1497-full&section=167014&passage=1246962",
+          "checks": {
+            "canonical_span_exact": true,
+            "bounds_valid": true,
+            "book_id_exact": true,
+            "section_ordinal_exact": true,
+            "section_title_exact": true,
+            "artifact_sha256_exact": true,
+            "content_sha256_exact": true,
+            "book_searchable": true,
+            "scope_allowed": true
+          }
+        },
+        {
+          "case_id": "jowett-introduction",
+          "source_id": "S2",
+          "passage_id": 1246975,
+          "book_id": "pg1497-full",
+          "section_id": 167014,
+          "section_ordinal": 2,
+          "start": 17280,
+          "end": 18433,
+          "text_sha256": "7302c731afa7df1c08f7c265f5c09b2f86f8bd2109eb4a7e27db79ca3b48914d",
+          "reader_url": "/?book=pg1497-full&section=167014&passage=1246975",
+          "checks": {
+            "canonical_span_exact": true,
+            "bounds_valid": true,
+            "book_id_exact": true,
+            "section_ordinal_exact": true,
+            "section_title_exact": true,
+            "artifact_sha256_exact": true,
+            "content_sha256_exact": true,
+            "book_searchable": true,
+            "scope_allowed": true
+          }
+        }
+      ],
+      "human_reviewed": false
+    },
+    {
+      "id": "ru-query-smith-dinner",
+      "question": "Почему, по Адаму Смиту, мясник, пивовар и булочник обеспечивают нам обед: из благожелательности или из собственного интереса?",
+      "expected_answerable": true,
+      "response_status": "answered",
+      "capture_http_response_sha256": "63a7f6cc4c6918285eae1834dab4759ef6afc78caec6823d316194b55f5f0909",
+      "capture_timestamp": "2026-11-15T04:22:37.828810+00:00",
+      "parsed_response_canonical_json_sha256": "a2f9765cf1560a76c2e050d3b01c1e1317f1dd284f451301af56cb46b7089d13",
+      "category": "supported_direct_answer",
+      "severity": "none",
+      "question_axis": "The butcher, brewer and baker’s own interest rather than benevolence, answered in Russian.",
+      "claims": [
+        {
+          "claim_index": 1,
+          "text": "По Адаму Смиту, мясник, пивовар и булочник обеспечивают нам обед из собственного интереса, а не из благожелательности.",
+          "source_ids": [
+            "S1"
+          ],
+          "agent_verdict": "supported",
+          "reason": "The selected English quote explicitly contrasts benevolence with regard to their own interest. The Russian answer preserves the three providers, motive and negation.",
+          "exact_supporting_quote_checks": [
+            {
+              "case_id": "ru-query-smith-dinner",
+              "claim_index": 1,
+              "source_id": "S1",
+              "evidence_id": "S1:E2",
+              "section_id": 120660,
+              "start": 2832,
+              "end": 3205,
+              "quote_sha256": "0c03a510c462d549b7570d1f5fb48b5fea68dbbbfe38f07113caca60c7f2d4fc",
+              "quote_characters": 373,
+              "checks": {
+                "within_captured_source": true,
+                "captured_source_slice_exact": true,
+                "live_section_slice_exact": true,
+                "source_is_claim_citation": true
+              }
+            }
+          ]
+        }
+      ],
+      "notes": [
+        "The answer is in the language of the Russian question. Its grounding comes from the retrieved passage, not from the planner hypothesis."
+      ],
+      "warnings": [],
+      "same_model_judge_supported": [
+        true
+      ],
+      "planning": {
+        "requested": true,
+        "used": true,
+        "reason": "validated_plan_candidates",
+        "ranking_strategy": "body-coverage-proximity-v1",
+        "response_language_hint": "ru"
+      },
+      "reference_checks": [
+        {
+          "case_id": "ru-query-smith-dinner",
+          "reference_id": "interest",
+          "book_id": "pg3300-full",
+          "section_id": 120660,
+          "canonical_reference_checks": {
+            "section_sha256_exact": true,
+            "anchor_offsets_exact": true,
+            "anchor_sha256_exact": true
+          },
+          "whole_anchor_in_captured_sources": [
+            "S1"
+          ],
+          "whole_anchor_in_selected_quotes": [
+            "S1:E2"
+          ],
+          "source_attribution_checks": [
+            {
+              "source_id": "S1",
+              "checks": {
+                "section_author": true,
+                "section_role": true,
+                "section_translator": true
+              }
+            }
+          ]
+        }
+      ],
+      "source_checks": [
+        {
+          "case_id": "ru-query-smith-dinner",
+          "source_id": "S1",
+          "passage_id": 893061,
+          "book_id": "pg3300-full",
+          "section_id": 120660,
+          "section_ordinal": 4,
+          "start": 2454,
+          "end": 4184,
+          "text_sha256": "b78747c188842d3eb2e317e1f57d13307b8ea4a3334735172f48ad465506cd72",
+          "reader_url": "/?book=pg3300-full&section=120660&passage=893061",
+          "checks": {
+            "canonical_span_exact": true,
+            "bounds_valid": true,
+            "book_id_exact": true,
+            "section_ordinal_exact": true,
+            "section_title_exact": true,
+            "artifact_sha256_exact": true,
+            "content_sha256_exact": true,
+            "book_searchable": true,
+            "scope_allowed": true
+          }
+        },
+        {
+          "case_id": "ru-query-smith-dinner",
+          "source_id": "S2",
+          "passage_id": 893074,
+          "book_id": "pg3300-full",
+          "section_id": 120662,
+          "section_ordinal": 6,
+          "start": 0,
+          "end": 1203,
+          "text_sha256": "57bb64445202aaae135c8a9d9ce65d2ae034f3defb899c78f39ee2d2ab60be0b",
+          "reader_url": "/?book=pg3300-full&section=120662&passage=893074",
+          "checks": {
+            "canonical_span_exact": true,
+            "bounds_valid": true,
+            "book_id_exact": true,
+            "section_ordinal_exact": true,
+            "section_title_exact": true,
+            "artifact_sha256_exact": true,
+            "content_sha256_exact": true,
+            "book_searchable": true,
+            "scope_allowed": true
+          }
+        }
+      ],
+      "human_reviewed": false
+    },
+    {
+      "id": "compare-property",
+      "question": "Compare Smith’s description of property in a person’s own labour with Marx and Engels’ distinction between property generally and bourgeois property. What kinds of property do these passages discuss?",
+      "expected_answerable": true,
+      "response_status": "answered",
+      "capture_http_response_sha256": "086b84797ed980da1dde4ef68292fb5f23b2d97a128411e905c650f5f8c9ee89",
+      "capture_timestamp": "2026-11-15T04:23:21.891270+00:00",
+      "parsed_response_canonical_json_sha256": "8edbccf8611e336c2d4b8372c84f0f588699abb8fade32cf268ec0cea642d663",
+      "category": "partly_supported_comparison_wrong_smith_axis",
+      "severity": "major_question_axis_and_entailment_failure",
+      "question_axis": "Compare Smith’s property in one’s own labour with Marx/Engels on bourgeois property versus property generally.",
+      "claims": [
+        {
+          "claim_index": 1,
+          "text": "Smith discusses property in the context of labour, particularly how property derived from one’s own labour is essential for productive work, and contrasts it with property acquired through slave labour, which he views as less productive and more costly in the long run.",
+          "source_ids": [
+            "S1",
+            "S3"
+          ],
+          "agent_verdict": "unsupported_synthesis_and_wrong_requested_axis",
+          "reason": "The selected Smith passages concern incentives of a person unable to acquire property, the expense of slave labour, and transfer taxes reducing productive capital. They do not support the answer’s asserted comparison between property derived from one’s own labour and property acquired through slave labour. The requested own-labour/patrimony argument is missing from all captured passages.",
+          "exact_supporting_quote_checks": [
+            {
+              "case_id": "compare-property",
+              "claim_index": 1,
+              "source_id": "S1",
+              "evidence_id": "S1:E2",
+              "section_id": 120684,
+              "start": 10954,
+              "end": 11235,
+              "quote_sha256": "d33b79022732f7cc9798e756d7555af8b776a7adec53303b171599e70a4d1937",
+              "quote_characters": 281,
+              "checks": {
+                "within_captured_source": true,
+                "captured_source_slice_exact": true,
+                "live_section_slice_exact": true,
+                "source_is_claim_citation": true
+              }
+            },
+            {
+              "case_id": "compare-property",
+              "claim_index": 1,
+              "source_id": "S1",
+              "evidence_id": "S1:E1",
+              "section_id": 120684,
+              "start": 10620,
+              "end": 10953,
+              "quote_sha256": "7b1ed0e18099474a295fd5e0e7b23bf634e217867ce5db6939c81f296ad9cc08",
+              "quote_characters": 333,
+              "checks": {
+                "within_captured_source": true,
+                "captured_source_slice_exact": true,
+                "live_section_slice_exact": true,
+                "source_is_claim_citation": true
+              }
+            },
+            {
+              "case_id": "compare-property",
+              "claim_index": 1,
+              "source_id": "S3",
+              "evidence_id": "S3:E1",
+              "section_id": 120709,
+              "start": 11424,
+              "end": 11843,
+              "quote_sha256": "31e812b2dc3caf2160d2baaa17779db322f85c407a8a84b163bcb509987547fa",
+              "quote_characters": 419,
+              "checks": {
+                "within_captured_source": true,
+                "captured_source_slice_exact": true,
+                "live_section_slice_exact": true,
+                "source_is_claim_citation": true
+              }
+            }
+          ]
+        },
+        {
+          "claim_index": 2,
+          "text": "Marx and Engels distinguish between property generally and bourgeois property, identifying bourgeois property as the final and most complete form of class-based property rooted in exploitation, while affirming that all property relations have historically changed with social conditions.",
+          "source_ids": [
+            "S2"
+          ],
+          "agent_verdict": "supported",
+          "reason": "The Marx/Engels units explicitly distinguish abolishing bourgeois property from abolishing property generally, describe historical changes in property relations, and connect bourgeois property with class antagonism and exploitation.",
+          "exact_supporting_quote_checks": [
+            {
+              "case_id": "compare-property",
+              "claim_index": 2,
+              "source_id": "S2",
+              "evidence_id": "S2:E2",
+              "section_id": 157379,
+              "start": 1655,
+              "end": 2045,
+              "quote_sha256": "2d670077271b3a4a5a6294efb99fde0a3a9be8c605c1250ea992950c23b122f7",
+              "quote_characters": 390,
+              "checks": {
+                "within_captured_source": true,
+                "captured_source_slice_exact": true,
+                "live_section_slice_exact": true,
+                "source_is_claim_citation": true
+              }
+            },
+            {
+              "case_id": "compare-property",
+              "claim_index": 2,
+              "source_id": "S2",
+              "evidence_id": "S2:E3",
+              "section_id": 157379,
+              "start": 2047,
+              "end": 2267,
+              "quote_sha256": "57573d9e77f58d78e9b83127632a0169feb314e686b704c29954118bd1a46bd9",
+              "quote_characters": 220,
+              "checks": {
+                "within_captured_source": true,
+                "captured_source_slice_exact": true,
+                "live_section_slice_exact": true,
+                "source_is_claim_citation": true
+              }
+            },
+            {
+              "case_id": "compare-property",
+              "claim_index": 2,
+              "source_id": "S2",
+              "evidence_id": "S2:E4",
+              "section_id": 157379,
+              "start": 2268,
+              "end": 2482,
+              "quote_sha256": "9d6b7bd5e0b224be8e3b0bf99a58ae76275e7db97de2282e6ef3e4fd741477b3",
+              "quote_characters": 214,
+              "checks": {
+                "within_captured_source": true,
+                "captured_source_slice_exact": true,
+                "live_section_slice_exact": true,
+                "source_is_claim_citation": true
+              }
+            }
+          ]
+        }
+      ],
+      "notes": [
+        "The same-model grounding judge returned [true, true]; that did not detect the Smith entailment/question-axis problem. The correct Marx/Engels half does not make the two-author comparison adequate.",
+        "The missing own-labour reference is a retrieval/budget failure in this capture. Do not infer that this argument is absent from Smith’s book."
+      ],
+      "warnings": [],
+      "same_model_judge_supported": [
+        true,
+        true
+      ],
+      "planning": {
+        "requested": true,
+        "used": true,
+        "reason": "validated_plan_candidates",
+        "ranking_strategy": "body-coverage-proximity-v1",
+        "response_language_hint": "en"
+      },
+      "reference_checks": [
+        {
+          "case_id": "compare-property",
+          "reference_id": "labour",
+          "book_id": "pg3300-full",
+          "section_id": 120670,
+          "canonical_reference_checks": {
+            "section_sha256_exact": true,
+            "anchor_offsets_exact": true,
+            "anchor_sha256_exact": true
+          },
+          "whole_anchor_in_captured_sources": [],
+          "whole_anchor_in_selected_quotes": [],
+          "source_attribution_checks": []
+        },
+        {
+          "case_id": "compare-property",
+          "reference_id": "bourgeois",
+          "book_id": "pg61-full",
+          "section_id": 157379,
+          "canonical_reference_checks": {
+            "section_sha256_exact": true,
+            "anchor_offsets_exact": true,
+            "anchor_sha256_exact": true
+          },
+          "whole_anchor_in_captured_sources": [
+            "S2"
+          ],
+          "whole_anchor_in_selected_quotes": [
+            "S2:E3"
+          ],
+          "source_attribution_checks": [
+            {
+              "source_id": "S2",
+              "checks": {
+                "section_author": true,
+                "section_role": true,
+                "section_translator": true
+              }
+            },
+            {
+              "source_id": "S4",
+              "checks": {
+                "section_author": true,
+                "section_role": true,
+                "section_translator": true
+              }
+            }
+          ]
+        }
+      ],
+      "source_checks": [
+        {
+          "case_id": "compare-property",
+          "source_id": "S1",
+          "passage_id": 893723,
+          "book_id": "pg3300-full",
+          "section_id": 120684,
+          "section_ordinal": 28,
+          "start": 10620,
+          "end": 11789,
+          "text_sha256": "5ef90a677fbb5414679d0e846adbe1d703b0fed70cdd8426fa8f1d899750849d",
+          "reader_url": "/?book=pg3300-full&section=120684&passage=893723",
+          "checks": {
+            "canonical_span_exact": true,
+            "bounds_valid": true,
+            "book_id_exact": true,
+            "section_ordinal_exact": true,
+            "section_title_exact": true,
+            "artifact_sha256_exact": true,
+            "content_sha256_exact": true,
+            "book_searchable": true,
+            "scope_allowed": true
+          }
+        },
+        {
+          "case_id": "compare-property",
+          "source_id": "S2",
+          "passage_id": 1154184,
+          "book_id": "pg61-full",
+          "section_id": 157379,
+          "section_ordinal": 4,
+          "start": 1258,
+          "end": 2482,
+          "text_sha256": "c89f7625f1f1a792a79d43b191f5d9e6c12a2d4d9b5c94ef63b4eb29d03da021",
+          "reader_url": "/?book=pg61-full&section=157379&passage=1154184",
+          "checks": {
+            "canonical_span_exact": true,
+            "bounds_valid": true,
+            "book_id_exact": true,
+            "section_ordinal_exact": true,
+            "section_title_exact": true,
+            "artifact_sha256_exact": true,
+            "content_sha256_exact": true,
+            "book_searchable": true,
+            "scope_allowed": true
+          }
+        },
+        {
+          "case_id": "compare-property",
+          "source_id": "S3",
+          "passage_id": 894614,
+          "book_id": "pg3300-full",
+          "section_id": 120709,
+          "section_ordinal": 53,
+          "start": 11424,
+          "end": 13405,
+          "text_sha256": "8d920fa9575a979824762540ef8891c483687b1c5223cc9518581c3061124772",
+          "reader_url": "/?book=pg3300-full&section=120709&passage=894614",
+          "checks": {
+            "canonical_span_exact": true,
+            "bounds_valid": true,
+            "book_id_exact": true,
+            "section_ordinal_exact": true,
+            "section_title_exact": true,
+            "artifact_sha256_exact": true,
+            "content_sha256_exact": true,
+            "book_searchable": true,
+            "scope_allowed": true
+          }
+        },
+        {
+          "case_id": "compare-property",
+          "source_id": "S4",
+          "passage_id": 1154198,
+          "book_id": "pg61-full",
+          "section_id": 157379,
+          "section_ordinal": 4,
+          "start": 17622,
+          "end": 18665,
+          "text_sha256": "9bff6ae499d80e94d3cb2018f8e336c38a01fdded9a19f9891ea64c2c8355f68",
+          "reader_url": "/?book=pg61-full&section=157379&passage=1154198",
+          "checks": {
+            "canonical_span_exact": true,
+            "bounds_valid": true,
+            "book_id_exact": true,
+            "section_ordinal_exact": true,
+            "section_title_exact": true,
+            "artifact_sha256_exact": true,
+            "content_sha256_exact": true,
+            "book_searchable": true,
+            "scope_allowed": true
+          }
+        }
+      ],
+      "human_reviewed": false
+    },
+    {
+      "id": "compare-origin-editions",
+      "question": "How does the wording about life’s original powers differ in the concluding paragraphs of the 1859 and sixth editions of Origin of Species? Quote the difference and identify the editions.",
+      "expected_answerable": true,
+      "response_status": "abstained",
+      "capture_http_response_sha256": "28ecd29ae444a2a08cd8eeb16f532368e3f3439ae4d7ac20118a9dedb10e5bf2",
+      "capture_timestamp": "2026-11-15T04:24:02.677543+00:00",
+      "parsed_response_canonical_json_sha256": "4348bbb2d14fb65ce996e9fa914eb3541ec2261a65b74ba7c7cfc3b7c5f9f6e8",
+      "category": "answerable_but_abstained_after_grounding_gate",
+      "severity": "major_answer_completeness_failure",
+      "question_axis": "A narrow comparison of the two concluding passages, identifying first and sixth editions.",
+      "claims": [],
+      "notes": [
+        "Both exact reference anchors are present in captured S3 and S4. The first-edition conclusion says \"breathed into\"; the sixth says \"breathed by the Creator into\". Retrieval therefore supplied the requested contrast.",
+        "The response abstains with a grounding-check warning and same-model results [true, false]. Rejected draft claims are not in this public response transcript, so this review cannot identify their precise semantic defect or call the rejection false without inspecting a separately retained draft.",
+        "This is a failure to deliver an answer to an answerable retrieved comparison, not an unsupported released claim. No whole-book claim that Creator is absent from an edition is justified or released."
+      ],
+      "warnings": [
+        "Модель не подтвердила выводы по опорным цитатам. Проверьте найденные фрагменты."
+      ],
+      "same_model_judge_supported": [
+        true,
+        false
+      ],
+      "planning": {
+        "requested": true,
+        "used": true,
+        "reason": "validated_plan_candidates",
+        "ranking_strategy": "body-coverage-proximity-v1",
+        "response_language_hint": "en"
+      },
+      "reference_checks": [
+        {
+          "case_id": "compare-origin-editions",
+          "reference_id": "first-edition",
+          "book_id": "pg1228-full",
+          "section_id": 145845,
+          "canonical_reference_checks": {
+            "section_sha256_exact": true,
+            "anchor_offsets_exact": true,
+            "anchor_sha256_exact": true
+          },
+          "whole_anchor_in_captured_sources": [
+            "S3"
+          ],
+          "whole_anchor_in_selected_quotes": [],
+          "source_attribution_checks": [
+            {
+              "source_id": "S3",
+              "checks": {
+                "section_author": true,
+                "section_role": true,
+                "section_translator": true
+              }
+            }
+          ]
+        },
+        {
+          "case_id": "compare-origin-editions",
+          "reference_id": "sixth-edition",
+          "book_id": "pg2009-full",
+          "section_id": 165376,
+          "canonical_reference_checks": {
+            "section_sha256_exact": true,
+            "anchor_offsets_exact": true,
+            "anchor_sha256_exact": true
+          },
+          "whole_anchor_in_captured_sources": [
+            "S4"
+          ],
+          "whole_anchor_in_selected_quotes": [],
+          "source_attribution_checks": [
+            {
+              "source_id": "S2",
+              "checks": {
+                "section_author": true,
+                "section_role": true,
+                "section_translator": true
+              }
+            },
+            {
+              "source_id": "S4",
+              "checks": {
+                "section_author": true,
+                "section_role": true,
+                "section_translator": true
+              }
+            }
+          ]
+        }
+      ],
+      "source_checks": [
+        {
+          "case_id": "compare-origin-editions",
+          "source_id": "S1",
+          "passage_id": 1077398,
+          "book_id": "pg1228-full",
+          "section_id": 145830,
+          "section_ordinal": 3,
+          "start": 0,
+          "end": 1198,
+          "text_sha256": "6125b557e598d460768f837f62602718182b5887aed850d9e81aa91484da8892",
+          "reader_url": "/?book=pg1228-full&section=145830&passage=1077398",
+          "checks": {
+            "canonical_span_exact": true,
+            "bounds_valid": true,
+            "book_id_exact": true,
+            "section_ordinal_exact": true,
+            "section_title_exact": true,
+            "artifact_sha256_exact": true,
+            "content_sha256_exact": true,
+            "book_searchable": true,
+            "scope_allowed": true
+          }
+        },
+        {
+          "case_id": "compare-origin-editions",
+          "source_id": "S2",
+          "passage_id": 1234855,
+          "book_id": "pg2009-full",
+          "section_id": 165376,
+          "section_ordinal": 20,
+          "start": 0,
+          "end": 1501,
+          "text_sha256": "66d0670823264fd1c0bde61a72b5d6c51a58b8cf58f01e971b3bc3b6b2dc22a4",
+          "reader_url": "/?book=pg2009-full&section=165376&passage=1234855",
+          "checks": {
+            "canonical_span_exact": true,
+            "bounds_valid": true,
+            "book_id_exact": true,
+            "section_ordinal_exact": true,
+            "section_title_exact": true,
+            "artifact_sha256_exact": true,
+            "content_sha256_exact": true,
+            "book_searchable": true,
+            "scope_allowed": true
+          }
+        },
+        {
+          "case_id": "compare-origin-editions",
+          "source_id": "S3",
+          "passage_id": 1078120,
+          "book_id": "pg1228-full",
+          "section_id": 145845,
+          "section_ordinal": 18,
+          "start": 56432,
+          "end": 57750,
+          "text_sha256": "b2c34e79146e5bf1d139256c1ad453f4d3b5e5ff78db6a1fef667c2c84c99f26",
+          "reader_url": "/?book=pg1228-full&section=145845&passage=1078120",
+          "checks": {
+            "canonical_span_exact": true,
+            "bounds_valid": true,
+            "book_id_exact": true,
+            "section_ordinal_exact": true,
+            "section_title_exact": true,
+            "artifact_sha256_exact": true,
+            "content_sha256_exact": true,
+            "book_searchable": true,
+            "scope_allowed": true
+          }
+        },
+        {
+          "case_id": "compare-origin-editions",
+          "source_id": "S4",
+          "passage_id": 1234908,
+          "book_id": "pg2009-full",
+          "section_id": 165376,
+          "section_ordinal": 20,
+          "start": 67532,
+          "end": 68854,
+          "text_sha256": "988cac2a0053cc8ac6f1d88cc70a55b56e7c36edde4dcbaadfaab8f9c455572e",
+          "reader_url": "/?book=pg2009-full&section=165376&passage=1234908",
+          "checks": {
+            "canonical_span_exact": true,
+            "bounds_valid": true,
+            "book_id_exact": true,
+            "section_ordinal_exact": true,
+            "section_title_exact": true,
+            "artifact_sha256_exact": true,
+            "content_sha256_exact": true,
+            "book_searchable": true,
+            "scope_allowed": true
+          }
+        }
+      ],
+      "human_reviewed": false
+    },
+    {
+      "id": "wrong-topic-alice",
+      "question": "What mathematical formula for mass–energy equivalence does Alice’s Adventures in Wonderland derive?",
+      "expected_answerable": false,
+      "response_status": "abstained",
+      "capture_http_response_sha256": "4e736ae582050ef35b7a9c982a4005f1988a56971bde8351ca1f0046669c5008",
+      "capture_timestamp": "2026-11-15T04:24:13.789403+00:00",
+      "parsed_response_canonical_json_sha256": "157761f0c01abdd4708192bc966b87b6160ca77ba64f2c60130b2f18048b97a7",
+      "category": "appropriate_scoped_abstention",
+      "severity": "none",
+      "question_axis": "A mass–energy formula allegedly derived in Alice.",
+      "claims": [],
+      "notes": [
+        "The captured sources concern Alice’s adventures and dream, not the requested formula. The generator returns an abstention without an availability/invalid-output warning.",
+        "No remembered formula and no unsupported assertion of universal or whole-library absence is released. The reviewed basis is the selected-book evidence, not proof of exhaustive absence."
+      ],
+      "warnings": [],
+      "same_model_judge_supported": null,
+      "planning": {
+        "requested": true,
+        "used": true,
+        "reason": "validated_plan_candidates",
+        "ranking_strategy": "body-coverage-proximity-v1",
+        "response_language_hint": "en"
+      },
+      "reference_checks": [],
+      "source_checks": [
+        {
+          "case_id": "wrong-topic-alice",
+          "source_id": "S1",
+          "passage_id": 885026,
+          "book_id": "pg11-full",
+          "section_id": 119772,
+          "section_ordinal": 12,
+          "start": 8500,
+          "end": 9713,
+          "text_sha256": "59a3edc93f98d72e588910f87c416e27b5810cbbaed40169aba0898c14221fad",
+          "reader_url": "/?book=pg11-full&section=119772&passage=885026",
+          "checks": {
+            "canonical_span_exact": true,
+            "bounds_valid": true,
+            "book_id_exact": true,
+            "section_ordinal_exact": true,
+            "section_title_exact": true,
+            "artifact_sha256_exact": true,
+            "content_sha256_exact": true,
+            "book_searchable": true,
+            "scope_allowed": true
+          }
+        },
+        {
+          "case_id": "wrong-topic-alice",
+          "source_id": "S2",
+          "passage_id": 885007,
+          "book_id": "pg11-full",
+          "section_id": 119770,
+          "section_ordinal": 10,
+          "start": 6120,
+          "end": 7400,
+          "text_sha256": "3b3a824b79fddf2a7580ce4bc70b05a50f7e49c51e37c540f8b3f73448758f06",
+          "reader_url": "/?book=pg11-full&section=119770&passage=885007",
+          "checks": {
+            "canonical_span_exact": true,
+            "bounds_valid": true,
+            "book_id_exact": true,
+            "section_ordinal_exact": true,
+            "section_title_exact": true,
+            "artifact_sha256_exact": true,
+            "content_sha256_exact": true,
+            "book_searchable": true,
+            "scope_allowed": true
+          }
+        }
+      ],
+      "human_reviewed": false
+    },
+    {
+      "id": "wrong-topic-smith",
+      "question": "Which Python function for SHA-256 hashing does Adam Smith recommend in The Wealth of Nations?",
+      "expected_answerable": false,
+      "response_status": "abstained",
+      "capture_http_response_sha256": "4ed6c6247b4b1585fdf78813cbe9139b3def5d1c669744f1ed65e0244bc9fb4e",
+      "capture_timestamp": "2026-11-15T04:24:24.418415+00:00",
+      "parsed_response_canonical_json_sha256": "89584f3813098cb1d36bad8a84cc97b2dabd1320528292cf90968591540729bd",
+      "category": "appropriate_scoped_abstention",
+      "severity": "none",
+      "question_axis": "A Python SHA-256 function allegedly recommended by Smith.",
+      "claims": [],
+      "notes": [
+        "The captured sources concern wealth, money, metals and monetary functions, not a Python hashing function. The generator returns an abstention without an availability/invalid-output warning.",
+        "This is a scoped evidential abstention, not a claimed exhaustive search of every book or section."
+      ],
+      "warnings": [],
+      "same_model_judge_supported": null,
+      "planning": {
+        "requested": true,
+        "used": true,
+        "reason": "validated_plan_candidates",
+        "ranking_strategy": "body-coverage-proximity-v1",
+        "response_language_hint": "en"
+      },
+      "reference_checks": [],
+      "source_checks": [
+        {
+          "case_id": "wrong-topic-smith",
+          "source_id": "S1",
+          "passage_id": 893782,
+          "book_id": "pg3300-full",
+          "section_id": 120688,
+          "section_ordinal": 32,
+          "start": 0,
+          "end": 1030,
+          "text_sha256": "cfff5b5028452826fee0a3ed97b58ebd5da2b7f07ed1c8b4fcd8d829c95be35b",
+          "reader_url": "/?book=pg3300-full&section=120688&passage=893782",
+          "checks": {
+            "canonical_span_exact": true,
+            "bounds_valid": true,
+            "book_id_exact": true,
+            "section_ordinal_exact": true,
+            "section_title_exact": true,
+            "artifact_sha256_exact": true,
+            "content_sha256_exact": true,
+            "book_searchable": true,
+            "scope_allowed": true
+          }
+        },
+        {
+          "case_id": "wrong-topic-smith",
+          "source_id": "S2",
+          "passage_id": 893077,
+          "book_id": "pg3300-full",
+          "section_id": 120662,
+          "section_ordinal": 6,
+          "start": 4310,
+          "end": 5012,
+          "text_sha256": "1ae3e2c930b98e669b845965d4a306f814d14386721050113954527bea1435c8",
+          "reader_url": "/?book=pg3300-full&section=120662&passage=893077",
+          "checks": {
+            "canonical_span_exact": true,
+            "bounds_valid": true,
+            "book_id_exact": true,
+            "section_ordinal_exact": true,
+            "section_title_exact": true,
+            "artifact_sha256_exact": true,
+            "content_sha256_exact": true,
+            "book_searchable": true,
+            "scope_allowed": true
+          }
+        }
+      ],
+      "human_reviewed": false
+    },
+    {
+      "id": "ru-chameleon-owner",
+      "question": "Что повар Прохор в конце концов говорит о владельце собаки в «Хамелеоне»?",
+      "expected_answerable": true,
+      "response_status": "answered",
+      "capture_http_response_sha256": "7d8f7beb5d3d8434d88a87bb1afaca7c234e8ade6f8ee2071dc2e87becc8fcf3",
+      "capture_timestamp": "2026-11-15T04:24:51.864548+00:00",
+      "parsed_response_canonical_json_sha256": "cf105b168b412153939cf9b53bf6ee3879d5aba707103d2db3cc86dbfeb853c9",
+      "category": "supported_answer_with_contextual_resolution",
+      "severity": "minor_selected_quote_context_dependency",
+      "question_axis": "Prokhor’s final identification of the dog’s owner, despite the crowd’s earlier guess.",
+      "claims": [
+        {
+          "claim_index": 1,
+          "text": "Прохор говорит, что собака не ихняя, а принадлежит брату генерала Жигалова, который недавно приехал в гости.",
+          "source_ids": [
+            "S1"
+          ],
+          "agent_verdict": "core_fact_supported_with_some_details_outside_selected_unit",
+          "reason": "The selected unit identifies the general’s recently arrived brother and the visit. \"Not ours\" is just before the selected unit in captured S1. The surname Zhigalov is in captured S2, which the claim does not cite. These contextual details are supported by retrieved/canonical context, but are not all literally in the selected supporting quote.",
+          "exact_supporting_quote_checks": [
+            {
+              "case_id": "ru-chameleon-owner",
+              "claim_index": 1,
+              "source_id": "S1",
+              "evidence_id": "S1:E3",
+              "section_id": 343407,
+              "start": 5074,
+              "end": 5433,
+              "quote_sha256": "66a13a04d485d9f8659ac7f3b62724fd76e961ac3494c5c9e5ab65e1b7b3ef67",
+              "quote_characters": 359,
+              "checks": {
+                "within_captured_source": true,
+                "captured_source_slice_exact": true,
+                "live_section_slice_exact": true,
+                "source_is_claim_citation": true
+              }
+            }
+          ]
+        }
+      ],
+      "notes": [
+        "The core final ownership answer is correct and not confused with the earlier crowd’s claim that the dog belongs to the general himself.",
+        "Strict whole-reference containment is false for the selected quote because the fixture anchor starts with \"Это не наша\" just before it; this is a citation-boundary caveat, not a wrong-owner answer."
+      ],
+      "warnings": [
+        "У поиска есть ограничения; ответ основан только на показанных найденных фрагментах."
+      ],
+      "same_model_judge_supported": [
+        true
+      ],
+      "planning": {
+        "requested": true,
+        "used": true,
+        "reason": "validated_plan_candidates",
+        "ranking_strategy": "body-coverage-proximity-v1",
+        "response_language_hint": "ru"
+      },
+      "reference_checks": [
+        {
+          "case_id": "ru-chameleon-owner",
+          "reference_id": "owner",
+          "book_id": "wsru-chameleon-6a5f80896084",
+          "section_id": 343407,
+          "canonical_reference_checks": {
+            "section_sha256_exact": true,
+            "anchor_offsets_exact": true,
+            "anchor_sha256_exact": true
+          },
+          "whole_anchor_in_captured_sources": [
+            "S1"
+          ],
+          "whole_anchor_in_selected_quotes": [],
+          "source_attribution_checks": [
+            {
+              "source_id": "S1",
+              "checks": {
+                "section_author": true,
+                "section_role": true,
+                "section_translator": true
+              }
+            },
+            {
+              "source_id": "S2",
+              "checks": {
+                "section_author": true,
+                "section_role": true,
+                "section_translator": true
+              }
+            }
+          ]
+        }
+      ],
+      "source_checks": [
+        {
+          "case_id": "ru-chameleon-owner",
+          "source_id": "S1",
+          "passage_id": 2576410,
+          "book_id": "wsru-chameleon-6a5f80896084",
+          "section_id": 343407,
+          "section_ordinal": 1,
+          "start": 4281,
+          "end": 5781,
+          "text_sha256": "922352de28e7a36b9f3551f99a5d244cf6117d51742da00c1da874986d731500",
+          "reader_url": "/?book=wsru-chameleon-6a5f80896084&section=343407&passage=2576410",
+          "checks": {
+            "canonical_span_exact": true,
+            "bounds_valid": true,
+            "book_id_exact": true,
+            "section_ordinal_exact": true,
+            "section_title_exact": true,
+            "artifact_sha256_exact": true,
+            "content_sha256_exact": true,
+            "book_searchable": true,
+            "scope_allowed": true
+          }
+        },
+        {
+          "case_id": "ru-chameleon-owner",
+          "source_id": "S2",
+          "passage_id": 2576408,
+          "book_id": "wsru-chameleon-6a5f80896084",
+          "section_id": 343407,
+          "section_ordinal": 1,
+          "start": 2129,
+          "end": 3258,
+          "text_sha256": "a0405d04ca813e3942c626c66ce1a70e09b18195c35ab0a0fc7d0bd7e95d0f55",
+          "reader_url": "/?book=wsru-chameleon-6a5f80896084&section=343407&passage=2576408",
+          "checks": {
+            "canonical_span_exact": true,
+            "bounds_valid": true,
+            "book_id_exact": true,
+            "section_ordinal_exact": true,
+            "section_title_exact": true,
+            "artifact_sha256_exact": true,
+            "content_sha256_exact": true,
+            "book_searchable": true,
+            "scope_allowed": true
+          }
+        }
+      ],
+      "human_reviewed": false
+    },
+    {
+      "id": "ru-lefty-warning",
+      "question": "Какое предупреждение о чистке ружей Левша просит передать государю перед смертью?",
+      "expected_answerable": true,
+      "response_status": "answered",
+      "capture_http_response_sha256": "cad3d2d9a4320c3301a25d75fb5f2be2399e333fb3902cad9f5f718c8c86ab12",
+      "capture_timestamp": "2026-11-15T04:25:18.420106+00:00",
+      "parsed_response_canonical_json_sha256": "cd1ccea34bd1f6e123e0f3b3a466dacb45a7dfd8fb314d282ff4a8ec6c2db764",
+      "category": "supported_warning_with_recipient_wording_caveat",
+      "severity": "minor_recipient_wording_ambiguity",
+      "question_axis": "Lefty’s requested warning to be conveyed to the tsar, preserving the prohibition and consequence.",
+      "claims": [
+        {
+          "claim_index": 1,
+          "text": "Левша предупреждает государю, что у англичан ружья кирпичом не чистят, и просит, чтобы у нас тоже не чистили, иначе ружья не годятся к стрельбе.",
+          "source_ids": [
+            "S1"
+          ],
+          "agent_verdict": "warning_content_supported_but_indirect_recipient_should_be_explicit",
+          "reason": "The selected quote preserves that the English do not clean guns with brick, asks that Russians also not do so, and states loss of fitness to fire. The answer’s \"предупреждает государю\" is awkward and less precise than \"просит передать государю\" about the indirect intended recipient.",
+          "exact_supporting_quote_checks": [
+            {
+              "case_id": "ru-lefty-warning",
+              "claim_index": 1,
+              "source_id": "S1",
+              "evidence_id": "S1:E2",
+              "section_id": 343403,
+              "start": 1485,
+              "end": 1803,
+              "quote_sha256": "616bce0a0d826f00a669ab90226c12809a80aa6dd7240f38a5516cf30670e2d4",
+              "quote_characters": 318,
+              "checks": {
+                "within_captured_source": true,
+                "captured_source_slice_exact": true,
+                "live_section_slice_exact": true,
+                "source_is_claim_citation": true
+              }
+            }
+          ]
+        }
+      ],
+      "notes": [
+        "The answer does not explicitly assert that the tsar actually received the warning. Full canonical context says the dying Lefty spoke when doctor Martyn-Solsky arrived, the doctor reported to Chernyshev, and \"Государю так и не сказали\". Do not silently recast the warning as a successful direct conversation with the tsar.",
+        "The instruction is attributed to the fictional character; it is not presented as independently verified contemporary weapons advice."
+      ],
+      "warnings": [
+        "У поиска есть ограничения; ответ основан только на показанных найденных фрагментах."
+      ],
+      "same_model_judge_supported": [
+        true
+      ],
+      "planning": {
+        "requested": true,
+        "used": true,
+        "reason": "validated_plan_candidates",
+        "ranking_strategy": "body-coverage-proximity-v1",
+        "response_language_hint": "ru"
+      },
+      "reference_checks": [
+        {
+          "case_id": "ru-lefty-warning",
+          "reference_id": "brick",
+          "book_id": "wsru-lefty-45ef2537b9d9",
+          "section_id": 343403,
+          "canonical_reference_checks": {
+            "section_sha256_exact": true,
+            "anchor_offsets_exact": true,
+            "anchor_sha256_exact": true
+          },
+          "whole_anchor_in_captured_sources": [
+            "S1"
+          ],
+          "whole_anchor_in_selected_quotes": [
+            "S1:E2"
+          ],
+          "source_attribution_checks": [
+            {
+              "source_id": "S1",
+              "checks": {
+                "section_author": true,
+                "section_role": true,
+                "section_translator": true
+              }
+            }
+          ]
+        }
+      ],
+      "source_checks": [
+        {
+          "case_id": "ru-lefty-warning",
+          "source_id": "S1",
+          "passage_id": 2576402,
+          "book_id": "wsru-lefty-45ef2537b9d9",
+          "section_id": 343403,
+          "section_ordinal": 20,
+          "start": 1113,
+          "end": 2508,
+          "text_sha256": "8fbb30804b121814c07d894dfd1c96b26ab8196407f8d5d75400365e987e1344",
+          "reader_url": "/?book=wsru-lefty-45ef2537b9d9&section=343403&passage=2576402",
+          "checks": {
+            "canonical_span_exact": true,
+            "bounds_valid": true,
+            "book_id_exact": true,
+            "section_ordinal_exact": true,
+            "section_title_exact": true,
+            "artifact_sha256_exact": true,
+            "content_sha256_exact": true,
+            "book_searchable": true,
+            "scope_allowed": true
+          }
+        },
+        {
+          "case_id": "ru-lefty-warning",
+          "source_id": "S2",
+          "passage_id": 2576395,
+          "book_id": "wsru-lefty-45ef2537b9d9",
+          "section_id": 343400,
+          "section_ordinal": 17,
+          "start": 1298,
+          "end": 2458,
+          "text_sha256": "58bf29db2e2e1f413c6a936b6553d201c9e2ffd28e94bde94d76cf210246a4fb",
+          "reader_url": "/?book=wsru-lefty-45ef2537b9d9&section=343400&passage=2576395",
+          "checks": {
+            "canonical_span_exact": true,
+            "bounds_valid": true,
+            "book_id_exact": true,
+            "section_ordinal_exact": true,
+            "section_title_exact": true,
+            "artifact_sha256_exact": true,
+            "content_sha256_exact": true,
+            "book_searchable": true,
+            "scope_allowed": true
+          }
+        }
+      ],
+      "human_reviewed": false
+    },
+    {
+      "id": "ru-land-grave",
+      "question": "Сколько земли в итоге занимает могила Пахома в рассказе Толстого «Много ли человеку земли нужно»?",
+      "expected_answerable": true,
+      "response_status": "answered",
+      "capture_http_response_sha256": "43153153a2326fd93f097e2635889d152aca3dc16b6a69ff4674f77805c5046e",
+      "capture_timestamp": "2026-11-15T04:25:45.314740+00:00",
+      "parsed_response_canonical_json_sha256": "cb1ad686f8c5887492e388c460587eeb86caccfcbe08453643d8de1f391f1dc8",
+      "category": "supported_number_with_dimension_omission",
+      "severity": "minor_precision_loss",
+      "question_axis": "The final grave, measured along Pakhom’s body, rather than land he tried to acquire.",
+      "claims": [
+        {
+          "claim_index": 1,
+          "text": "Могила Пахома занимает три аршина земли.",
+          "source_ids": [
+            "S2"
+          ],
+          "agent_verdict": "supported_number_but_length_dimension_omitted",
+          "reason": "Three arshins is correct. The source explicitly measures from feet to head, so this is the grave’s length. The compact answer omits that dimension and must not be interpreted as three square arshins of area.",
+          "exact_supporting_quote_checks": [
+            {
+              "case_id": "ru-land-grave",
+              "claim_index": 1,
+              "source_id": "S2",
+              "evidence_id": "S2:E5",
+              "section_id": 343437,
+              "start": 2394,
+              "end": 2676,
+              "quote_sha256": "0107282daf52414b7f9461a5c79b0dbe41cc8e496b0d3d9404936584dd0a21bf",
+              "quote_characters": 282,
+              "checks": {
+                "within_captured_source": true,
+                "captured_source_slice_exact": true,
+                "live_section_slice_exact": true,
+                "source_is_claim_citation": true
+              }
+            }
+          ]
+        }
+      ],
+      "notes": [
+        "Selected S2 is Tolstoy’s chapter IX. S1 is Book RAG editorial provenance packaging and is correctly marked editorial; it is not cited as Tolstoy’s narrative evidence."
+      ],
+      "warnings": [
+        "У поиска есть ограничения; ответ основан только на показанных найденных фрагментах."
+      ],
+      "same_model_judge_supported": [
+        true
+      ],
+      "planning": {
+        "requested": true,
+        "used": true,
+        "reason": "validated_plan_candidates",
+        "ranking_strategy": "body-coverage-proximity-v1",
+        "response_language_hint": "ru"
+      },
+      "reference_checks": [
+        {
+          "case_id": "ru-land-grave",
+          "reference_id": "grave",
+          "book_id": "wsru-how-much-land-285bf7cc584e",
+          "section_id": 343437,
+          "canonical_reference_checks": {
+            "section_sha256_exact": true,
+            "anchor_offsets_exact": true,
+            "anchor_sha256_exact": true
+          },
+          "whole_anchor_in_captured_sources": [
+            "S2"
+          ],
+          "whole_anchor_in_selected_quotes": [
+            "S2:E5"
+          ],
+          "source_attribution_checks": [
+            {
+              "source_id": "S2",
+              "checks": {
+                "section_author": true,
+                "section_role": true,
+                "section_translator": true
+              }
+            }
+          ]
+        }
+      ],
+      "source_checks": [
+        {
+          "case_id": "ru-land-grave",
+          "source_id": "S1",
+          "passage_id": 2576549,
+          "book_id": "wsru-how-much-land-285bf7cc584e",
+          "section_id": 343428,
+          "section_ordinal": 0,
+          "start": 0,
+          "end": 1118,
+          "text_sha256": "1b79b7aef24aeed78acf4d891d74941313824672e7c86a41624d7b04c7774f63",
+          "reader_url": "/?book=wsru-how-much-land-285bf7cc584e&section=343428&passage=2576549",
+          "checks": {
+            "canonical_span_exact": true,
+            "bounds_valid": true,
+            "book_id_exact": true,
+            "section_ordinal_exact": true,
+            "section_title_exact": true,
+            "artifact_sha256_exact": true,
+            "content_sha256_exact": true,
+            "book_searchable": true,
+            "scope_allowed": true
+          }
+        },
+        {
+          "case_id": "ru-land-grave",
+          "source_id": "S2",
+          "passage_id": 2576566,
+          "book_id": "wsru-how-much-land-285bf7cc584e",
+          "section_id": 343437,
+          "section_ordinal": 9,
+          "start": 920,
+          "end": 2676,
+          "text_sha256": "380231cd287307572008907959aa533a33d0aa9189f795f5ae419fd948cbcfaf",
+          "reader_url": "/?book=wsru-how-much-land-285bf7cc584e&section=343437&passage=2576566",
+          "checks": {
+            "canonical_span_exact": true,
+            "bounds_valid": true,
+            "book_id_exact": true,
+            "section_ordinal_exact": true,
+            "section_title_exact": true,
+            "artifact_sha256_exact": true,
+            "content_sha256_exact": true,
+            "book_searchable": true,
+            "scope_allowed": true
+          }
+        }
+      ],
+      "human_reviewed": false
+    }
+  ],
+  "prioritized_actions": [
+    {
+      "priority": 1,
+      "case": "compare-property",
+      "action": "Recover evidence for the requested own-labour axis before the per-book evidence cap; require the writer to abstain on that subquestion rather than construct a property-category comparison from unrelated slavery/tax passages."
+    },
+    {
+      "priority": 2,
+      "case": "compare-origin-editions",
+      "action": "Inspect the separately preserved rejected draft and grounding judgement; distinguish a genuinely unsupported draft from an overly conservative judge, since both requested source phrases were retrieved."
+    },
+    {
+      "priority": 3,
+      "case": "alice-court",
+      "action": "Apply literal quotation validation to ASCII-single-quoted speech as well as other quote forms, or require a paraphrase/explicit omission marker."
+    },
+    {
+      "priority": 4,
+      "case": "smith-pins / ru-land-grave / ru-lefty-warning / ru-chameleon-owner / darwin-struggle",
+      "action": "Preserve lower bounds, measurement dimensions and indirect recipient roles; select complete supporting units for claim details or narrow the wording to what the selected units establish."
+    }
+  ],
+  "limitations": [
+    "AI-agent qualitative judgement, not human review or an independently validated entailment classifier. No percentage factual-accuracy estimate is asserted.",
+    "Open fixture development cases were authored for inspection and iteration. These observations are not results on a closed/final test set and do not establish generalization.",
+    "Current canonical identity is checked against captured artifact/content hashes and all involved section text is rechecked; the entire multi-gigabyte database is not hashed.",
+    "The public transcript omits rejected draft claim text. The exact semantic cause of the Origin-editions grounding rejection cannot be inferred from the boolean judgement alone.",
+    "No real-browser rerun or model inference was performed for this review; reader URLs are recorded from source cards, and source offsets are checked directly against canonical storage."
+  ]
+}

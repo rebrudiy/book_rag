@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "experiment": "scoped-query-planning-4b-rag-dev-v1",
+  "split": "development",
+  "closed_final_used": false,
+  "measured_candidate_commit": "ffac8ab",
+  "candidate_guard_file": "data/evaluations/rag-dev-v1/planned-v1.candidate.json",
+  "all_17_candidate_guards_unchanged": true,
+  "source_archive_sha256": "64a52a11a1fd1eda5db9e8887d24ccd128e21181dde7f737a115d34aead2537a",
+  "request_config": {
+    "mode": "hybrid",
+    "limit": 8,
+    "origin": "http://127.0.0.1:8002",
+    "plan_retrieval": true
+  },
+  "summary": {
+    "cases": 14,
+    "statuses": {
+      "answered": 11,
+      "abstained": 3
+    },
+    "scored_answerability_cases": 14,
+    "observed_answerability_matches": 13,
+    "not_run_cases": 0,
+    "operational_failure_cases": 0,
+    "structure_error_cases": 0,
+    "sources_checked": 32,
+    "invalid_sources": 0,
+    "claims_checked": 13,
+    "invalid_claim_citations": 0,
+    "reference_anchors_observed": 16,
+    "reference_anchors_retrieved": 15,
+    "reference_anchors_in_cited_passages": 13,
+    "human_factual_reviewed_cases": 0,
+    "human_entailment_reviewed_cases": 0,
+    "quality_note": "Literal evidence integrity and answerability are separate from factual correctness/entailment; semantic checks remain unreviewed."
+  },
+  "runtime_report_sha256": "655e1c0066551ddfa970019761a7920eb230fca76d7dbeb47a0eebf685145f38",
+  "agent_review": "experiments/rag-run05-agent-review.json",
+  "agent_review_sha256": "d55cc87afc5717d8316d8544966809b8cb4c96d21894d2b5316e02b94d2e5a42",
+  "human_factual_accuracy": null,
+  "latency_comparison": "Not paired; bulk MPS interrupted deliberately after three cases; no causal speed claim.",
+  "post_measurement_literal_guard_replay": {
+    "kind": "deterministic-validator-replay-no-new-model-calls",
+    "cases": [
+      {
+        "case_id": "alice-watch",
+        "passes_new_literal_guard": true,
+        "reason": null
+      },
+      {
+        "case_id": "alice-court",
+        "passes_new_literal_guard": false,
+        "reason": "Quotation not present in cited source"
+      },
+      {
+        "case_id": "austen-opener",
+        "passes_new_literal_guard": true,
+        "reason": null
+      },
+      {
+        "case_id": "smith-pins",
+        "passes_new_literal_guard": true,
+        "reason": null
+      },
+      {
+        "case_id": "darwin-struggle",
+        "passes_new_literal_guard": true,
+        "reason": null
+      },
+      {
+        "case_id": "jowett-introduction",
+        "passes_new_literal_guard": true,
+        "reason": null
+      },
+      {
+        "case_id": "ru-query-smith-dinner",
+        "passes_new_literal_guard": true,
+        "reason": null
+      },
+      {
+        "case_id": "compare-property",
+        "passes_new_literal_guard": true,
+        "reason": null
+      },
+      {
+        "case_id": "ru-chameleon-owner",
+        "passes_new_literal_guard": true,
+        "reason": null
+      },
+      {
+        "case_id": "ru-lefty-warning",
+        "passes_new_literal_guard": true,
+        "reason": null
+      },
+      {
+        "case_id": "ru-land-grave",
+        "passes_new_literal_guard": true,
+        "reason": null
+      }
+    ]
+  },
+  "limitations": [
+    "Answerability status matches and literal source checks do not establish factual accuracy.",
+    "AI review retains wrong question-axis synthesis, numerical/mood/recipient qualifications and missed answer despite retrieved evidence.",
+    "Post-run code fixes final source-coverage metadata and rejects noncontiguous ASCII-single-quoted speech; this is a deterministic replay, not another actual model evaluation."
+  ]
+}

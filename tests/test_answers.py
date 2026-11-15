@@ -336,3 +336,31 @@ def test_mixed_grounding_verdict_discards_the_answer_including_unreliably_accept
     answer = ask(library, "amber bookmark", mode="lexical", generator=fake)
     assert answer["status"] == "abstained" and not answer["claims"]
     assert answer["sources"][0]["verified"]
+
+
+@pytest.mark.parametrize(
+    "claim",
+    [
+        "The source says 'a fabricated quotation'.",
+        "The source says 'amber bookmark helps remember exact words'.",
+        "The source says ''.",
+    ],
+)
+def test_ascii_single_quoted_claims_must_be_exact_contiguous_sources(library: Library, claim: str) -> None:
+    fake = Fake({"answerable": True, "claims": [{"text": claim, "source_ids": ["S1"]}]})
+    answer = ask(library, "amber bookmark", mode="lexical", generator=fake)
+    assert answer["status"] == "invalid_output" and not answer["claims"]
+
+
+@pytest.mark.parametrize(
+    "claim",
+    [
+        "The source says 'amber bookmark helps the reader remember exact words'.",
+        "The book 'Remembering words' describes the bookmark.",
+        "The reader's bookmark helps the visitor's memory.",
+    ],
+)
+def test_ascii_source_titles_and_ordinary_apostrophes_remain_usable(library: Library, claim: str) -> None:
+    fake = Fake({"answerable": True, "claims": [{"text": claim, "source_ids": ["S1"]}]})
+    answer = ask(library, "amber bookmark", mode="lexical", generator=fake)
+    assert answer["status"] == "answered"
