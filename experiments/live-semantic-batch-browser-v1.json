@@ -183,8 +183,30 @@
     }
   ],
   "completed_at": "2026-11-15T04:21:54.455934+00:00",
+  "open_probe_book_ids": [
+    "pg30821-full",
+    "pg21593-full",
+    "pg4718-full"
+  ],
+  "human_quality_ratings": false,
+  "visual_review": {
+    "reviewer": "AI_agent",
+    "human_rating": false,
+    "screenshots_inspected": [
+      "open-kant-ru-to-de-search.png",
+      "open-kant-ru-to-de-reader.png",
+      "open-kafka-judgment-de-reader.png",
+      "mobile-scoped-search.png",
+      "mobile-exact-reader.png"
+    ],
+    "observations": [
+      "Selected-book/approximate-order banner is readable and correctly labelled.",
+      "Kant Russian-query result shows the German paragraph on Unmuendigkeit; Kafka result contains the condemnation to death by drowning. These are qualitative observations on inspected open probes, not final relevance scores.",
+      "Desktop and mobile exact highlights remain readable; no horizontal overflow was observed."
+    ]
+  },
   "raw_report": {
     "path": "artifacts/live-semantic-batch-20261115T042122663968Z/report.json",
-    "sha256": "3ad4ceb5136608782b4bdfeb75a762f08123d4beaeaad63f64ee363329a4fe7b"
+    "sha256": "447837b723fedb2e8cb22672b62befb5226309c031e926c0b58873bbb044ec18"
   }
 }

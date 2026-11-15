@@ -6,7 +6,7 @@
     view: 'search', mode: 'hybrid', query: '', books: [], saved: [], results: [], stats: null,
     currentBook: null, currentSection: null, currentPassage: null,
     saveDraft: null, saveItemID: null, saveOriginal: null, savePending: false, saveReturnFocus: null,
-    searchSequence: 0, readerSequence: 0, readerSize: 20,
+    searchSequence: 0, searchController: null, searchLoading: false, readerSequence: 0, readerSize: 20,
     previousView: 'search', researchQuery: '', toastTimer: null,
     explore: null, exploreLoading: false, mapSelection: null,
     landingTotal: 0, libraryOffset: 0, libraryTotal: 0, libraryHasMore: false, libraryRequest: 0,
@@ -14,7 +14,7 @@
     compareBooks: [], compareTotal: 0, compareLoaded: false, compareRequest: 0, researchSelection: new Map(),
     starterLanguage: '', starterCache: new Map(), starterPending: new Map(), starterVersion: 0,
     panel: 'fragments', answerSequence: 0, answerController: null, answerResponse: null,
-    answerRouteSequence: 0, answerScopeBlocked: null, answerScopeLoading: false,
+    answerRouteSequence: 0, answerScopeBlocked: null, answerScopeLoading: false, scopeRestoreController: null,
   };
   const languageNames = { ru: 'Русский', en: 'English', fr: 'Français', de: 'Deutsch', es: 'Español', it: 'Italiano', nl: 'Nederlands', fi: 'Suomi', sv: 'Svenska', da: 'Dansk', zh: '中文', ja: '日本語', la: 'Latina', el: 'Ελληνικά', pt: 'Português', uk: 'Українська', ar: 'العربية' };
   const statusNames = { discovered: 'Найдены', downloaded: 'Скачаны', processed: 'Обработаны', indexed: 'В поиске', searchable: 'В поиске', failed: 'Пока недоступны · ошибка', deferred: 'Пока недоступны · отложены', error: 'Требуют внимания', duplicate: 'Дубли' };
@@ -141,7 +141,7 @@
   function showView(view, push = true) {
     if (!['search', 'library', 'saved', 'reader', 'explore'].includes(view)) view = 'search';
     if (view !== 'reader') state.readerSequence++;
-    if (push || view !== 'search') stopScopeRestore();
+    if (push || view !== 'search') { stopScopeRestore(); cancelSearchRequest(); }
     if (view !== 'search') cancelAnswer('Ожидание остановлено. Отправьте вопрос, чтобы повторить.');
     state.view = view;
     document.querySelectorAll('.view').forEach((el) => el.classList.toggle('hidden', el.id !== `${view}-view`));
@@ -155,11 +155,8 @@
         if ($('library-query').value.trim()) params.set('book_q', $('library-query').value.trim());
         if ($('library-language').value) params.set('language', $('library-language').value);
       }
-      if (view === 'search' && state.query) params.set('q', state.query);
-      if (view === 'search' && state.panel === 'answer') params.set('panel', 'answer');
-      if (view === 'search' && state.panel === 'answer' && $('book-filter').value) params.set('scope', $('book-filter').value);
-      if (view === 'search' && state.panel === 'answer' && $('language-filter').value) params.set('language', $('language-filter').value);
-      history.pushState({}, '', params.size ? `/?${params}` : '/');
+      if (view === 'search') { history.pushState({}, '', searchURL()); }
+      else history.pushState({}, '', params.size ? `/?${params}` : '/');
     }
     if (view === 'library') loadLibrary();
     if (view === 'saved') renderSaved();
@@ -176,6 +173,7 @@
   document.addEventListener('click', navigate);
 
   function setMode(mode) {
+    if (!['lexical', 'hybrid', 'semantic', 'reranked'].includes(mode)) mode = 'hybrid';
     state.mode = mode;
     $('search-extra-mode').value = mode === 'reranked' ? 'reranked' : '';
     document.querySelectorAll('[data-mode]').forEach((el) => {
@@ -183,6 +181,48 @@
       el.classList.toggle('active', active);
       el.setAttribute('aria-pressed', String(active));
     });
+  }
+  function searchURL(panel = state.panel) {
+    const params = new URLSearchParams();
+    if (state.query) params.set('q', state.query);
+    params.set('mode', state.mode);
+    const scope = state.answerScopeBlocked || $('book-filter').value;
+    if (scope) params.set('scope', scope);
+    if ($('language-filter').value) params.set('language', $('language-filter').value);
+    if (panel === 'answer') params.set('panel', 'answer');
+    return `/?${params}`;
+  }
+  function updateSearchURL() {
+    if (state.view === 'search') history.replaceState({}, '', searchURL());
+  }
+  function setSourceLanguage(value) {
+    const select = $('language-filter');
+    if (value && ![...select.options].some((option) => option.value === value)) {
+      const option = node('option', '', labelLanguage(value)); option.value = value; select.append(option);
+    }
+    select.value = value;
+  }
+  function syncSearchBusy() {
+    $('search-form').querySelector('[type="submit"]').disabled = state.searchLoading || state.answerScopeLoading || Boolean(state.answerScopeBlocked);
+  }
+  function cancelSearchRequest() {
+    state.searchSequence++;
+    state.searchController?.abort(); state.searchController = null; state.searchLoading = false;
+    syncSearchBusy();
+  }
+  function blockedSearch() {
+    cancelSearchRequest(); state.results = [];
+    $('search-results').classList.remove('hidden'); $('discovery').classList.add('hidden');
+    renderSemanticCoverage(null);
+    $('search-warnings').textContent = ''; $('search-warnings').classList.add('hidden');
+    $('results-meta').textContent = state.answerScopeLoading ? 'Проверяем выбранную книгу…' : 'Поиск не запущен';
+    empty($('fragments-panel'), state.answerScopeLoading ? 'Проверяем книгу из ссылки' : 'Книга из ссылки не подтверждена',
+      'Поиск по всей библиотеке не выполнялся. Выберите доступную книгу или явно снимите ограничение по книге.');
+  }
+  function modeChanged(mode) {
+    stopScopeRestore(); cancelSearchRequest(); setMode(mode);
+    if (state.answerScopeBlocked) { blockedSearch(); updateSearchURL(); return; }
+    if (state.query) search(); else updateSearchURL();
   }
   function setPanel(panel, updateURL = true) {
     if (!['fragments', 'research', 'answer'].includes(panel)) panel = 'fragments';
@@ -204,11 +244,7 @@
       updateAnswerScope();
     }
     if (updateURL && state.view === 'search') {
-      const params = new URLSearchParams(location.search);
-      params.delete('book'); params.delete('section'); params.delete('passage'); params.delete('view');
-      if (panel === 'answer') { updateAnswerURL(); return; }
-      params.delete('panel'); params.delete('scope'); params.delete('language');
-      history.replaceState({}, '', params.size ? `/?${params}` : '/');
+      updateSearchURL();
     }
   }
 
@@ -378,7 +414,7 @@
   function setScopeBook(book, invalidateRoute = true) {
     if (invalidateRoute) stopScopeRestore();
     state.answerScopeBlocked = null; state.answerScopeLoading = false;
-    state.scopeBook = book; renderScopeBooks(); answerBusy(Boolean(state.answerController));
+    state.scopeBook = book; renderScopeBooks(); answerBusy(Boolean(state.answerController)); syncSearchBusy();
   }
   async function loadScopeBooks() {
     const request = ++state.scopeRequest;
@@ -441,7 +477,8 @@
     const languages = stats.languages;
     const codes = Array.isArray(languages) ? languages.map((item) => typeof item === 'string' ? item : item.language) : Object.keys(languages || {});
     const options = codes.filter(Boolean).map((value) => ({ value, label: labelLanguage(value) }));
-    populateSelect($('language-filter'), options, 'Все языки');
+    const selectedLanguage = $('language-filter').value;
+    populateSelect($('language-filter'), options, 'Все языки'); setSourceLanguage(selectedLanguage);
     populateSelect($('library-language'), options, 'Все языки');
     $('stat-languages').textContent = formatNumber(Array.isArray(languages) ? languages.length : typeof languages === 'object' && languages ? Object.keys(languages).length : languages || 0);
     const availability = node('section', 'pipeline-group'); availability.setAttribute('aria-label', 'Доступность изданий');
@@ -603,12 +640,7 @@
     $('answer-scope').textContent = `${scope}. Язык источников: ${$('language-filter').value ? labelLanguage($('language-filter').value) : 'все языки'}.`;
   }
   function updateAnswerURL() {
-    if (state.view !== 'search' || state.panel !== 'answer') return;
-    const params = new URLSearchParams({ panel: 'answer' });
-    if (state.query) params.set('q', state.query);
-    if ($('book-filter').value) params.set('scope', $('book-filter').value);
-    if ($('language-filter').value) params.set('language', $('language-filter').value);
-    history.replaceState({}, '', `/?${params}`);
+    if (state.view === 'search' && state.panel === 'answer') updateSearchURL();
   }
   function answerBusy(busy) {
     const restoreFocus = !busy && document.activeElement === $('cancel-answer');
@@ -620,7 +652,9 @@
   }
   function stopScopeRestore() {
     state.answerRouteSequence++;
+    state.scopeRestoreController?.abort(); state.scopeRestoreController = null;
     if (state.answerScopeLoading) { state.answerScopeLoading = false; answerBusy(Boolean(state.answerController)); renderScopeBooks(); updateAnswerScope(); }
+    syncSearchBusy();
   }
   function cancelAnswer(message) {
     if (!state.answerController) return;
@@ -643,11 +677,12 @@
     if (state.panel === 'answer') {
       clearFragmentContext('Область поиска изменилась'); updateAnswerURL();
     }
+    else if (state.answerScopeBlocked) { blockedSearch(); updateSearchURL(); }
     else if (state.query) search();
+    else updateSearchURL();
   }
   function clearFragmentContext(title) {
-    state.searchSequence++; state.results = [];
-    $('search-form').querySelector('[type="submit"]').disabled = false;
+    cancelSearchRequest(); state.results = [];
     $('search-warnings').textContent = ''; $('search-warnings').classList.add('hidden');
     $('results-meta').textContent = '';
     renderSemanticCoverage(null);
@@ -746,25 +781,26 @@
   async function search(push = true) {
     const query = $('query').value.trim();
     if (!query) { $('query').focus(); return; }
+    stopScopeRestore(); cancelSearchRequest();
+    if (state.answerScopeBlocked) { state.query = query; blockedSearch(); if (push) updateSearchURL(); return; }
     invalidateAnswer();
     if (state.query !== query) { state.researchQuery = ''; $('research-output').replaceChildren(); $('answer-query').value = query; }
     state.query = query;
     const request = ++state.searchSequence;
+    const controller = new AbortController(); state.searchController = controller; state.searchLoading = true; syncSearchBusy();
     $('search-results').classList.remove('hidden');
     $('discovery').classList.add('hidden');
     $('search-warnings').textContent = ''; $('search-warnings').classList.add('hidden');
     renderSemanticCoverage(null);
     $('results-meta').textContent = 'Ищем в библиотеке…';
-    setPanel('fragments');
+    setPanel('fragments', false);
     loading($('fragments-panel'), 'Поиск фрагментов');
-    const submit = $('search-form').querySelector('[type="submit"]');
-    submit.disabled = true;
     const params = new URLSearchParams({ q: query, mode: state.mode, limit: '20' });
     if ($('language-filter').value) params.set('language', $('language-filter').value);
     if ($('book-filter').value) params.set('book_id', $('book-filter').value);
-    if (push) { const route = new URLSearchParams({ q: query }); history.replaceState({}, '', `/?${route}`); }
+    if (push) updateSearchURL();
     try {
-      const result = await api(`/api/search?${params}`);
+      const result = await api(`/api/search?${params}`, { signal: controller.signal });
       if (request !== state.searchSequence) return;
       state.results = result.results || [];
       renderSemanticCoverage(result.semantic_coverage);
@@ -775,9 +811,12 @@
       else empty($('fragments-panel'), 'Точного следа пока нет', 'В этой библиотеке не найдено подходящих фрагментов. Попробуйте другие слова, снимите фильтры или расширьте корпус. Отсутствие результатов не означает, что ответа нет в книгах.');
       if (result.warnings?.length) { $('search-warnings').textContent = result.warnings.join('\n'); $('search-warnings').classList.remove('hidden'); }
       announce(`Найдено фрагментов: ${state.results.length}.`);
+      if (request === state.searchSequence && state.view === 'search' && state.panel === 'fragments' && $('query').value.trim() === query) {
+        $('search-results').querySelector('.results-main').scrollIntoView({ block: 'start', behavior: 'instant' });
+      }
     } catch (error) {
-      if (request === state.searchSequence) { showError(error, $('fragments-panel')); $('results-meta').textContent = 'Поиск не завершён'; }
-    } finally { if (request === state.searchSequence) submit.disabled = false; }
+      if (error.name !== 'AbortError' && request === state.searchSequence) { showError(error, $('fragments-panel')); $('results-meta').textContent = 'Поиск не завершён'; }
+    } finally { if (request === state.searchSequence) { state.searchController = null; state.searchLoading = false; syncSearchBusy(); } }
   }
   async function research() {
     if (!state.query) { toast('Сначала задайте вопрос в строке поиска.'); return; }
@@ -1251,8 +1290,34 @@
     link.download = 'book-atlas-collection.md';
     document.body.append(link); link.click(); link.remove();
   }
+  async function restoreRouteScope(scope, currentRoute) {
+    if (!scope) { setScopeBook(null, false); return true; }
+    if (!state.answerScopeBlocked && asID(state.scopeBook?.id) === scope && bookSearchable(state.scopeBook)) return true;
+    state.answerScopeBlocked = scope; state.answerScopeLoading = true; state.scopeBook = null;
+    const controller = new AbortController(); state.scopeRestoreController = controller;
+    renderScopeBooks(); updateAnswerScope(); answerBusy(true); syncSearchBusy();
+    if (state.panel !== 'answer') blockedSearch();
+    try {
+      const book = await api(`/api/books/${encodeURIComponent(scope)}`, { signal: controller.signal });
+      if (!currentRoute()) return false;
+      if (asID(book.id) !== scope || !bookSearchable(book)) throw new Error('Выбранное издание сейчас недоступно в поиске.');
+      setScopeBook(book, false); return true;
+    } catch (error) {
+      if (currentRoute() && error.name !== 'AbortError') {
+        state.answerScopeLoading = false; renderScopeBooks(); updateAnswerScope();
+        if (state.panel === 'answer') showError(error, $('answer-output')); else blockedSearch();
+      }
+      return false;
+    } finally {
+      if (currentRoute()) {
+        if (state.scopeRestoreController === controller) state.scopeRestoreController = null;
+        state.answerScopeLoading = false; answerBusy(Boolean(state.answerController)); syncSearchBusy();
+      }
+    }
+  }
   async function route() {
-    const navigation = ++state.answerRouteSequence;
+    stopScopeRestore(); cancelSearchRequest();
+    const navigation = state.answerRouteSequence;
     const routeKey = location.search;
     const currentRoute = () => navigation === state.answerRouteSequence && location.search === routeKey && state.view === 'search';
     const params = new URLSearchParams(location.search);
@@ -1264,28 +1329,25 @@
       if (params.has('book_q')) $('library-query').value = params.get('book_q');
     }
     showView(params.get('view') || 'search', false);
-    if (params.get('panel') === 'answer' && state.view === 'search') {
-      const query = params.get('q') || '';
-      if (state.query !== query) { invalidateAnswer(); state.query = query; $('answer-query').value = query; }
-      $('query').value = query;
-      const scope = params.get('scope') || '';
-      const language = params.get('language') || '';
-      setPanel('answer', false);
-      if ($('language-filter').value !== language) { invalidateAnswer(); $('language-filter').value = language; }
-      if (scope !== $('book-filter').value || (scope && state.answerScopeBlocked === scope)) {
-        invalidateAnswer();
-        if (scope) {
-          state.answerScopeBlocked = scope; state.answerScopeLoading = true; state.scopeBook = null;
-          renderScopeBooks(); updateAnswerScope();
-          answerBusy(true);
-          try { const book = await api(`/api/books/${encodeURIComponent(scope)}`); if (!currentRoute()) return; if (!bookSearchable(book)) throw new Error('Выбранное издание сейчас недоступно в поиске.'); setScopeBook(book, false); }
-          catch (error) { if (currentRoute()) { state.answerScopeLoading = false; renderScopeBooks(); updateAnswerScope(); showError(error, $('answer-output')); } }
-          finally { if (currentRoute()) { state.answerScopeLoading = false; answerBusy(false); } }
-        } else setScopeBook(null, false);
-      }
-      if (currentRoute()) setPanel('answer', false); return;
-    }
-    if (params.has('q')) { $('query').value = params.get('q'); await search(false); }
+    if (state.view !== 'search') return;
+    const panel = params.get('panel') === 'answer' ? 'answer' : 'fragments';
+    const query = params.get('q') || '';
+    const scope = params.get('scope') || '';
+    const language = params.get('language') || '';
+    const mode = ['lexical', 'hybrid', 'semantic', 'reranked'].includes(params.get('mode')) ? params.get('mode') : 'hybrid';
+    const queryChanged = state.query !== query;
+    if (queryChanged || state.mode !== mode || $('language-filter').value !== language || (state.answerScopeBlocked || $('book-filter').value) !== scope) invalidateAnswer();
+    state.query = query; $('query').value = query;
+    if (queryChanged || !$('answer-query').value.trim()) $('answer-query').value = query;
+    setMode(mode); setSourceLanguage(language);
+    setPanel(panel, false);
+    const hasSearchContext = params.has('q') || params.has('scope') || params.has('language') || params.has('mode') || panel === 'answer';
+    $('search-results').classList.toggle('hidden', !hasSearchContext);
+    $('discovery').classList.toggle('hidden', hasSearchContext);
+    const ready = await restoreRouteScope(scope, currentRoute);
+    if (!currentRoute() || !ready) return;
+    if (panel === 'answer') { setPanel('answer', false); return; }
+    if (query) await search(false);
   }
 
   // Keep availability and the latest source attempt independently selectable.
@@ -1318,14 +1380,15 @@
   $('search-warnings').before(semanticCoverage);
 
   $('search-form').addEventListener('submit', (event) => { event.preventDefault(); search(); });
-  document.querySelectorAll('[data-mode]').forEach((el) => el.addEventListener('click', () => { setMode(el.dataset.mode); if (state.query) search(); }));
+  $('query').addEventListener('input', () => { if (state.answerScopeLoading) { stopScopeRestore(); blockedSearch(); } });
+  document.querySelectorAll('[data-mode]').forEach((el) => el.addEventListener('click', () => modeChanged(el.dataset.mode)));
   document.querySelectorAll('[data-query]').forEach((el) => el.addEventListener('click', () => { $('query').value = el.dataset.query; search(); }));
   $('refresh-map').addEventListener('click', () => loadExplore(true));
   document.querySelectorAll('[data-shelf-language]').forEach((el) => el.addEventListener('click', () => loadStarterShelf(el.dataset.shelfLanguage)));
   $('starter-catalog').addEventListener('click', (event) => { if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return; event.preventDefault(); shelfCatalogFilters(state.starterLanguage); showView('library'); history.replaceState({}, '', $('starter-catalog').href); });
   $('map-language').addEventListener('change', () => { state.mapSelection = null; populateMapBooks(); renderExplore(); });
   $('map-book').addEventListener('change', () => { if ($('map-book').value) focusMapBook($('map-book').value); else { state.mapSelection = null; renderExplore(); } });
-  $('search-extra-mode').addEventListener('change', () => { setMode($('search-extra-mode').value || 'hybrid'); if (state.query) search(); });
+  $('search-extra-mode').addEventListener('change', () => modeChanged($('search-extra-mode').value || 'hybrid'));
   $('fragments-tab').addEventListener('click', () => setPanel('fragments'));
   $('research-tab').addEventListener('click', () => setPanel('research'));
   $('answer-tab').addEventListener('click', () => setPanel('answer'));
@@ -1361,7 +1424,14 @@
   $('library-prev').addEventListener('click', () => loadLibrary(Math.max(0, state.libraryOffset - 48)));
   $('library-next').addEventListener('click', () => loadLibrary(state.libraryOffset + 48));
   $('reload-library').addEventListener('click', async () => { await refreshLibrary(); loadStarterShelf(); });
-  $('reader-back').addEventListener('click', () => { const previous = state.previousView; showView(previous); if (previous === 'saved') refreshSaved().catch(showError); });
+  $('reader-back').addEventListener('click', () => {
+    const previous = state.previousView; showView(previous);
+    if (previous === 'saved') refreshSaved().catch(showError);
+    if (previous === 'search' && state.panel === 'fragments' && state.results.length && state.query &&
+        !state.answerScopeBlocked && !state.searchLoading && $('query').value.trim() === state.query) {
+      $('search-results').querySelector('.results-main').scrollIntoView({ block: 'start', behavior: 'instant' });
+    }
+  });
   $('prev-chapter').addEventListener('click', () => { const sections = sectionList(state.currentBook); const index = sections.findIndex((item) => asID(item.id) === asID(state.currentSection?.id)); if (index > 0) selectChapter(sections[index - 1].id); });
   $('next-chapter').addEventListener('click', () => { const sections = sectionList(state.currentBook); const index = sections.findIndex((item) => asID(item.id) === asID(state.currentSection?.id)); if (index >= 0 && index < sections.length - 1) selectChapter(sections[index + 1].id); });
   $('font-smaller').addEventListener('click', () => { state.readerSize = Math.max(15, state.readerSize - 1); document.documentElement.style.setProperty('--reader-size', `${state.readerSize}px`); });

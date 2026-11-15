@@ -94,6 +94,7 @@ def main() -> None:
     parser.add_argument("--source", type=Path, default=Path("data/full"))
     parser.add_argument("--artifacts", type=Path)
     parser.add_argument("--public-receipt", type=Path)
+    parser.add_argument("--include-multilingual1000", action="store_true", help="Also check the completed larger batch")
     args = parser.parse_args()
     base = args.base_url.rstrip("/")
     if urlsplit(base).hostname not in {"localhost", "127.0.0.1"}:
@@ -105,7 +106,18 @@ def main() -> None:
         parser.error("Preserve prior receipts; select a new public receipt path")
     output.mkdir(parents=True, exist_ok=False)
     source = ReadOnlyLibrary(args.source)
-    ids = [case["book_id"] for case in PROBES]
+    probes = list(PROBES)
+    if args.include_multilingual1000:
+        probes.append(
+            {
+                "id": "open-grand-inquisitor-ru-to-de",
+                "book_id": "pg38336-full",
+                "query_language": "ru",
+                "source_language": "de",
+                "query": "Почему люди отказываются от свободы ради хлеба и спокойствия?",
+            }
+        )
+    ids = [case["book_id"] for case in probes]
     before = batch_source_state(source, ids)
     original_artifacts = artifact_state(source, ids)
     errors: list[str] = []
@@ -117,6 +129,8 @@ def main() -> None:
         "started_at": datetime.now(UTC).isoformat(),
         "base_url": base,
         "probe_status": "new_open_probes_not_final_quality",
+        "open_probe_book_ids": ids,
+        "human_quality_ratings": False,
         "closed_final_used": False,
         "real_api": True,
         "http_response_mocking": False,
@@ -162,7 +176,7 @@ def main() -> None:
                     )
 
             page.on("request", observed)
-            for case in PROBES:
+            for case in probes:
                 scope = case["book_id"]
                 page.goto(
                     base + "/?" + urlencode({"panel": "answer", "scope": scope}),
@@ -244,7 +258,7 @@ def main() -> None:
                     "back_preserved_scope": True,
                     "honest_approximate_scope_badge": True,
                 }
-                if case is PROBES[-1]:
+                if case is probes[-1]:
                     page.set_viewport_size({"width": 390, "height": 844})
                     assert page.evaluate("document.documentElement.scrollWidth <= window.innerWidth")
                     page.screenshot(path=str(output / "mobile-scoped-search.png"))

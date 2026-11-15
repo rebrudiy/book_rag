@@ -2,7 +2,7 @@
 
 An open, local-first library for finding passages, reading books in context and assembling research with verifiable sources. Search works without a generative model, API key or paid service.
 
-**Current scope:** functional local prototype. The separately acquired development library contains **11,001 searchable editions in 11 languages**, with full-text semantic vectors for **1,308 editions**. These edition counts do not establish 10,000 unique complete works. A fresh checkout includes eight small public-domain demo works/excerpts in English, French, German and Russian. Runtime books, models, indexes and user notes stay outside Git.
+**Current scope:** functional local prototype. The separately acquired development library contains **11,001 searchable editions in 11 languages**. Global semantic search covers **1,308 editions**; selecting a book enables additional registered batches, for **2,420 distinct editions across scoped routes**. These edition counts do not establish 10,000 unique complete works. A fresh checkout includes eight small public-domain demo works/excerpts in English, French, German and Russian. Runtime books, models, indexes and user notes stay outside Git.
 
 [Measured large-library MVP](docs/LARGE_LIBRARY.md) documents the earlier 4,001-edition checkpoint. All 7,000 additions in the [resumable acquisition queue](docs/CORPUS_SCALE.md) are now indexed and audited. [Book discovery by description](docs/BOOK_DISCOVERY.md) searches title/author/subject metadata across all 11,001 editions and links to their readers. It has different coverage and limitations from full-text semantic search. Live counts are in `/api/stats`; [development measurements](docs/LARGE_RETRIEVAL.md) retain gains, regressions and known retrieval failures.
 
@@ -19,6 +19,8 @@ uv run bookrag serve
 ```
 
 Open **http://127.0.0.1:8000**. The initial demo requires no network after installing dependencies. Commands below assume a source checkout. `BOOKRAG_DATA_DIR` defaults to `./data`; environment variables are documented in [.env.example](.env.example). `.env` files are not auto-loaded: export the variables in your shell.
+
+[Try the interface with concrete queries](docs/TRY_IT.md): examples for the separately acquired corpus include Russian questions over German Kant and Dostoevsky, book descriptions, exact reading and an explicitly submitted local answer. Scoped search URLs preserve the book, language and mode across reload and reader navigation.
 
 ## What works
 

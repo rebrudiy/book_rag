@@ -1,0 +1,249 @@
+{
+  "kind": "actual-live-explicit-book-semantic-batch-browser-probes",
+  "started_at": "2026-11-15T04:48:48.091101+00:00",
+  "base_url": "http://127.0.0.1:8001",
+  "probe_status": "new_open_probes_not_final_quality",
+  "open_probe_book_ids": [
+    "pg30821-full",
+    "pg21593-full",
+    "pg4718-full",
+    "pg38336-full"
+  ],
+  "human_quality_ratings": false,
+  "closed_final_used": false,
+  "real_api": true,
+  "http_response_mocking": false,
+  "get_only": true,
+  "answer_generation_requested": false,
+  "query_planning_requested": false,
+  "cases": [
+    {
+      "id": "open-kant-ru-to-de",
+      "book_id": "pg30821-full",
+      "query_language": "ru",
+      "source_language": "de",
+      "query": "Почему человек остаётся несовершеннолетним и не решается пользоваться собственным рассудком?",
+      "title": "Beantwortung der Frage: Was ist Aufklärung?",
+      "author": "Kant, Immanuel",
+      "result_count": 16,
+      "retrieval_strategy": "explicit-book-batch-IVFPQ-RRF-v1",
+      "coverage": {
+        "indexed_books": 96,
+        "searchable_books": 11001,
+        "active": true,
+        "requested_book_covered": true,
+        "scope": "book-batch-overlay",
+        "scope_book_id": "pg30821-full",
+        "scope_language": "de",
+        "scope_searchable_books": 1
+      },
+      "server_elapsed_ms": 552.4,
+      "browser_search_wall_ms": 589.6200840361416,
+      "reader": {
+        "book_id": "pg30821-full",
+        "passage_id": 1647597,
+        "section_id": 219181,
+        "start": 1919,
+        "end": 2718,
+        "text_sha256": "af43b49f6182e502fdb6d3a0f83feaec2dfc414c72821b0a516989c30495faed",
+        "citation_sha256": "838e85454a4e18ae1039ed3b1b24fedc93b205ff7f9ef0cfbfc6df476b87fea7",
+        "exact_highlight": true,
+        "exact_unicode_section_slice": true
+      },
+      "back_preserved_scope": true,
+      "honest_approximate_scope_badge": true
+    },
+    {
+      "id": "open-kafka-judgment-de",
+      "book_id": "pg21593-full",
+      "query_language": "de",
+      "source_language": "de",
+      "query": "Ein Vater verurteilt seinen Sohn zum Tod durch Ertrinken.",
+      "title": "Das Urteil: Eine Geschichte",
+      "author": "Kafka, Franz",
+      "result_count": 20,
+      "retrieval_strategy": "explicit-book-batch-IVFPQ-RRF-v1",
+      "coverage": {
+        "indexed_books": 96,
+        "searchable_books": 11001,
+        "active": true,
+        "requested_book_covered": true,
+        "scope": "book-batch-overlay",
+        "scope_book_id": "pg21593-full",
+        "scope_language": "de",
+        "scope_searchable_books": 1
+      },
+      "server_elapsed_ms": 207.14,
+      "browser_search_wall_ms": 245.9827079437673,
+      "reader": {
+        "book_id": "pg21593-full",
+        "passage_id": 2593788,
+        "section_id": 347548,
+        "start": 23167,
+        "end": 24181,
+        "text_sha256": "568ff1d7d91f56e19719440133e81fc5285da9ae4e11bbc494c66b791df0d2ae",
+        "citation_sha256": "fe2d8d83c26a10da606357ce263a729807c638fb9109bca20ea8802fda533b78",
+        "exact_highlight": true,
+        "exact_unicode_section_slice": true
+      },
+      "back_preserved_scope": true,
+      "honest_approximate_scope_badge": true
+    },
+    {
+      "id": "open-voltaire-journey-fr",
+      "book_id": "pg4718-full",
+      "query_language": "fr",
+      "source_language": "fr",
+      "query": "Un voyageur rencontre la cruauté et le fanatisme dans les différents pays qu'il visite.",
+      "title": "Histoire des voyages de Scarmentado",
+      "author": "Voltaire",
+      "result_count": 17,
+      "retrieval_strategy": "explicit-book-batch-IVFPQ-RRF-v1",
+      "coverage": {
+        "indexed_books": 96,
+        "searchable_books": 11001,
+        "active": true,
+        "requested_book_covered": true,
+        "scope": "book-batch-overlay",
+        "scope_book_id": "pg4718-full",
+        "scope_language": "fr",
+        "scope_searchable_books": 1
+      },
+      "server_elapsed_ms": 239.18,
+      "browser_search_wall_ms": 276.55695797875524,
+      "reader": {
+        "book_id": "pg4718-full",
+        "passage_id": 2582271,
+        "section_id": 344789,
+        "start": 3986,
+        "end": 5151,
+        "text_sha256": "9cf6b01b99829bfb80ae55c9c90e282810a63b12e7d29bfca04c75ab17aa279b",
+        "citation_sha256": "d373022201a2cc8e8951e4481a041a5306ab20ce68cffba64cbc064666b93f6a",
+        "exact_highlight": true,
+        "exact_unicode_section_slice": true
+      },
+      "back_preserved_scope": true,
+      "honest_approximate_scope_badge": true
+    },
+    {
+      "id": "open-grand-inquisitor-ru-to-de",
+      "book_id": "pg38336-full",
+      "query_language": "ru",
+      "source_language": "de",
+      "query": "Почему люди отказываются от свободы ради хлеба и спокойствия?",
+      "title": "Der Großinquisitor",
+      "author": "Dostoyevsky, Fyodor",
+      "result_count": 20,
+      "retrieval_strategy": "explicit-book-batch-IVFPQ-RRF-v1",
+      "coverage": {
+        "indexed_books": 1000,
+        "searchable_books": 11001,
+        "active": true,
+        "requested_book_covered": true,
+        "scope": "book-batch-overlay",
+        "scope_book_id": "pg38336-full",
+        "scope_language": "de",
+        "scope_searchable_books": 1
+      },
+      "server_elapsed_ms": 1450.6,
+      "browser_search_wall_ms": 1491.1482082679868,
+      "reader": {
+        "book_id": "pg38336-full",
+        "passage_id": 1820853,
+        "section_id": 241153,
+        "start": 12106,
+        "end": 13476,
+        "text_sha256": "77e7bd54ec5dee0d6c31b5c1070f577e533fac3c16d776215a6889f89e0fe08f",
+        "citation_sha256": "46b281cfe941cff89688bdc1cac442b672b665ed58b35881bd20725109f75df5",
+        "exact_highlight": true,
+        "exact_unicode_section_slice": true
+      },
+      "back_preserved_scope": true,
+      "honest_approximate_scope_badge": true,
+      "mobile_reader_exact": true,
+      "mobile_reader_reload_exact": true
+    }
+  ],
+  "latency_is_not_a_paired_benchmark": true,
+  "latency_caveat": "Root may run bulk MiniLM and a separate local4B evaluation concurrently.",
+  "passed": true,
+  "selected_original_source_unchanged": true,
+  "original_artifacts_unchanged": true,
+  "original_artifact_hashes": {
+    "pg21593-full": {
+      "sha256": "2702314b969dbebbbf21ac51f653f41423d4a4a15e47866745c53dbf199512c5",
+      "bytes": 67829
+    },
+    "pg30821-full": {
+      "sha256": "8b3ea0e86e81640f969795f3923fdba1320c64531567bea677c9f53975114fc5",
+      "bytes": 85046
+    },
+    "pg38336-full": {
+      "sha256": "5c1ddadececc4113cb5d9e2254117fd27a591e4e29ba3adc9df89340a115fdfa",
+      "bytes": 88287
+    },
+    "pg4718-full": {
+      "sha256": "9bf67dfef980bb20f88bae0293c808432cab49ed89cbbc338b87295a86d94954",
+      "bytes": 78672
+    }
+  },
+  "source_state_sha256": "b6e6043d478876d3d072af7641352e9aa3f5aab2cbfec07400baf31d125af544",
+  "javascript_errors": [],
+  "non_get_attempts": [],
+  "ask_requests": [],
+  "semantic_search_requests": [
+    {
+      "q": [
+        "Почему человек остаётся несовершеннолетним и не решается пользоваться собственным рассудком?"
+      ],
+      "book_id": [
+        "pg30821-full"
+      ],
+      "mode": [
+        "semantic"
+      ],
+      "method": "GET"
+    },
+    {
+      "q": [
+        "Ein Vater verurteilt seinen Sohn zum Tod durch Ertrinken."
+      ],
+      "book_id": [
+        "pg21593-full"
+      ],
+      "mode": [
+        "semantic"
+      ],
+      "method": "GET"
+    },
+    {
+      "q": [
+        "Un voyageur rencontre la cruauté et le fanatisme dans les différents pays qu'il visite."
+      ],
+      "book_id": [
+        "pg4718-full"
+      ],
+      "mode": [
+        "semantic"
+      ],
+      "method": "GET"
+    },
+    {
+      "q": [
+        "Почему люди отказываются от свободы ради хлеба и спокойствия?"
+      ],
+      "book_id": [
+        "pg38336-full"
+      ],
+      "mode": [
+        "semantic"
+      ],
+      "method": "GET"
+    }
+  ],
+  "completed_at": "2026-11-15T04:49:05.890828+00:00",
+  "raw_report": {
+    "path": "artifacts/live-semantic-batch-20261115T044848065108Z/report.json",
+    "sha256": "41323615c6336fef31e9bc34fa8bd737f81f4995c3671389759cc0a5b53b83fb"
+  }
+}
