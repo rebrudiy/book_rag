@@ -1,0 +1,194 @@
+{
+  "schema_version": 1,
+  "kind": "OPEN_DEVELOPMENT_QUERY_PLANNING_RETRIEVAL_NOT_FINAL_QUALITY",
+  "source_database_modified": false,
+  "normal_search_api_answers_modified": false,
+  "fixture_sha256": "573155bfea71d0086b37f622e3bc24598bd1dd6595535436c05ae59bf7fdf92d",
+  "pre_inference_startup_failures": 1,
+  "actual_model_completions": 3,
+  "model_budget_seconds_each": 20,
+  "answer_or_entailment_generations": 0,
+  "model_downloads": 0,
+  "actual_calls": [
+    {
+      "case": "ru-query-smith-dinner",
+      "condition": "same-earlier-prompt-dinner",
+      "used": false,
+      "reason": "invalid_plan",
+      "planning_ms": 4651.662,
+      "query_hypotheses": [],
+      "response_language_hint": null,
+      "source_guard_passed": true,
+      "model_workers_closed": true,
+      "model": {
+        "profile": "qwen3-4b-instruct-2507",
+        "repository": "unsloth/Qwen3-4B-Instruct-2507-GGUF",
+        "revision": "a06e946bb6b655725eafa393f4a9745d460374c9",
+        "sha256": "3605803b982cb64aead44f6c1b2ae36e3acdb41d8e46c8a94c6533bc4c67e597",
+        "quantization": "Q4_K_M",
+        "upstream_repository": "Qwen/Qwen3-4B-Instruct-2507",
+        "reviewed_upstream_revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+        "conversion_base_revision": null,
+        "conversion": "Unsloth GGUF conversion of Qwen weights; not an official Qwen GGUF release"
+      }
+    },
+    {
+      "case": "ru-query-smith-dinner",
+      "condition": "constrained-generic-prompt-dinner",
+      "used": true,
+      "reason": "validated_plan",
+      "planning_ms": 5692.595,
+      "query_hypotheses": [
+        {
+          "book_id": "pg3300-full",
+          "language": "en",
+          "queries": [
+            "why butcher brewer and baker provide us with meal out of goodwill or self interest according to smith"
+          ]
+        }
+      ],
+      "response_language_hint": "ru",
+      "source_guard_passed": true,
+      "model_workers_closed": true,
+      "model": {
+        "profile": "qwen3-4b-instruct-2507",
+        "repository": "unsloth/Qwen3-4B-Instruct-2507-GGUF",
+        "revision": "a06e946bb6b655725eafa393f4a9745d460374c9",
+        "sha256": "3605803b982cb64aead44f6c1b2ae36e3acdb41d8e46c8a94c6533bc4c67e597",
+        "quantization": "Q4_K_M",
+        "upstream_repository": "Qwen/Qwen3-4B-Instruct-2507",
+        "reviewed_upstream_revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+        "conversion_base_revision": null,
+        "conversion": "Unsloth GGUF conversion of Qwen weights; not an official Qwen GGUF release"
+      }
+    },
+    {
+      "case": "wrong-topic-alice",
+      "condition": "wrong-topic-negative",
+      "used": true,
+      "reason": "validated_plan",
+      "planning_ms": 4163.543,
+      "query_hypotheses": [
+        {
+          "book_id": "pg11-full",
+          "language": "en",
+          "queries": [
+            "mass energy equivalence formula alice adventures wonderland"
+          ]
+        }
+      ],
+      "response_language_hint": "en",
+      "source_guard_passed": true,
+      "model_workers_closed": true,
+      "model": {
+        "profile": "qwen3-4b-instruct-2507",
+        "repository": "unsloth/Qwen3-4B-Instruct-2507-GGUF",
+        "revision": "a06e946bb6b655725eafa393f4a9745d460374c9",
+        "sha256": "3605803b982cb64aead44f6c1b2ae36e3acdb41d8e46c8a94c6533bc4c67e597",
+        "quantization": "Q4_K_M",
+        "upstream_repository": "Qwen/Qwen3-4B-Instruct-2507",
+        "reviewed_upstream_revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+        "conversion_base_revision": null,
+        "conversion": "Unsloth GGUF conversion of Qwen weights; not an official Qwen GGUF release"
+      }
+    }
+  ],
+  "historical_v2_exact_rejection_cause": "Unknown because the historical raw output was not retained",
+  "same_condition_reproduction": {
+    "private_validation_error": "ValueError: Expected a short plain-text keyword query",
+    "rejected_field": "books[0].queries[0]",
+    "observed_prohibited_codepoint": "U+201D",
+    "raw_artifact_sha256": "aae66c9b41afd94a09b90770a411ae3fd3e6b2119d0ee5496e020f0f37d28460",
+    "raw_output_in_public_UX": false
+  },
+  "rerank_default_enabled": false,
+  "rerank_strategy": "body-coverage-proximity-v1 with same-language original-question guard",
+  "ranking_weights": {
+    "planned_observed_coverage": 0.35,
+    "original_observed_coverage": 0.2,
+    "same_sentence_query_bigram_coverage": 0.3,
+    "proximity": 0.15
+  },
+  "fixed_v2_replay_summary": {
+    "cases": 3,
+    "validated_plans": 2,
+    "reference_anchors": 4,
+    "helper_anchor_hits_at2_per_book": 3,
+    "helper_anchor_hits_at40_per_book": 3,
+    "original_anchor_hits_at2_per_book": 0,
+    "planned_anchor_hits_at2_per_book": 2,
+    "original_anchor_hits_at40_per_book": 1,
+    "planned_anchor_hits_in_query_union": 3
+  },
+  "composite_open_anchor_observations": [
+    {
+      "case": "compare-property",
+      "book_id": "pg3300-full",
+      "reference_id": "labour",
+      "rank": 1,
+      "rerank": {
+        "applied": true,
+        "reason": "same_language_original_question"
+      }
+    },
+    {
+      "case": "compare-property",
+      "book_id": "pg61-full",
+      "reference_id": "bourgeois",
+      "rank": 1,
+      "rerank": {
+        "applied": true,
+        "reason": "same_language_original_question"
+      }
+    },
+    {
+      "case": "ru-land-grave",
+      "book_id": "wsru-how-much-land-285bf7cc584e",
+      "reference_id": "grave",
+      "rank": 2,
+      "rerank": {
+        "applied": true,
+        "reason": "same_language_original_question"
+      }
+    },
+    {
+      "case": "ru-query-smith-dinner",
+      "book_id": "pg3300-full",
+      "reference_id": "interest",
+      "rank": 1,
+      "rerank": {
+        "applied": false,
+        "reason": "cross_language_or_unknown_hint_original_order"
+      }
+    }
+  ],
+  "composite_hits_at2_per_book": 4,
+  "composite_reference_anchors": 4,
+  "preserved_regression": {
+    "condition": "Unconditional rerank on fresh cross-language dinner plan",
+    "prior_planned_rank": 1,
+    "unconditional_helper_rank": 4,
+    "guarded_helper_rank": 1,
+    "runtime_receipt": "data/bench/query-planning-v3/dinner-rerank-replay.json"
+  },
+  "wrong_topic_control": {
+    "plan_valid": true,
+    "helper_candidates": 40,
+    "answerability_fixed": false,
+    "interpretation": "Metadata/title echo still retrieves irrelevant Alice candidates; no answer, entailment or absence claim is made"
+  },
+  "all_replayed_original_responses_unchanged": true,
+  "all_selected_source_guards_passed": true,
+  "checks": [
+    "74 query-planning tests passed with directpytest",
+    "Ruff passed",
+    "ty passed"
+  ],
+  "runtime_reports": "data/bench/query-planning-v3",
+  "limitations": [
+    "Three already inspected open failures plus one negative; no heldout or final quality claim",
+    "Mixed saved-plan replay and one fresh valid dinner hypothesis are not a paired end-to-end RAG result",
+    "Syntax guard and generic prompt changed together, so wording effects are not separately attributed",
+    "Lexical coverage/proximity is not entailment, answerability, or question-axis verification"
+  ]
+}

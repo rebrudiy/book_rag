@@ -406,6 +406,7 @@ def collect(
     mode: str = "hybrid",
     limit: int = 8,
     resume: bool = False,
+    plan_retrieval: bool = False,
 ) -> dict[str, Any]:
     if not allow_generation:
         raise ValueError("Actual model collection requires --allow-generation")
@@ -418,6 +419,8 @@ def collect(
     if not validation["valid"]:
         raise ValueError("Source snapshot mismatch; collection was not started")
     config = {"mode": mode, "limit": limit, "origin": url.rstrip("/")}
+    if plan_retrieval:
+        config["plan_retrieval"] = True
     payload: dict[str, Any] = {
         "fixture_sha256": fixture_sha,
         "request_config": config,
@@ -444,6 +447,8 @@ def collect(
             if case["id"] in payload["responses"]:
                 continue
             request = {"query": case["question"], "book_ids": case["book_ids"], "mode": mode, "limit": limit}
+            if plan_retrieval:
+                request["plan_retrieval"] = True
             try:
                 raw = bytearray()
                 with client.stream("POST", config["origin"] + "/api/ask", json=request) as response:
@@ -485,6 +490,7 @@ def main() -> None:
     action.add_argument("--validate-only", action="store_true", help="Default: source validation only, no model calls")
     parser.add_argument("--allow-generation", action="store_true")
     parser.add_argument("--resume", action="store_true")
+    parser.add_argument("--plan-retrieval", action="store_true", help="Explicitly enable scoped query hypotheses")
     parser.add_argument("--mode", choices=["lexical", "hybrid", "semantic"], default="hybrid")
     parser.add_argument("--limit", type=int, choices=range(1, 13), default=8)
     parser.add_argument("--transcript", type=Path, default=Path("data/evaluations/rag-dev-v1/responses.json"))
@@ -503,6 +509,7 @@ def main() -> None:
             mode=args.mode,
             limit=args.limit,
             resume=args.resume,
+            plan_retrieval=args.plan_retrieval,
         )
     elif args.responses:
         captured = json.loads(args.responses.read_text())

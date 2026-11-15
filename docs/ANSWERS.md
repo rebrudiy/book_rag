@@ -13,7 +13,9 @@ BOOKRAG_DATA_DIR=./data/full BOOKRAG_MODEL_CACHE=./data/models \
 ```
 
 `POST /api/ask` accepts `query`, up to ten explicit `book_ids`, optional
-`language`, `mode` (`lexical`, `semantic`, `hybrid`) and a source `limit` of1–12.
+`language`, `mode` (`lexical`, `semantic`, `hybrid`), a source `limit` of1–12,
+and strict boolean `plan_retrieval` (default `false`). Strings such as `"true"`
+and numeric flags are rejected.
 Empty book IDs are rejected rather than broadening a selected scope. Scoped
 search results are merged by rank, not incomparable score magnitudes. Generated
 BookRAG editorial credits are excluded; genuine introductions remain attributed
@@ -58,7 +60,9 @@ verdict suppresses the complete answer. The failed experiment and reproduction
 patch are retained in `experiments/rag-partial-v2.json` and `.patch`; independent
 AI-agent review is recorded separately from human evaluation.
 
-No retrieved evidence means no model call. A model abstention means insufficient
+In the default mode, no retrieved evidence means no model call. An explicitly
+requested eligible planner may run before evidence is found, as described below;
+answer generation still requires canonical sources. A model abstention means insufficient
 evidence in the retrieved excerpts, not proof that no answer exists anywhere in
 the library. The system never fills missing evidence with an uncited answer.
 Invalid citations/quotes or incomplete JSON suppress the complete generated
@@ -71,8 +75,10 @@ The current exact vector backend and small model do not establish reliable
 exhaustive author comparison or argument/counterargument coverage.
 
 Answer generation is bounded to512 output tokens; its grounding check has64.
-Both share a45-second combined queue/load/inference budget. Retrieval precedes
-that budget and may take additional time.
+Both share a45-second combined queue/load/inference budget. With retrieval
+planning enabled, the planner and its additional retrieval also consume that
+same budget, beginning before planning. Original retrieval precedes the budget
+and may take additional time.
 Oversized contexts are retried with fewer complete excerpts; source text is
 never silently truncated. UI generation occurs only after explicit submission;
 navigation, language changes and reload do not silently run the model. Browser
@@ -93,3 +99,85 @@ generator, exercising the real API, retrieval, citation validator and reader.
 They do not measure model quality. The exploratory real-model smoke uses known
 development books, keeps raw model output outside Git and never reads the
 closed final fixture. Preserve failed smokes alongside later improvements.
+
+## Optional selected-book retrieval planning
+
+`plan_retrieval: true` explicitly enables a separate retrieval-hypothesis stage
+for existing selected books. The server resolves their IDs, titles, authors and
+languages itself. A global request, an unknown ID, an unavailable selected book
+or an invalid mixed scope retains original retrieval without invoking a planner.
+No book is silently dropped or added to make the scope valid.
+
+```json
+{
+  "query": "What does this author say about the requested topic?",
+  "book_ids": ["an-existing-selected-book-id"],
+  "mode": "hybrid",
+  "plan_retrieval": true
+}
+```
+
+The planner receives only the unchanged question and those four catalog fields,
+never book passages, notes, reference answers or expected facts. It uses the same
+configured local generator as the writer and judge, permits one short query per
+book, at most384 output tokens and20 seconds. It does not acquire weights, invoke
+a paid service or switch models. All stages share the existing45-second generation
+deadline; the answer stage does not start a new45-second budget after planning.
+A valid cross-language plan keeps source-language filtering independent from its
+validated reply-language hint. Only that hint is added to the writer payload.
+
+Original searches and their response objects are retained. Validated hypotheses
+add bounded scoped lexical/Russian-word-form candidates through
+[the optional helper](QUERY_PLANNING.md). Its ordered per-book pools feed the
+existing final round robin **before** the two-passages-per-book cap. Same-language
+body coverage/proximity reranking is enabled; cross-language hypotheses keep the
+conservative channel order. Old heterogeneous search scores are not added or
+resorted. Invalid, late, foreign-scope or failed optional planning/search/reranking
+retains original candidates. A selected source-version change during planning
+also falls back; stale original rows still fail ordinary canonical hydration.
+The opt-in path enforces the requested book/language scope during hydration and
+again after generation.
+
+A planner may therefore run on an explicitly selected indexed book even when
+original retrieval is empty. If it still finds no verified sources, Ask abstains
+without writer or grounding-check calls. The default empty-evidence path still
+makes zero model calls. This distinction is intentional and opt-in.
+
+The response exposes only bounded retrieval diagnostics:
+
+```python
+{
+    "retrieval": {
+        "planning": {
+            "requested": True,
+            "used": True,
+            "reason": "validated_plan_candidates",
+            "elapsed_ms": 1200.0,
+            "ranking_strategy": "body-coverage-proximity-v1",
+            "book_queries": [{"book_id": selected_id, "language": "en", "queries": [hypothesis]}],
+            "response_language_hint": "ru",
+        }
+    }
+}
+```
+
+`used` describes retrieval hypotheses, not an answerability or correctness
+certificate. Rejected raw model output, native exceptions and private diagnostics
+are excluded. No hypotheses or rerank explanations are inserted into the
+writer's source evidence. Invalid/unused planning has an empty query list and
+keeps a bounded reason code.
+
+Only the opt-in writer and grounding-check prompts add explicit reminders to
+preserve actors, recipients, negation, units, quantified bounds, and observation
+versus instruction or possibility versus fact. They also reject conclusions of
+whole-book absence from missing retrieved evidence. Default prompts and writer
+payloads are retained for controlled comparisons. These instructions remain
+model guidance, with the previously documented false-positive/false-negative
+limitations; exact quote and source-version checks remain mandatory.
+
+Twenty-eight new temporary-CC0 integration tests cover strict API booleans,
+metadata-only planner inputs, reply/source language separation, source recovery,
+ordered candidates before the cap, untouched originals, opt-in failures, unknown
+or global scopes, no default planner calls, missing evidence, shared deadlines
+and source/language changes. The166-test targeted suite passed; real-model quality evaluation is separate.
+No live model, corpus or server was changed by these tests.

@@ -1,0 +1,760 @@
+{
+  "kind": "open-development-retrieval-planning-probe",
+  "created_at": "2026-11-15T03:05:59.481188+00:00",
+  "source_directory": "/Users/rebrudiy/book_rag/data/full",
+  "fixture": "/Users/rebrudiy/book_rag/evals/rag-dev-v1.json",
+  "fixture_sha256": "573155bfea71d0086b37f622e3bc24598bd1dd6595535436c05ae59bf7fdf92d",
+  "planner_invoked": true,
+  "limits": {
+    "timeout_seconds": 8,
+    "max_tokens": 384,
+    "max_queries": 10
+  },
+  "comparison_mode": "lexical",
+  "source_guard_before": {
+    "wsru-how-much-land-285bf7cc584e": {
+      "book_metadata_sha256": "836f287d69a161cbac45cafb2a79f1841d3d08579425f17d44c80708eb081e6a",
+      "artifact_sha256": "0ebd281360393ff0d9dbf15d5e01f41dc8d4cb44ac7020ba9d1887126769fc68",
+      "content_sha256": "ccc134c7cab15ebae59a82b9ee6a5da946e8e697a104d264228cc0e299d2fb18",
+      "section_snapshot_sha256": "77eb716867351c1092928ff44fcc3a40bee6df6d45f0131fd1739dc0ccebd9c4",
+      "passage_identity_sha256": "6c0d64decafefeaf505e396195c3ce08a04e991bd653b206cef9ad952a3f5d34",
+      "roles_sha256": "4e1a5a855baaec6ad7e7e0ca69d9708fad5c9743e2b17490866f2251fa93d160",
+      "passages": 18
+    }
+  },
+  "source_guard_after": {
+    "wsru-how-much-land-285bf7cc584e": {
+      "book_metadata_sha256": "836f287d69a161cbac45cafb2a79f1841d3d08579425f17d44c80708eb081e6a",
+      "artifact_sha256": "0ebd281360393ff0d9dbf15d5e01f41dc8d4cb44ac7020ba9d1887126769fc68",
+      "content_sha256": "ccc134c7cab15ebae59a82b9ee6a5da946e8e697a104d264228cc0e299d2fb18",
+      "section_snapshot_sha256": "77eb716867351c1092928ff44fcc3a40bee6df6d45f0131fd1739dc0ccebd9c4",
+      "passage_identity_sha256": "6c0d64decafefeaf505e396195c3ce08a04e991bd653b206cef9ad952a3f5d34",
+      "roles_sha256": "4e1a5a855baaec6ad7e7e0ca69d9708fad5c9743e2b17490866f2251fa93d160",
+      "passages": 18
+    }
+  },
+  "selected_source_guard_passed": true,
+  "elapsed_seconds": 0.048927083145827055,
+  "summary": {
+    "cases": 1,
+    "validated_plans": 1,
+    "reference_anchors": 1,
+    "original_anchor_hits_at2_per_book": 0,
+    "planned_anchor_hits_at2_per_book": 0,
+    "original_anchor_hits_at40_per_book": 1,
+    "planned_anchor_hits_in_query_union": 0
+  },
+  "cases": [
+    {
+      "id": "ru-land-grave",
+      "question": "Сколько земли в итоге занимает могила Пахома в рассказе Толстого «Много ли человеку земли нужно»?",
+      "plan": {
+        "original_question": "Сколько земли в итоге занимает могила Пахома в рассказе Толстого «Много ли человеку земли нужно»?",
+        "kind": "retrieval_hypotheses",
+        "used": true,
+        "reason": "validated_plan",
+        "book_queries": [
+          {
+            "book_id": "wsru-how-much-land-285bf7cc584e",
+            "language": "ru",
+            "queries": [
+              "количество земли в могиле пахома",
+              "сколько земли заняла могила пахома"
+            ]
+          }
+        ],
+        "response_language_hint": "ru",
+        "fallback": null,
+        "generation": {
+          "model": {
+            "profile": "receipt-replay-no-model-call"
+          },
+          "elapsed_ms": 0
+        },
+        "elapsed_ms": 0.075
+      },
+      "books": [
+        {
+          "book_id": "wsru-how-much-land-285bf7cc584e",
+          "language": "ru",
+          "original": {
+            "query": "Сколько земли в итоге занимает могила Пахома в рассказе Толстого  Много ли человеку земли нужно ?",
+            "mode": "lexical",
+            "elapsed_ms": 6.35,
+            "anchors": [
+              {
+                "reference_id": "grave",
+                "book_id": "wsru-how-much-land-285bf7cc584e",
+                "first_rank": 14
+              }
+            ],
+            "results": [
+              {
+                "id": 2576558,
+                "book_id": "wsru-how-much-land-285bf7cc584e",
+                "section_id": 343433,
+                "section_title": "V",
+                "start": 1318,
+                "end": 2257,
+                "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. V, chars 1318–2257.",
+                "verified": true,
+                "text_sha256": "b67a203d601980d4ccba1be350ade2222fe008567e9a3b7a6a9a7311d9b139a5"
+              },
+              {
+                "id": 2576560,
+                "book_id": "wsru-how-much-land-285bf7cc584e",
+                "section_id": 343434,
+                "section_title": "VI",
+                "start": 1202,
+                "end": 2255,
+                "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. VI, chars 1202–2255.",
+                "verified": true,
+                "text_sha256": "6a5aec39b0adf62a43cdda727589c7f42ea11a6c4774d663606ee2dfe7bbbfc7"
+              },
+              {
+                "id": 2576555,
+                "book_id": "wsru-how-much-land-285bf7cc584e",
+                "section_id": 343432,
+                "section_title": "IV",
+                "start": 0,
+                "end": 1356,
+                "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. IV, chars 0–1356.",
+                "verified": true,
+                "text_sha256": "6e50013b868f521eee31b77ae064dfed33079d2c09f0660da430f45737f4fee9"
+              },
+              {
+                "id": 2576554,
+                "book_id": "wsru-how-much-land-285bf7cc584e",
+                "section_id": 343431,
+                "section_title": "III",
+                "start": 1183,
+                "end": 3061,
+                "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. III, chars 1183–3061.",
+                "verified": true,
+                "text_sha256": "1ab65a12669849c8d18d29158d9f146f429c87224b3ac2f02e0abd6b99f69fa0"
+              },
+              {
+                "id": 2576561,
+                "book_id": "wsru-how-much-land-285bf7cc584e",
+                "section_id": 343435,
+                "section_title": "VII",
+                "start": 0,
+                "end": 1820,
+                "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. VII, chars 0–1820.",
+                "verified": true,
+                "text_sha256": "875b4df12db0fef5c46050e36b1544b96b6969776d8bb21b8c6b50c6c9be6e9c"
+              },
+              {
+                "id": 2576553,
+                "book_id": "wsru-how-much-land-285bf7cc584e",
+                "section_id": 343431,
+                "section_title": "III",
+                "start": 0,
+                "end": 1181,
+                "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. III, chars 0–1181.",
+                "verified": true,
+                "text_sha256": "85357209c194cab684277c973fee38b51f954777c3adf95eedc4e208d7150714"
+              },
+              {
+                "id": 2576557,
+                "book_id": "wsru-how-much-land-285bf7cc584e",
+                "section_id": 343433,
+                "section_title": "V",
+                "start": 0,
+                "end": 1316,
+                "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. V, chars 0–1316.",
+                "verified": true,
+                "text_sha256": "aec9e8520e13e064c92c5c04eab14365586f574cdc2706635394ca7cc4dd64d5"
+              },
+              {
+                "id": 2576562,
+                "book_id": "wsru-how-much-land-285bf7cc584e",
+                "section_id": 343436,
+                "section_title": "VIII",
+                "start": 0,
+                "end": 1237,
+                "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. VIII, chars 0–1237.",
+                "verified": true,
+                "text_sha256": "42ccfdde18e779eb59ffc261cf6210f0c04e46b896ca635ec853ab40a239c60c"
+              },
+              {
+                "id": 2576549,
+                "book_id": "wsru-how-much-land-285bf7cc584e",
+                "section_id": 343428,
+                "section_title": "Происхождение и условия использования — Book RAG",
+                "start": 0,
+                "end": 1118,
+                "citation": "Book RAG (editorial). В: Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. Происхождение и условия использования — Book RAG, chars 0–1118.",
+                "verified": true,
+                "text_sha256": "1b79b7aef24aeed78acf4d891d74941313824672e7c86a41624d7b04c7774f63"
+              },
+              {
+                "id": 2576550,
+                "book_id": "wsru-how-much-land-285bf7cc584e",
+                "section_id": 343429,
+                "section_title": "Много ли человеку земли нужно\nI",
+                "start": 0,
+                "end": 1920,
+                "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. Много ли человеку земли нужно\nI, chars 0–1920.",
+                "verified": true,
+                "text_sha256": "c0cd2f7094501fee85dc190f34a405eb10db3bcfb77afda37d49749e093d079e"
+              },
+              {
+                "id": 2576559,
+                "book_id": "wsru-how-much-land-285bf7cc584e",
+                "section_id": 343434,
+                "section_title": "VI",
+                "start": 0,
+                "end": 1200,
+                "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. VI, chars 0–1200.",
+                "verified": true,
+                "text_sha256": "0939c8f3d0dde312f9ff6d4e08433926cfc6f665d30a15217004316710edb65e"
+              },
+              {
+                "id": 2576564,
+                "book_id": "wsru-how-much-land-285bf7cc584e",
+                "section_id": 343436,
+                "section_title": "VIII",
+                "start": 2405,
+                "end": 3569,
+                "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. VIII, chars 2405–3569.",
+                "verified": true,
+                "text_sha256": "90260dc7b05faf2e8736ef33af6cb7c8dae30a2fa0eae731b47058f330f3e5f8"
+              },
+              {
+                "id": 2576551,
+                "book_id": "wsru-how-much-land-285bf7cc584e",
+                "section_id": 343430,
+                "section_title": "II",
+                "start": 0,
+                "end": 1321,
+                "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. II, chars 0–1321.",
+                "verified": true,
+                "text_sha256": "70da2811049321c558bdfa43cc5b0bec601412a137ed0d5b9d0abdac91e734de"
+              },
+              {
+                "id": 2576566,
+                "book_id": "wsru-how-much-land-285bf7cc584e",
+                "section_id": 343437,
+                "section_title": "IX",
+                "start": 920,
+                "end": 2676,
+                "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. IX, chars 920–2676.",
+                "verified": true,
+                "text_sha256": "380231cd287307572008907959aa533a33d0aa9189f795f5ae419fd948cbcfaf"
+              },
+              {
+                "id": 2576565,
+                "book_id": "wsru-how-much-land-285bf7cc584e",
+                "section_id": 343437,
+                "section_title": "IX",
+                "start": 0,
+                "end": 918,
+                "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. IX, chars 0–918.",
+                "verified": true,
+                "text_sha256": "6402bb68d6e872dccd7602d13b0b904a7e4d2bd9b96af00ecd9d1555249a6965"
+              },
+              {
+                "id": 2576552,
+                "book_id": "wsru-how-much-land-285bf7cc584e",
+                "section_id": 343430,
+                "section_title": "II",
+                "start": 1323,
+                "end": 2385,
+                "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. II, chars 1323–2385.",
+                "verified": true,
+                "text_sha256": "4c3a72aa33bf671209d67c39cc9cbfba577cf4e5251c1b3824b48a1e00a79556"
+              },
+              {
+                "id": 2576556,
+                "book_id": "wsru-how-much-land-285bf7cc584e",
+                "section_id": 343432,
+                "section_title": "IV",
+                "start": 1358,
+                "end": 2991,
+                "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. IV, chars 1358–2991.",
+                "verified": true,
+                "text_sha256": "665b1c68335a5d39529a805f395a6c4be7393a6f411875b94f0270c020d006c4"
+              },
+              {
+                "id": 2576563,
+                "book_id": "wsru-how-much-land-285bf7cc584e",
+                "section_id": 343436,
+                "section_title": "VIII",
+                "start": 1239,
+                "end": 2403,
+                "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. VIII, chars 1239–2403.",
+                "verified": true,
+                "text_sha256": "dc1ab4677607ff583e28cc5f09de69d386f62ba40fe40f5b3f0d6e2d9a7f5232"
+              }
+            ]
+          },
+          "planned_queries": [
+            {
+              "query": "количество земли в могиле пахома",
+              "mode": "lexical",
+              "elapsed_ms": 5.12,
+              "warnings": [],
+              "anchors": [
+                {
+                  "reference_id": "grave",
+                  "book_id": "wsru-how-much-land-285bf7cc584e",
+                  "first_rank": null
+                }
+              ],
+              "results": [
+                {
+                  "id": 2576558,
+                  "book_id": "wsru-how-much-land-285bf7cc584e",
+                  "section_id": 343433,
+                  "section_title": "V",
+                  "start": 1318,
+                  "end": 2257,
+                  "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. V, chars 1318–2257.",
+                  "verified": true,
+                  "text_sha256": "b67a203d601980d4ccba1be350ade2222fe008567e9a3b7a6a9a7311d9b139a5"
+                },
+                {
+                  "id": 2576555,
+                  "book_id": "wsru-how-much-land-285bf7cc584e",
+                  "section_id": 343432,
+                  "section_title": "IV",
+                  "start": 0,
+                  "end": 1356,
+                  "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. IV, chars 0–1356.",
+                  "verified": true,
+                  "text_sha256": "6e50013b868f521eee31b77ae064dfed33079d2c09f0660da430f45737f4fee9"
+                },
+                {
+                  "id": 2576560,
+                  "book_id": "wsru-how-much-land-285bf7cc584e",
+                  "section_id": 343434,
+                  "section_title": "VI",
+                  "start": 1202,
+                  "end": 2255,
+                  "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. VI, chars 1202–2255.",
+                  "verified": true,
+                  "text_sha256": "6a5aec39b0adf62a43cdda727589c7f42ea11a6c4774d663606ee2dfe7bbbfc7"
+                },
+                {
+                  "id": 2576554,
+                  "book_id": "wsru-how-much-land-285bf7cc584e",
+                  "section_id": 343431,
+                  "section_title": "III",
+                  "start": 1183,
+                  "end": 3061,
+                  "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. III, chars 1183–3061.",
+                  "verified": true,
+                  "text_sha256": "1ab65a12669849c8d18d29158d9f146f429c87224b3ac2f02e0abd6b99f69fa0"
+                },
+                {
+                  "id": 2576561,
+                  "book_id": "wsru-how-much-land-285bf7cc584e",
+                  "section_id": 343435,
+                  "section_title": "VII",
+                  "start": 0,
+                  "end": 1820,
+                  "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. VII, chars 0–1820.",
+                  "verified": true,
+                  "text_sha256": "875b4df12db0fef5c46050e36b1544b96b6969776d8bb21b8c6b50c6c9be6e9c"
+                },
+                {
+                  "id": 2576553,
+                  "book_id": "wsru-how-much-land-285bf7cc584e",
+                  "section_id": 343431,
+                  "section_title": "III",
+                  "start": 0,
+                  "end": 1181,
+                  "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. III, chars 0–1181.",
+                  "verified": true,
+                  "text_sha256": "85357209c194cab684277c973fee38b51f954777c3adf95eedc4e208d7150714"
+                },
+                {
+                  "id": 2576557,
+                  "book_id": "wsru-how-much-land-285bf7cc584e",
+                  "section_id": 343433,
+                  "section_title": "V",
+                  "start": 0,
+                  "end": 1316,
+                  "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. V, chars 0–1316.",
+                  "verified": true,
+                  "text_sha256": "aec9e8520e13e064c92c5c04eab14365586f574cdc2706635394ca7cc4dd64d5"
+                },
+                {
+                  "id": 2576562,
+                  "book_id": "wsru-how-much-land-285bf7cc584e",
+                  "section_id": 343436,
+                  "section_title": "VIII",
+                  "start": 0,
+                  "end": 1237,
+                  "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. VIII, chars 0–1237.",
+                  "verified": true,
+                  "text_sha256": "42ccfdde18e779eb59ffc261cf6210f0c04e46b896ca635ec853ab40a239c60c"
+                }
+              ],
+              "experimental_russian_stems": {
+                "used": true,
+                "stems": [
+                  "количеств",
+                  "земл",
+                  "могил",
+                  "пахом"
+                ],
+                "elapsed_ms": 24.852917063981295,
+                "corrupt_candidates_suppressed": 0,
+                "anchors": [
+                  {
+                    "reference_id": "grave",
+                    "book_id": "wsru-how-much-land-285bf7cc584e",
+                    "first_rank": 1
+                  }
+                ],
+                "results": [
+                  {
+                    "id": 2576566,
+                    "book_id": "wsru-how-much-land-285bf7cc584e",
+                    "section_id": 343437,
+                    "section_title": "IX",
+                    "start": 920,
+                    "end": 2676,
+                    "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. IX, chars 920–2676.",
+                    "verified": true,
+                    "text_sha256": "380231cd287307572008907959aa533a33d0aa9189f795f5ae419fd948cbcfaf"
+                  },
+                  {
+                    "id": 2576555,
+                    "book_id": "wsru-how-much-land-285bf7cc584e",
+                    "section_id": 343432,
+                    "section_title": "IV",
+                    "start": 0,
+                    "end": 1356,
+                    "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. IV, chars 0–1356.",
+                    "verified": true,
+                    "text_sha256": "6e50013b868f521eee31b77ae064dfed33079d2c09f0660da430f45737f4fee9"
+                  },
+                  {
+                    "id": 2576558,
+                    "book_id": "wsru-how-much-land-285bf7cc584e",
+                    "section_id": 343433,
+                    "section_title": "V",
+                    "start": 1318,
+                    "end": 2257,
+                    "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. V, chars 1318–2257.",
+                    "verified": true,
+                    "text_sha256": "b67a203d601980d4ccba1be350ade2222fe008567e9a3b7a6a9a7311d9b139a5"
+                  },
+                  {
+                    "id": 2576554,
+                    "book_id": "wsru-how-much-land-285bf7cc584e",
+                    "section_id": 343431,
+                    "section_title": "III",
+                    "start": 1183,
+                    "end": 3061,
+                    "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. III, chars 1183–3061.",
+                    "verified": true,
+                    "text_sha256": "1ab65a12669849c8d18d29158d9f146f429c87224b3ac2f02e0abd6b99f69fa0"
+                  },
+                  {
+                    "id": 2576562,
+                    "book_id": "wsru-how-much-land-285bf7cc584e",
+                    "section_id": 343436,
+                    "section_title": "VIII",
+                    "start": 0,
+                    "end": 1237,
+                    "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. VIII, chars 0–1237.",
+                    "verified": true,
+                    "text_sha256": "42ccfdde18e779eb59ffc261cf6210f0c04e46b896ca635ec853ab40a239c60c"
+                  },
+                  {
+                    "id": 2576561,
+                    "book_id": "wsru-how-much-land-285bf7cc584e",
+                    "section_id": 343435,
+                    "section_title": "VII",
+                    "start": 0,
+                    "end": 1820,
+                    "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. VII, chars 0–1820.",
+                    "verified": true,
+                    "text_sha256": "875b4df12db0fef5c46050e36b1544b96b6969776d8bb21b8c6b50c6c9be6e9c"
+                  },
+                  {
+                    "id": 2576560,
+                    "book_id": "wsru-how-much-land-285bf7cc584e",
+                    "section_id": 343434,
+                    "section_title": "VI",
+                    "start": 1202,
+                    "end": 2255,
+                    "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. VI, chars 1202–2255.",
+                    "verified": true,
+                    "text_sha256": "6a5aec39b0adf62a43cdda727589c7f42ea11a6c4774d663606ee2dfe7bbbfc7"
+                  },
+                  {
+                    "id": 2576557,
+                    "book_id": "wsru-how-much-land-285bf7cc584e",
+                    "section_id": 343433,
+                    "section_title": "V",
+                    "start": 0,
+                    "end": 1316,
+                    "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. V, chars 0–1316.",
+                    "verified": true,
+                    "text_sha256": "aec9e8520e13e064c92c5c04eab14365586f574cdc2706635394ca7cc4dd64d5"
+                  }
+                ]
+              }
+            },
+            {
+              "query": "сколько земли заняла могила пахома",
+              "mode": "lexical",
+              "elapsed_ms": 5.14,
+              "warnings": [],
+              "anchors": [
+                {
+                  "reference_id": "grave",
+                  "book_id": "wsru-how-much-land-285bf7cc584e",
+                  "first_rank": null
+                }
+              ],
+              "results": [
+                {
+                  "id": 2576558,
+                  "book_id": "wsru-how-much-land-285bf7cc584e",
+                  "section_id": 343433,
+                  "section_title": "V",
+                  "start": 1318,
+                  "end": 2257,
+                  "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. V, chars 1318–2257.",
+                  "verified": true,
+                  "text_sha256": "b67a203d601980d4ccba1be350ade2222fe008567e9a3b7a6a9a7311d9b139a5"
+                },
+                {
+                  "id": 2576555,
+                  "book_id": "wsru-how-much-land-285bf7cc584e",
+                  "section_id": 343432,
+                  "section_title": "IV",
+                  "start": 0,
+                  "end": 1356,
+                  "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. IV, chars 0–1356.",
+                  "verified": true,
+                  "text_sha256": "6e50013b868f521eee31b77ae064dfed33079d2c09f0660da430f45737f4fee9"
+                },
+                {
+                  "id": 2576560,
+                  "book_id": "wsru-how-much-land-285bf7cc584e",
+                  "section_id": 343434,
+                  "section_title": "VI",
+                  "start": 1202,
+                  "end": 2255,
+                  "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. VI, chars 1202–2255.",
+                  "verified": true,
+                  "text_sha256": "6a5aec39b0adf62a43cdda727589c7f42ea11a6c4774d663606ee2dfe7bbbfc7"
+                },
+                {
+                  "id": 2576554,
+                  "book_id": "wsru-how-much-land-285bf7cc584e",
+                  "section_id": 343431,
+                  "section_title": "III",
+                  "start": 1183,
+                  "end": 3061,
+                  "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. III, chars 1183–3061.",
+                  "verified": true,
+                  "text_sha256": "1ab65a12669849c8d18d29158d9f146f429c87224b3ac2f02e0abd6b99f69fa0"
+                },
+                {
+                  "id": 2576561,
+                  "book_id": "wsru-how-much-land-285bf7cc584e",
+                  "section_id": 343435,
+                  "section_title": "VII",
+                  "start": 0,
+                  "end": 1820,
+                  "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. VII, chars 0–1820.",
+                  "verified": true,
+                  "text_sha256": "875b4df12db0fef5c46050e36b1544b96b6969776d8bb21b8c6b50c6c9be6e9c"
+                },
+                {
+                  "id": 2576553,
+                  "book_id": "wsru-how-much-land-285bf7cc584e",
+                  "section_id": 343431,
+                  "section_title": "III",
+                  "start": 0,
+                  "end": 1181,
+                  "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. III, chars 0–1181.",
+                  "verified": true,
+                  "text_sha256": "85357209c194cab684277c973fee38b51f954777c3adf95eedc4e208d7150714"
+                },
+                {
+                  "id": 2576557,
+                  "book_id": "wsru-how-much-land-285bf7cc584e",
+                  "section_id": 343433,
+                  "section_title": "V",
+                  "start": 0,
+                  "end": 1316,
+                  "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. V, chars 0–1316.",
+                  "verified": true,
+                  "text_sha256": "aec9e8520e13e064c92c5c04eab14365586f574cdc2706635394ca7cc4dd64d5"
+                },
+                {
+                  "id": 2576562,
+                  "book_id": "wsru-how-much-land-285bf7cc584e",
+                  "section_id": 343436,
+                  "section_title": "VIII",
+                  "start": 0,
+                  "end": 1237,
+                  "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. VIII, chars 0–1237.",
+                  "verified": true,
+                  "text_sha256": "42ccfdde18e779eb59ffc261cf6210f0c04e46b896ca635ec853ab40a239c60c"
+                }
+              ],
+              "experimental_russian_stems": {
+                "used": true,
+                "stems": [
+                  "земл",
+                  "заня",
+                  "мог",
+                  "пахом"
+                ],
+                "elapsed_ms": 5.400792229920626,
+                "corrupt_candidates_suppressed": 0,
+                "anchors": [
+                  {
+                    "reference_id": "grave",
+                    "book_id": "wsru-how-much-land-285bf7cc584e",
+                    "first_rank": 2
+                  }
+                ],
+                "results": [
+                  {
+                    "id": 2576552,
+                    "book_id": "wsru-how-much-land-285bf7cc584e",
+                    "section_id": 343430,
+                    "section_title": "II",
+                    "start": 1323,
+                    "end": 2385,
+                    "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. II, chars 1323–2385.",
+                    "verified": true,
+                    "text_sha256": "4c3a72aa33bf671209d67c39cc9cbfba577cf4e5251c1b3824b48a1e00a79556"
+                  },
+                  {
+                    "id": 2576566,
+                    "book_id": "wsru-how-much-land-285bf7cc584e",
+                    "section_id": 343437,
+                    "section_title": "IX",
+                    "start": 920,
+                    "end": 2676,
+                    "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. IX, chars 920–2676.",
+                    "verified": true,
+                    "text_sha256": "380231cd287307572008907959aa533a33d0aa9189f795f5ae419fd948cbcfaf"
+                  },
+                  {
+                    "id": 2576555,
+                    "book_id": "wsru-how-much-land-285bf7cc584e",
+                    "section_id": 343432,
+                    "section_title": "IV",
+                    "start": 0,
+                    "end": 1356,
+                    "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. IV, chars 0–1356.",
+                    "verified": true,
+                    "text_sha256": "6e50013b868f521eee31b77ae064dfed33079d2c09f0660da430f45737f4fee9"
+                  },
+                  {
+                    "id": 2576558,
+                    "book_id": "wsru-how-much-land-285bf7cc584e",
+                    "section_id": 343433,
+                    "section_title": "V",
+                    "start": 1318,
+                    "end": 2257,
+                    "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. V, chars 1318–2257.",
+                    "verified": true,
+                    "text_sha256": "b67a203d601980d4ccba1be350ade2222fe008567e9a3b7a6a9a7311d9b139a5"
+                  },
+                  {
+                    "id": 2576554,
+                    "book_id": "wsru-how-much-land-285bf7cc584e",
+                    "section_id": 343431,
+                    "section_title": "III",
+                    "start": 1183,
+                    "end": 3061,
+                    "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. III, chars 1183–3061.",
+                    "verified": true,
+                    "text_sha256": "1ab65a12669849c8d18d29158d9f146f429c87224b3ac2f02e0abd6b99f69fa0"
+                  },
+                  {
+                    "id": 2576562,
+                    "book_id": "wsru-how-much-land-285bf7cc584e",
+                    "section_id": 343436,
+                    "section_title": "VIII",
+                    "start": 0,
+                    "end": 1237,
+                    "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. VIII, chars 0–1237.",
+                    "verified": true,
+                    "text_sha256": "42ccfdde18e779eb59ffc261cf6210f0c04e46b896ca635ec853ab40a239c60c"
+                  },
+                  {
+                    "id": 2576561,
+                    "book_id": "wsru-how-much-land-285bf7cc584e",
+                    "section_id": 343435,
+                    "section_title": "VII",
+                    "start": 0,
+                    "end": 1820,
+                    "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. VII, chars 0–1820.",
+                    "verified": true,
+                    "text_sha256": "875b4df12db0fef5c46050e36b1544b96b6969776d8bb21b8c6b50c6c9be6e9c"
+                  },
+                  {
+                    "id": 2576560,
+                    "book_id": "wsru-how-much-land-285bf7cc584e",
+                    "section_id": 343434,
+                    "section_title": "VI",
+                    "start": 1202,
+                    "end": 2255,
+                    "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. VI, chars 1202–2255.",
+                    "verified": true,
+                    "text_sha256": "6a5aec39b0adf62a43cdda727589c7f42ea11a6c4774d663606ee2dfe7bbbfc7"
+                  },
+                  {
+                    "id": 2576557,
+                    "book_id": "wsru-how-much-land-285bf7cc584e",
+                    "section_id": 343433,
+                    "section_title": "V",
+                    "start": 0,
+                    "end": 1316,
+                    "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. V, chars 0–1316.",
+                    "verified": true,
+                    "text_sha256": "aec9e8520e13e064c92c5c04eab14365586f574cdc2706635394ca7cc4dd64d5"
+                  }
+                ]
+              }
+            }
+          ],
+          "planned_round_robin_anchors": [
+            {
+              "reference_id": "grave",
+              "book_id": "wsru-how-much-land-285bf7cc584e",
+              "first_rank": null
+            }
+          ],
+          "planned_then_original_round_robin_anchors": [
+            {
+              "reference_id": "grave",
+              "book_id": "wsru-how-much-land-285bf7cc584e",
+              "first_rank": 14
+            }
+          ],
+          "merge_note": "Diagnostic only; candidate ranking/merging is not integrated into Ask."
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "Three or fewer selected, previously inspected open development failures; not heldout or general quality.",
+    "Lexical original versus lexical planned queries; this does not re-run or score the full hybrid RAG pipeline.",
+    "Only query hypotheses are generated; no answer, entailment verdict or user-facing fact is generated.",
+    "Keyword-language correctness and topical fidelity require review; structural validation cannot prove them.",
+    "Selected-source guards cover metadata, source hashes, sections, passage IDs and contributor roles; global ingestion may continue.",
+    "No Library(original) constructor, migrations, source writes, embedding jobs or paid inference.",
+    "Timing includes a potentially cold local planner; sequential searches have cache/order confounds."
+  ],
+  "actual_model_generation_invoked": false,
+  "replay_receipt": {
+    "path": "experiments/query-planning-v1.json",
+    "sha256": "223c2e2fb8f1420ec521d18dc1f1ceb012fb91825a9370dd6fe3dcedcd7a2b73"
+  }
+}

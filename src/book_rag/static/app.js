@@ -581,10 +581,12 @@
     target.replaceChildren(); target.classList.add('hidden'); target.dataset.active = 'false';
     if (!coverage || coverage.active !== true || !Number.isSafeInteger(coverage.indexed_books) || !Number.isSafeInteger(coverage.searchable_books) || coverage.indexed_books < 1 || coverage.searchable_books < coverage.indexed_books) return;
     const russianScope = coverage.scope === 'ru21-scoped-overlay' && coverage.scope_language === 'ru' && Number.isSafeInteger(coverage.scope_searchable_books) && coverage.scope_searchable_books >= coverage.indexed_books;
-    const title = russianScope
+    const selectedBookScope = coverage.scope === 'book-batch-overlay' && coverage.requested_book_covered === true && typeof coverage.scope_book_id === 'string';
+    const title = selectedBookScope ? 'Поиск по смыслу доступен для выбранной книги' : russianScope
       ? `Поиск по смыслу на русском: ${formatNumber(coverage.indexed_books)} из ${formatNumber(coverage.scope_searchable_books)} изданий`
       : `Поиск по смыслу: ${formatNumber(coverage.indexed_books)} из ${formatNumber(coverage.searchable_books)} изданий`;
     target.append(node('p', 'semantic-coverage-title', title));
+    if (selectedBookScope) target.append(node('p', 'semantic-coverage-scope', 'Используем полный индекс выбранного издания. Порядок фрагментов рассчитан приближённо; проверьте содержание в источнике.'));
     if (russianScope) target.append(node('p', 'semantic-coverage-scope', 'Подключён отдельный индекс русских текстов. Порядок фрагментов рассчитан приближённо; откройте источник, чтобы проверить содержание.'));
     if (coverage.requested_book_covered === false) target.append(node('p', 'semantic-coverage-scope', 'Для выбранной книги доступен поиск по словам.'));
     target.append(node('p', 'semantic-coverage-note', 'Поиск по словам доступен по всей библиотеке.'));
@@ -592,6 +594,9 @@
     target.classList.toggle('hidden', state.panel !== (target.id === 'answer-coverage' ? 'answer' : 'fragments'));
   }
   function updateAnswerScope() {
+    const planningAllowed = Boolean($('book-filter').value) && !state.answerScopeBlocked;
+    $('answer-plan-retrieval').disabled = !planningAllowed || Boolean(state.answerController);
+    if (!planningAllowed) $('answer-plan-retrieval').checked = false;
     if (state.answerScopeBlocked) { $('answer-scope').textContent = state.answerScopeLoading ? 'Проверяем выбранную книгу из ссылки…' : 'Книга из ссылки не подтверждена. Выберите другую книгу или явно снимите ограничение.'; return; }
     const book = state.scopeBook;
     const scope = $('book-filter').value ? `Книга: ${book?.title || 'выбранное издание'}${book?.author ? ' · ' + book.author : ''}` : 'Вся библиотека';
@@ -609,6 +614,7 @@
     const restoreFocus = !busy && document.activeElement === $('cancel-answer');
     $('answer-panel').setAttribute('aria-busy', String(busy));
     $('run-answer').disabled = busy || Boolean(state.answerScopeBlocked);
+    $('answer-plan-retrieval').disabled = busy || Boolean(state.answerScopeBlocked) || !$('book-filter').value;
     $('cancel-answer').classList.toggle('hidden', !busy || !state.answerController);
     if (restoreFocus && state.view === 'search' && state.panel === 'answer') $('answer-query').focus();
   }
@@ -723,10 +729,11 @@
     if (state.query !== query) { state.researchQuery = ''; $('research-output').replaceChildren(); clearFragmentContext('Этот вопрос можно исследовать по фрагментам'); }
     state.query = query; $('query').value = query; updateAnswerURL();
     $('answer-output').replaceChildren(); $('answer-warnings').replaceChildren(); $('answer-warnings').classList.add('hidden'); renderSemanticCoverage(null, $('answer-coverage'));
-    answerBusy(true); $('answer-status').textContent = 'Ищем фрагменты и готовим ответ с источниками…';
+    const planRetrieval = Boolean($('book-filter').value) && $('answer-plan-retrieval').checked;
+    answerBusy(true); $('answer-status').textContent = planRetrieval ? 'Уточняем поиск и готовим ответ с источниками…' : 'Ищем фрагменты и готовим ответ с источниками…';
     announce($('answer-status').textContent);
     try {
-      const data = await api('/api/ask', { method: 'POST', signal: controller.signal, body: JSON.stringify({ query, book_ids: $('book-filter').value ? [$('book-filter').value] : [], language: $('language-filter').value || null, mode: 'hybrid', limit: 8 }) });
+      const data = await api('/api/ask', { method: 'POST', signal: controller.signal, body: JSON.stringify({ query, book_ids: $('book-filter').value ? [$('book-filter').value] : [], language: $('language-filter').value || null, mode: 'hybrid', limit: 8, ...(planRetrieval ? { plan_retrieval: true } : {}) }) });
       if (request !== state.answerSequence || state.view !== 'search' || state.panel !== 'answer') return;
       state.answerResponse = data; renderAnswer(data);
     } catch (error) {
@@ -1347,6 +1354,7 @@
   $('library-query').addEventListener('input', debounce(() => loadLibrary(0)));
   $('library-search-mode').addEventListener('change', () => loadLibrary(0));
   $('open-book-discovery').addEventListener('click', () => { $('library-search-mode').value = 'description'; $('library-query').value = $('query').value.trim(); showView('library'); $('library-query').focus(); });
+  $('answer-plan-retrieval').addEventListener('change', () => invalidateAnswer('Настройка поиска изменилась. Отправьте вопрос снова.'));
   $('library-language').addEventListener('change', () => loadLibrary(0));
   $('library-status').addEventListener('change', () => loadLibrary(0));
   $('library-ingestion-status').addEventListener('change', () => loadLibrary(0));

@@ -1,0 +1,1477 @@
+{
+  "kind": "open-development-retrieval-planning-probe",
+  "created_at": "2026-11-15T03:20:39.979654+00:00",
+  "source_directory": "/Users/rebrudiy/book_rag/data/full",
+  "fixture": "/Users/rebrudiy/book_rag/evals/rag-dev-v1.json",
+  "fixture_sha256": "573155bfea71d0086b37f622e3bc24598bd1dd6595535436c05ae59bf7fdf92d",
+  "planner_invoked": true,
+  "limits": {
+    "timeout_seconds": 20.0,
+    "max_tokens": 384,
+    "max_queries": 10,
+    "max_queries_per_book": 1
+  },
+  "comparison_mode": "lexical",
+  "source_guard_before": {
+    "pg3300-full": {
+      "book_metadata_sha256": "c2b9e0a5a7338ddee81d867a6f0718f7f0003c28991a3aeef8cb1def70fe06ad",
+      "artifact_sha256": "52c8c5b9cc2b18d1edc87a326b76f0d8aee568932995d407083b394aaa9165ab",
+      "content_sha256": "da5946d31a0e131f1ff9c772b4831fd06cfb55a23bb137f180ffe1a6f905d6fd",
+      "section_snapshot_sha256": "952b29880d03de167bf37e7beb4bc6e3ede393f05095189befde80aebd258a9b",
+      "passage_identity_sha256": "833b6c17a00daf8522c4e4bf61b362867a673074d0c442de856b5ec36f9b46b7",
+      "roles_sha256": "f10ecf68a64042e25d85faf85a855062036b4634f45f0d66879ba44612aeb4a5",
+      "passages": 1753
+    },
+    "pg61-full": {
+      "book_metadata_sha256": "5605a792e1ef2a910bbf58520cfc965717370b33a08198bc39b105f21ab902be",
+      "artifact_sha256": "eb9d882661805128f3f476818a9eee328b77778b0d5ef7415fe08fcd76ecd763",
+      "content_sha256": "30738896b98b4adc0881feb58013408908b74438810eed97f32fb0e5e457af5b",
+      "section_snapshot_sha256": "9a6406282d8df05837c0dabf6c20c89aa1d3dcc3b1b89d18b0a143a60e79775f",
+      "passage_identity_sha256": "e70ede0b81d94ee2abaaa5c1c1a95850d4fe6880aba134dde0f78551030c08d6",
+      "roles_sha256": "ae8e72a80f5751b7da753a145e826a8b61aa228617cb9a50a05c0efe3480bb1b",
+      "passages": 61
+    },
+    "wsru-how-much-land-285bf7cc584e": {
+      "book_metadata_sha256": "836f287d69a161cbac45cafb2a79f1841d3d08579425f17d44c80708eb081e6a",
+      "artifact_sha256": "0ebd281360393ff0d9dbf15d5e01f41dc8d4cb44ac7020ba9d1887126769fc68",
+      "content_sha256": "ccc134c7cab15ebae59a82b9ee6a5da946e8e697a104d264228cc0e299d2fb18",
+      "section_snapshot_sha256": "77eb716867351c1092928ff44fcc3a40bee6df6d45f0131fd1739dc0ccebd9c4",
+      "passage_identity_sha256": "6c0d64decafefeaf505e396195c3ce08a04e991bd653b206cef9ad952a3f5d34",
+      "roles_sha256": "4e1a5a855baaec6ad7e7e0ca69d9708fad5c9743e2b17490866f2251fa93d160",
+      "passages": 18
+    }
+  },
+  "source_guard_after": {
+    "pg3300-full": {
+      "book_metadata_sha256": "c2b9e0a5a7338ddee81d867a6f0718f7f0003c28991a3aeef8cb1def70fe06ad",
+      "artifact_sha256": "52c8c5b9cc2b18d1edc87a326b76f0d8aee568932995d407083b394aaa9165ab",
+      "content_sha256": "da5946d31a0e131f1ff9c772b4831fd06cfb55a23bb137f180ffe1a6f905d6fd",
+      "section_snapshot_sha256": "952b29880d03de167bf37e7beb4bc6e3ede393f05095189befde80aebd258a9b",
+      "passage_identity_sha256": "833b6c17a00daf8522c4e4bf61b362867a673074d0c442de856b5ec36f9b46b7",
+      "roles_sha256": "f10ecf68a64042e25d85faf85a855062036b4634f45f0d66879ba44612aeb4a5",
+      "passages": 1753
+    },
+    "pg61-full": {
+      "book_metadata_sha256": "5605a792e1ef2a910bbf58520cfc965717370b33a08198bc39b105f21ab902be",
+      "artifact_sha256": "eb9d882661805128f3f476818a9eee328b77778b0d5ef7415fe08fcd76ecd763",
+      "content_sha256": "30738896b98b4adc0881feb58013408908b74438810eed97f32fb0e5e457af5b",
+      "section_snapshot_sha256": "9a6406282d8df05837c0dabf6c20c89aa1d3dcc3b1b89d18b0a143a60e79775f",
+      "passage_identity_sha256": "e70ede0b81d94ee2abaaa5c1c1a95850d4fe6880aba134dde0f78551030c08d6",
+      "roles_sha256": "ae8e72a80f5751b7da753a145e826a8b61aa228617cb9a50a05c0efe3480bb1b",
+      "passages": 61
+    },
+    "wsru-how-much-land-285bf7cc584e": {
+      "book_metadata_sha256": "836f287d69a161cbac45cafb2a79f1841d3d08579425f17d44c80708eb081e6a",
+      "artifact_sha256": "0ebd281360393ff0d9dbf15d5e01f41dc8d4cb44ac7020ba9d1887126769fc68",
+      "content_sha256": "ccc134c7cab15ebae59a82b9ee6a5da946e8e697a104d264228cc0e299d2fb18",
+      "section_snapshot_sha256": "77eb716867351c1092928ff44fcc3a40bee6df6d45f0131fd1739dc0ccebd9c4",
+      "passage_identity_sha256": "6c0d64decafefeaf505e396195c3ce08a04e991bd653b206cef9ad952a3f5d34",
+      "roles_sha256": "4e1a5a855baaec6ad7e7e0ca69d9708fad5c9743e2b17490866f2251fa93d160",
+      "passages": 18
+    }
+  },
+  "selected_source_guard_passed": true,
+  "elapsed_seconds": 12.324437125120312,
+  "summary": {
+    "cases": 3,
+    "validated_plans": 2,
+    "reference_anchors": 4,
+    "original_anchor_hits_at2_per_book": 0,
+    "planned_anchor_hits_at2_per_book": 2,
+    "original_anchor_hits_at40_per_book": 1,
+    "planned_anchor_hits_in_query_union": 3
+  },
+  "cases": [
+    {
+      "id": "ru-query-smith-dinner",
+      "question": "Почему, по Адаму Смиту, мясник, пивовар и булочник обеспечивают нам обед: из благожелательности или из собственного интереса?",
+      "plan": {
+        "original_question": "Почему, по Адаму Смиту, мясник, пивовар и булочник обеспечивают нам обед: из благожелательности или из собственного интереса?",
+        "kind": "retrieval_hypotheses",
+        "used": false,
+        "reason": "invalid_plan",
+        "book_queries": [],
+        "response_language_hint": null,
+        "fallback": "original_retrieval",
+        "generation": {
+          "model": {
+            "profile": "qwen3-4b-instruct-2507",
+            "repository": "unsloth/Qwen3-4B-Instruct-2507-GGUF",
+            "revision": "a06e946bb6b655725eafa393f4a9745d460374c9",
+            "sha256": "3605803b982cb64aead44f6c1b2ae36e3acdb41d8e46c8a94c6533bc4c67e597",
+            "quantization": "Q4_K_M",
+            "upstream_repository": "Qwen/Qwen3-4B-Instruct-2507",
+            "reviewed_upstream_revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+            "conversion_base_revision": null,
+            "conversion": "Unsloth GGUF conversion of Qwen weights; not an official Qwen GGUF release"
+          },
+          "usage": {
+            "prompt_tokens": 293,
+            "completion_tokens": 43,
+            "total_tokens": 336
+          },
+          "elapsed_ms": 4554.413791745901
+        },
+        "elapsed_ms": 4554.81
+      },
+      "books": [
+        {
+          "book_id": "pg3300-full",
+          "language": "en",
+          "original": {
+            "query": "Почему, по Адаму Смиту, мясник, пивовар и булочник обеспечивают нам обед: из благожелательности или из собственного интереса?",
+            "mode": "lexical",
+            "elapsed_ms": 29.11,
+            "anchors": [
+              {
+                "reference_id": "interest",
+                "book_id": "pg3300-full",
+                "first_rank": null
+              }
+            ],
+            "results": []
+          },
+          "planned_queries": [],
+          "planned_round_robin_anchors": [
+            {
+              "reference_id": "interest",
+              "book_id": "pg3300-full",
+              "first_rank": null
+            }
+          ],
+          "planned_then_original_round_robin_anchors": [
+            {
+              "reference_id": "interest",
+              "book_id": "pg3300-full",
+              "first_rank": null
+            }
+          ],
+          "merge_note": "Diagnostic only; candidate ranking/merging is not integrated into Ask."
+        }
+      ]
+    },
+    {
+      "id": "compare-property",
+      "question": "Compare Smith’s description of property in a person’s own labour with Marx and Engels’ distinction between property generally and bourgeois property. What kinds of property do these passages discuss?",
+      "plan": {
+        "original_question": "Compare Smith’s description of property in a person’s own labour with Marx and Engels’ distinction between property generally and bourgeois property. What kinds of property do these passages discuss?",
+        "kind": "retrieval_hypotheses",
+        "used": true,
+        "reason": "validated_plan",
+        "book_queries": [
+          {
+            "book_id": "pg3300-full",
+            "language": "en",
+            "queries": [
+              "labour as source of property ownership in individuals"
+            ]
+          },
+          {
+            "book_id": "pg61-full",
+            "language": "en",
+            "queries": [
+              "distinction between property generally and bourgeois property"
+            ]
+          }
+        ],
+        "response_language_hint": "en",
+        "fallback": null,
+        "generation": {
+          "model": {
+            "profile": "qwen3-4b-instruct-2507",
+            "repository": "unsloth/Qwen3-4B-Instruct-2507-GGUF",
+            "revision": "a06e946bb6b655725eafa393f4a9745d460374c9",
+            "sha256": "3605803b982cb64aead44f6c1b2ae36e3acdb41d8e46c8a94c6533bc4c67e597",
+            "quantization": "Q4_K_M",
+            "upstream_repository": "Qwen/Qwen3-4B-Instruct-2507",
+            "reviewed_upstream_revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+            "conversion_base_revision": null,
+            "conversion": "Unsloth GGUF conversion of Qwen weights; not an official Qwen GGUF release"
+          },
+          "usage": {
+            "prompt_tokens": 342,
+            "completion_tokens": 66,
+            "total_tokens": 408
+          },
+          "elapsed_ms": 3805.465125013143
+        },
+        "elapsed_ms": 3805.609
+      },
+      "books": [
+        {
+          "book_id": "pg3300-full",
+          "language": "en",
+          "original": {
+            "query": "Compare Smith’s description of property in a person’s own labour with Marx and Engels’ distinction between property generally and bourgeois property. What kinds of property do these passages discuss?",
+            "mode": "lexical",
+            "elapsed_ms": 216.92,
+            "anchors": [
+              {
+                "reference_id": "labour",
+                "book_id": "pg3300-full",
+                "first_rank": null
+              }
+            ],
+            "results": []
+          },
+          "planned_queries": [
+            {
+              "query": "labour as source of property ownership in individuals",
+              "mode": "lexical",
+              "elapsed_ms": 96.38,
+              "warnings": [],
+              "anchors": [
+                {
+                  "reference_id": "labour",
+                  "book_id": "pg3300-full",
+                  "first_rank": 8
+                }
+              ],
+              "results": [
+                {
+                  "id": 894615,
+                  "book_id": "pg3300-full",
+                  "section_id": 120709,
+                  "section_title": "APPENDIX TO ARTICLES I. AND II.—Taxes upon the Capital Value of Lands, Houses, and Stock.",
+                  "start": 13407,
+                  "end": 14399,
+                  "citation": "Smith, Adam, 1723-1790. An Inquiry into the Nature and Causes of the Wealth of Nations. Project Gutenberg #3300, full electronic edition; updated Jul 3, 2025. APPENDIX TO ARTICLES I. AND II.—Taxes upon the Capital Value of Lands, Houses, and Stock., chars 13407–14399.",
+                  "verified": true,
+                  "text_sha256": "d340f1be4c2f9e6f7cdae14b2da0900b6811ee0521ac97c8711e46235baaeaf2"
+                },
+                {
+                  "id": 894314,
+                  "book_id": "pg3300-full",
+                  "section_id": 120702,
+                  "section_title": "PART II. Of the Expense of Justice",
+                  "start": 1164,
+                  "end": 2859,
+                  "citation": "Smith, Adam, 1723-1790. An Inquiry into the Nature and Causes of the Wealth of Nations. Project Gutenberg #3300, full electronic edition; updated Jul 3, 2025. PART II. Of the Expense of Justice, chars 1164–2859.",
+                  "verified": true,
+                  "text_sha256": "533d56e0de5182ce59f732b2e82ae2754c7585bba15dcc73675b123fac4230a3"
+                },
+                {
+                  "id": 893688,
+                  "book_id": "pg3300-full",
+                  "section_id": 120682,
+                  "section_title": "CHAPTER V. OF THE DIFFERENT EMPLOYMENTS OF CAPITALS.",
+                  "start": 15334,
+                  "end": 17060,
+                  "citation": "Smith, Adam, 1723-1790. An Inquiry into the Nature and Causes of the Wealth of Nations. Project Gutenberg #3300, full electronic edition; updated Jul 3, 2025. CHAPTER V. OF THE DIFFERENT EMPLOYMENTS OF CAPITALS., chars 15334–17060.",
+                  "verified": true,
+                  "text_sha256": "e109b25d789d13912b88ae09aedcbdb788a56870eb8d9b8aa6cf0d9013c52026"
+                },
+                {
+                  "id": 894447,
+                  "book_id": "pg3300-full",
+                  "section_id": 120703,
+                  "section_title": "PART III. Of the Expense of public Works and public Institutions.",
+                  "start": 136293,
+                  "end": 137440,
+                  "citation": "Smith, Adam, 1723-1790. An Inquiry into the Nature and Causes of the Wealth of Nations. Project Gutenberg #3300, full electronic edition; updated Jul 3, 2025. PART III. Of the Expense of public Works and public Institutions., chars 136293–137440.",
+                  "verified": true,
+                  "text_sha256": "36ff320dfdb61b9b913c6eaae8aa26a6115d0188a3b249a86d9ee8c27b1a66e0"
+                },
+                {
+                  "id": 893151,
+                  "book_id": "pg3300-full",
+                  "section_id": 120666,
+                  "section_title": "CHAPTER VIII. OF THE WAGES OF LABOUR.",
+                  "start": 2001,
+                  "end": 3175,
+                  "citation": "Smith, Adam, 1723-1790. An Inquiry into the Nature and Causes of the Wealth of Nations. Project Gutenberg #3300, full electronic edition; updated Jul 3, 2025. CHAPTER VIII. OF THE WAGES OF LABOUR., chars 2001–3175.",
+                  "verified": true,
+                  "text_sha256": "ab6c60015837432c22ad15dc7eda449f24f6f2bd8204545a8688ae1ca5d3952f"
+                },
+                {
+                  "id": 894129,
+                  "book_id": "pg3300-full",
+                  "section_id": 120697,
+                  "section_title": "PART III. Of the Advantages which Europe has derived From the Discovery of America, and from that of a Passage to the East Indies by the Cape of Good Hope.",
+                  "start": 52482,
+                  "end": 53369,
+                  "citation": "Smith, Adam, 1723-1790. An Inquiry into the Nature and Causes of the Wealth of Nations. Project Gutenberg #3300, full electronic edition; updated Jul 3, 2025. PART III. Of the Advantages which Europe has derived From the Discovery of America, and from that of a Passage to the East Indies by the Cape of Good Hope., chars 52482–53369.",
+                  "verified": true,
+                  "text_sha256": "cb7a426da87bc98099430aa10cadaa345f62ebe3a977dc452794a4b9f34981d6"
+                },
+                {
+                  "id": 893640,
+                  "book_id": "pg3300-full",
+                  "section_id": 120680,
+                  "section_title": "CHAPTER III. OF THE ACCUMULATION OF CAPITAL, OR OF PRODUCTIVE AND UNPRODUCTIVE LABOUR.",
+                  "start": 26020,
+                  "end": 27272,
+                  "citation": "Smith, Adam, 1723-1790. An Inquiry into the Nature and Causes of the Wealth of Nations. Project Gutenberg #3300, full electronic edition; updated Jul 3, 2025. CHAPTER III. OF THE ACCUMULATION OF CAPITAL, OR OF PRODUCTIVE AND UNPRODUCTIVE LABOUR., chars 26020–27272.",
+                  "verified": true,
+                  "text_sha256": "58cd8adaffdab3c7f82b2233f7f8a2a65467a74f5ffd8cebd8fb80604fbb4c01"
+                },
+                {
+                  "id": 893258,
+                  "book_id": "pg3300-full",
+                  "section_id": 120670,
+                  "section_title": "PART II.—Inequalities occasioned by the Policy of Europe.",
+                  "start": 7423,
+                  "end": 8343,
+                  "citation": "Smith, Adam, 1723-1790. An Inquiry into the Nature and Causes of the Wealth of Nations. Project Gutenberg #3300, full electronic edition; updated Jul 3, 2025. PART II.—Inequalities occasioned by the Policy of Europe., chars 7423–8343.",
+                  "verified": true,
+                  "text_sha256": "2ceff6a9ad5af89004fb501f23e53204c31e0cb2345c6010118f17fd24199dcd"
+                },
+                {
+                  "id": 893632,
+                  "book_id": "pg3300-full",
+                  "section_id": 120680,
+                  "section_title": "CHAPTER III. OF THE ACCUMULATION OF CAPITAL, OR OF PRODUCTIVE AND UNPRODUCTIVE LABOUR.",
+                  "start": 17345,
+                  "end": 18465,
+                  "citation": "Smith, Adam, 1723-1790. An Inquiry into the Nature and Causes of the Wealth of Nations. Project Gutenberg #3300, full electronic edition; updated Jul 3, 2025. CHAPTER III. OF THE ACCUMULATION OF CAPITAL, OR OF PRODUCTIVE AND UNPRODUCTIVE LABOUR., chars 17345–18465.",
+                  "verified": true,
+                  "text_sha256": "16d84503270fd2699442ee81fe3b108b02dd3c3dda7ef57e979d37a9bac28b76"
+                },
+                {
+                  "id": 894739,
+                  "book_id": "pg3300-full",
+                  "section_id": 120710,
+                  "section_title": "CHAPTER III. OF PUBLIC DEBTS.",
+                  "start": 47911,
+                  "end": 49003,
+                  "citation": "Smith, Adam, 1723-1790. An Inquiry into the Nature and Causes of the Wealth of Nations. Project Gutenberg #3300, full electronic edition; updated Jul 3, 2025. CHAPTER III. OF PUBLIC DEBTS., chars 47911–49003.",
+                  "verified": true,
+                  "text_sha256": "ba99a67323fa6ac8006956a84f446e4bc21583ad0d86b095f5efe0621e7f4296"
+                },
+                {
+                  "id": 893669,
+                  "book_id": "pg3300-full",
+                  "section_id": 120681,
+                  "section_title": "CHAPTER IV. OF STOCK LENT AT INTEREST.",
+                  "start": 12979,
+                  "end": 14004,
+                  "citation": "Smith, Adam, 1723-1790. An Inquiry into the Nature and Causes of the Wealth of Nations. Project Gutenberg #3300, full electronic edition; updated Jul 3, 2025. CHAPTER IV. OF STOCK LENT AT INTEREST., chars 12979–14004.",
+                  "verified": true,
+                  "text_sha256": "f5ee6d564e4211030ff2d2041ea296b0a67e4da377f6cd6f6c47ab46c58ea180"
+                },
+                {
+                  "id": 893122,
+                  "book_id": "pg3300-full",
+                  "section_id": 120664,
+                  "section_title": "CHAPTER VI. OF THE COMPONENT PART OF THE PRICE OF COMMODITIES.",
+                  "start": 5372,
+                  "end": 6656,
+                  "citation": "Smith, Adam, 1723-1790. An Inquiry into the Nature and Causes of the Wealth of Nations. Project Gutenberg #3300, full electronic edition; updated Jul 3, 2025. CHAPTER VI. OF THE COMPONENT PART OF THE PRICE OF COMMODITIES., chars 5372–6656.",
+                  "verified": true,
+                  "text_sha256": "19c6e858413af217537d2739d95f2f9f3e864d54cd4ec16ef2079ded115b4fb7"
+                },
+                {
+                  "id": 893643,
+                  "book_id": "pg3300-full",
+                  "section_id": 120680,
+                  "section_title": "CHAPTER III. OF THE ACCUMULATION OF CAPITAL, OR OF PRODUCTIVE AND UNPRODUCTIVE LABOUR.",
+                  "start": 29261,
+                  "end": 30754,
+                  "citation": "Smith, Adam, 1723-1790. An Inquiry into the Nature and Causes of the Wealth of Nations. Project Gutenberg #3300, full electronic edition; updated Jul 3, 2025. CHAPTER III. OF THE ACCUMULATION OF CAPITAL, OR OF PRODUCTIVE AND UNPRODUCTIVE LABOUR., chars 29261–30754.",
+                  "verified": true,
+                  "text_sha256": "1e37c77229ca92a101d19c932d9e45e6231d38799d7669af7a85a7b27eca9f62"
+                },
+                {
+                  "id": 893336,
+                  "book_id": "pg3300-full",
+                  "section_id": 120673,
+                  "section_title": "PART II.—Of the Produce of Land, which sometimes does, and sometimes does not, afford Rent.",
+                  "start": 8239,
+                  "end": 9368,
+                  "citation": "Smith, Adam, 1723-1790. An Inquiry into the Nature and Causes of the Wealth of Nations. Project Gutenberg #3300, full electronic edition; updated Jul 3, 2025. PART II.—Of the Produce of Land, which sometimes does, and sometimes does not, afford Rent., chars 8239–9368.",
+                  "verified": true,
+                  "text_sha256": "c57396c164b15bb5d4f55d1298db00802731966157fbfd1af176362c4ba9cfd6"
+                },
+                {
+                  "id": 894313,
+                  "book_id": "pg3300-full",
+                  "section_id": 120702,
+                  "section_title": "PART II. Of the Expense of Justice",
+                  "start": 0,
+                  "end": 1163,
+                  "citation": "Smith, Adam, 1723-1790. An Inquiry into the Nature and Causes of the Wealth of Nations. Project Gutenberg #3300, full electronic edition; updated Jul 3, 2025. PART II. Of the Expense of Justice, chars 0–1163.",
+                  "verified": true,
+                  "text_sha256": "613a40ab4e8a529993ec56e69168970caff5f0b28eee659e1bffd22f4ade476b"
+                },
+                {
+                  "id": 893127,
+                  "book_id": "pg3300-full",
+                  "section_id": 120664,
+                  "section_title": "CHAPTER VI. OF THE COMPONENT PART OF THE PRICE OF COMMODITIES.",
+                  "start": 12010,
+                  "end": 13662,
+                  "citation": "Smith, Adam, 1723-1790. An Inquiry into the Nature and Causes of the Wealth of Nations. Project Gutenberg #3300, full electronic edition; updated Jul 3, 2025. CHAPTER VI. OF THE COMPONENT PART OF THE PRICE OF COMMODITIES., chars 12010–13662.",
+                  "verified": true,
+                  "text_sha256": "74ff0084030d73ebec3736f894e2b4a0a14a7c7b2f8263c903870559e5b34785"
+                },
+                {
+                  "id": 893651,
+                  "book_id": "pg3300-full",
+                  "section_id": 120680,
+                  "section_title": "CHAPTER III. OF THE ACCUMULATION OF CAPITAL, OR OF PRODUCTIVE AND UNPRODUCTIVE LABOUR.",
+                  "start": 38029,
+                  "end": 39694,
+                  "citation": "Smith, Adam, 1723-1790. An Inquiry into the Nature and Causes of the Wealth of Nations. Project Gutenberg #3300, full electronic edition; updated Jul 3, 2025. CHAPTER III. OF THE ACCUMULATION OF CAPITAL, OR OF PRODUCTIVE AND UNPRODUCTIVE LABOUR., chars 38029–39694.",
+                  "verified": true,
+                  "text_sha256": "1d09677d76566d645ac730a3739c007993e267bd882e5625a20d8808b682ccbb"
+                },
+                {
+                  "id": 893704,
+                  "book_id": "pg3300-full",
+                  "section_id": 120682,
+                  "section_title": "CHAPTER V. OF THE DIFFERENT EMPLOYMENTS OF CAPITALS.",
+                  "start": 36404,
+                  "end": 37632,
+                  "citation": "Smith, Adam, 1723-1790. An Inquiry into the Nature and Causes of the Wealth of Nations. Project Gutenberg #3300, full electronic edition; updated Jul 3, 2025. CHAPTER V. OF THE DIFFERENT EMPLOYMENTS OF CAPITALS., chars 36404–37632.",
+                  "verified": true,
+                  "text_sha256": "90bd78fcfacd85e3262bcb7f507305cf4f69af5463c464fe0ddfa030667ac041"
+                },
+                {
+                  "id": 893201,
+                  "book_id": "pg3300-full",
+                  "section_id": 120667,
+                  "section_title": "CHAPTER IX. OF THE PROFITS OF STOCK.",
+                  "start": 10962,
+                  "end": 12574,
+                  "citation": "Smith, Adam, 1723-1790. An Inquiry into the Nature and Causes of the Wealth of Nations. Project Gutenberg #3300, full electronic edition; updated Jul 3, 2025. CHAPTER IX. OF THE PROFITS OF STOCK., chars 10962–12574.",
+                  "verified": true,
+                  "text_sha256": "1aa56b0faf734b0bbe321b311b97cd07fffdb8ffafbdbcd1f75c8d51778fd3e9"
+                },
+                {
+                  "id": 893625,
+                  "book_id": "pg3300-full",
+                  "section_id": 120680,
+                  "section_title": "CHAPTER III. OF THE ACCUMULATION OF CAPITAL, OR OF PRODUCTIVE AND UNPRODUCTIVE LABOUR.",
+                  "start": 9883,
+                  "end": 11176,
+                  "citation": "Smith, Adam, 1723-1790. An Inquiry into the Nature and Causes of the Wealth of Nations. Project Gutenberg #3300, full electronic edition; updated Jul 3, 2025. CHAPTER III. OF THE ACCUMULATION OF CAPITAL, OR OF PRODUCTIVE AND UNPRODUCTIVE LABOUR., chars 9883–11176.",
+                  "verified": true,
+                  "text_sha256": "a1ceb26b2503978d6d0dacd62ecbe69251df6d7f921894314913dd719666d89c"
+                },
+                {
+                  "id": 894586,
+                  "book_id": "pg3300-full",
+                  "section_id": 120708,
+                  "section_title": "PART II. Of Taxes.",
+                  "start": 61676,
+                  "end": 62707,
+                  "citation": "Smith, Adam, 1723-1790. An Inquiry into the Nature and Causes of the Wealth of Nations. Project Gutenberg #3300, full electronic edition; updated Jul 3, 2025. PART II. Of Taxes., chars 61676–62707.",
+                  "verified": true,
+                  "text_sha256": "fc570488a4dac8fcf3404f7b862b2e0ece6204f5a78c3cd1210900bb2e8b8bd5"
+                },
+                {
+                  "id": 893659,
+                  "book_id": "pg3300-full",
+                  "section_id": 120681,
+                  "section_title": "CHAPTER IV. OF STOCK LENT AT INTEREST.",
+                  "start": 0,
+                  "end": 981,
+                  "citation": "Smith, Adam, 1723-1790. An Inquiry into the Nature and Causes of the Wealth of Nations. Project Gutenberg #3300, full electronic edition; updated Jul 3, 2025. CHAPTER IV. OF STOCK LENT AT INTEREST., chars 0–981.",
+                  "verified": true,
+                  "text_sha256": "0ee77e986d83f742a86d196194b0b1b9bb57c9bffabf1612b2ffd1910ef8dc1c"
+                },
+                {
+                  "id": 894230,
+                  "book_id": "pg3300-full",
+                  "section_id": 120699,
+                  "section_title": "CHAPTER IX. OF THE AGRICULTURAL SYSTEMS, OR OF THOSE SYSTEMS OF POLITICAL ECONOMY WHICH REPRESENT THE PRODUCE OF LAND, AS EITHER THE SOLE OR THE PRINCIPAL SOURCE OF THE REVENUE AND WEALTH OF EVERY COUNTRY.",
+                  "start": 3215,
+                  "end": 4269,
+                  "citation": "Smith, Adam, 1723-1790. An Inquiry into the Nature and Causes of the Wealth of Nations. Project Gutenberg #3300, full electronic edition; updated Jul 3, 2025. CHAPTER IX. OF THE AGRICULTURAL SYSTEMS, OR OF THOSE SYSTEMS OF POLITICAL ECONOMY WHICH REPRESENT THE PRODUCE OF LAND, AS EITHER THE SOLE OR THE PRINCIPAL SOURCE OF THE REVENUE AND WEALTH OF EVERY COUNTRY., chars 3215–4269.",
+                  "verified": true,
+                  "text_sha256": "113c1d4ac2aad3ed4cfb38444420822db993de32f79a0c5eae5c79c4ed16d0b8"
+                },
+                {
+                  "id": 893160,
+                  "book_id": "pg3300-full",
+                  "section_id": 120666,
+                  "section_title": "CHAPTER VIII. OF THE WAGES OF LABOUR.",
+                  "start": 13884,
+                  "end": 15618,
+                  "citation": "Smith, Adam, 1723-1790. An Inquiry into the Nature and Causes of the Wealth of Nations. Project Gutenberg #3300, full electronic edition; updated Jul 3, 2025. CHAPTER VIII. OF THE WAGES OF LABOUR., chars 13884–15618.",
+                  "verified": true,
+                  "text_sha256": "d9daee7ab6b553939060d52f3015886503682009923047e3217beb7ca4295f9c"
+                },
+                {
+                  "id": 894616,
+                  "book_id": "pg3300-full",
+                  "section_id": 120709,
+                  "section_title": "APPENDIX TO ARTICLES I. AND II.—Taxes upon the Capital Value of Lands, Houses, and Stock.",
+                  "start": 14401,
+                  "end": 15135,
+                  "citation": "Smith, Adam, 1723-1790. An Inquiry into the Nature and Causes of the Wealth of Nations. Project Gutenberg #3300, full electronic edition; updated Jul 3, 2025. APPENDIX TO ARTICLES I. AND II.—Taxes upon the Capital Value of Lands, Houses, and Stock., chars 14401–15135.",
+                  "verified": true,
+                  "text_sha256": "04d2270d2f75f4a0fad939b792f3e99f0da292ee6589e78177753bab2422d309"
+                },
+                {
+                  "id": 894614,
+                  "book_id": "pg3300-full",
+                  "section_id": 120709,
+                  "section_title": "APPENDIX TO ARTICLES I. AND II.—Taxes upon the Capital Value of Lands, Houses, and Stock.",
+                  "start": 11424,
+                  "end": 13405,
+                  "citation": "Smith, Adam, 1723-1790. An Inquiry into the Nature and Causes of the Wealth of Nations. Project Gutenberg #3300, full electronic edition; updated Jul 3, 2025. APPENDIX TO ARTICLES I. AND II.—Taxes upon the Capital Value of Lands, Houses, and Stock., chars 11424–13405.",
+                  "verified": true,
+                  "text_sha256": "8d920fa9575a979824762540ef8891c483687b1c5223cc9518581c3061124772"
+                },
+                {
+                  "id": 893530,
+                  "book_id": "pg3300-full",
+                  "section_id": 120679,
+                  "section_title": "CHAPTER II. OF MONEY, CONSIDERED AS A PARTICULAR BRANCH OF THE GENERAL STOCK OF THE SOCIETY, OR OF THE EXPENSE OF MAINTAINING THE NATIONAL CAPITAL.",
+                  "start": 8277,
+                  "end": 9252,
+                  "citation": "Smith, Adam, 1723-1790. An Inquiry into the Nature and Causes of the Wealth of Nations. Project Gutenberg #3300, full electronic edition; updated Jul 3, 2025. CHAPTER II. OF MONEY, CONSIDERED AS A PARTICULAR BRANCH OF THE GENERAL STOCK OF THE SOCIETY, OR OF THE EXPENSE OF MAINTAINING THE NATIONAL CAPITAL., chars 8277–9252.",
+                  "verified": true,
+                  "text_sha256": "9bfbd942da623cba00309e3ea5df44381ba20d93d19757bfc6cbdd63e2c4960f"
+                },
+                {
+                  "id": 894082,
+                  "book_id": "pg3300-full",
+                  "section_id": 120696,
+                  "section_title": "PART II. Causes of the Prosperity of New Colonies.",
+                  "start": 55607,
+                  "end": 57158,
+                  "citation": "Smith, Adam, 1723-1790. An Inquiry into the Nature and Causes of the Wealth of Nations. Project Gutenberg #3300, full electronic edition; updated Jul 3, 2025. PART II. Causes of the Prosperity of New Colonies., chars 55607–57158.",
+                  "verified": true,
+                  "text_sha256": "69c39db672320c60ff6d8f1545c4738d4e70deb53becb66e368b4e3c6eab3566"
+                },
+                {
+                  "id": 893509,
+                  "book_id": "pg3300-full",
+                  "section_id": 120678,
+                  "section_title": "CHAPTER I. OF THE DIVISION OF STOCK.",
+                  "start": 0,
+                  "end": 1436,
+                  "citation": "Smith, Adam, 1723-1790. An Inquiry into the Nature and Causes of the Wealth of Nations. Project Gutenberg #3300, full electronic edition; updated Jul 3, 2025. CHAPTER I. OF THE DIVISION OF STOCK., chars 0–1436.",
+                  "verified": true,
+                  "text_sha256": "e49d4045eeceb1ab015ff1da4c2a5e3f2cd93b7d31a381abba22f4065846b49d"
+                },
+                {
+                  "id": 894291,
+                  "book_id": "pg3300-full",
+                  "section_id": 120701,
+                  "section_title": "BOOK V. OF THE REVENUE OF THE SOVEREIGN OR COMMONWEALTH\nCHAPTER I. OF THE EXPENSES OF THE SOVEREIGN OR COMMONWEALTH.\nPART I. Of the Expense of Defence.",
+                  "start": 13895,
+                  "end": 15511,
+                  "citation": "Smith, Adam, 1723-1790. An Inquiry into the Nature and Causes of the Wealth of Nations. Project Gutenberg #3300, full electronic edition; updated Jul 3, 2025. BOOK V. OF THE REVENUE OF THE SOVEREIGN OR COMMONWEALTH\nCHAPTER I. OF THE EXPENSES OF THE SOVEREIGN OR COMMONWEALTH.\nPART I. Of the Expense of Defence., chars 13895–15511.",
+                  "verified": true,
+                  "text_sha256": "107324e1aaaf88b5c2f7329b009e505a3735ef2d3dfb8130568eb91f72118364"
+                },
+                {
+                  "id": 893905,
+                  "book_id": "pg3300-full",
+                  "section_id": 120691,
+                  "section_title": "PART II.—Of the Unreasonableness of those extraordinary Restraints, upon other Principles.",
+                  "start": 12692,
+                  "end": 13770,
+                  "citation": "Smith, Adam, 1723-1790. An Inquiry into the Nature and Causes of the Wealth of Nations. Project Gutenberg #3300, full electronic edition; updated Jul 3, 2025. PART II.—Of the Unreasonableness of those extraordinary Restraints, upon other Principles., chars 12692–13770.",
+                  "verified": true,
+                  "text_sha256": "d1f37e335dcddd2862ed36148bb77f4195dbe0e17c82042fe0ab36697c0d97a4"
+                },
+                {
+                  "id": 894683,
+                  "book_id": "pg3300-full",
+                  "section_id": 120709,
+                  "section_title": "APPENDIX TO ARTICLES I. AND II.—Taxes upon the Capital Value of Lands, Houses, and Stock.",
+                  "start": 100209,
+                  "end": 101067,
+                  "citation": "Smith, Adam, 1723-1790. An Inquiry into the Nature and Causes of the Wealth of Nations. Project Gutenberg #3300, full electronic edition; updated Jul 3, 2025. APPENDIX TO ARTICLES I. AND II.—Taxes upon the Capital Value of Lands, Houses, and Stock., chars 100209–101067.",
+                  "verified": true,
+                  "text_sha256": "b99114642b4aed068c24909c3e46340cd476df37d4ae03c5538761179dfe3a15"
+                },
+                {
+                  "id": 894536,
+                  "book_id": "pg3300-full",
+                  "section_id": 120708,
+                  "section_title": "PART II. Of Taxes.",
+                  "start": 0,
+                  "end": 1185,
+                  "citation": "Smith, Adam, 1723-1790. An Inquiry into the Nature and Causes of the Wealth of Nations. Project Gutenberg #3300, full electronic edition; updated Jul 3, 2025. PART II. Of Taxes., chars 0–1185.",
+                  "verified": true,
+                  "text_sha256": "6a9bc184765b81047fe2b89028712d2cf3671937588cce6acac485d68aa2dd35"
+                },
+                {
+                  "id": 894609,
+                  "book_id": "pg3300-full",
+                  "section_id": 120709,
+                  "section_title": "APPENDIX TO ARTICLES I. AND II.—Taxes upon the Capital Value of Lands, Houses, and Stock.",
+                  "start": 6079,
+                  "end": 7032,
+                  "citation": "Smith, Adam, 1723-1790. An Inquiry into the Nature and Causes of the Wealth of Nations. Project Gutenberg #3300, full electronic edition; updated Jul 3, 2025. APPENDIX TO ARTICLES I. AND II.—Taxes upon the Capital Value of Lands, Houses, and Stock., chars 6079–7032.",
+                  "verified": true,
+                  "text_sha256": "21c14d8e35c48531de9a48b729ec400270de8822adb0cac656d58083ef485e36"
+                },
+                {
+                  "id": 894574,
+                  "book_id": "pg3300-full",
+                  "section_id": 120708,
+                  "section_title": "PART II. Of Taxes.",
+                  "start": 45049,
+                  "end": 46662,
+                  "citation": "Smith, Adam, 1723-1790. An Inquiry into the Nature and Causes of the Wealth of Nations. Project Gutenberg #3300, full electronic edition; updated Jul 3, 2025. PART II. Of Taxes., chars 45049–46662.",
+                  "verified": true,
+                  "text_sha256": "3d16ab36cacdca936432ef2a61207b7996f5f926b18ea7769798da498a764876"
+                },
+                {
+                  "id": 894286,
+                  "book_id": "pg3300-full",
+                  "section_id": 120701,
+                  "section_title": "BOOK V. OF THE REVENUE OF THE SOVEREIGN OR COMMONWEALTH\nCHAPTER I. OF THE EXPENSES OF THE SOVEREIGN OR COMMONWEALTH.\nPART I. Of the Expense of Defence.",
+                  "start": 8625,
+                  "end": 9585,
+                  "citation": "Smith, Adam, 1723-1790. An Inquiry into the Nature and Causes of the Wealth of Nations. Project Gutenberg #3300, full electronic edition; updated Jul 3, 2025. BOOK V. OF THE REVENUE OF THE SOVEREIGN OR COMMONWEALTH\nCHAPTER I. OF THE EXPENSES OF THE SOVEREIGN OR COMMONWEALTH.\nPART I. Of the Expense of Defence., chars 8625–9585.",
+                  "verified": true,
+                  "text_sha256": "c2ab0f58332ffdb8fe0bc5b7bbf249d8792d2c6220a02234e8094e175f49cffc"
+                },
+                {
+                  "id": 893723,
+                  "book_id": "pg3300-full",
+                  "section_id": 120684,
+                  "section_title": "CHAPTER II. OF THE DISCOURAGEMENT OF AGRICULTURE IN THE ANCIENT STATE OF EUROPE, AFTER THE FALL OF THE ROMAN EMPIRE.",
+                  "start": 10620,
+                  "end": 11789,
+                  "citation": "Smith, Adam, 1723-1790. An Inquiry into the Nature and Causes of the Wealth of Nations. Project Gutenberg #3300, full electronic edition; updated Jul 3, 2025. CHAPTER II. OF THE DISCOURAGEMENT OF AGRICULTURE IN THE ANCIENT STATE OF EUROPE, AFTER THE FALL OF THE ROMAN EMPIRE., chars 10620–11789.",
+                  "verified": true,
+                  "text_sha256": "5ef90a677fbb5414679d0e846adbe1d703b0fed70cdd8426fa8f1d899750849d"
+                },
+                {
+                  "id": 893862,
+                  "book_id": "pg3300-full",
+                  "section_id": 120689,
+                  "section_title": "CHAPTER II. OF RESTRAINTS UPON IMPORTATION FROM FOREIGN COUNTRIES OF SUCH GOODS AS CAN BE PRODUCED AT HOME.",
+                  "start": 43973,
+                  "end": 45426,
+                  "citation": "Smith, Adam, 1723-1790. An Inquiry into the Nature and Causes of the Wealth of Nations. Project Gutenberg #3300, full electronic edition; updated Jul 3, 2025. CHAPTER II. OF RESTRAINTS UPON IMPORTATION FROM FOREIGN COUNTRIES OF SUCH GOODS AS CAN BE PRODUCED AT HOME., chars 43973–45426.",
+                  "verified": true,
+                  "text_sha256": "7f64b6a048b49a387c2218ebede8d052d9b4bd00e7659ab5c05180bc3b299812"
+                },
+                {
+                  "id": 894675,
+                  "book_id": "pg3300-full",
+                  "section_id": 120709,
+                  "section_title": "APPENDIX TO ARTICLES I. AND II.—Taxes upon the Capital Value of Lands, Houses, and Stock.",
+                  "start": 90758,
+                  "end": 92040,
+                  "citation": "Smith, Adam, 1723-1790. An Inquiry into the Nature and Causes of the Wealth of Nations. Project Gutenberg #3300, full electronic edition; updated Jul 3, 2025. APPENDIX TO ARTICLES I. AND II.—Taxes upon the Capital Value of Lands, Houses, and Stock., chars 90758–92040.",
+                  "verified": true,
+                  "text_sha256": "798fe8a1531ed720af492c7cfd35e0518a0fd38dc6d4abbef813b9b1505a3b83"
+                },
+                {
+                  "id": 894660,
+                  "book_id": "pg3300-full",
+                  "section_id": 120709,
+                  "section_title": "APPENDIX TO ARTICLES I. AND II.—Taxes upon the Capital Value of Lands, Houses, and Stock.",
+                  "start": 71219,
+                  "end": 72536,
+                  "citation": "Smith, Adam, 1723-1790. An Inquiry into the Nature and Causes of the Wealth of Nations. Project Gutenberg #3300, full electronic edition; updated Jul 3, 2025. APPENDIX TO ARTICLES I. AND II.—Taxes upon the Capital Value of Lands, Houses, and Stock., chars 71219–72536.",
+                  "verified": true,
+                  "text_sha256": "a130adca6190325df6dc3b838eba44a6584def69bf8c9ec2d4d7a2daea104604"
+                }
+              ],
+              "experimental_russian_stems": null
+            }
+          ],
+          "planned_round_robin_anchors": [
+            {
+              "reference_id": "labour",
+              "book_id": "pg3300-full",
+              "first_rank": 8
+            }
+          ],
+          "planned_then_original_round_robin_anchors": [
+            {
+              "reference_id": "labour",
+              "book_id": "pg3300-full",
+              "first_rank": 8
+            }
+          ],
+          "merge_note": "Diagnostic only; candidate ranking/merging is not integrated into Ask."
+        },
+        {
+          "book_id": "pg61-full",
+          "language": "en",
+          "original": {
+            "query": "Compare Smith’s description of property in a person’s own labour with Marx and Engels’ distinction between property generally and bourgeois property. What kinds of property do these passages discuss?",
+            "mode": "lexical",
+            "elapsed_ms": 34.53,
+            "anchors": [
+              {
+                "reference_id": "bourgeois",
+                "book_id": "pg61-full",
+                "first_rank": null
+              }
+            ],
+            "results": [
+              {
+                "id": 1154198,
+                "book_id": "pg61-full",
+                "section_id": 157379,
+                "section_title": "II. PROLETARIANS AND COMMUNISTS",
+                "start": 17622,
+                "end": 18665,
+                "citation": "Marx, Karl, 1818-1883; Engels, Friedrich, 1820-1895. The Communist Manifesto. Project Gutenberg #61, full electronic edition; updated Mar 2, 2022. II. PROLETARIANS AND COMMUNISTS, chars 17622–18665.",
+                "verified": true,
+                "text_sha256": "9bff6ae499d80e94d3cb2018f8e336c38a01fdded9a19f9891ea64c2c8355f68"
+              },
+              {
+                "id": 1154188,
+                "book_id": "pg61-full",
+                "section_id": 157379,
+                "section_title": "II. PROLETARIANS AND COMMUNISTS",
+                "start": 6292,
+                "end": 7584,
+                "citation": "Marx, Karl, 1818-1883; Engels, Friedrich, 1820-1895. The Communist Manifesto. Project Gutenberg #61, full electronic edition; updated Mar 2, 2022. II. PROLETARIANS AND COMMUNISTS, chars 6292–7584.",
+                "verified": true,
+                "text_sha256": "d3c07450ba7adcfaae546f52b15cd00e6c8df8bc24189447b1c08fe51e7459eb"
+              },
+              {
+                "id": 1154162,
+                "book_id": "pg61-full",
+                "section_id": 157378,
+                "section_title": "I. BOURGEOIS AND PROLETARIANS",
+                "start": 1349,
+                "end": 2724,
+                "citation": "Marx, Karl, 1818-1883; Engels, Friedrich, 1820-1895. The Communist Manifesto. Project Gutenberg #61, full electronic edition; updated Mar 2, 2022. I. BOURGEOIS AND PROLETARIANS, chars 1349–2724.",
+                "verified": true,
+                "text_sha256": "03a83748421872771f284f34b24082e9a71effc0dea8204cdb36180138a33723"
+              },
+              {
+                "id": 1154204,
+                "book_id": "pg61-full",
+                "section_id": 157380,
+                "section_title": "III. SOCIALIST AND COMMUNIST LITERATURE\n1. REACTIONARY SOCIALISM",
+                "start": 4853,
+                "end": 6033,
+                "citation": "Marx, Karl, 1818-1883; Engels, Friedrich, 1820-1895. The Communist Manifesto. Project Gutenberg #61, full electronic edition; updated Mar 2, 2022. III. SOCIALIST AND COMMUNIST LITERATURE\n1. REACTIONARY SOCIALISM, chars 4853–6033.",
+                "verified": true,
+                "text_sha256": "62ececa718aabc94221ed2b82b739badf955a63582ff652a8c8e23df5ba63573"
+              },
+              {
+                "id": 1154218,
+                "book_id": "pg61-full",
+                "section_id": 157383,
+                "section_title": "IV. POSITION OF THE COMMUNISTS IN RELATION TO THE VARIOUS EXISTING OPPOSITION PARTIES",
+                "start": 1234,
+                "end": 2966,
+                "citation": "Marx, Karl, 1818-1883; Engels, Friedrich, 1820-1895. The Communist Manifesto. Project Gutenberg #61, full electronic edition; updated Mar 2, 2022. IV. POSITION OF THE COMMUNISTS IN RELATION TO THE VARIOUS EXISTING OPPOSITION PARTIES, chars 1234–2966.",
+                "verified": true,
+                "text_sha256": "6cd5fd9477f06b91738cb92b29993838fc6dede6576d86313bc17e51d9ab5e93"
+              }
+            ]
+          },
+          "planned_queries": [
+            {
+              "query": "distinction between property generally and bourgeois property",
+              "mode": "lexical",
+              "elapsed_ms": 23.98,
+              "warnings": [],
+              "anchors": [
+                {
+                  "reference_id": "bourgeois",
+                  "book_id": "pg61-full",
+                  "first_rank": 2
+                }
+              ],
+              "results": [
+                {
+                  "id": 1154198,
+                  "book_id": "pg61-full",
+                  "section_id": 157379,
+                  "section_title": "II. PROLETARIANS AND COMMUNISTS",
+                  "start": 17622,
+                  "end": 18665,
+                  "citation": "Marx, Karl, 1818-1883; Engels, Friedrich, 1820-1895. The Communist Manifesto. Project Gutenberg #61, full electronic edition; updated Mar 2, 2022. II. PROLETARIANS AND COMMUNISTS, chars 17622–18665.",
+                  "verified": true,
+                  "text_sha256": "9bff6ae499d80e94d3cb2018f8e336c38a01fdded9a19f9891ea64c2c8355f68"
+                },
+                {
+                  "id": 1154184,
+                  "book_id": "pg61-full",
+                  "section_id": 157379,
+                  "section_title": "II. PROLETARIANS AND COMMUNISTS",
+                  "start": 1258,
+                  "end": 2482,
+                  "citation": "Marx, Karl, 1818-1883; Engels, Friedrich, 1820-1895. The Communist Manifesto. Project Gutenberg #61, full electronic edition; updated Mar 2, 2022. II. PROLETARIANS AND COMMUNISTS, chars 1258–2482.",
+                  "verified": true,
+                  "text_sha256": "c89f7625f1f1a792a79d43b191f5d9e6c12a2d4d9b5c94ef63b4eb29d03da021"
+                },
+                {
+                  "id": 1154197,
+                  "book_id": "pg61-full",
+                  "section_id": 157379,
+                  "section_title": "II. PROLETARIANS AND COMMUNISTS",
+                  "start": 16440,
+                  "end": 17620,
+                  "citation": "Marx, Karl, 1818-1883; Engels, Friedrich, 1820-1895. The Communist Manifesto. Project Gutenberg #61, full electronic edition; updated Mar 2, 2022. II. PROLETARIANS AND COMMUNISTS, chars 16440–17620.",
+                  "verified": true,
+                  "text_sha256": "e24559a07d2c2aed1f8462098b1d6fe61fc0dd8de1e5a39089fd437f971734e6"
+                },
+                {
+                  "id": 1154204,
+                  "book_id": "pg61-full",
+                  "section_id": 157380,
+                  "section_title": "III. SOCIALIST AND COMMUNIST LITERATURE\n1. REACTIONARY SOCIALISM",
+                  "start": 4853,
+                  "end": 6033,
+                  "citation": "Marx, Karl, 1818-1883; Engels, Friedrich, 1820-1895. The Communist Manifesto. Project Gutenberg #61, full electronic edition; updated Mar 2, 2022. III. SOCIALIST AND COMMUNIST LITERATURE\n1. REACTIONARY SOCIALISM, chars 4853–6033.",
+                  "verified": true,
+                  "text_sha256": "62ececa718aabc94221ed2b82b739badf955a63582ff652a8c8e23df5ba63573"
+                },
+                {
+                  "id": 1154162,
+                  "book_id": "pg61-full",
+                  "section_id": 157378,
+                  "section_title": "I. BOURGEOIS AND PROLETARIANS",
+                  "start": 1349,
+                  "end": 2724,
+                  "citation": "Marx, Karl, 1818-1883; Engels, Friedrich, 1820-1895. The Communist Manifesto. Project Gutenberg #61, full electronic edition; updated Mar 2, 2022. I. BOURGEOIS AND PROLETARIANS, chars 1349–2724.",
+                  "verified": true,
+                  "text_sha256": "03a83748421872771f284f34b24082e9a71effc0dea8204cdb36180138a33723"
+                },
+                {
+                  "id": 1154218,
+                  "book_id": "pg61-full",
+                  "section_id": 157383,
+                  "section_title": "IV. POSITION OF THE COMMUNISTS IN RELATION TO THE VARIOUS EXISTING OPPOSITION PARTIES",
+                  "start": 1234,
+                  "end": 2966,
+                  "citation": "Marx, Karl, 1818-1883; Engels, Friedrich, 1820-1895. The Communist Manifesto. Project Gutenberg #61, full electronic edition; updated Mar 2, 2022. IV. POSITION OF THE COMMUNISTS IN RELATION TO THE VARIOUS EXISTING OPPOSITION PARTIES, chars 1234–2966.",
+                  "verified": true,
+                  "text_sha256": "6cd5fd9477f06b91738cb92b29993838fc6dede6576d86313bc17e51d9ab5e93"
+                },
+                {
+                  "id": 1154190,
+                  "book_id": "pg61-full",
+                  "section_id": 157379,
+                  "section_title": "II. PROLETARIANS AND COMMUNISTS",
+                  "start": 8601,
+                  "end": 9706,
+                  "citation": "Marx, Karl, 1818-1883; Engels, Friedrich, 1820-1895. The Communist Manifesto. Project Gutenberg #61, full electronic edition; updated Mar 2, 2022. II. PROLETARIANS AND COMMUNISTS, chars 8601–9706.",
+                  "verified": true,
+                  "text_sha256": "07f325ce3981dc663b8dec2b5dad1520de5b39bdc69ee722223a1d25aa38bf54"
+                },
+                {
+                  "id": 1154185,
+                  "book_id": "pg61-full",
+                  "section_id": 157379,
+                  "section_title": "II. PROLETARIANS AND COMMUNISTS",
+                  "start": 2484,
+                  "end": 3599,
+                  "citation": "Marx, Karl, 1818-1883; Engels, Friedrich, 1820-1895. The Communist Manifesto. Project Gutenberg #61, full electronic edition; updated Mar 2, 2022. II. PROLETARIANS AND COMMUNISTS, chars 2484–3599.",
+                  "verified": true,
+                  "text_sha256": "9206aa559256bd69c5bc398623a660a9e72793b97b1f0437387a32b416d6fee4"
+                },
+                {
+                  "id": 1154188,
+                  "book_id": "pg61-full",
+                  "section_id": 157379,
+                  "section_title": "II. PROLETARIANS AND COMMUNISTS",
+                  "start": 6292,
+                  "end": 7584,
+                  "citation": "Marx, Karl, 1818-1883; Engels, Friedrich, 1820-1895. The Communist Manifesto. Project Gutenberg #61, full electronic edition; updated Mar 2, 2022. II. PROLETARIANS AND COMMUNISTS, chars 6292–7584.",
+                  "verified": true,
+                  "text_sha256": "d3c07450ba7adcfaae546f52b15cd00e6c8df8bc24189447b1c08fe51e7459eb"
+                },
+                {
+                  "id": 1154171,
+                  "book_id": "pg61-full",
+                  "section_id": 157378,
+                  "section_title": "I. BOURGEOIS AND PROLETARIANS",
+                  "start": 12575,
+                  "end": 13828,
+                  "citation": "Marx, Karl, 1818-1883; Engels, Friedrich, 1820-1895. The Communist Manifesto. Project Gutenberg #61, full electronic edition; updated Mar 2, 2022. I. BOURGEOIS AND PROLETARIANS, chars 12575–13828.",
+                  "verified": true,
+                  "text_sha256": "c5c099e1b1fae7ba31bc6df7d738128cc3f9f90b899b05060661e4089dc60dd9"
+                },
+                {
+                  "id": 1154180,
+                  "book_id": "pg61-full",
+                  "section_id": 157378,
+                  "section_title": "I. BOURGEOIS AND PROLETARIANS",
+                  "start": 23420,
+                  "end": 24787,
+                  "citation": "Marx, Karl, 1818-1883; Engels, Friedrich, 1820-1895. The Communist Manifesto. Project Gutenberg #61, full electronic edition; updated Mar 2, 2022. I. BOURGEOIS AND PROLETARIANS, chars 23420–24787.",
+                  "verified": true,
+                  "text_sha256": "e26b3b70f017399513570cd9d078669b89bca9880722cc20c28df6231acbac53"
+                },
+                {
+                  "id": 1154170,
+                  "book_id": "pg61-full",
+                  "section_id": 157378,
+                  "section_title": "I. BOURGEOIS AND PROLETARIANS",
+                  "start": 11261,
+                  "end": 12574,
+                  "citation": "Marx, Karl, 1818-1883; Engels, Friedrich, 1820-1895. The Communist Manifesto. Project Gutenberg #61, full electronic edition; updated Mar 2, 2022. I. BOURGEOIS AND PROLETARIANS, chars 11261–12574.",
+                  "verified": true,
+                  "text_sha256": "280c68edb212a7c690216525c0639cd3e7e350ac456d8655b597ceae6fd45d90"
+                },
+                {
+                  "id": 1154189,
+                  "book_id": "pg61-full",
+                  "section_id": 157379,
+                  "section_title": "II. PROLETARIANS AND COMMUNISTS",
+                  "start": 7586,
+                  "end": 8599,
+                  "citation": "Marx, Karl, 1818-1883; Engels, Friedrich, 1820-1895. The Communist Manifesto. Project Gutenberg #61, full electronic edition; updated Mar 2, 2022. II. PROLETARIANS AND COMMUNISTS, chars 7586–8599.",
+                  "verified": true,
+                  "text_sha256": "0b78a987216f588ce93ffee032c60819cd0af3e6a0df640947b9bb3a0c979ce6"
+                },
+                {
+                  "id": 1154169,
+                  "book_id": "pg61-full",
+                  "section_id": 157378,
+                  "section_title": "I. BOURGEOIS AND PROLETARIANS",
+                  "start": 10523,
+                  "end": 11259,
+                  "citation": "Marx, Karl, 1818-1883; Engels, Friedrich, 1820-1895. The Communist Manifesto. Project Gutenberg #61, full electronic edition; updated Mar 2, 2022. I. BOURGEOIS AND PROLETARIANS, chars 10523–11259.",
+                  "verified": true,
+                  "text_sha256": "a406cb4893823048493e8c0bdffc8ce3e9c612ef7ae5a80c2b3bd5e20eba5ae8"
+                },
+                {
+                  "id": 1154176,
+                  "book_id": "pg61-full",
+                  "section_id": 157378,
+                  "section_title": "I. BOURGEOIS AND PROLETARIANS",
+                  "start": 18554,
+                  "end": 19655,
+                  "citation": "Marx, Karl, 1818-1883; Engels, Friedrich, 1820-1895. The Communist Manifesto. Project Gutenberg #61, full electronic edition; updated Mar 2, 2022. I. BOURGEOIS AND PROLETARIANS, chars 18554–19655.",
+                  "verified": true,
+                  "text_sha256": "1e6659f5b4e4bf8a3dd0d9fbeddb40ce2274e6b34c28890759c6c7067427edf2"
+                },
+                {
+                  "id": 1154211,
+                  "book_id": "pg61-full",
+                  "section_id": 157381,
+                  "section_title": "2. CONSERVATIVE, OR BOURGEOIS, SOCIALISM",
+                  "start": 1343,
+                  "end": 2589,
+                  "citation": "Marx, Karl, 1818-1883; Engels, Friedrich, 1820-1895. The Communist Manifesto. Project Gutenberg #61, full electronic edition; updated Mar 2, 2022. 2. CONSERVATIVE, OR BOURGEOIS, SOCIALISM, chars 1343–2589.",
+                  "verified": true,
+                  "text_sha256": "f303eaf6af8408e845fb0de42bfde463a5a7af9bdc13eaf18f16c34d54516dbc"
+                },
+                {
+                  "id": 1154174,
+                  "book_id": "pg61-full",
+                  "section_id": 157378,
+                  "section_title": "I. BOURGEOIS AND PROLETARIANS",
+                  "start": 16573,
+                  "end": 17758,
+                  "citation": "Marx, Karl, 1818-1883; Engels, Friedrich, 1820-1895. The Communist Manifesto. Project Gutenberg #61, full electronic edition; updated Mar 2, 2022. I. BOURGEOIS AND PROLETARIANS, chars 16573–17758.",
+                  "verified": true,
+                  "text_sha256": "62713b0a2d411d4a8b7667c000b0f31c25420f70165a9829b1cb94b74f40ba54"
+                },
+                {
+                  "id": 1154203,
+                  "book_id": "pg61-full",
+                  "section_id": 157380,
+                  "section_title": "III. SOCIALIST AND COMMUNIST LITERATURE\n1. REACTIONARY SOCIALISM",
+                  "start": 3734,
+                  "end": 4851,
+                  "citation": "Marx, Karl, 1818-1883; Engels, Friedrich, 1820-1895. The Communist Manifesto. Project Gutenberg #61, full electronic edition; updated Mar 2, 2022. III. SOCIALIST AND COMMUNIST LITERATURE\n1. REACTIONARY SOCIALISM, chars 3734–4851.",
+                  "verified": true,
+                  "text_sha256": "e2abeae57f04c8d7415580260fbab08bc52cce5e01eea74ce89813ceabc9d980"
+                },
+                {
+                  "id": 1154202,
+                  "book_id": "pg61-full",
+                  "section_id": 157380,
+                  "section_title": "III. SOCIALIST AND COMMUNIST LITERATURE\n1. REACTIONARY SOCIALISM",
+                  "start": 2391,
+                  "end": 3732,
+                  "citation": "Marx, Karl, 1818-1883; Engels, Friedrich, 1820-1895. The Communist Manifesto. Project Gutenberg #61, full electronic edition; updated Mar 2, 2022. III. SOCIALIST AND COMMUNIST LITERATURE\n1. REACTIONARY SOCIALISM, chars 2391–3732.",
+                  "verified": true,
+                  "text_sha256": "1350574f9490d4f4965e74b08edfe8d9c96d405c8eeccce40efff9aebb4c1bff"
+                },
+                {
+                  "id": 1154212,
+                  "book_id": "pg61-full",
+                  "section_id": 157382,
+                  "section_title": "3. CRITICAL-UTOPIAN SOCIALISM AND COMMUNISM",
+                  "start": 0,
+                  "end": 1079,
+                  "citation": "Marx, Karl, 1818-1883; Engels, Friedrich, 1820-1895. The Communist Manifesto. Project Gutenberg #61, full electronic edition; updated Mar 2, 2022. 3. CRITICAL-UTOPIAN SOCIALISM AND COMMUNISM, chars 0–1079.",
+                  "verified": true,
+                  "text_sha256": "6039510e209ad945f0e91824a34b6e8fbba861c2799407bab9af02ff39055bd6"
+                },
+                {
+                  "id": 1154182,
+                  "book_id": "pg61-full",
+                  "section_id": 157378,
+                  "section_title": "I. BOURGEOIS AND PROLETARIANS",
+                  "start": 25759,
+                  "end": 27700,
+                  "citation": "Marx, Karl, 1818-1883; Engels, Friedrich, 1820-1895. The Communist Manifesto. Project Gutenberg #61, full electronic edition; updated Mar 2, 2022. I. BOURGEOIS AND PROLETARIANS, chars 25759–27700.",
+                  "verified": true,
+                  "text_sha256": "2c518dfe78683f7903c992c5d571209e6a522cc35a28b91d8f020184db7bc212"
+                },
+                {
+                  "id": 1154196,
+                  "book_id": "pg61-full",
+                  "section_id": 157379,
+                  "section_title": "II. PROLETARIANS AND COMMUNISTS",
+                  "start": 15294,
+                  "end": 16438,
+                  "citation": "Marx, Karl, 1818-1883; Engels, Friedrich, 1820-1895. The Communist Manifesto. Project Gutenberg #61, full electronic edition; updated Mar 2, 2022. II. PROLETARIANS AND COMMUNISTS, chars 15294–16438.",
+                  "verified": true,
+                  "text_sha256": "67d781819429e98900d4c44471e256badac795a3e3ac256d0be164b38fc10d89"
+                },
+                {
+                  "id": 1154199,
+                  "book_id": "pg61-full",
+                  "section_id": 157379,
+                  "section_title": "II. PROLETARIANS AND COMMUNISTS",
+                  "start": 18667,
+                  "end": 19659,
+                  "citation": "Marx, Karl, 1818-1883; Engels, Friedrich, 1820-1895. The Communist Manifesto. Project Gutenberg #61, full electronic edition; updated Mar 2, 2022. II. PROLETARIANS AND COMMUNISTS, chars 18667–19659.",
+                  "verified": true,
+                  "text_sha256": "68d467c1b8fa7082c573236d0a124424b2c2edd912d5d5d0954e282062bf19b3"
+                },
+                {
+                  "id": 1154215,
+                  "book_id": "pg61-full",
+                  "section_id": 157382,
+                  "section_title": "3. CRITICAL-UTOPIAN SOCIALISM AND COMMUNISM",
+                  "start": 3443,
+                  "end": 4302,
+                  "citation": "Marx, Karl, 1818-1883; Engels, Friedrich, 1820-1895. The Communist Manifesto. Project Gutenberg #61, full electronic edition; updated Mar 2, 2022. 3. CRITICAL-UTOPIAN SOCIALISM AND COMMUNISM, chars 3443–4302.",
+                  "verified": true,
+                  "text_sha256": "a3e9f2e0037389b315189b919f2ba837c1e82088450ef86d43bd58a71d17aecf"
+                },
+                {
+                  "id": 1154194,
+                  "book_id": "pg61-full",
+                  "section_id": 157379,
+                  "section_title": "II. PROLETARIANS AND COMMUNISTS",
+                  "start": 12987,
+                  "end": 14152,
+                  "citation": "Marx, Karl, 1818-1883; Engels, Friedrich, 1820-1895. The Communist Manifesto. Project Gutenberg #61, full electronic edition; updated Mar 2, 2022. II. PROLETARIANS AND COMMUNISTS, chars 12987–14152.",
+                  "verified": true,
+                  "text_sha256": "6a2a268f677a10af5af50246128e8934404691c007724c2105785722a1ddc519"
+                },
+                {
+                  "id": 1154168,
+                  "book_id": "pg61-full",
+                  "section_id": 157378,
+                  "section_title": "I. BOURGEOIS AND PROLETARIANS",
+                  "start": 9434,
+                  "end": 10521,
+                  "citation": "Marx, Karl, 1818-1883; Engels, Friedrich, 1820-1895. The Communist Manifesto. Project Gutenberg #61, full electronic edition; updated Mar 2, 2022. I. BOURGEOIS AND PROLETARIANS, chars 9434–10521.",
+                  "verified": true,
+                  "text_sha256": "6c63ffcb11ab79f347b1a2d20b4ec951e2f24f69569aa51cf479f76cbfd53cae"
+                },
+                {
+                  "id": 1154177,
+                  "book_id": "pg61-full",
+                  "section_id": 157378,
+                  "section_title": "I. BOURGEOIS AND PROLETARIANS",
+                  "start": 19657,
+                  "end": 20828,
+                  "citation": "Marx, Karl, 1818-1883; Engels, Friedrich, 1820-1895. The Communist Manifesto. Project Gutenberg #61, full electronic edition; updated Mar 2, 2022. I. BOURGEOIS AND PROLETARIANS, chars 19657–20828.",
+                  "verified": true,
+                  "text_sha256": "66003baabec58a2bd129a9a4b68da94bf8f19ca191d84404e68f2dad971fb76c"
+                },
+                {
+                  "id": 1154166,
+                  "book_id": "pg61-full",
+                  "section_id": 157378,
+                  "section_title": "I. BOURGEOIS AND PROLETARIANS",
+                  "start": 6828,
+                  "end": 8313,
+                  "citation": "Marx, Karl, 1818-1883; Engels, Friedrich, 1820-1895. The Communist Manifesto. Project Gutenberg #61, full electronic edition; updated Mar 2, 2022. I. BOURGEOIS AND PROLETARIANS, chars 6828–8313.",
+                  "verified": true,
+                  "text_sha256": "c3ff476658e753ab472990ec01e27a21556bbc120a188f0be080b2f8bf9673f2"
+                },
+                {
+                  "id": 1154178,
+                  "book_id": "pg61-full",
+                  "section_id": 157378,
+                  "section_title": "I. BOURGEOIS AND PROLETARIANS",
+                  "start": 20830,
+                  "end": 21874,
+                  "citation": "Marx, Karl, 1818-1883; Engels, Friedrich, 1820-1895. The Communist Manifesto. Project Gutenberg #61, full electronic edition; updated Mar 2, 2022. I. BOURGEOIS AND PROLETARIANS, chars 20830–21874.",
+                  "verified": true,
+                  "text_sha256": "92ae9985e394c0158882edd73a2c61367b30251fb0f7384a081833df1879fc7b"
+                },
+                {
+                  "id": 1154164,
+                  "book_id": "pg61-full",
+                  "section_id": 157378,
+                  "section_title": "I. BOURGEOIS AND PROLETARIANS",
+                  "start": 4255,
+                  "end": 5477,
+                  "citation": "Marx, Karl, 1818-1883; Engels, Friedrich, 1820-1895. The Communist Manifesto. Project Gutenberg #61, full electronic edition; updated Mar 2, 2022. I. BOURGEOIS AND PROLETARIANS, chars 4255–5477.",
+                  "verified": true,
+                  "text_sha256": "51669a251afa6856e8518318000e561d8f3603fa708e199034dba2ec74c83e9c"
+                }
+              ],
+              "experimental_russian_stems": null
+            }
+          ],
+          "planned_round_robin_anchors": [
+            {
+              "reference_id": "bourgeois",
+              "book_id": "pg61-full",
+              "first_rank": 2
+            }
+          ],
+          "planned_then_original_round_robin_anchors": [
+            {
+              "reference_id": "bourgeois",
+              "book_id": "pg61-full",
+              "first_rank": 2
+            }
+          ],
+          "merge_note": "Diagnostic only; candidate ranking/merging is not integrated into Ask."
+        }
+      ]
+    },
+    {
+      "id": "ru-land-grave",
+      "question": "Сколько земли в итоге занимает могила Пахома в рассказе Толстого «Много ли человеку земли нужно»?",
+      "plan": {
+        "original_question": "Сколько земли в итоге занимает могила Пахома в рассказе Толстого «Много ли человеку земли нужно»?",
+        "kind": "retrieval_hypotheses",
+        "used": true,
+        "reason": "validated_plan",
+        "book_queries": [
+          {
+            "book_id": "wsru-how-much-land-285bf7cc584e",
+            "language": "ru",
+            "queries": [
+              "количество земли в могиле пахома в конце рассказа"
+            ]
+          }
+        ],
+        "response_language_hint": "ru",
+        "fallback": null,
+        "generation": {
+          "model": {
+            "profile": "qwen3-4b-instruct-2507",
+            "repository": "unsloth/Qwen3-4B-Instruct-2507-GGUF",
+            "revision": "a06e946bb6b655725eafa393f4a9745d460374c9",
+            "sha256": "3605803b982cb64aead44f6c1b2ae36e3acdb41d8e46c8a94c6533bc4c67e597",
+            "quantization": "Q4_K_M",
+            "upstream_repository": "Qwen/Qwen3-4B-Instruct-2507",
+            "reviewed_upstream_revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+            "conversion_base_revision": null,
+            "conversion": "Unsloth GGUF conversion of Qwen weights; not an official Qwen GGUF release"
+          },
+          "usage": {
+            "prompt_tokens": 291,
+            "completion_tokens": 61,
+            "total_tokens": 352
+          },
+          "elapsed_ms": 3492.1080409549177
+        },
+        "elapsed_ms": 3492.195
+      },
+      "books": [
+        {
+          "book_id": "wsru-how-much-land-285bf7cc584e",
+          "language": "ru",
+          "original": {
+            "query": "Сколько земли в итоге занимает могила Пахома в рассказе Толстого  Много ли человеку земли нужно ?",
+            "mode": "lexical",
+            "elapsed_ms": 10.34,
+            "anchors": [
+              {
+                "reference_id": "grave",
+                "book_id": "wsru-how-much-land-285bf7cc584e",
+                "first_rank": 14
+              }
+            ],
+            "results": [
+              {
+                "id": 2576558,
+                "book_id": "wsru-how-much-land-285bf7cc584e",
+                "section_id": 343433,
+                "section_title": "V",
+                "start": 1318,
+                "end": 2257,
+                "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. V, chars 1318–2257.",
+                "verified": true,
+                "text_sha256": "b67a203d601980d4ccba1be350ade2222fe008567e9a3b7a6a9a7311d9b139a5"
+              },
+              {
+                "id": 2576560,
+                "book_id": "wsru-how-much-land-285bf7cc584e",
+                "section_id": 343434,
+                "section_title": "VI",
+                "start": 1202,
+                "end": 2255,
+                "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. VI, chars 1202–2255.",
+                "verified": true,
+                "text_sha256": "6a5aec39b0adf62a43cdda727589c7f42ea11a6c4774d663606ee2dfe7bbbfc7"
+              },
+              {
+                "id": 2576555,
+                "book_id": "wsru-how-much-land-285bf7cc584e",
+                "section_id": 343432,
+                "section_title": "IV",
+                "start": 0,
+                "end": 1356,
+                "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. IV, chars 0–1356.",
+                "verified": true,
+                "text_sha256": "6e50013b868f521eee31b77ae064dfed33079d2c09f0660da430f45737f4fee9"
+              },
+              {
+                "id": 2576554,
+                "book_id": "wsru-how-much-land-285bf7cc584e",
+                "section_id": 343431,
+                "section_title": "III",
+                "start": 1183,
+                "end": 3061,
+                "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. III, chars 1183–3061.",
+                "verified": true,
+                "text_sha256": "1ab65a12669849c8d18d29158d9f146f429c87224b3ac2f02e0abd6b99f69fa0"
+              },
+              {
+                "id": 2576561,
+                "book_id": "wsru-how-much-land-285bf7cc584e",
+                "section_id": 343435,
+                "section_title": "VII",
+                "start": 0,
+                "end": 1820,
+                "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. VII, chars 0–1820.",
+                "verified": true,
+                "text_sha256": "875b4df12db0fef5c46050e36b1544b96b6969776d8bb21b8c6b50c6c9be6e9c"
+              },
+              {
+                "id": 2576553,
+                "book_id": "wsru-how-much-land-285bf7cc584e",
+                "section_id": 343431,
+                "section_title": "III",
+                "start": 0,
+                "end": 1181,
+                "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. III, chars 0–1181.",
+                "verified": true,
+                "text_sha256": "85357209c194cab684277c973fee38b51f954777c3adf95eedc4e208d7150714"
+              },
+              {
+                "id": 2576557,
+                "book_id": "wsru-how-much-land-285bf7cc584e",
+                "section_id": 343433,
+                "section_title": "V",
+                "start": 0,
+                "end": 1316,
+                "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. V, chars 0–1316.",
+                "verified": true,
+                "text_sha256": "aec9e8520e13e064c92c5c04eab14365586f574cdc2706635394ca7cc4dd64d5"
+              },
+              {
+                "id": 2576562,
+                "book_id": "wsru-how-much-land-285bf7cc584e",
+                "section_id": 343436,
+                "section_title": "VIII",
+                "start": 0,
+                "end": 1237,
+                "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. VIII, chars 0–1237.",
+                "verified": true,
+                "text_sha256": "42ccfdde18e779eb59ffc261cf6210f0c04e46b896ca635ec853ab40a239c60c"
+              },
+              {
+                "id": 2576549,
+                "book_id": "wsru-how-much-land-285bf7cc584e",
+                "section_id": 343428,
+                "section_title": "Происхождение и условия использования — Book RAG",
+                "start": 0,
+                "end": 1118,
+                "citation": "Book RAG (editorial). В: Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. Происхождение и условия использования — Book RAG, chars 0–1118.",
+                "verified": true,
+                "text_sha256": "1b79b7aef24aeed78acf4d891d74941313824672e7c86a41624d7b04c7774f63"
+              },
+              {
+                "id": 2576550,
+                "book_id": "wsru-how-much-land-285bf7cc584e",
+                "section_id": 343429,
+                "section_title": "Много ли человеку земли нужно\nI",
+                "start": 0,
+                "end": 1920,
+                "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. Много ли человеку земли нужно\nI, chars 0–1920.",
+                "verified": true,
+                "text_sha256": "c0cd2f7094501fee85dc190f34a405eb10db3bcfb77afda37d49749e093d079e"
+              },
+              {
+                "id": 2576559,
+                "book_id": "wsru-how-much-land-285bf7cc584e",
+                "section_id": 343434,
+                "section_title": "VI",
+                "start": 0,
+                "end": 1200,
+                "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. VI, chars 0–1200.",
+                "verified": true,
+                "text_sha256": "0939c8f3d0dde312f9ff6d4e08433926cfc6f665d30a15217004316710edb65e"
+              },
+              {
+                "id": 2576564,
+                "book_id": "wsru-how-much-land-285bf7cc584e",
+                "section_id": 343436,
+                "section_title": "VIII",
+                "start": 2405,
+                "end": 3569,
+                "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. VIII, chars 2405–3569.",
+                "verified": true,
+                "text_sha256": "90260dc7b05faf2e8736ef33af6cb7c8dae30a2fa0eae731b47058f330f3e5f8"
+              },
+              {
+                "id": 2576551,
+                "book_id": "wsru-how-much-land-285bf7cc584e",
+                "section_id": 343430,
+                "section_title": "II",
+                "start": 0,
+                "end": 1321,
+                "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. II, chars 0–1321.",
+                "verified": true,
+                "text_sha256": "70da2811049321c558bdfa43cc5b0bec601412a137ed0d5b9d0abdac91e734de"
+              },
+              {
+                "id": 2576566,
+                "book_id": "wsru-how-much-land-285bf7cc584e",
+                "section_id": 343437,
+                "section_title": "IX",
+                "start": 920,
+                "end": 2676,
+                "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. IX, chars 920–2676.",
+                "verified": true,
+                "text_sha256": "380231cd287307572008907959aa533a33d0aa9189f795f5ae419fd948cbcfaf"
+              },
+              {
+                "id": 2576565,
+                "book_id": "wsru-how-much-land-285bf7cc584e",
+                "section_id": 343437,
+                "section_title": "IX",
+                "start": 0,
+                "end": 918,
+                "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. IX, chars 0–918.",
+                "verified": true,
+                "text_sha256": "6402bb68d6e872dccd7602d13b0b904a7e4d2bd9b96af00ecd9d1555249a6965"
+              },
+              {
+                "id": 2576552,
+                "book_id": "wsru-how-much-land-285bf7cc584e",
+                "section_id": 343430,
+                "section_title": "II",
+                "start": 1323,
+                "end": 2385,
+                "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. II, chars 1323–2385.",
+                "verified": true,
+                "text_sha256": "4c3a72aa33bf671209d67c39cc9cbfba577cf4e5251c1b3824b48a1e00a79556"
+              },
+              {
+                "id": 2576556,
+                "book_id": "wsru-how-much-land-285bf7cc584e",
+                "section_id": 343432,
+                "section_title": "IV",
+                "start": 1358,
+                "end": 2991,
+                "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. IV, chars 1358–2991.",
+                "verified": true,
+                "text_sha256": "665b1c68335a5d39529a805f395a6c4be7393a6f411875b94f0270c020d006c4"
+              },
+              {
+                "id": 2576563,
+                "book_id": "wsru-how-much-land-285bf7cc584e",
+                "section_id": 343436,
+                "section_title": "VIII",
+                "start": 1239,
+                "end": 2403,
+                "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. VIII, chars 1239–2403.",
+                "verified": true,
+                "text_sha256": "dc1ab4677607ff583e28cc5f09de69d386f62ba40fe40f5b3f0d6e2d9a7f5232"
+              }
+            ]
+          },
+          "planned_queries": [
+            {
+              "query": "количество земли в могиле пахома в конце рассказа",
+              "mode": "lexical",
+              "elapsed_ms": 25.7,
+              "warnings": [
+                "Использовано сопоставление русских словоформ; проверьте фрагменты в контексте."
+              ],
+              "anchors": [
+                {
+                  "reference_id": "grave",
+                  "book_id": "wsru-how-much-land-285bf7cc584e",
+                  "first_rank": 1
+                }
+              ],
+              "results": [
+                {
+                  "id": 2576566,
+                  "book_id": "wsru-how-much-land-285bf7cc584e",
+                  "section_id": 343437,
+                  "section_title": "IX",
+                  "start": 920,
+                  "end": 2676,
+                  "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. IX, chars 920–2676.",
+                  "verified": true,
+                  "text_sha256": "380231cd287307572008907959aa533a33d0aa9189f795f5ae419fd948cbcfaf"
+                }
+              ],
+              "experimental_russian_stems": {
+                "used": true,
+                "stems": [
+                  "количеств",
+                  "земл",
+                  "могил",
+                  "пахом",
+                  "конц",
+                  "рассказ"
+                ],
+                "elapsed_ms": 5.6055826134979725,
+                "corrupt_candidates_suppressed": 0,
+                "anchors": [
+                  {
+                    "reference_id": "grave",
+                    "book_id": "wsru-how-much-land-285bf7cc584e",
+                    "first_rank": 1
+                  }
+                ],
+                "results": [
+                  {
+                    "id": 2576566,
+                    "book_id": "wsru-how-much-land-285bf7cc584e",
+                    "section_id": 343437,
+                    "section_title": "IX",
+                    "start": 920,
+                    "end": 2676,
+                    "citation": "Лев Николаевич Толстой. Много ли человеку земли нужно. Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293. IX, chars 920–2676.",
+                    "verified": true,
+                    "text_sha256": "380231cd287307572008907959aa533a33d0aa9189f795f5ae419fd948cbcfaf"
+                  }
+                ]
+              }
+            }
+          ],
+          "planned_round_robin_anchors": [
+            {
+              "reference_id": "grave",
+              "book_id": "wsru-how-much-land-285bf7cc584e",
+              "first_rank": 1
+            }
+          ],
+          "planned_then_original_round_robin_anchors": [
+            {
+              "reference_id": "grave",
+              "book_id": "wsru-how-much-land-285bf7cc584e",
+              "first_rank": 1
+            }
+          ],
+          "merge_note": "Diagnostic only; candidate ranking/merging is not integrated into Ask."
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "Three or fewer selected, previously inspected open development failures; not heldout or general quality.",
+    "Lexical original versus lexical planned queries; this does not re-run or score the full hybrid RAG pipeline.",
+    "Only query hypotheses are generated; no answer, entailment verdict or user-facing fact is generated.",
+    "Keyword-language correctness and topical fidelity require review; structural validation cannot prove them.",
+    "Selected-source guards cover metadata, source hashes, sections, passage IDs and contributor roles; global ingestion may continue.",
+    "No Library(original) constructor, migrations, source writes, embedding jobs or paid inference.",
+    "Timing includes a potentially cold local planner; sequential searches have cache/order confounds."
+  ],
+  "actual_model_generation_invoked": true
+}

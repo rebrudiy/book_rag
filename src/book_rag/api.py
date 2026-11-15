@@ -35,6 +35,7 @@ class AnswerRequest(BaseModel):
     language: str | None = Field(default=None, max_length=20)
     mode: Literal["lexical", "semantic", "hybrid"] = "hybrid"
     limit: int = Field(default=8, ge=1, le=12)
+    plan_retrieval: bool = Field(default=False, strict=True)
 
     @field_validator("book_ids")
     @classmethod
@@ -187,6 +188,7 @@ def create_app(directory: Path | None = None, *, answer_generator: AnswerGenerat
             mode=request.mode,
             limit=request.limit,
             generator=answer_generator,
+            plan_retrieval=request.plan_retrieval,
         )
 
     @app.get("/api/saved")
