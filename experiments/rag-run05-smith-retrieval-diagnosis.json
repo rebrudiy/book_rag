@@ -1,0 +1,1970 @@
+{
+  "schema_version": 1,
+  "kind": "read_only_open_development_retrieval_diagnosis",
+  "created_at": "2026-11-15T04:58:07.825313+00:00",
+  "scope": {
+    "model_calls": 0,
+    "gpu_jobs": 0,
+    "source_mutations": 0,
+    "core_edits": 0,
+    "sealed_files_accessed": false,
+    "ordinary_baseline_modified": false
+  },
+  "transcript_sha256": "11ddf0762e063896915a3084894b2844273710a147d4fa8a9a73e39558dab531",
+  "case_id": "compare-property",
+  "question": "Compare Smith’s description of property in a person’s own labour with Marx and Engels’ distinction between property generally and bourgeois property. What kinds of property do these passages discuss?",
+  "actual_plan": {
+    "requested": true,
+    "used": true,
+    "reason": "validated_plan_candidates",
+    "elapsed_ms": 5440.4,
+    "ranking_strategy": "body-coverage-proximity-v1",
+    "book_queries": [
+      {
+        "book_id": "pg3300-full",
+        "language": "en",
+        "queries": [
+          "description of property in a person's own labour in wealth of nations"
+        ]
+      },
+      {
+        "book_id": "pg61-full",
+        "language": "en",
+        "queries": [
+          "distinction between property generally and bourgeois property in communist manifesto"
+        ]
+      }
+    ],
+    "response_language_hint": "en"
+  },
+  "candidate_scope": "Actual run05 planned lexical query replayed against immutable-guarded current Smith source. This is not a reproduction of the unrecorded full original hybrid candidate pool.",
+  "source_guard": {
+    "pg3300-full": {
+      "book_metadata_sha256": "c2b9e0a5a7338ddee81d867a6f0718f7f0003c28991a3aeef8cb1def70fe06ad",
+      "artifact_sha256": "52c8c5b9cc2b18d1edc87a326b76f0d8aee568932995d407083b394aaa9165ab",
+      "content_sha256": "da5946d31a0e131f1ff9c772b4831fd06cfb55a23bb137f180ffe1a6f905d6fd",
+      "section_snapshot_sha256": "952b29880d03de167bf37e7beb4bc6e3ede393f05095189befde80aebd258a9b",
+      "passage_identity_sha256": "833b6c17a00daf8522c4e4bf61b362867a673074d0c442de856b5ec36f9b46b7",
+      "roles_sha256": "f10ecf68a64042e25d85faf85a855062036b4634f45f0d66879ba44612aeb4a5",
+      "passages": 1753
+    }
+  },
+  "source_guards_unchanged": true,
+  "canonical_span_checks": {
+    "checked": 40,
+    "failures": 0
+  },
+  "target": {
+    "id": 893258,
+    "book_id": "pg3300-full",
+    "section_id": 120670,
+    "section_title": "PART II.—Inequalities occasioned by the Policy of Europe.",
+    "start": 7423,
+    "end": 8343,
+    "verified": true,
+    "text_sha256": "2ceff6a9ad5af89004fb501f23e53204c31e0cb2345c6010118f17fd24199dcd"
+  },
+  "target_reference_sha256": "5bf6b0d9dc590516c2f6b8bfd6300b73a98c5e6fea083c8d450e6c601bec3fba",
+  "planned_query_terms": [
+    "description",
+    "property",
+    "person",
+    "labour",
+    "wealth",
+    "nations"
+  ],
+  "target_raw_rank": 3,
+  "target_rerank_rank": 8,
+  "raw_pool": [
+    {
+      "id": 894313,
+      "book_id": "pg3300-full",
+      "section_id": 120702,
+      "section_title": "PART II. Of the Expense of Justice",
+      "start": 0,
+      "end": 1163,
+      "verified": true,
+      "text_sha256": "613a40ab4e8a529993ec56e69168970caff5f0b28eee659e1bffd22f4ade476b"
+    },
+    {
+      "id": 893723,
+      "book_id": "pg3300-full",
+      "section_id": 120684,
+      "section_title": "CHAPTER II. OF THE DISCOURAGEMENT OF AGRICULTURE IN THE ANCIENT STATE OF EUROPE, AFTER THE FALL OF THE ROMAN EMPIRE.",
+      "start": 10620,
+      "end": 11789,
+      "verified": true,
+      "text_sha256": "5ef90a677fbb5414679d0e846adbe1d703b0fed70cdd8426fa8f1d899750849d"
+    },
+    {
+      "id": 893258,
+      "book_id": "pg3300-full",
+      "section_id": 120670,
+      "section_title": "PART II.—Inequalities occasioned by the Policy of Europe.",
+      "start": 7423,
+      "end": 8343,
+      "verified": true,
+      "text_sha256": "2ceff6a9ad5af89004fb501f23e53204c31e0cb2345c6010118f17fd24199dcd"
+    },
+    {
+      "id": 893151,
+      "book_id": "pg3300-full",
+      "section_id": 120666,
+      "section_title": "CHAPTER VIII. OF THE WAGES OF LABOUR.",
+      "start": 2001,
+      "end": 3175,
+      "verified": true,
+      "text_sha256": "ab6c60015837432c22ad15dc7eda449f24f6f2bd8204545a8688ae1ca5d3952f"
+    },
+    {
+      "id": 894614,
+      "book_id": "pg3300-full",
+      "section_id": 120709,
+      "section_title": "APPENDIX TO ARTICLES I. AND II.—Taxes upon the Capital Value of Lands, Houses, and Stock.",
+      "start": 11424,
+      "end": 13405,
+      "verified": true,
+      "text_sha256": "8d920fa9575a979824762540ef8891c483687b1c5223cc9518581c3061124772"
+    },
+    {
+      "id": 893088,
+      "book_id": "pg3300-full",
+      "section_id": 120663,
+      "section_title": "CHAPTER V. OF THE REAL AND NOMINAL PRICE OF COMMODITIES, OR OF THEIR PRICE IN LABOUR, AND THEIR PRICE IN MONEY.",
+      "start": 1898,
+      "end": 2816,
+      "verified": true,
+      "text_sha256": "5d522d640e720d13f58c864738661adb00b65a3d5fe9150e8233af34aed8a5dc"
+    },
+    {
+      "id": 893632,
+      "book_id": "pg3300-full",
+      "section_id": 120680,
+      "section_title": "CHAPTER III. OF THE ACCUMULATION OF CAPITAL, OR OF PRODUCTIVE AND UNPRODUCTIVE LABOUR.",
+      "start": 17345,
+      "end": 18465,
+      "verified": true,
+      "text_sha256": "16d84503270fd2699442ee81fe3b108b02dd3c3dda7ef57e979d37a9bac28b76"
+    },
+    {
+      "id": 893047,
+      "book_id": "pg3300-full",
+      "section_id": 120659,
+      "section_title": "CHAPTER I. OF THE DIVISION OF LABOUR.",
+      "start": 5166,
+      "end": 6349,
+      "verified": true,
+      "text_sha256": "5ced7b790240cedbd3f3de97864105a9e6f1059e131a0a122a3d6888d21d07da"
+    },
+    {
+      "id": 893770,
+      "book_id": "pg3300-full",
+      "section_id": 120686,
+      "section_title": "CHAPTER IV. HOW THE COMMERCE OF TOWNS CONTRIBUTED TO THE IMPROVEMENT OF THE COUNTRY.",
+      "start": 17932,
+      "end": 19440,
+      "verified": true,
+      "text_sha256": "2f67b9602ec9db6ff345e300b0b274d19df85e30288ae8984f19641bad5eb0ed"
+    },
+    {
+      "id": 893193,
+      "book_id": "pg3300-full",
+      "section_id": 120667,
+      "section_title": "CHAPTER IX. OF THE PROFITS OF STOCK.",
+      "start": 0,
+      "end": 1741,
+      "verified": true,
+      "text_sha256": "f4794ed8537c2b8e9d7f29187882f43902dfc7d9d9610ce79dc5aa10ea375af4"
+    },
+    {
+      "id": 893086,
+      "book_id": "pg3300-full",
+      "section_id": 120663,
+      "section_title": "CHAPTER V. OF THE REAL AND NOMINAL PRICE OF COMMODITIES, OR OF THEIR PRICE IN LABOUR, AND THEIR PRICE IN MONEY.",
+      "start": 0,
+      "end": 821,
+      "verified": true,
+      "text_sha256": "ef9824df07564008ee15ac0f7ccdbfa5351890ecc33f2102c39fe1fda9170207"
+    },
+    {
+      "id": 894314,
+      "book_id": "pg3300-full",
+      "section_id": 120702,
+      "section_title": "PART II. Of the Expense of Justice",
+      "start": 1164,
+      "end": 2859,
+      "verified": true,
+      "text_sha256": "533d56e0de5182ce59f732b2e82ae2754c7585bba15dcc73675b123fac4230a3"
+    },
+    {
+      "id": 893093,
+      "book_id": "pg3300-full",
+      "section_id": 120663,
+      "section_title": "CHAPTER V. OF THE REAL AND NOMINAL PRICE OF COMMODITIES, OR OF THEIR PRICE IN LABOUR, AND THEIR PRICE IN MONEY.",
+      "start": 8019,
+      "end": 8929,
+      "verified": true,
+      "text_sha256": "31a7314dcee4dd2c40e822ad55ae195611045e2d57a0d7add3327cfa22a9bf2c"
+    },
+    {
+      "id": 893152,
+      "book_id": "pg3300-full",
+      "section_id": 120666,
+      "section_title": "CHAPTER VIII. OF THE WAGES OF LABOUR.",
+      "start": 3177,
+      "end": 4373,
+      "verified": true,
+      "text_sha256": "46eceeff6d37e8fb9f6b333fa86e6c6d880cb8e6a2f5ba508958cdc65d310054"
+    },
+    {
+      "id": 894616,
+      "book_id": "pg3300-full",
+      "section_id": 120709,
+      "section_title": "APPENDIX TO ARTICLES I. AND II.—Taxes upon the Capital Value of Lands, Houses, and Stock.",
+      "start": 14401,
+      "end": 15135,
+      "verified": true,
+      "text_sha256": "04d2270d2f75f4a0fad939b792f3e99f0da292ee6589e78177753bab2422d309"
+    },
+    {
+      "id": 894254,
+      "book_id": "pg3300-full",
+      "section_id": 120699,
+      "section_title": "CHAPTER IX. OF THE AGRICULTURAL SYSTEMS, OR OF THOSE SYSTEMS OF POLITICAL ECONOMY WHICH REPRESENT THE PRODUCE OF LAND, AS EITHER THE SOLE OR THE PRINCIPAL SOURCE OF THE REVENUE AND WEALTH OF EVERY COUNTRY.",
+      "start": 32924,
+      "end": 34158,
+      "verified": true,
+      "text_sha256": "652297572a115205fb4d67702b26731fe2bfba933f7500e845dc354d95b8533b"
+    },
+    {
+      "id": 893216,
+      "book_id": "pg3300-full",
+      "section_id": 120669,
+      "section_title": "PART I. Inequalities arising from the nature of the employments themselves.",
+      "start": 4028,
+      "end": 5263,
+      "verified": true,
+      "text_sha256": "6d3cba40613e1145703d0f93157c15b753c819daeea820aa9c22699b92cc9ee4"
+    },
+    {
+      "id": 893122,
+      "book_id": "pg3300-full",
+      "section_id": 120664,
+      "section_title": "CHAPTER VI. OF THE COMPONENT PART OF THE PRICE OF COMMODITIES.",
+      "start": 5372,
+      "end": 6656,
+      "verified": true,
+      "text_sha256": "19c6e858413af217537d2739d95f2f9f3e864d54cd4ec16ef2079ded115b4fb7"
+    },
+    {
+      "id": 893505,
+      "book_id": "pg3300-full",
+      "section_id": 120677,
+      "section_title": "BOOK II. OF THE NATURE, ACCUMULATION, AND EMPLOYMENT OF STOCK.\nINTRODUCTION.",
+      "start": 662,
+      "end": 1807,
+      "verified": true,
+      "text_sha256": "3b2a6d4228bf2742a0ccb07b01e28c2c6f6289a2aff1dc38458226bc5684279b"
+    },
+    {
+      "id": 893620,
+      "book_id": "pg3300-full",
+      "section_id": 120680,
+      "section_title": "CHAPTER III. OF THE ACCUMULATION OF CAPITAL, OR OF PRODUCTIVE AND UNPRODUCTIVE LABOUR.",
+      "start": 4274,
+      "end": 5471,
+      "verified": true,
+      "text_sha256": "8562fc3149665e266daf62e5a77adfe0944784ec35f809c6d889136269aa34f1"
+    },
+    {
+      "id": 893507,
+      "book_id": "pg3300-full",
+      "section_id": 120677,
+      "section_title": "BOOK II. OF THE NATURE, ACCUMULATION, AND EMPLOYMENT OF STOCK.\nINTRODUCTION.",
+      "start": 2878,
+      "end": 3890,
+      "verified": true,
+      "text_sha256": "98d20ee8ad3202d24f770723425e196e6cf9689696147930ec47444b2a1ec915"
+    },
+    {
+      "id": 893065,
+      "book_id": "pg3300-full",
+      "section_id": 120661,
+      "section_title": "CHAPTER III. THAT THE DIVISION OF LABOUR IS LIMITED BY THE EXTENT OF THE MARKET.",
+      "start": 0,
+      "end": 1204,
+      "verified": true,
+      "text_sha256": "6bd939a0ca028a547bfdb06b0c82774077d63025d599ddb5fe05846ac975084e"
+    },
+    {
+      "id": 893127,
+      "book_id": "pg3300-full",
+      "section_id": 120664,
+      "section_title": "CHAPTER VI. OF THE COMPONENT PART OF THE PRICE OF COMMODITIES.",
+      "start": 12010,
+      "end": 13662,
+      "verified": true,
+      "text_sha256": "74ff0084030d73ebec3736f894e2b4a0a14a7c7b2f8263c903870559e5b34785"
+    },
+    {
+      "id": 893625,
+      "book_id": "pg3300-full",
+      "section_id": 120680,
+      "section_title": "CHAPTER III. OF THE ACCUMULATION OF CAPITAL, OR OF PRODUCTIVE AND UNPRODUCTIVE LABOUR.",
+      "start": 9883,
+      "end": 11176,
+      "verified": true,
+      "text_sha256": "a1ceb26b2503978d6d0dacd62ecbe69251df6d7f921894314913dd719666d89c"
+    },
+    {
+      "id": 894683,
+      "book_id": "pg3300-full",
+      "section_id": 120709,
+      "section_title": "APPENDIX TO ARTICLES I. AND II.—Taxes upon the Capital Value of Lands, Houses, and Stock.",
+      "start": 100209,
+      "end": 101067,
+      "verified": true,
+      "text_sha256": "b99114642b4aed068c24909c3e46340cd476df37d4ae03c5538761179dfe3a15"
+    },
+    {
+      "id": 893508,
+      "book_id": "pg3300-full",
+      "section_id": 120677,
+      "section_title": "BOOK II. OF THE NATURE, ACCUMULATION, AND EMPLOYMENT OF STOCK.\nINTRODUCTION.",
+      "start": 3892,
+      "end": 4952,
+      "verified": true,
+      "text_sha256": "e61d072ab3d900d94ff8cebd4f3c5c5be168e1246071c99cf638b7f4ad4bfcb2"
+    },
+    {
+      "id": 894609,
+      "book_id": "pg3300-full",
+      "section_id": 120709,
+      "section_title": "APPENDIX TO ARTICLES I. AND II.—Taxes upon the Capital Value of Lands, Houses, and Stock.",
+      "start": 6079,
+      "end": 7032,
+      "verified": true,
+      "text_sha256": "21c14d8e35c48531de9a48b729ec400270de8822adb0cac656d58083ef485e36"
+    },
+    {
+      "id": 894604,
+      "book_id": "pg3300-full",
+      "section_id": 120709,
+      "section_title": "APPENDIX TO ARTICLES I. AND II.—Taxes upon the Capital Value of Lands, Houses, and Stock.",
+      "start": 0,
+      "end": 1723,
+      "verified": true,
+      "text_sha256": "33b17d114a3ac4e6df153d922a4219728afb1ac5386270132511a9c9bc358e3a"
+    },
+    {
+      "id": 893223,
+      "book_id": "pg3300-full",
+      "section_id": 120669,
+      "section_title": "PART I. Inequalities arising from the nature of the employments themselves.",
+      "start": 12450,
+      "end": 13579,
+      "verified": true,
+      "text_sha256": "36d0f071ef8f57a31f9a4e7e9b9e1c3ad5e3444ca3671213d8a0d6330791ae57"
+    },
+    {
+      "id": 893129,
+      "book_id": "pg3300-full",
+      "section_id": 120664,
+      "section_title": "CHAPTER VI. OF THE COMPONENT PART OF THE PRICE OF COMMODITIES.",
+      "start": 15077,
+      "end": 16916,
+      "verified": true,
+      "text_sha256": "d1a1339baff3bda0549094f6129e8c219d983f956d85a7ac5d822f25a00b2411"
+    },
+    {
+      "id": 894612,
+      "book_id": "pg3300-full",
+      "section_id": 120709,
+      "section_title": "APPENDIX TO ARTICLES I. AND II.—Taxes upon the Capital Value of Lands, Houses, and Stock.",
+      "start": 9161,
+      "end": 10390,
+      "verified": true,
+      "text_sha256": "d78f61782b769c2fa2825e86ededfd2f2904937be97a22626f9def9d19c52fe7"
+    },
+    {
+      "id": 893515,
+      "book_id": "pg3300-full",
+      "section_id": 120678,
+      "section_title": "CHAPTER I. OF THE DIVISION OF STOCK.",
+      "start": 8218,
+      "end": 9676,
+      "verified": true,
+      "text_sha256": "1a8430a5500f4d8d28040cd15383ff998bafe973c85f6e78092bd037cfee9b34"
+    },
+    {
+      "id": 893062,
+      "book_id": "pg3300-full",
+      "section_id": 120660,
+      "section_title": "CHAPTER II. OF THE PRINCIPLE WHICH GIVES OCCASION TO THE DIVISION OF LABOUR.",
+      "start": 4186,
+      "end": 5844,
+      "verified": true,
+      "text_sha256": "8e07464a7d31f061561de096166920651369ff095802eb13b06a890252be2236"
+    },
+    {
+      "id": 893685,
+      "book_id": "pg3300-full",
+      "section_id": 120682,
+      "section_title": "CHAPTER V. OF THE DIFFERENT EMPLOYMENTS OF CAPITALS.",
+      "start": 12245,
+      "end": 13267,
+      "verified": true,
+      "text_sha256": "57667c336c7c1b70097f9568272fc4bbd9044a0ace288986b0f802f0d90f07da"
+    },
+    {
+      "id": 893050,
+      "book_id": "pg3300-full",
+      "section_id": 120659,
+      "section_title": "CHAPTER I. OF THE DIVISION OF LABOUR.",
+      "start": 8884,
+      "end": 10650,
+      "verified": true,
+      "text_sha256": "71271849c24bd5cd4205e592f23ee7647ceb0e8a1e6735e76831d2a268af69cd"
+    },
+    {
+      "id": 893247,
+      "book_id": "pg3300-full",
+      "section_id": 120669,
+      "section_title": "PART I. Inequalities arising from the nature of the employments themselves.",
+      "start": 41182,
+      "end": 43134,
+      "verified": true,
+      "text_sha256": "1f33f46c0873e9496fd63fc05a0510a7783bad761a9e694ad47c25dacf014298"
+    },
+    {
+      "id": 894619,
+      "book_id": "pg3300-full",
+      "section_id": 120709,
+      "section_title": "APPENDIX TO ARTICLES I. AND II.—Taxes upon the Capital Value of Lands, Houses, and Stock.",
+      "start": 17229,
+      "end": 19133,
+      "verified": true,
+      "text_sha256": "c6579e54e580f747677332d9520d486a79b9169389d82cea05701f566176d69c"
+    },
+    {
+      "id": 893289,
+      "book_id": "pg3300-full",
+      "section_id": 120670,
+      "section_title": "PART II.—Inequalities occasioned by the Policy of Europe.",
+      "start": 48838,
+      "end": 50743,
+      "verified": true,
+      "text_sha256": "3354af9f18827fb65e0ed082d4bfd39ef2923ba1320ef6c85a49af43ab64be06"
+    },
+    {
+      "id": 894660,
+      "book_id": "pg3300-full",
+      "section_id": 120709,
+      "section_title": "APPENDIX TO ARTICLES I. AND II.—Taxes upon the Capital Value of Lands, Houses, and Stock.",
+      "start": 71219,
+      "end": 72536,
+      "verified": true,
+      "text_sha256": "a130adca6190325df6dc3b838eba44a6584def69bf8c9ec2d4d7a2daea104604"
+    },
+    {
+      "id": 893516,
+      "book_id": "pg3300-full",
+      "section_id": 120678,
+      "section_title": "CHAPTER I. OF THE DIVISION OF STOCK.",
+      "start": 9678,
+      "end": 10924,
+      "verified": true,
+      "text_sha256": "7ceb5fa5c8a6ef49ea33541ac61024634df2c4961e022e1d45314a6b651601be"
+    }
+  ],
+  "reranked_pool": [
+    {
+      "id": 893723,
+      "book_id": "pg3300-full",
+      "section_id": 120684,
+      "section_title": "CHAPTER II. OF THE DISCOURAGEMENT OF AGRICULTURE IN THE ANCIENT STATE OF EUROPE, AFTER THE FALL OF THE ROMAN EMPIRE.",
+      "start": 10620,
+      "end": 11789,
+      "verified": true,
+      "text_sha256": "5ef90a677fbb5414679d0e846adbe1d703b0fed70cdd8426fa8f1d899750849d",
+      "rerank": {
+        "strategy": "body-coverage-proximity-v1",
+        "value": 0.360058758474842,
+        "planned_query_coverage": 0.6799498228693827,
+        "original_question_coverage": 0.2166316023527904,
+        "coverage_scope": "candidate-observed query terms; full-term diagnostics are separate",
+        "planned_all_terms_coverage": 0.4678347096170605,
+        "unobserved_planned_terms": [
+          "descript"
+        ],
+        "query_bigram_coverage": 0.2,
+        "proximity": 0.125,
+        "minimum_matched_query_span": 46,
+        "prior_rank": 2,
+        "matched_body_terms": [
+          "labour",
+          "nation",
+          "person",
+          "properti"
+        ],
+        "semantic_support_verified": false
+      }
+    },
+    {
+      "id": 894614,
+      "book_id": "pg3300-full",
+      "section_id": 120709,
+      "section_title": "APPENDIX TO ARTICLES I. AND II.—Taxes upon the Capital Value of Lands, Houses, and Stock.",
+      "start": 11424,
+      "end": 13405,
+      "verified": true,
+      "text_sha256": "8d920fa9575a979824762540ef8891c483687b1c5223cc9518581c3061124772",
+      "rerank": {
+        "strategy": "body-coverage-proximity-v1",
+        "value": 0.33684295460382285,
+        "planned_query_coverage": 0.39890125340514715,
+        "original_question_coverage": 0.6490088666888196,
+        "coverage_scope": "candidate-observed query terms; full-term diagnostics are separate",
+        "planned_all_terms_coverage": 0.2744612113657803,
+        "unobserved_planned_terms": [
+          "descript"
+        ],
+        "query_bigram_coverage": 0.2,
+        "proximity": 0.04950495049504951,
+        "minimum_matched_query_span": 99,
+        "prior_rank": 5,
+        "matched_body_terms": [
+          "distinct",
+          "general",
+          "kind",
+          "labour",
+          "person",
+          "properti"
+        ],
+        "semantic_support_verified": false
+      }
+    },
+    {
+      "id": 893508,
+      "book_id": "pg3300-full",
+      "section_id": 120677,
+      "section_title": "BOOK II. OF THE NATURE, ACCUMULATION, AND EMPLOYMENT OF STOCK.\nINTRODUCTION.",
+      "start": 3892,
+      "end": 4952,
+      "verified": true,
+      "text_sha256": "e61d072ab3d900d94ff8cebd4f3c5c5be168e1246071c99cf638b7f4ad4bfcb2",
+      "rerank": {
+        "strategy": "body-coverage-proximity-v1",
+        "value": 0.3203287221945394,
+        "planned_query_coverage": 0.49324702311184393,
+        "original_question_coverage": 0.3738061481131771,
+        "coverage_scope": "candidate-observed query terms; full-term diagnostics are separate",
+        "planned_all_terms_coverage": 0.33937515690968467,
+        "unobserved_planned_terms": [
+          "descript"
+        ],
+        "query_bigram_coverage": 0.2,
+        "proximity": 0.08620689655172414,
+        "minimum_matched_query_span": 56,
+        "prior_rank": 26,
+        "matched_body_terms": [
+          "general",
+          "kind",
+          "labour",
+          "nation",
+          "person"
+        ],
+        "semantic_support_verified": false
+      }
+    },
+    {
+      "id": 894313,
+      "book_id": "pg3300-full",
+      "section_id": 120702,
+      "section_title": "PART II. Of the Expense of Justice",
+      "start": 0,
+      "end": 1163,
+      "verified": true,
+      "text_sha256": "613a40ab4e8a529993ec56e69168970caff5f0b28eee659e1bffd22f4ade476b",
+      "rerank": {
+        "strategy": "body-coverage-proximity-v1",
+        "value": 0.2989558172983714,
+        "planned_query_coverage": 0.6799498228693827,
+        "original_question_coverage": 0.2166316023527904,
+        "coverage_scope": "candidate-observed query terms; full-term diagnostics are separate",
+        "planned_all_terms_coverage": 0.4678347096170605,
+        "unobserved_planned_terms": [
+          "descript"
+        ],
+        "query_bigram_coverage": 0.0,
+        "proximity": 0.11764705882352941,
+        "minimum_matched_query_span": 49,
+        "prior_rank": 1,
+        "matched_body_terms": [
+          "labour",
+          "nation",
+          "person",
+          "properti"
+        ],
+        "semantic_support_verified": false
+      }
+    },
+    {
+      "id": 893047,
+      "book_id": "pg3300-full",
+      "section_id": 120659,
+      "section_title": "CHAPTER I. OF THE DIVISION OF LABOUR.",
+      "start": 5166,
+      "end": 6349,
+      "verified": true,
+      "text_sha256": "5ced7b790240cedbd3f3de97864105a9e6f1059e131a0a122a3d6888d21d07da",
+      "rerank": {
+        "strategy": "body-coverage-proximity-v1",
+        "value": 0.29407940875918376,
+        "planned_query_coverage": 0.49324702311184393,
+        "original_question_coverage": 0.5721680243782293,
+        "coverage_scope": "candidate-observed query terms; full-term diagnostics are separate",
+        "planned_all_terms_coverage": 0.33937515690968467,
+        "unobserved_planned_terms": [
+          "descript"
+        ],
+        "query_bigram_coverage": 0.0,
+        "proximity": 0.04672897196261682,
+        "minimum_matched_query_span": 105,
+        "prior_rank": 8,
+        "matched_body_terms": [
+          "distinct",
+          "general",
+          "labour",
+          "nation",
+          "person",
+          "smith"
+        ],
+        "semantic_support_verified": false
+      }
+    },
+    {
+      "id": 893193,
+      "book_id": "pg3300-full",
+      "section_id": 120667,
+      "section_title": "CHAPTER IX. OF THE PROFITS OF STOCK.",
+      "start": 0,
+      "end": 1741,
+      "verified": true,
+      "text_sha256": "f4794ed8537c2b8e9d7f29187882f43902dfc7d9d9610ce79dc5aa10ea375af4",
+      "rerank": {
+        "strategy": "body-coverage-proximity-v1",
+        "value": 0.2744368162087078,
+        "planned_query_coverage": 0.532248630778226,
+        "original_question_coverage": 0.115238773100011,
+        "coverage_scope": "candidate-observed query terms; full-term diagnostics are separate",
+        "planned_all_terms_coverage": 0.3662099396885096,
+        "unobserved_planned_terms": [
+          "descript"
+        ],
+        "query_bigram_coverage": 0.2,
+        "proximity": 0.034013605442176874,
+        "minimum_matched_query_span": 145,
+        "prior_rank": 10,
+        "matched_body_terms": [
+          "labour",
+          "person",
+          "wealth"
+        ],
+        "semantic_support_verified": false
+      }
+    },
+    {
+      "id": 893632,
+      "book_id": "pg3300-full",
+      "section_id": 120680,
+      "section_title": "CHAPTER III. OF THE ACCUMULATION OF CAPITAL, OR OF PRODUCTIVE AND UNPRODUCTIVE LABOUR.",
+      "start": 17345,
+      "end": 18465,
+      "verified": true,
+      "text_sha256": "16d84503270fd2699442ee81fe3b108b02dd3c3dda7ef57e979d37a9bac28b76",
+      "rerank": {
+        "strategy": "body-coverage-proximity-v1",
+        "value": 0.27296440177413256,
+        "planned_query_coverage": 0.532248630778226,
+        "original_question_coverage": 0.3040765601811809,
+        "coverage_scope": "candidate-observed query terms; full-term diagnostics are separate",
+        "planned_all_terms_coverage": 0.3662099396885096,
+        "unobserved_planned_terms": [
+          "descript"
+        ],
+        "query_bigram_coverage": 0.0,
+        "proximity": 0.1724137931034483,
+        "minimum_matched_query_span": 27,
+        "prior_rank": 7,
+        "matched_body_terms": [
+          "between",
+          "labour",
+          "person",
+          "wealth"
+        ],
+        "semantic_support_verified": false
+      }
+    },
+    {
+      "id": 893258,
+      "book_id": "pg3300-full",
+      "section_id": 120670,
+      "section_title": "PART II.—Inequalities occasioned by the Policy of Europe.",
+      "start": 7423,
+      "end": 8343,
+      "verified": true,
+      "text_sha256": "2ceff6a9ad5af89004fb501f23e53204c31e0cb2345c6010118f17fd24199dcd",
+      "rerank": {
+        "strategy": "body-coverage-proximity-v1",
+        "value": 0.24794175916235955,
+        "planned_query_coverage": 0.39890125340514715,
+        "original_question_coverage": 0.2166316023527904,
+        "coverage_scope": "candidate-observed query terms; full-term diagnostics are separate",
+        "planned_all_terms_coverage": 0.2744612113657803,
+        "unobserved_planned_terms": [
+          "descript"
+        ],
+        "query_bigram_coverage": 0.2,
+        "proximity": 0.03333333333333333,
+        "minimum_matched_query_span": 148,
+        "prior_rank": 3,
+        "matched_body_terms": [
+          "labour",
+          "person",
+          "properti"
+        ],
+        "semantic_support_verified": false
+      }
+    },
+    {
+      "id": 893770,
+      "book_id": "pg3300-full",
+      "section_id": 120686,
+      "section_title": "CHAPTER IV. HOW THE COMMERCE OF TOWNS CONTRIBUTED TO THE IMPROVEMENT OF THE COUNTRY.",
+      "start": 17932,
+      "end": 19440,
+      "verified": true,
+      "text_sha256": "2f67b9602ec9db6ff345e300b0b274d19df85e30288ae8984f19641bad5eb0ed",
+      "rerank": {
+        "strategy": "body-coverage-proximity-v1",
+        "value": 0.24634271256670975,
+        "planned_query_coverage": 0.5764509536465489,
+        "original_question_coverage": 0.16042439395208827,
+        "coverage_scope": "candidate-observed query terms; full-term diagnostics are separate",
+        "planned_all_terms_coverage": 0.396623038108382,
+        "unobserved_planned_terms": [
+          "descript"
+        ],
+        "query_bigram_coverage": 0.0,
+        "proximity": 0.08333333333333333,
+        "minimum_matched_query_span": 58,
+        "prior_rank": 9,
+        "matched_body_terms": [
+          "nation",
+          "person",
+          "properti"
+        ],
+        "semantic_support_verified": false
+      }
+    },
+    {
+      "id": 894660,
+      "book_id": "pg3300-full",
+      "section_id": 120709,
+      "section_title": "APPENDIX TO ARTICLES I. AND II.—Taxes upon the Capital Value of Lands, Houses, and Stock.",
+      "start": 71219,
+      "end": 72536,
+      "verified": true,
+      "text_sha256": "a130adca6190325df6dc3b838eba44a6584def69bf8c9ec2d4d7a2daea104604",
+      "rerank": {
+        "strategy": "body-coverage-proximity-v1",
+        "value": 0.2463251492456766,
+        "planned_query_coverage": 0.2902016689803724,
+        "original_question_coverage": 0.29520139694130276,
+        "coverage_scope": "candidate-observed query terms; full-term diagnostics are separate",
+        "planned_all_terms_coverage": 0.1996712242160542,
+        "unobserved_planned_terms": [
+          "descript"
+        ],
+        "query_bigram_coverage": 0.0,
+        "proximity": 0.5714285714285714,
+        "minimum_matched_query_span": 5,
+        "prior_rank": 39,
+        "matched_body_terms": [
+          "kind",
+          "labour",
+          "properti"
+        ],
+        "semantic_support_verified": false
+      }
+    },
+    {
+      "id": 894612,
+      "book_id": "pg3300-full",
+      "section_id": 120709,
+      "section_title": "APPENDIX TO ARTICLES I. AND II.—Taxes upon the Capital Value of Lands, Houses, and Stock.",
+      "start": 9161,
+      "end": 10390,
+      "verified": true,
+      "text_sha256": "d78f61782b769c2fa2825e86ededfd2f2904937be97a22626f9def9d19c52fe7",
+      "rerank": {
+        "strategy": "body-coverage-proximity-v1",
+        "value": 0.245383202113582,
+        "planned_query_coverage": 0.29540238418231335,
+        "original_question_coverage": 0.28139040967743306,
+        "coverage_scope": "candidate-observed query terms; full-term diagnostics are separate",
+        "planned_all_terms_coverage": 0.2032495398571018,
+        "unobserved_planned_terms": [
+          "descript"
+        ],
+        "query_bigram_coverage": 0.0,
+        "proximity": 0.5714285714285714,
+        "minimum_matched_query_span": 5,
+        "prior_rank": 31,
+        "matched_body_terms": [
+          "general",
+          "person",
+          "properti"
+        ],
+        "semantic_support_verified": false
+      }
+    },
+    {
+      "id": 893152,
+      "book_id": "pg3300-full",
+      "section_id": 120666,
+      "section_title": "CHAPTER VIII. OF THE WAGES OF LABOUR.",
+      "start": 3177,
+      "end": 4373,
+      "verified": true,
+      "text_sha256": "46eceeff6d37e8fb9f6b333fa86e6c6d880cb8e6a2f5ba508958cdc65d310054",
+      "rerank": {
+        "strategy": "body-coverage-proximity-v1",
+        "value": 0.23207919126123783,
+        "planned_query_coverage": 0.2121984536476085,
+        "original_question_coverage": 0.28904866242287425,
+        "coverage_scope": "candidate-observed query terms; full-term diagnostics are separate",
+        "planned_all_terms_coverage": 0.14600165865840448,
+        "unobserved_planned_terms": [
+          "descript"
+        ],
+        "query_bigram_coverage": 0.0,
+        "proximity": 0.6666666666666666,
+        "minimum_matched_query_span": 4,
+        "prior_rank": 14,
+        "matched_body_terms": [
+          "distinct",
+          "labour",
+          "person"
+        ],
+        "semantic_support_verified": false
+      }
+    },
+    {
+      "id": 893151,
+      "book_id": "pg3300-full",
+      "section_id": 120666,
+      "section_title": "CHAPTER VIII. OF THE WAGES OF LABOUR.",
+      "start": 2001,
+      "end": 3175,
+      "verified": true,
+      "text_sha256": "ab6c60015837432c22ad15dc7eda449f24f6f2bd8204545a8688ae1ca5d3952f",
+      "rerank": {
+        "strategy": "body-coverage-proximity-v1",
+        "value": 0.22343931013351545,
+        "planned_query_coverage": 0.39890125340514715,
+        "original_question_coverage": 0.33759761807813515,
+        "coverage_scope": "candidate-observed query terms; full-term diagnostics are separate",
+        "planned_all_terms_coverage": 0.2744612113657803,
+        "unobserved_planned_terms": [
+          "descript"
+        ],
+        "query_bigram_coverage": 0.0,
+        "proximity": 0.10869565217391304,
+        "minimum_matched_query_span": 44,
+        "prior_rank": 4,
+        "matched_body_terms": [
+          "general",
+          "labour",
+          "person",
+          "properti"
+        ],
+        "semantic_support_verified": false
+      }
+    },
+    {
+      "id": 893625,
+      "book_id": "pg3300-full",
+      "section_id": 120680,
+      "section_title": "CHAPTER III. OF THE ACCUMULATION OF CAPITAL, OR OF PRODUCTIVE AND UNPRODUCTIVE LABOUR.",
+      "start": 9883,
+      "end": 11176,
+      "verified": true,
+      "text_sha256": "a1ceb26b2503978d6d0dacd62ecbe69251df6d7f921894314913dd719666d89c",
+      "rerank": {
+        "strategy": "body-coverage-proximity-v1",
+        "value": 0.2210238511963174,
+        "planned_query_coverage": 0.39890125340514715,
+        "original_question_coverage": 0.33759761807813515,
+        "coverage_scope": "candidate-observed query terms; full-term diagnostics are separate",
+        "planned_all_terms_coverage": 0.2744612113657803,
+        "unobserved_planned_terms": [
+          "descript"
+        ],
+        "query_bigram_coverage": 0.0,
+        "proximity": 0.09259259259259259,
+        "minimum_matched_query_span": 52,
+        "prior_rank": 24,
+        "matched_body_terms": [
+          "general",
+          "labour",
+          "person",
+          "properti"
+        ],
+        "semantic_support_verified": false
+      }
+    },
+    {
+      "id": 893088,
+      "book_id": "pg3300-full",
+      "section_id": 120663,
+      "section_title": "CHAPTER V. OF THE REAL AND NOMINAL PRICE OF COMMODITIES, OR OF THEIR PRICE IN LABOUR, AND THEIR PRICE IN MONEY.",
+      "start": 1898,
+      "end": 2816,
+      "verified": true,
+      "text_sha256": "5d522d640e720d13f58c864738661adb00b65a3d5fe9150e8233af34aed8a5dc",
+      "rerank": {
+        "strategy": "body-coverage-proximity-v1",
+        "value": 0.21837091997069455,
+        "planned_query_coverage": 0.532248630778226,
+        "original_question_coverage": 0.115238773100011,
+        "coverage_scope": "candidate-observed query terms; full-term diagnostics are separate",
+        "planned_all_terms_coverage": 0.3662099396885096,
+        "unobserved_planned_terms": [
+          "descript"
+        ],
+        "query_bigram_coverage": 0.0,
+        "proximity": 0.060240963855421686,
+        "minimum_matched_query_span": 81,
+        "prior_rank": 6,
+        "matched_body_terms": [
+          "labour",
+          "person",
+          "wealth"
+        ],
+        "semantic_support_verified": false
+      }
+    },
+    {
+      "id": 894604,
+      "book_id": "pg3300-full",
+      "section_id": 120709,
+      "section_title": "APPENDIX TO ARTICLES I. AND II.—Taxes upon the Capital Value of Lands, Houses, and Stock.",
+      "start": 0,
+      "end": 1723,
+      "verified": true,
+      "text_sha256": "33b17d114a3ac4e6df153d922a4219728afb1ac5386270132511a9c9bc358e3a",
+      "rerank": {
+        "strategy": "body-coverage-proximity-v1",
+        "value": 0.21754143965724612,
+        "planned_query_coverage": 0.29540238418231335,
+        "original_question_coverage": 0.29802575323990954,
+        "coverage_scope": "candidate-observed query terms; full-term diagnostics are separate",
+        "planned_all_terms_coverage": 0.2032495398571018,
+        "unobserved_planned_terms": [
+          "descript"
+        ],
+        "query_bigram_coverage": 0.0,
+        "proximity": 0.36363636363636365,
+        "minimum_matched_query_span": 9,
+        "prior_rank": 28,
+        "matched_body_terms": [
+          "kind",
+          "person",
+          "properti"
+        ],
+        "semantic_support_verified": false
+      }
+    },
+    {
+      "id": 894314,
+      "book_id": "pg3300-full",
+      "section_id": 120702,
+      "section_title": "PART II. Of the Expense of Justice",
+      "start": 1164,
+      "end": 2859,
+      "verified": true,
+      "text_sha256": "533d56e0de5182ce59f732b2e82ae2754c7585bba15dcc73675b123fac4230a3",
+      "rerank": {
+        "strategy": "body-coverage-proximity-v1",
+        "value": 0.1997572583404933,
+        "planned_query_coverage": 0.2902016689803724,
+        "original_question_coverage": 0.15760003765348146,
+        "coverage_scope": "candidate-observed query terms; full-term diagnostics are separate",
+        "planned_all_terms_coverage": 0.1996712242160542,
+        "unobserved_planned_terms": [
+          "descript"
+        ],
+        "query_bigram_coverage": 0.0,
+        "proximity": 0.4444444444444444,
+        "minimum_matched_query_span": 7,
+        "prior_rank": 12,
+        "matched_body_terms": [
+          "labour",
+          "properti"
+        ],
+        "semantic_support_verified": false
+      }
+    },
+    {
+      "id": 894616,
+      "book_id": "pg3300-full",
+      "section_id": 120709,
+      "section_title": "APPENDIX TO ARTICLES I. AND II.—Taxes upon the Capital Value of Lands, Houses, and Stock.",
+      "start": 14401,
+      "end": 15135,
+      "verified": true,
+      "text_sha256": "04d2270d2f75f4a0fad939b792f3e99f0da292ee6589e78177753bab2422d309",
+      "rerank": {
+        "strategy": "body-coverage-proximity-v1",
+        "value": 0.1908364960044648,
+        "planned_query_coverage": 0.39890125340514715,
+        "original_question_coverage": 0.2166316023527904,
+        "coverage_scope": "candidate-observed query terms; full-term diagnostics are separate",
+        "planned_all_terms_coverage": 0.2744612113657803,
+        "unobserved_planned_terms": [
+          "descript"
+        ],
+        "query_bigram_coverage": 0.0,
+        "proximity": 0.05263157894736842,
+        "minimum_matched_query_span": 93,
+        "prior_rank": 15,
+        "matched_body_terms": [
+          "labour",
+          "person",
+          "properti"
+        ],
+        "semantic_support_verified": false
+      }
+    },
+    {
+      "id": 893129,
+      "book_id": "pg3300-full",
+      "section_id": 120664,
+      "section_title": "CHAPTER VI. OF THE COMPONENT PART OF THE PRICE OF COMMODITIES.",
+      "start": 15077,
+      "end": 16916,
+      "verified": true,
+      "text_sha256": "d1a1339baff3bda0549094f6129e8c219d983f956d85a7ac5d822f25a00b2411",
+      "rerank": {
+        "strategy": "body-coverage-proximity-v1",
+        "value": 0.18508477081289915,
+        "planned_query_coverage": 0.2121984536476085,
+        "original_question_coverage": 0.3040765601811809,
+        "coverage_scope": "candidate-observed query terms; full-term diagnostics are separate",
+        "planned_all_terms_coverage": 0.14600165865840448,
+        "unobserved_planned_terms": [
+          "descript"
+        ],
+        "query_bigram_coverage": 0.0,
+        "proximity": 0.3333333333333333,
+        "minimum_matched_query_span": 10,
+        "prior_rank": 30,
+        "matched_body_terms": [
+          "between",
+          "labour",
+          "person"
+        ],
+        "semantic_support_verified": false
+      }
+    },
+    {
+      "id": 893093,
+      "book_id": "pg3300-full",
+      "section_id": 120663,
+      "section_title": "CHAPTER V. OF THE REAL AND NOMINAL PRICE OF COMMODITIES, OR OF THEIR PRICE IN LABOUR, AND THEIR PRICE IN MONEY.",
+      "start": 8019,
+      "end": 8929,
+      "verified": true,
+      "text_sha256": "31a7314dcee4dd2c40e822ad55ae195611045e2d57a0d7add3327cfa22a9bf2c",
+      "rerank": {
+        "strategy": "body-coverage-proximity-v1",
+        "value": 0.18303149911095087,
+        "planned_query_coverage": 0.2121984536476085,
+        "original_question_coverage": 0.115238773100011,
+        "coverage_scope": "candidate-observed query terms; full-term diagnostics are separate",
+        "planned_all_terms_coverage": 0.14600165865840448,
+        "unobserved_planned_terms": [
+          "descript"
+        ],
+        "query_bigram_coverage": 0.0,
+        "proximity": 0.5714285714285714,
+        "minimum_matched_query_span": 5,
+        "prior_rank": 13,
+        "matched_body_terms": [
+          "labour",
+          "person"
+        ],
+        "semantic_support_verified": false
+      }
+    },
+    {
+      "id": 893507,
+      "book_id": "pg3300-full",
+      "section_id": 120677,
+      "section_title": "BOOK II. OF THE NATURE, ACCUMULATION, AND EMPLOYMENT OF STOCK.\nINTRODUCTION.",
+      "start": 2878,
+      "end": 3890,
+      "verified": true,
+      "text_sha256": "98d20ee8ad3202d24f770723425e196e6cf9689696147930ec47444b2a1ec915",
+      "rerank": {
+        "strategy": "body-coverage-proximity-v1",
+        "value": 0.18151041654173414,
+        "planned_query_coverage": 0.2121984536476085,
+        "original_question_coverage": 0.2362047888253558,
+        "coverage_scope": "candidate-observed query terms; full-term diagnostics are separate",
+        "planned_all_terms_coverage": 0.14600165865840448,
+        "unobserved_planned_terms": [
+          "descript"
+        ],
+        "query_bigram_coverage": 0.0,
+        "proximity": 0.4,
+        "minimum_matched_query_span": 8,
+        "prior_rank": 21,
+        "matched_body_terms": [
+          "general",
+          "labour",
+          "person"
+        ],
+        "semantic_support_verified": false
+      }
+    },
+    {
+      "id": 893065,
+      "book_id": "pg3300-full",
+      "section_id": 120661,
+      "section_title": "CHAPTER III. THAT THE DIVISION OF LABOUR IS LIMITED BY THE EXTENT OF THE MARKET.",
+      "start": 0,
+      "end": 1204,
+      "verified": true,
+      "text_sha256": "6bd939a0ca028a547bfdb06b0c82774077d63025d599ddb5fe05846ac975084e",
+      "rerank": {
+        "strategy": "body-coverage-proximity-v1",
+        "value": 0.1760181545002315,
+        "planned_query_coverage": 0.2121984536476085,
+        "original_question_coverage": 0.41499347861784264,
+        "coverage_scope": "candidate-observed query terms; full-term diagnostics are separate",
+        "planned_all_terms_coverage": 0.14600165865840448,
+        "unobserved_planned_terms": [
+          "descript"
+        ],
+        "query_bigram_coverage": 0.0,
+        "proximity": 0.125,
+        "minimum_matched_query_span": 30,
+        "prior_rank": 22,
+        "matched_body_terms": [
+          "kind",
+          "labour",
+          "person",
+          "smith"
+        ],
+        "semantic_support_verified": false
+      }
+    },
+    {
+      "id": 893062,
+      "book_id": "pg3300-full",
+      "section_id": 120660,
+      "section_title": "CHAPTER II. OF THE PRINCIPLE WHICH GIVES OCCASION TO THE DIVISION OF LABOUR.",
+      "start": 4186,
+      "end": 5844,
+      "verified": true,
+      "text_sha256": "8e07464a7d31f061561de096166920651369ff095802eb13b06a890252be2236",
+      "rerank": {
+        "strategy": "body-coverage-proximity-v1",
+        "value": 0.1759017287965134,
+        "planned_query_coverage": 0.2121984536476085,
+        "original_question_coverage": 0.27739211933002134,
+        "coverage_scope": "candidate-observed query terms; full-term diagnostics are separate",
+        "planned_all_terms_coverage": 0.14600165865840448,
+        "unobserved_planned_terms": [
+          "descript"
+        ],
+        "query_bigram_coverage": 0.0,
+        "proximity": 0.3076923076923077,
+        "minimum_matched_query_span": 11,
+        "prior_rank": 33,
+        "matched_body_terms": [
+          "labour",
+          "person",
+          "smith"
+        ],
+        "semantic_support_verified": false
+      }
+    },
+    {
+      "id": 893127,
+      "book_id": "pg3300-full",
+      "section_id": 120664,
+      "section_title": "CHAPTER VI. OF THE COMPONENT PART OF THE PRICE OF COMMODITIES.",
+      "start": 12010,
+      "end": 13662,
+      "verified": true,
+      "text_sha256": "74ff0084030d73ebec3736f894e2b4a0a14a7c7b2f8263c903870559e5b34785",
+      "rerank": {
+        "strategy": "body-coverage-proximity-v1",
+        "value": 0.1709913314080756,
+        "planned_query_coverage": 0.2121984536476085,
+        "original_question_coverage": 0.2528401323878323,
+        "coverage_scope": "candidate-observed query terms; full-term diagnostics are separate",
+        "planned_all_terms_coverage": 0.14600165865840448,
+        "unobserved_planned_terms": [
+          "descript"
+        ],
+        "query_bigram_coverage": 0.0,
+        "proximity": 0.3076923076923077,
+        "minimum_matched_query_span": 11,
+        "prior_rank": 23,
+        "matched_body_terms": [
+          "kind",
+          "labour",
+          "person"
+        ],
+        "semantic_support_verified": false
+      }
+    },
+    {
+      "id": 893122,
+      "book_id": "pg3300-full",
+      "section_id": 120664,
+      "section_title": "CHAPTER VI. OF THE COMPONENT PART OF THE PRICE OF COMMODITIES.",
+      "start": 5372,
+      "end": 6656,
+      "verified": true,
+      "text_sha256": "19c6e858413af217537d2739d95f2f9f3e864d54cd4ec16ef2079ded115b4fb7",
+      "rerank": {
+        "strategy": "body-coverage-proximity-v1",
+        "value": 0.17059059167382665,
+        "planned_query_coverage": 0.2902016689803724,
+        "original_question_coverage": 0.15760003765348146,
+        "coverage_scope": "candidate-observed query terms; full-term diagnostics are separate",
+        "planned_all_terms_coverage": 0.1996712242160542,
+        "unobserved_planned_terms": [
+          "descript"
+        ],
+        "query_bigram_coverage": 0.0,
+        "proximity": 0.25,
+        "minimum_matched_query_span": 14,
+        "prior_rank": 18,
+        "matched_body_terms": [
+          "labour",
+          "properti"
+        ],
+        "semantic_support_verified": false
+      }
+    },
+    {
+      "id": 894683,
+      "book_id": "pg3300-full",
+      "section_id": 120709,
+      "section_title": "APPENDIX TO ARTICLES I. AND II.—Taxes upon the Capital Value of Lands, Houses, and Stock.",
+      "start": 100209,
+      "end": 101067,
+      "verified": true,
+      "text_sha256": "b99114642b4aed068c24909c3e46340cd476df37d4ae03c5538761179dfe3a15",
+      "rerank": {
+        "strategy": "body-coverage-proximity-v1",
+        "value": 0.1697837948188956,
+        "planned_query_coverage": 0.2902016689803724,
+        "original_question_coverage": 0.27856605337882623,
+        "coverage_scope": "candidate-observed query terms; full-term diagnostics are separate",
+        "planned_all_terms_coverage": 0.1996712242160542,
+        "unobserved_planned_terms": [
+          "descript"
+        ],
+        "query_bigram_coverage": 0.0,
+        "proximity": 0.08333333333333333,
+        "minimum_matched_query_span": 46,
+        "prior_rank": 25,
+        "matched_body_terms": [
+          "general",
+          "labour",
+          "properti"
+        ],
+        "semantic_support_verified": false
+      }
+    },
+    {
+      "id": 893216,
+      "book_id": "pg3300-full",
+      "section_id": 120669,
+      "section_title": "PART I. Inequalities arising from the nature of the employments themselves.",
+      "start": 4028,
+      "end": 5263,
+      "verified": true,
+      "text_sha256": "6d3cba40613e1145703d0f93157c15b753c819daeea820aa9c22699b92cc9ee4",
+      "rerank": {
+        "strategy": "body-coverage-proximity-v1",
+        "value": 0.15731721339666516,
+        "planned_query_coverage": 0.2121984536476085,
+        "original_question_coverage": 0.115238773100011,
+        "coverage_scope": "candidate-observed query terms; full-term diagnostics are separate",
+        "planned_all_terms_coverage": 0.14600165865840448,
+        "unobserved_planned_terms": [
+          "descript"
+        ],
+        "query_bigram_coverage": 0.0,
+        "proximity": 0.4,
+        "minimum_matched_query_span": 8,
+        "prior_rank": 17,
+        "matched_body_terms": [
+          "labour",
+          "person"
+        ],
+        "semantic_support_verified": false
+      }
+    },
+    {
+      "id": 893515,
+      "book_id": "pg3300-full",
+      "section_id": 120678,
+      "section_title": "CHAPTER I. OF THE DIVISION OF STOCK.",
+      "start": 8218,
+      "end": 9676,
+      "verified": true,
+      "text_sha256": "1a8430a5500f4d8d28040cd15383ff998bafe973c85f6e78092bd037cfee9b34",
+      "rerank": {
+        "strategy": "body-coverage-proximity-v1",
+        "value": 0.14026041654173413,
+        "planned_query_coverage": 0.2121984536476085,
+        "original_question_coverage": 0.2362047888253558,
+        "coverage_scope": "candidate-observed query terms; full-term diagnostics are separate",
+        "planned_all_terms_coverage": 0.14600165865840448,
+        "unobserved_planned_terms": [
+          "descript"
+        ],
+        "query_bigram_coverage": 0.0,
+        "proximity": 0.125,
+        "minimum_matched_query_span": 30,
+        "prior_rank": 32,
+        "matched_body_terms": [
+          "general",
+          "labour",
+          "person"
+        ],
+        "semantic_support_verified": false
+      }
+    },
+    {
+      "id": 894609,
+      "book_id": "pg3300-full",
+      "section_id": 120709,
+      "section_title": "APPENDIX TO ARTICLES I. AND II.—Taxes upon the Capital Value of Lands, Houses, and Stock.",
+      "start": 6079,
+      "end": 7032,
+      "verified": true,
+      "text_sha256": "21c14d8e35c48531de9a48b729ec400270de8822adb0cac656d58083ef485e36",
+      "rerank": {
+        "strategy": "body-coverage-proximity-v1",
+        "value": 0.13869806830934067,
+        "planned_query_coverage": 0.2902016689803724,
+        "original_question_coverage": 0.15760003765348146,
+        "coverage_scope": "candidate-observed query terms; full-term diagnostics are separate",
+        "planned_all_terms_coverage": 0.1996712242160542,
+        "unobserved_planned_terms": [
+          "descript"
+        ],
+        "query_bigram_coverage": 0.0,
+        "proximity": 0.037383177570093455,
+        "minimum_matched_query_span": 105,
+        "prior_rank": 27,
+        "matched_body_terms": [
+          "labour",
+          "properti"
+        ],
+        "semantic_support_verified": false
+      }
+    },
+    {
+      "id": 893516,
+      "book_id": "pg3300-full",
+      "section_id": 120678,
+      "section_title": "CHAPTER I. OF THE DIVISION OF STOCK.",
+      "start": 9678,
+      "end": 10924,
+      "verified": true,
+      "text_sha256": "7ceb5fa5c8a6ef49ea33541ac61024634df2c4961e022e1d45314a6b651601be",
+      "rerank": {
+        "strategy": "body-coverage-proximity-v1",
+        "value": 0.13351041654173415,
+        "planned_query_coverage": 0.2121984536476085,
+        "original_question_coverage": 0.2362047888253558,
+        "coverage_scope": "candidate-observed query terms; full-term diagnostics are separate",
+        "planned_all_terms_coverage": 0.14600165865840448,
+        "unobserved_planned_terms": [
+          "descript"
+        ],
+        "query_bigram_coverage": 0.0,
+        "proximity": 0.08,
+        "minimum_matched_query_span": 48,
+        "prior_rank": 40,
+        "matched_body_terms": [
+          "general",
+          "labour",
+          "person"
+        ],
+        "semantic_support_verified": false
+      }
+    },
+    {
+      "id": 893050,
+      "book_id": "pg3300-full",
+      "section_id": 120659,
+      "section_title": "CHAPTER I. OF THE DIVISION OF LABOUR.",
+      "start": 8884,
+      "end": 10650,
+      "verified": true,
+      "text_sha256": "71271849c24bd5cd4205e592f23ee7647ceb0e8a1e6735e76831d2a268af69cd",
+      "rerank": {
+        "strategy": "body-coverage-proximity-v1",
+        "value": 0.13295643879239985,
+        "planned_query_coverage": 0.2121984536476085,
+        "original_question_coverage": 0.27739211933002134,
+        "coverage_scope": "candidate-observed query terms; full-term diagnostics are separate",
+        "planned_all_terms_coverage": 0.14600165865840448,
+        "unobserved_planned_terms": [
+          "descript"
+        ],
+        "query_bigram_coverage": 0.0,
+        "proximity": 0.0213903743315508,
+        "minimum_matched_query_span": 185,
+        "prior_rank": 35,
+        "matched_body_terms": [
+          "labour",
+          "person",
+          "smith"
+        ],
+        "semantic_support_verified": false
+      }
+    },
+    {
+      "id": 894619,
+      "book_id": "pg3300-full",
+      "section_id": 120709,
+      "section_title": "APPENDIX TO ARTICLES I. AND II.—Taxes upon the Capital Value of Lands, Houses, and Stock.",
+      "start": 17229,
+      "end": 19133,
+      "verified": true,
+      "text_sha256": "c6579e54e580f747677332d9520d486a79b9169389d82cea05701f566176d69c",
+      "rerank": {
+        "strategy": "body-coverage-proximity-v1",
+        "value": 0.132611331043724,
+        "planned_query_coverage": 0.2121984536476085,
+        "original_question_coverage": 0.115238773100011,
+        "coverage_scope": "candidate-observed query terms; full-term diagnostics are separate",
+        "planned_all_terms_coverage": 0.14600165865840448,
+        "unobserved_planned_terms": [
+          "descript"
+        ],
+        "query_bigram_coverage": 0.0,
+        "proximity": 0.23529411764705882,
+        "minimum_matched_query_span": 15,
+        "prior_rank": 37,
+        "matched_body_terms": [
+          "labour",
+          "person"
+        ],
+        "semantic_support_verified": false
+      }
+    },
+    {
+      "id": 893505,
+      "book_id": "pg3300-full",
+      "section_id": 120677,
+      "section_title": "BOOK II. OF THE NATURE, ACCUMULATION, AND EMPLOYMENT OF STOCK.\nINTRODUCTION.",
+      "start": 662,
+      "end": 1807,
+      "verified": true,
+      "text_sha256": "3b2a6d4228bf2742a0ccb07b01e28c2c6f6289a2aff1dc38458226bc5684279b",
+      "rerank": {
+        "strategy": "body-coverage-proximity-v1",
+        "value": 0.13215455842496115,
+        "planned_query_coverage": 0.2121984536476085,
+        "original_question_coverage": 0.2528401323878323,
+        "coverage_scope": "candidate-observed query terms; full-term diagnostics are separate",
+        "planned_all_terms_coverage": 0.14600165865840448,
+        "unobserved_planned_terms": [
+          "descript"
+        ],
+        "query_bigram_coverage": 0.0,
+        "proximity": 0.04878048780487805,
+        "minimum_matched_query_span": 80,
+        "prior_rank": 19,
+        "matched_body_terms": [
+          "kind",
+          "labour",
+          "person"
+        ],
+        "semantic_support_verified": false
+      }
+    },
+    {
+      "id": 893086,
+      "book_id": "pg3300-full",
+      "section_id": 120663,
+      "section_title": "CHAPTER V. OF THE REAL AND NOMINAL PRICE OF COMMODITIES, OR OF THEIR PRICE IN LABOUR, AND THEIR PRICE IN MONEY.",
+      "start": 0,
+      "end": 821,
+      "verified": true,
+      "text_sha256": "ef9824df07564008ee15ac0f7ccdbfa5351890ecc33f2102c39fe1fda9170207",
+      "rerank": {
+        "strategy": "body-coverage-proximity-v1",
+        "value": 0.1234041699184043,
+        "planned_query_coverage": 0.2121984536476085,
+        "original_question_coverage": 0.115238773100011,
+        "coverage_scope": "candidate-observed query terms; full-term diagnostics are separate",
+        "planned_all_terms_coverage": 0.14600165865840448,
+        "unobserved_planned_terms": [
+          "descript"
+        ],
+        "query_bigram_coverage": 0.0,
+        "proximity": 0.17391304347826086,
+        "minimum_matched_query_span": 21,
+        "prior_rank": 11,
+        "matched_body_terms": [
+          "labour",
+          "person"
+        ],
+        "semantic_support_verified": false
+      }
+    },
+    {
+      "id": 893223,
+      "book_id": "pg3300-full",
+      "section_id": 120669,
+      "section_title": "PART I. Inequalities arising from the nature of the employments themselves.",
+      "start": 12450,
+      "end": 13579,
+      "verified": true,
+      "text_sha256": "36d0f071ef8f57a31f9a4e7e9b9e1c3ad5e3444ca3671213d8a0d6330791ae57",
+      "rerank": {
+        "strategy": "body-coverage-proximity-v1",
+        "value": 0.1234041699184043,
+        "planned_query_coverage": 0.2121984536476085,
+        "original_question_coverage": 0.115238773100011,
+        "coverage_scope": "candidate-observed query terms; full-term diagnostics are separate",
+        "planned_all_terms_coverage": 0.14600165865840448,
+        "unobserved_planned_terms": [
+          "descript"
+        ],
+        "query_bigram_coverage": 0.0,
+        "proximity": 0.17391304347826086,
+        "minimum_matched_query_span": 21,
+        "prior_rank": 29,
+        "matched_body_terms": [
+          "labour",
+          "person"
+        ],
+        "semantic_support_verified": false
+      }
+    },
+    {
+      "id": 893289,
+      "book_id": "pg3300-full",
+      "section_id": 120670,
+      "section_title": "PART II.—Inequalities occasioned by the Policy of Europe.",
+      "start": 48838,
+      "end": 50743,
+      "verified": true,
+      "text_sha256": "3354af9f18827fb65e0ed082d4bfd39ef2923ba1320ef6c85a49af43ab64be06",
+      "rerank": {
+        "strategy": "body-coverage-proximity-v1",
+        "value": 0.1187457848252366,
+        "planned_query_coverage": 0.2121984536476085,
+        "original_question_coverage": 0.115238773100011,
+        "coverage_scope": "candidate-observed query terms; full-term diagnostics are separate",
+        "planned_all_terms_coverage": 0.14600165865840448,
+        "unobserved_planned_terms": [
+          "descript"
+        ],
+        "query_bigram_coverage": 0.0,
+        "proximity": 0.14285714285714285,
+        "minimum_matched_query_span": 26,
+        "prior_rank": 38,
+        "matched_body_terms": [
+          "labour",
+          "person"
+        ],
+        "semantic_support_verified": false
+      }
+    },
+    {
+      "id": 893685,
+      "book_id": "pg3300-full",
+      "section_id": 120682,
+      "section_title": "CHAPTER V. OF THE DIFFERENT EMPLOYMENTS OF CAPITALS.",
+      "start": 12245,
+      "end": 13267,
+      "verified": true,
+      "text_sha256": "57667c336c7c1b70097f9568272fc4bbd9044a0ace288986b0f802f0d90f07da",
+      "rerank": {
+        "strategy": "body-coverage-proximity-v1",
+        "value": 0.11549903157848335,
+        "planned_query_coverage": 0.2121984536476085,
+        "original_question_coverage": 0.115238773100011,
+        "coverage_scope": "candidate-observed query terms; full-term diagnostics are separate",
+        "planned_all_terms_coverage": 0.14600165865840448,
+        "unobserved_planned_terms": [
+          "descript"
+        ],
+        "query_bigram_coverage": 0.0,
+        "proximity": 0.12121212121212122,
+        "minimum_matched_query_span": 31,
+        "prior_rank": 34,
+        "matched_body_terms": [
+          "labour",
+          "person"
+        ],
+        "semantic_support_verified": false
+      }
+    },
+    {
+      "id": 894254,
+      "book_id": "pg3300-full",
+      "section_id": 120699,
+      "section_title": "CHAPTER IX. OF THE AGRICULTURAL SYSTEMS, OR OF THOSE SYSTEMS OF POLITICAL ECONOMY WHICH REPRESENT THE PRODUCE OF LAND, AS EITHER THE SOLE OR THE PRINCIPAL SOURCE OF THE REVENUE AND WEALTH OF EVERY COUNTRY.",
+      "start": 32924,
+      "end": 34158,
+      "verified": true,
+      "text_sha256": "652297572a115205fb4d67702b26731fe2bfba933f7500e845dc354d95b8533b",
+      "rerank": {
+        "strategy": "body-coverage-proximity-v1",
+        "value": 0.1112707017687582,
+        "planned_query_coverage": 0.2121984536476085,
+        "original_question_coverage": 0.115238773100011,
+        "coverage_scope": "candidate-observed query terms; full-term diagnostics are separate",
+        "planned_all_terms_coverage": 0.14600165865840448,
+        "unobserved_planned_terms": [
+          "descript"
+        ],
+        "query_bigram_coverage": 0.0,
+        "proximity": 0.09302325581395349,
+        "minimum_matched_query_span": 41,
+        "prior_rank": 16,
+        "matched_body_terms": [
+          "labour",
+          "person"
+        ],
+        "semantic_support_verified": false
+      }
+    },
+    {
+      "id": 893620,
+      "book_id": "pg3300-full",
+      "section_id": 120680,
+      "section_title": "CHAPTER III. OF THE ACCUMULATION OF CAPITAL, OR OF PRODUCTIVE AND UNPRODUCTIVE LABOUR.",
+      "start": 4274,
+      "end": 5471,
+      "verified": true,
+      "text_sha256": "8562fc3149665e266daf62e5a77adfe0944784ec35f809c6d889136269aa34f1",
+      "rerank": {
+        "strategy": "body-coverage-proximity-v1",
+        "value": 0.10627243727726218,
+        "planned_query_coverage": 0.2121984536476085,
+        "original_question_coverage": 0.115238773100011,
+        "coverage_scope": "candidate-observed query terms; full-term diagnostics are separate",
+        "planned_all_terms_coverage": 0.14600165865840448,
+        "unobserved_planned_terms": [
+          "descript"
+        ],
+        "query_bigram_coverage": 0.0,
+        "proximity": 0.05970149253731343,
+        "minimum_matched_query_span": 65,
+        "prior_rank": 20,
+        "matched_body_terms": [
+          "labour",
+          "person"
+        ],
+        "semantic_support_verified": false
+      }
+    },
+    {
+      "id": 893247,
+      "book_id": "pg3300-full",
+      "section_id": 120669,
+      "section_title": "PART I. Inequalities arising from the nature of the employments themselves.",
+      "start": 41182,
+      "end": 43134,
+      "verified": true,
+      "text_sha256": "1f33f46c0873e9496fd63fc05a0510a7783bad761a9e694ad47c25dacf014298",
+      "rerank": {
+        "strategy": "body-coverage-proximity-v1",
+        "value": 0.10196837618736285,
+        "planned_query_coverage": 0.2121984536476085,
+        "original_question_coverage": 0.115238773100011,
+        "coverage_scope": "candidate-observed query terms; full-term diagnostics are separate",
+        "planned_all_terms_coverage": 0.14600165865840448,
+        "unobserved_planned_terms": [
+          "descript"
+        ],
+        "query_bigram_coverage": 0.0,
+        "proximity": 0.031007751937984496,
+        "minimum_matched_query_span": 127,
+        "prior_rank": 36,
+        "matched_body_terms": [
+          "labour",
+          "person"
+        ],
+        "semantic_support_verified": false
+      }
+    }
+  ],
+  "diagnostic_controls_only_not_new_queries_in_production": [
+    {
+      "query": "description of property in a person's own labour in wealth of nations",
+      "lexical_candidates": 40,
+      "target_lexical_rank": 3,
+      "target_rerank_rank": 8,
+      "target_rerank_rank_on_original_fixed_pool": 8
+    },
+    {
+      "query": "description of property in a person's own labor in wealth of nations",
+      "lexical_candidates": 40,
+      "target_lexical_rank": 4,
+      "target_rerank_rank": 14,
+      "target_rerank_rank_on_original_fixed_pool": 13
+    },
+    {
+      "query": "description of property in a person's own labour",
+      "lexical_candidates": 40,
+      "target_lexical_rank": 3,
+      "target_rerank_rank": 3,
+      "target_rerank_rank_on_original_fixed_pool": 3
+    },
+    {
+      "query": "property own labour",
+      "lexical_candidates": 40,
+      "target_lexical_rank": 3,
+      "target_rerank_rank": 2,
+      "target_rerank_rank_on_original_fixed_pool": 2
+    },
+    {
+      "query": "property own labor",
+      "lexical_candidates": 40,
+      "target_lexical_rank": 4,
+      "target_rerank_rank": 3,
+      "target_rerank_rank_on_original_fixed_pool": 3
+    }
+  ],
+  "matching_feature_observations": [
+    {
+      "passage_id": 893723,
+      "matching_query_bigrams": [
+        [
+          "a",
+          "person"
+        ]
+      ],
+      "query_term_positions": [
+        [
+          33,
+          "nation"
+        ],
+        [
+          60,
+          "person"
+        ],
+        [
+          65,
+          "properti"
+        ],
+        [
+          78,
+          "labour"
+        ]
+      ],
+      "rerank": {
+        "strategy": "body-coverage-proximity-v1",
+        "value": 0.360058758474842,
+        "planned_query_coverage": 0.6799498228693827,
+        "original_question_coverage": 0.2166316023527904,
+        "coverage_scope": "candidate-observed query terms; full-term diagnostics are separate",
+        "planned_all_terms_coverage": 0.4678347096170605,
+        "unobserved_planned_terms": [
+          "descript"
+        ],
+        "query_bigram_coverage": 0.2,
+        "proximity": 0.125,
+        "minimum_matched_query_span": 46,
+        "prior_rank": 2,
+        "matched_body_terms": [
+          "labour",
+          "nation",
+          "person",
+          "properti"
+        ],
+        "semantic_support_verified": false
+      }
+    },
+    {
+      "passage_id": 894614,
+      "matching_query_bigrams": [
+        [
+          "of",
+          "properti"
+        ]
+      ],
+      "query_term_positions": [
+        [
+          6,
+          "properti"
+        ],
+        [
+          9,
+          "kind"
+        ],
+        [
+          20,
+          "properti"
+        ],
+        [
+          32,
+          "labour"
+        ],
+        [
+          54,
+          "labour"
+        ],
+        [
+          81,
+          "properti"
+        ],
+        [
+          95,
+          "properti"
+        ],
+        [
+          152,
+          "person"
+        ],
+        [
+          196,
+          "general"
+        ],
+        [
+          247,
+          "general"
+        ],
+        [
+          331,
+          "distinct"
+        ]
+      ],
+      "rerank": {
+        "strategy": "body-coverage-proximity-v1",
+        "value": 0.33684295460382285,
+        "planned_query_coverage": 0.39890125340514715,
+        "original_question_coverage": 0.6490088666888196,
+        "coverage_scope": "candidate-observed query terms; full-term diagnostics are separate",
+        "planned_all_terms_coverage": 0.2744612113657803,
+        "unobserved_planned_terms": [
+          "descript"
+        ],
+        "query_bigram_coverage": 0.2,
+        "proximity": 0.04950495049504951,
+        "minimum_matched_query_span": 99,
+        "prior_rank": 5,
+        "matched_body_terms": [
+          "distinct",
+          "general",
+          "kind",
+          "labour",
+          "person",
+          "properti"
+        ],
+        "semantic_support_verified": false
+      }
+    },
+    {
+      "passage_id": 893258,
+      "matching_query_bigrams": [
+        [
+          "own",
+          "labour"
+        ]
+      ],
+      "query_term_positions": [
+        [
+          1,
+          "properti"
+        ],
+        [
+          9,
+          "labour"
+        ],
+        [
+          19,
+          "properti"
+        ],
+        [
+          72,
+          "properti"
+        ],
+        [
+          156,
+          "person"
+        ]
+      ],
+      "rerank": {
+        "strategy": "body-coverage-proximity-v1",
+        "value": 0.24794175916235955,
+        "planned_query_coverage": 0.39890125340514715,
+        "original_question_coverage": 0.2166316023527904,
+        "coverage_scope": "candidate-observed query terms; full-term diagnostics are separate",
+        "planned_all_terms_coverage": 0.2744612113657803,
+        "unobserved_planned_terms": [
+          "descript"
+        ],
+        "query_bigram_coverage": 0.2,
+        "proximity": 0.03333333333333333,
+        "minimum_matched_query_span": 148,
+        "prior_rank": 3,
+        "matched_body_terms": [
+          "labour",
+          "person",
+          "properti"
+        ],
+        "semantic_support_verified": false
+      }
+    }
+  ],
+  "actual_run05_selected_smith_ids": [
+    893723,
+    894614
+  ],
+  "actual_selected_equal_to_replayed_rerank_top_two": true,
+  "findings": [
+    "Actual plan already uses British labour. Orthographic variation is not the cause in this capture; labor makes the measured target rank worse.",
+    "Correct source is present at raw lexical rank3 but current opt-in reranker demotes it to8, outside two-per-book answer budget.",
+    "Weak function/topic bigrams a-person and of-property receive the same aggregate0.2 bigram coverage as own-labour. Own is not in term coverage, although own-labour can contribute as a bigram.",
+    "The target’s property/labour tokens are close (positions1/9), but a later person at156 stretches the all-matched-term span to148 and suppresses the proximity feature.",
+    "Generated title terms wealth/nations favour unrelated excerpts; removing them alone improves rank8 to3 on the fixed pool, still outside the answer budget. Cross-author original-question words also favour the generic tax excerpt."
+  ],
+  "proposal_pending_root_coordination": {
+    "implement_now": false,
+    "orthographic_channel_justified_by_this_failure": false,
+    "candidate_fix": "Bounded opt-in query-local sentence/window proximity and informative relation-phrase handling; consider metadata title-token downweight. Keep original search and non-opt-in ranking unchanged.",
+    "required_validation": [
+      "Original canonical and scope/source guards on all candidates.",
+      "Replay the same three declared open development cases plus wrong-topic controls without models.",
+      "CC0 contrastive tests for local topic relations versus scattered term matches and irrelevant article+noun pairs.",
+      "Retain failed variants and demonstrate no cross-language regression before integration."
+    ]
+  },
+  "limitations": [
+    "This diagnoses one open development failure and does not establish general ranking quality.",
+    "Gold reference is used only to measure position and quote identity, never as an implemented feature.",
+    "No full-original-hybrid pool was captured; the verified planned lexical40pool alone reproduces the two actual selected Smith passages."
+  ]
+}

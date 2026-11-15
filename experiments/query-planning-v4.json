@@ -1,0 +1,419 @@
+{
+  "schema_version": 1,
+  "kind": "OPEN_DEVELOPMENT_OPT_IN_RERANK_CANDIDATE_NOT_FINAL_QUALITY",
+  "created_at": "2026-11-15T05:02:15.945091+00:00",
+  "scope": {
+    "model_calls": 0,
+    "source_mutations": 0,
+    "gpu_jobs": 0,
+    "sealed_files_accessed": false,
+    "changed_production_function": "query_planning.rerank_planned_candidates only",
+    "ordinary_search_or_non_optin_ask_changed": false,
+    "prompt_schema_api_signature_changed": false
+  },
+  "inputs": {
+    "fixture": {
+      "path": "evals/rag-dev-v1.json",
+      "sha256": "573155bfea71d0086b37f622e3bc24598bd1dd6595535436c05ae59bf7fdf92d"
+    },
+    "run05_transcript_sha256": "11ddf0762e063896915a3084894b2844273710a147d4fa8a9a73e39558dab531",
+    "before_code_sha256": "9e92391ddcf7ed01f024cb9eff5d29faf7168a501c290b08c61db438da1de521",
+    "candidate_code_sha256": "dd834e53a9e580817c87b3dd9379f5c42cfa10c6c1aee4a8c7487961cc21ee92",
+    "runtime_receipt": {
+      "path": "data/bench/query-planning-v4/candidate-2.json",
+      "sha256": "a561463782ac0d29c25dac3ed8760d0e132af6a9bb27744e96c424ce0344f23f"
+    },
+    "before_code_snapshot": "data/bench/query-planning-v4/query_planning.before.py",
+    "runtime_replay_script": "data/bench/query-planning-v4/offline_replay.py",
+    "earlier_candidate_receipt_preserved": "data/bench/query-planning-v4/candidate-1.json"
+  },
+  "feature_changes": {
+    "generic_weak_function_topic_pair_weight": 0.2,
+    "informative_topic_or_ownership_negation_pair_weight": 1.0,
+    "proximity_window_max_tokens": 32,
+    "local_proximity_requires_distinct_planned_terms": 2,
+    "cross_sentence_or_paragraph_proximity": false,
+    "weights_unchanged": {
+      "planned_observed_coverage": 0.35,
+      "original_observed_coverage": 0.2,
+      "query_pair_coverage": 0.3,
+      "proximity": 0.15
+    },
+    "feature_revision": "relation-local-window-v2",
+    "metadata_title_removal_added": false,
+    "orthographic_variant_channel_added": false,
+    "book_ids_or_reference_words_in_scorer": false,
+    "helper_and_row_ranking_strategy": "body-coverage-proximity-v2-local32"
+  },
+  "observations": [
+    {
+      "pool": "v2-guarded-replay",
+      "case_id": "compare-property",
+      "entry": {
+        "book_id": "pg3300-full",
+        "language": "en",
+        "queries": [
+          "labour as source of property ownership in individuals"
+        ]
+      },
+      "applied": true,
+      "references": [
+        {
+          "reference_id": "labour",
+          "before_rank": 1,
+          "after_rank": 1
+        }
+      ],
+      "input_candidates": 40,
+      "before_top2": [
+        893258,
+        894614
+      ],
+      "after_top2": [
+        893258,
+        893659
+      ],
+      "same_ids_and_canonical_text": true
+    },
+    {
+      "pool": "v2-guarded-replay",
+      "case_id": "compare-property",
+      "entry": {
+        "book_id": "pg61-full",
+        "language": "en",
+        "queries": [
+          "distinction between property generally and bourgeois property"
+        ]
+      },
+      "applied": true,
+      "references": [
+        {
+          "reference_id": "bourgeois",
+          "before_rank": 1,
+          "after_rank": 1
+        }
+      ],
+      "input_candidates": 30,
+      "before_top2": [
+        1154184,
+        1154185
+      ],
+      "after_top2": [
+        1154184,
+        1154198
+      ],
+      "same_ids_and_canonical_text": true
+    },
+    {
+      "pool": "v2-guarded-replay",
+      "case_id": "ru-land-grave",
+      "entry": {
+        "book_id": "wsru-how-much-land-285bf7cc584e",
+        "language": "ru",
+        "queries": [
+          "количество земли в могиле пахома в конце рассказа"
+        ]
+      },
+      "applied": true,
+      "references": [
+        {
+          "reference_id": "grave",
+          "before_rank": 2,
+          "after_rank": 2
+        }
+      ],
+      "input_candidates": 18,
+      "before_top2": [
+        2576549,
+        2576566
+      ],
+      "after_top2": [
+        2576549,
+        2576566
+      ],
+      "same_ids_and_canonical_text": true
+    },
+    {
+      "pool": "dinner-guarded-replay",
+      "case_id": "ru-query-smith-dinner",
+      "entry": {
+        "book_id": "pg3300-full",
+        "language": "en",
+        "queries": [
+          "why butcher brewer and baker provide us with meal out of goodwill or self interest according to smith"
+        ]
+      },
+      "applied": false,
+      "references": [
+        {
+          "reference_id": "interest",
+          "before_rank": 1,
+          "after_rank": 1
+        }
+      ],
+      "input_candidates": 9,
+      "before_top2": [
+        893061,
+        893065
+      ],
+      "after_top2": [
+        893061,
+        893065
+      ],
+      "same_ids_and_canonical_text": true
+    },
+    {
+      "pool": "wrong-topic-guarded-replay",
+      "case_id": "wrong-topic-alice",
+      "entry": {
+        "book_id": "pg11-full",
+        "language": "en",
+        "queries": [
+          "mass energy equivalence formula alice adventures wonderland"
+        ]
+      },
+      "applied": true,
+      "references": [],
+      "input_candidates": 40,
+      "before_top2": [
+        885026,
+        885007
+      ],
+      "after_top2": [
+        885026,
+        885007
+      ],
+      "same_ids_and_canonical_text": true
+    },
+    {
+      "pool": "run05-planned-lexical40-only-not-original-hybrid",
+      "case_id": "compare-property",
+      "entry": {
+        "book_id": "pg3300-full",
+        "language": "en",
+        "queries": [
+          "description of property in a person's own labour in wealth of nations"
+        ]
+      },
+      "applied": true,
+      "references": [
+        {
+          "reference_id": "labour",
+          "before_rank": 8,
+          "after_rank": 1
+        }
+      ],
+      "input_candidates": 40,
+      "before_top2": [
+        893723,
+        894614
+      ],
+      "after_top2": [
+        893258,
+        893723
+      ],
+      "same_ids_and_canonical_text": true
+    },
+    {
+      "pool": "run05-planned-lexical40-only-not-original-hybrid",
+      "case_id": "compare-property",
+      "entry": {
+        "book_id": "pg61-full",
+        "language": "en",
+        "queries": [
+          "distinction between property generally and bourgeois property in communist manifesto"
+        ]
+      },
+      "applied": true,
+      "references": [
+        {
+          "reference_id": "bourgeois",
+          "before_rank": 1,
+          "after_rank": 1
+        }
+      ],
+      "input_candidates": 40,
+      "before_top2": [
+        1154184,
+        1154198
+      ],
+      "after_top2": [
+        1154184,
+        1154198
+      ],
+      "same_ids_and_canonical_text": true
+    },
+    {
+      "pool": "run05-planned-lexical40-only-not-original-hybrid",
+      "case_id": "ru-query-smith-dinner",
+      "entry": {
+        "book_id": "pg3300-full",
+        "language": "en",
+        "queries": [
+          "why butcher brewer and baker provide us with meal out of goodwill or self interest according to smith"
+        ]
+      },
+      "applied": false,
+      "references": [
+        {
+          "reference_id": "interest",
+          "before_rank": 1,
+          "after_rank": 1
+        }
+      ],
+      "input_candidates": 9,
+      "before_top2": [
+        893061,
+        893065
+      ],
+      "after_top2": [
+        893061,
+        893065
+      ],
+      "same_ids_and_canonical_text": true
+    },
+    {
+      "pool": "run05-planned-lexical40-only-not-original-hybrid",
+      "case_id": "ru-land-grave",
+      "entry": {
+        "book_id": "wsru-how-much-land-285bf7cc584e",
+        "language": "ru",
+        "queries": [
+          "количество земли в могиле пахома в конце рассказа"
+        ]
+      },
+      "applied": true,
+      "references": [
+        {
+          "reference_id": "grave",
+          "before_rank": 1,
+          "after_rank": 1
+        }
+      ],
+      "input_candidates": 1,
+      "before_top2": [
+        2576566
+      ],
+      "after_top2": [
+        2576566
+      ],
+      "same_ids_and_canonical_text": true
+    },
+    {
+      "pool": "run05-planned-lexical40-only-not-original-hybrid",
+      "case_id": "wrong-topic-alice",
+      "entry": {
+        "book_id": "pg11-full",
+        "language": "en",
+        "queries": [
+          "mass energy equivalence formula alice adventures wonderland"
+        ]
+      },
+      "applied": true,
+      "references": [],
+      "input_candidates": 40,
+      "before_top2": [
+        885026,
+        885007
+      ],
+      "after_top2": [
+        885026,
+        885007
+      ],
+      "same_ids_and_canonical_text": true
+    },
+    {
+      "pool": "run05-planned-lexical40-only-not-original-hybrid",
+      "case_id": "wrong-topic-smith",
+      "entry": {
+        "book_id": "pg3300-full",
+        "language": "en",
+        "queries": [
+          "sha256 hashing function recommended by adam smith"
+        ]
+      },
+      "applied": true,
+      "references": [],
+      "input_candidates": 16,
+      "before_top2": [
+        893782,
+        893077
+      ],
+      "after_top2": [
+        893782,
+        893077
+      ],
+      "same_ids_and_canonical_text": true
+    }
+  ],
+  "wrong_topic_controls": [
+    {
+      "pool": "wrong-topic-guarded-replay",
+      "case_id": "wrong-topic-alice",
+      "candidates": 40,
+      "maximum_candidate_all_terms_coverage": 0.16375081555956883,
+      "answer_generation": false,
+      "entailment_or_answerability_claim": false
+    },
+    {
+      "pool": "run05-planned-lexical40-only-not-original-hybrid",
+      "case_id": "wrong-topic-alice",
+      "candidates": 40,
+      "maximum_candidate_all_terms_coverage": 0.16375081555956883,
+      "answer_generation": false,
+      "entailment_or_answerability_claim": false
+    },
+    {
+      "pool": "run05-planned-lexical40-only-not-original-hybrid",
+      "case_id": "wrong-topic-smith",
+      "candidates": 16,
+      "maximum_candidate_all_terms_coverage": 0.09420142498474261,
+      "answer_generation": false,
+      "entailment_or_answerability_claim": false
+    }
+  ],
+  "source_guards": {
+    "selected_books": 4,
+    "before_after_unchanged": true,
+    "saved_pool_hydration": "All historical saved passage IDs verified canonical text SHA before reranking. Input rows remained unchanged; candidate sets and canonical text identity preserved."
+  },
+  "rejected_or_non_promoted_diagnostic_tries": [
+    {
+      "kind": "orthographic labor substitution",
+      "result": "Actual run05 plan already uses labour. labor worsened planned lexical target rank3→4 and reranked8→14; no variant channel implemented."
+    },
+    {
+      "kind": "metadata title token omission only",
+      "result": "Fixed-pool target rank8→3, outside two-per-book budget. Not implemented."
+    },
+    {
+      "kind": "initial local-window code before offline replay",
+      "result": "First replay exposed NameError from an unbound per-row sentence variable. Fixed before successful candidate-1 receipt and tests; no model/live run used that intermediate state."
+    }
+  ],
+  "verification": {
+    "query_planning_pytest": "81 passed in0.56s;7 new original CC0 contrasts",
+    "ruff_check": "passed",
+    "ruff_format_check": "2 files already formatted",
+    "ty_check": "passed",
+    "new_tests": [
+      "Ownership/negation query pairs versus generic article+noun coincidence",
+      "Nearby two-term relation retained despite a distant extra match",
+      "No proximity across sentence/paragraph boundaries or beyond32tokens",
+      "Cross-language caller guard preserves candidate order and never invokes reranker"
+    ],
+    "targeted_pytest": "109 passed in1.39s (query_planning + answers_planning;7 new CC0 contrasts)",
+    "version_assertions": "Helper and per-row diagnostic version both updated; opt-in Ask expectation updated to match. Original-round-robin/default controls unchanged."
+  },
+  "decision": "Candidate passes this bounded offline development gate. Root decides end-to-end opt-in model validation and promotion; no new factual-accuracy or final-quality claim.",
+  "limitations": [
+    "Open cases only, no heldout/final claims. No answer/entailment generation or factual-accuracy measurement.",
+    "Saved v2/v3 pools are reconstructed from exact IDs, prior-rank metadata and canonical text SHA checks.",
+    "Run05 full original hybrid pool was not retained; replay uses only the actual planned lexical40 channel.",
+    "Cross-language ordering is preserved by the existing caller guard, not by applying same-language reranking.",
+    "The changed heuristic prioritizes lexical relations; it cannot certify actors, recipients, entailment, completeness or question-axis correctness.",
+    "Observed8reference positions include repeated pools for the same three inspected cases, not8 independent evaluation questions.",
+    "Full original run05 hybrid pool was not captured; the planned lexical40pool matches the two actually released Smith source IDs under the prior scorer, but end-to-end improvement remains unmeasured."
+  ],
+  "updated_at": "2026-11-15T05:03:04.124950+00:00"
+}

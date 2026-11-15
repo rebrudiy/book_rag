@@ -446,7 +446,7 @@ def retrieve_plan_candidates(
     result["used"] = True
     result["candidates_by_book"] = prioritized
     result["planned_searches"] = searches
-    result["ranking_strategy"] = "body-coverage-proximity-v1" if rerank_candidates else "original-round-robin"
+    result["ranking_strategy"] = "body-coverage-proximity-v2-local32" if rerank_candidates else "original-round-robin"
     result["rerank_by_book"] = rerank_by_book
     result["warnings"] = list(dict.fromkeys(warning for search in searches for warning in search["warnings"]))
     return finish("validated_plan_candidates")
@@ -536,14 +536,28 @@ def rerank_planned_candidates(
     pair_df = Counter(pair for values in pairs for pair in values & query_pairs)
     weights = {term: 1 + math.log((len(rows) + 1) / (count + 1)) for term, count in df.items()}
     all_weights = {term: 1 + math.log((len(rows) + 1) / (df.get(term, 0) + 1)) for term in meaningful}
-    pair_weights = {pair: 1 + math.log((len(rows) + 1) / (count + 1)) for pair, count in pair_df.items()}
+    # A generic article/preposition next to a topic word is a weak lexical
+    # coincidence. Preserve ownership and negation as relations even when
+    # ordinary query stopword handling excludes them from term coverage.
+    relation_words = {
+        "en": {"own", "not", "no", "without", "never", "neither"},
+        "ru": {"свой", "собственный", "не", "нет", "без"},
+        "de": {"eigen", "nicht", "kein", "ohne"},
+        "fr": {"propre", "pas", "non", "sans"},
+    }
+    relations = {key(term) for term in relation_words.get(language, set())}
+    pair_weights = {
+        pair: (1 + math.log((len(rows) + 1) / (count + 1)))
+        * (1.0 if set(pair) <= meaningful or set(pair) & relations else 0.2)
+        for pair, count in pair_df.items()
+    }
 
     def coverage(wanted: set[str], seen: set[str]) -> float:
         total = sum(weights.get(term, 0) for term in wanted)
         return sum(weights.get(term, 0) for term in wanted & seen) / total if total else 0.0
 
     ranked = []
-    for rank, (row, tokens, seen, body_pairs) in enumerate(zip(rows, tokenized, sets, pairs, strict=True)):
+    for rank, (row, seen, body_pairs, sections) in enumerate(zip(rows, sets, pairs, sentences, strict=True)):
         planned = max((coverage(wanted, seen) for wanted in planned_sets), default=0)
         original = coverage(original_set, seen)
         pair_total = sum(pair_weights.values())
@@ -552,24 +566,29 @@ def rerank_planned_candidates(
         )
         wanted = set().union(*planned_sets) & seen
         minimum = None
-        left = 0
-        counts: Counter[str] = Counter()
-        for right, token in enumerate(tokens):
-            if token in wanted:
-                counts[token] += 1
-            while len(wanted) >= 2 and len(counts) == len(wanted):
-                span = right - left + 1
-                minimum = span if minimum is None else min(minimum, span)
-                old = tokens[left]
-                left += 1
-                if old in counts:
-                    counts[old] -= 1
-                    if not counts[old]:
-                        del counts[old]
-        proximity = min(1, (len(wanted) + 2) / (minimum + 2)) if minimum is not None else 0.0
+        proximity = 0.0
+        local_terms: set[str] = set()
+        # A distant extra match must not erase a nearby topical relation.
+        # Compare bounded windows within a single sentence, requiring at least
+        # two different planned terms; never join terms across paragraph ends.
+        for sentence in sections:
+            positions = [(offset, term) for offset, term in enumerate(sentence) if term in wanted]
+            for left, (offset, term) in enumerate(positions):
+                covered = {term}
+                for right, other in positions[left + 1 :]:
+                    span = right - offset + 1
+                    if span > 32:
+                        break
+                    covered.add(other)
+                    if len(covered) < 2:
+                        continue
+                    value = min(1.0, (len(covered) + 2) / (span + 2)) * coverage(wanted, covered)
+                    if value > proximity:
+                        proximity, minimum, local_terms = value, span, set(covered)
         value = 0.35 * planned + 0.2 * original + 0.3 * adjacent + 0.15 * proximity
         row["planned_lexical_rerank"] = {
-            "strategy": "body-coverage-proximity-v1",
+            "strategy": "body-coverage-proximity-v2-local32",
+            "feature_revision": "relation-local-window-v2",
             "value": value,
             "planned_query_coverage": planned,
             "original_question_coverage": original,
@@ -585,6 +604,8 @@ def rerank_planned_candidates(
             "query_bigram_coverage": adjacent,
             "proximity": proximity,
             "minimum_matched_query_span": minimum,
+            "proximity_window_tokens": 32,
+            "local_proximity_terms": sorted(local_terms),
             "prior_rank": rank + 1,
             "matched_body_terms": sorted(meaningful & seen),
             "semantic_support_verified": False,

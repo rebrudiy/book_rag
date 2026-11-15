@@ -1,0 +1,368 @@
+{
+  "schema_version": 1,
+  "kind": "AI_AGENT_QUALITATIVE_REVIEW_NOT_HUMAN_RATINGS",
+  "created_at": "2026-11-15T05:08:34.714818+00:00",
+  "reviewer": "Codex /root/interface/pipeline_review AI agent; no human adjudication or independent truth oracle",
+  "case_id": "compare-property",
+  "scope": {
+    "single_open_development_case": true,
+    "closed_final_accessed": false,
+    "model_calls": 0,
+    "gpu_jobs": 0,
+    "production_mutations": 0,
+    "core_edits": 0,
+    "scope_of_inference": "This one recorded response and its selected evidence only; no general accuracy claim"
+  },
+  "inputs": {
+    "response": {
+      "path": "data/evaluations/rag-dev-v1/property-v4.response.json",
+      "sha256": "a7868b2dd5214112c6592c9b59b875ab56d8b438594ab4f2aee73a42fcce1200"
+    },
+    "run05": {
+      "path": "data/evaluations/rag-dev-v1/run-05.responses.json",
+      "sha256": "11ddf0762e063896915a3084894b2844273710a147d4fa8a9a73e39558dab531"
+    },
+    "prior_ai_review": {
+      "path": "experiments/rag-run05-agent-review.json",
+      "sha256": "d55cc87afc5717d8316d8544966809b8cb4c96d21894d2b5316e02b94d2e5a42"
+    },
+    "planner_sha256": "dd834e53a9e580817c87b3dd9379f5c42cfa10c6c1aee4a8c7487961cc21ee92",
+    "source_access": "ReadOnlyLibrary path adapter without Library.__init__; SQLite mode=ro/query_only; coherent source checks then fresh-snapshot recheck; no source initialization or migrations"
+  },
+  "observed": {
+    "response_status": "answered",
+    "seconds": 32.32443324988708,
+    "source_cards": 4,
+    "claims": 2,
+    "selected_supporting_quotes": 4,
+    "same_model_judge_supported": [
+      true,
+      true
+    ],
+    "requested_book_ids": [
+      "pg3300-full",
+      "pg61-full"
+    ],
+    "actual_evidence_book_ids": [
+      "pg3300-full",
+      "pg61-full"
+    ],
+    "planning_strategy": "body-coverage-proximity-v2-local32"
+  },
+  "integrity": {
+    "all_four_source_cards_exact": true,
+    "all_four_selected_supporting_spans_exact": true,
+    "source_fields_attribution_edition_reader_locations_exact": true,
+    "original_artifact_hashes_verified": {
+      "pg3300-full": {
+        "artifact_sha256": "52c8c5b9cc2b18d1edc87a326b76f0d8aee568932995d407083b394aaa9165ab",
+        "bytes": 947727,
+        "hash_matches_captured_and_current_book": true
+      },
+      "pg61-full": {
+        "artifact_sha256": "eb9d882661805128f3f476818a9eee328b77778b0d5ef7415fe08fcd76ecd763",
+        "bytes": 116175,
+        "hash_matches_captured_and_current_book": true
+      }
+    },
+    "fresh_source_recheck_unchanged": true,
+    "captured_response_unchanged": true,
+    "source_checks": [
+      {
+        "source_id": "S1",
+        "passage_id": 893258,
+        "book_id": "pg3300-full",
+        "section_id": 120670,
+        "section_ordinal": 14,
+        "start": 7423,
+        "end": 8343,
+        "text_sha256": "2ceff6a9ad5af89004fb501f23e53204c31e0cb2345c6010118f17fd24199dcd",
+        "citation_sha256": "c22231a9c137f5183e8cc2e3ad516a759a6b5339b14fb5ca4f393949a3a48e61",
+        "reader_url": "/?book=pg3300-full&section=120670&passage=893258",
+        "section_author": "Smith, Adam, 1723-1790",
+        "section_role": "unclassified",
+        "section_translator": "",
+        "checks": {
+          "book_id": true,
+          "section_id": true,
+          "start": true,
+          "end": true,
+          "text": true,
+          "title": true,
+          "author": true,
+          "language": true,
+          "edition": true,
+          "source_url": true,
+          "rights": true,
+          "rights_url": true,
+          "artifact_sha256": true,
+          "content_sha256": true,
+          "section_ordinal": true,
+          "section_title": true,
+          "section_author": true,
+          "section_role": true,
+          "section_translator": true,
+          "attribution_basis": true,
+          "citation": true,
+          "reader_url": true,
+          "canonical_section_slice_exact": true,
+          "scope_allowed": true
+        }
+      },
+      {
+        "source_id": "S2",
+        "passage_id": 1154184,
+        "book_id": "pg61-full",
+        "section_id": 157379,
+        "section_ordinal": 4,
+        "start": 1258,
+        "end": 2482,
+        "text_sha256": "c89f7625f1f1a792a79d43b191f5d9e6c12a2d4d9b5c94ef63b4eb29d03da021",
+        "citation_sha256": "0e9d4e0328b0f814a4a90e8efe7820a41e859e3e55ba6c7e1f1869809ee4974b",
+        "reader_url": "/?book=pg61-full&section=157379&passage=1154184",
+        "section_author": "Marx, Karl, 1818-1883; Engels, Friedrich, 1820-1895",
+        "section_role": "unclassified",
+        "section_translator": "",
+        "checks": {
+          "book_id": true,
+          "section_id": true,
+          "start": true,
+          "end": true,
+          "text": true,
+          "title": true,
+          "author": true,
+          "language": true,
+          "edition": true,
+          "source_url": true,
+          "rights": true,
+          "rights_url": true,
+          "artifact_sha256": true,
+          "content_sha256": true,
+          "section_ordinal": true,
+          "section_title": true,
+          "section_author": true,
+          "section_role": true,
+          "section_translator": true,
+          "attribution_basis": true,
+          "citation": true,
+          "reader_url": true,
+          "canonical_section_slice_exact": true,
+          "scope_allowed": true
+        }
+      },
+      {
+        "source_id": "S3",
+        "passage_id": 893723,
+        "book_id": "pg3300-full",
+        "section_id": 120684,
+        "section_ordinal": 28,
+        "start": 10620,
+        "end": 11789,
+        "text_sha256": "5ef90a677fbb5414679d0e846adbe1d703b0fed70cdd8426fa8f1d899750849d",
+        "citation_sha256": "b2e428c5bc9420b45d74b51edfcac14bfd496e5e21dfc877f0444f38ce48d874",
+        "reader_url": "/?book=pg3300-full&section=120684&passage=893723",
+        "section_author": "Smith, Adam, 1723-1790",
+        "section_role": "unclassified",
+        "section_translator": "",
+        "checks": {
+          "book_id": true,
+          "section_id": true,
+          "start": true,
+          "end": true,
+          "text": true,
+          "title": true,
+          "author": true,
+          "language": true,
+          "edition": true,
+          "source_url": true,
+          "rights": true,
+          "rights_url": true,
+          "artifact_sha256": true,
+          "content_sha256": true,
+          "section_ordinal": true,
+          "section_title": true,
+          "section_author": true,
+          "section_role": true,
+          "section_translator": true,
+          "attribution_basis": true,
+          "citation": true,
+          "reader_url": true,
+          "canonical_section_slice_exact": true,
+          "scope_allowed": true
+        }
+      },
+      {
+        "source_id": "S4",
+        "passage_id": 1154198,
+        "book_id": "pg61-full",
+        "section_id": 157379,
+        "section_ordinal": 4,
+        "start": 17622,
+        "end": 18665,
+        "text_sha256": "9bff6ae499d80e94d3cb2018f8e336c38a01fdded9a19f9891ea64c2c8355f68",
+        "citation_sha256": "60ff1a79187e013ac164237569135f825220ea481f29c57ff79b4cccb93ec676",
+        "reader_url": "/?book=pg61-full&section=157379&passage=1154198",
+        "section_author": "Marx, Karl, 1818-1883; Engels, Friedrich, 1820-1895",
+        "section_role": "unclassified",
+        "section_translator": "",
+        "checks": {
+          "book_id": true,
+          "section_id": true,
+          "start": true,
+          "end": true,
+          "text": true,
+          "title": true,
+          "author": true,
+          "language": true,
+          "edition": true,
+          "source_url": true,
+          "rights": true,
+          "rights_url": true,
+          "artifact_sha256": true,
+          "content_sha256": true,
+          "section_ordinal": true,
+          "section_title": true,
+          "section_author": true,
+          "section_role": true,
+          "section_translator": true,
+          "attribution_basis": true,
+          "citation": true,
+          "reader_url": true,
+          "canonical_section_slice_exact": true,
+          "scope_allowed": true
+        }
+      }
+    ],
+    "quote_checks": [
+      {
+        "claim_index": 1,
+        "source_id": "S1",
+        "evidence_id": "S1:E1",
+        "section_id": 120670,
+        "start": 7423,
+        "end": 7826,
+        "characters": 403,
+        "quote_sha256": "f9b970f6488fcd17015f3de9324716894f7ceaab2be4dd8b745d1fab37d1a5e7",
+        "checks": {
+          "cited_source_id": true,
+          "within_captured_source": true,
+          "captured_source_substring_exact": true,
+          "canonical_section_substring_exact": true
+        }
+      },
+      {
+        "claim_index": 2,
+        "source_id": "S2",
+        "evidence_id": "S2:E2",
+        "section_id": 157379,
+        "start": 1655,
+        "end": 2045,
+        "characters": 390,
+        "quote_sha256": "2d670077271b3a4a5a6294efb99fde0a3a9be8c605c1250ea992950c23b122f7",
+        "checks": {
+          "cited_source_id": true,
+          "within_captured_source": true,
+          "captured_source_substring_exact": true,
+          "canonical_section_substring_exact": true
+        }
+      },
+      {
+        "claim_index": 2,
+        "source_id": "S2",
+        "evidence_id": "S2:E3",
+        "section_id": 157379,
+        "start": 2047,
+        "end": 2267,
+        "characters": 220,
+        "quote_sha256": "57573d9e77f58d78e9b83127632a0169feb314e686b704c29954118bd1a46bd9",
+        "checks": {
+          "cited_source_id": true,
+          "within_captured_source": true,
+          "captured_source_substring_exact": true,
+          "canonical_section_substring_exact": true
+        }
+      },
+      {
+        "claim_index": 2,
+        "source_id": "S2",
+        "evidence_id": "S2:E4",
+        "section_id": 157379,
+        "start": 2268,
+        "end": 2482,
+        "characters": 214,
+        "quote_sha256": "9d6b7bd5e0b224be8e3b0bf99a58ae76275e7db97de2282e6ef3e4fd741477b3",
+        "checks": {
+          "cited_source_id": true,
+          "within_captured_source": true,
+          "captured_source_substring_exact": true,
+          "canonical_section_substring_exact": true
+        }
+      }
+    ]
+  },
+  "claims": [
+    {
+      "claim_index": 1,
+      "text": "Smith describes property in a person’s own labour as the original and most sacred foundation of all other property, emphasizing the right of individuals to use their strength and dexterity freely without interference.",
+      "source_ids": [
+        "S1"
+      ],
+      "verdict": "largely_supported_correct_axis_with_material_qualification_omission",
+      "severity": "moderate_qualification_loss",
+      "supported_core": "The selected source explicitly identifies property in one’s own labour, calls it the original foundation of other property and sacred/inviolable, and describes strength/dexterity as the poor person’s patrimony. The answer now addresses that requested concept rather than an invented slave-property comparison.",
+      "qualification_omitted": "The selected S1:E1 itself limits the described freedom to exercise labour by absence of injury to a neighbour. Freely without interference omits this explicit condition and can overstate an unrestricted right. This is not merely missing distant context: the qualifier is inside the actually selected supporting unit.",
+      "source_role": "Smith main-author attribution according to current catalog/section_author. Parser role is unclassified, not independently certified authorial discourse; the supplied paragraph is an expository argument, not an identified fictional speaker or editorial contributor.",
+      "full_card_context": "S1 continues with both worker and employer liberty and criticism of the lawgiver’s interference. Those sentences support the anti-interference theme but do not erase the explicit neighbour-harm limit. No claim about ownership of all products of labour or labour versus slave-acquired property follows from this span.",
+      "suggested_fidelity_correction": "Describe the protected freedom to employ one’s strength and dexterity as one sees fit, provided it does not injure a neighbour."
+    },
+    {
+      "claim_index": 2,
+      "text": "Marx and Engels distinguish between property generally and bourgeois property, noting that the abolition of bourgeois property is the distinguishing feature of Communism, while all property relations have historically changed with social conditions.",
+      "source_ids": [
+        "S2"
+      ],
+      "verdict": "supported_but_comparison_underexplained",
+      "severity": "minor_completeness_omission",
+      "supported_core": "S2:E2 supports historical change of property relations; S2:E3 explicitly distinguishes abolition of bourgeois property from abolition of property generally. The claim preserves this distinction and does not attribute abolition of every kind of property to Marx and Engels.",
+      "omission": "S2:E4 is selected yet the answer does not explain its description of modern bourgeois private property as a class-antagonistic system of production/appropriation and exploitation. Because the question asks what kinds of property are discussed, naming bourgeois property without that available definition makes the contrast thinner than the evidence permits.",
+      "source_role": "Both Marx and Engels remain named. Current section_author matches the joint book authors; section_role is unclassified and translator is blank, so the review does not certify an independently curated translation attribution."
+    }
+  ],
+  "comparison_axis": {
+    "correct_axis_now_present": true,
+    "smith_own_labour_anchor_retrieved_and_cited": true,
+    "marx_bourgeois_vs_general_anchor_retrieved_and_cited": true,
+    "verdict": "Substantial observed repair of the prior Smith axis failure, with remaining qualification/completeness defects; not an unqualified fully faithful comparison.",
+    "unused_sources": {
+      "S3": "Smith on costs/incentives of slave labour; remains a retrieved card but is not used to manufacture a contrast in the released claim.",
+      "S4": "Marx/Engels policy measures; not the conceptual property distinction and not cited by either current claim."
+    }
+  },
+  "run05_comparison": {
+    "prior_smith_claim": "Smith discusses property in the context of labour, particularly how property derived from one’s own labour is essential for productive work, and contrasts it with property acquired through slave labour, which he views as less productive and more costly in the long run.",
+    "prior_smith_source_passage_ids": [
+      893723,
+      894614
+    ],
+    "prior_smith_verdict": "Unsupported synthesis on the wrong axis: slavery expense/incentives and property-transfer taxes did not establish the requested own-labour/patrimony argument.",
+    "v4_smith_primary_passage_id": 893258,
+    "unsupported_slave_property_comparison_removed": true,
+    "marx_evidence_units_unchanged": [
+      "S2:E2",
+      "S2:E3",
+      "S2:E4"
+    ],
+    "marx_change": "The core distinction stays supported, but the newer wording drops the class/exploitation definition that the prior supported Marx half had included.",
+    "same_model_judge_approved_both_versions": true,
+    "not_an_isolated_ablation": true,
+    "causal_limit": "One open case with changed retrieval ranking and a fresh model response does not isolate the scorer’s causal effect or establish general accuracy; generated hypotheses are not controlled evidence facts.",
+    "planning_hypotheses_identical": true
+  },
+  "decision": "Useful single-case open-development repair of a major retrieval/question-axis error. Exact citations pass. The released Smith paraphrase still loses a material harm qualification, and the comparative definition could be clearer. No final-quality, human-verified, or general factual-accuracy promotion follows.",
+  "limitations": [
+    "AI-authored qualitative review, not human ratings.",
+    "No new generation, model judging, embeddings, sealed cases or heldout queries.",
+    "Canonical source fidelity is verified separately from entailment/completeness.",
+    "The current database is checked against the recorded source identities; this is not proof of a raw-source transcription or a historical whole-database snapshot."
+  ]
+}

@@ -162,7 +162,10 @@ def test_real_cc0_opt_in_recovers_cross_language_source_and_only_hint_enters_wri
     assert answers.OPT_IN_FIDELITY_INSTRUCTIONS in judge["messages"][0]["content"]
     planning = result["retrieval"]["planning"]
     assert planning["requested"] and planning["used"] and planning["reason"] == "validated_plan_candidates"
-    assert planning["ranking_strategy"] == "body-coverage-proximity-v1" and planning["response_language_hint"] == "ru"
+    assert (
+        planning["ranking_strategy"] == "body-coverage-proximity-v2-local32"
+        and planning["response_language_hint"] == "ru"
+    )
     assert planning["book_queries"] == [{"book_id": META["id"], "language": "en", "queries": ["amber bookmark"]}]
     assert all(
         source["book_id"] == META["id"] and source["language"] == "en" and source["verified"]

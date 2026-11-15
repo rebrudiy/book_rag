@@ -603,7 +603,7 @@ def test_rerank_is_explicit_optin_and_preserves_original_results(planning_librar
     control = retrieve_plan_candidates(planning_library, question, BOOKS, plan, original)
     treated = retrieve_plan_candidates(planning_library, question, BOOKS, plan, original, rerank_candidates=True)
     assert control["ranking_strategy"] == "original-round-robin"
-    assert treated["ranking_strategy"] == "body-coverage-proximity-v1"
+    assert treated["ranking_strategy"] == "body-coverage-proximity-v2-local32"
     for book in BOOKS:
         hits = treated["candidates_by_book"][book["id"]]
         applied = book["language"] == plan["response_language_hint"]
@@ -680,3 +680,94 @@ def test_full_term_diagnostics_do_not_hide_absent_query_topics() -> None:
     assert evidence["planned_all_terms_coverage"] < 0.5
     assert set(evidence["unobserved_planned_terms"]) == {"quantum", "formula"}
     assert not evidence["semantic_support_verified"]
+
+
+@pytest.mark.parametrize(
+    ("question", "query", "weak", "related"),
+    [
+        (
+            "What is an example of a person's own craft?",
+            "person own craft",
+            "A person studies craft.",
+            "Own craft belongs to each person.",
+        ),
+        (
+            "What may a person not carry?",
+            "person not carry",
+            "A person carries equipment.",
+            "Not carrying equipment is the rule for each person.",
+        ),
+    ],
+)
+def test_ownership_and_negation_pairs_outweigh_generic_article_pairs(
+    question: str, query: str, weak: str, related: str
+) -> None:
+    """Original CC0 contrasts: lexical relation signals, not entailment labels."""
+    from book_rag.query_planning import rerank_planned_candidates
+
+    rows = [
+        {"id": 1, "verified": True, "text": weak},
+        {"id": 2, "verified": True, "text": related},
+    ]
+    result = rerank_planned_candidates(question, [query], rows, language="en")
+    metrics = {row["id"]: row["planned_lexical_rerank"] for row in result}
+    assert metrics[2]["query_bigram_coverage"] > metrics[1]["query_bigram_coverage"]
+    assert metrics[2]["feature_revision"] == "relation-local-window-v2"
+    assert all(not metric["semantic_support_verified"] for metric in metrics.values())
+
+
+def test_local_topic_relation_survives_a_distant_additional_query_match() -> None:
+    from book_rag.query_planning import rerank_planned_candidates
+
+    filler = "The courtyard contains unrelated weather observations. " * 20
+    rows = [
+        {"id": 1, "verified": True, "text": "Skill creates craft. " + filler + "A person observes."},
+        {"id": 2, "verified": True, "text": "Skill. " + filler + "Craft. " + filler + "A person observes."},
+    ]
+    original = json.dumps(rows, sort_keys=True)
+    ranked = rerank_planned_candidates("person skill craft", ["person skill craft"], rows, language="en")
+    metrics = {row["id"]: row["planned_lexical_rerank"] for row in ranked}
+    assert ranked[0]["id"] == 1
+    assert metrics[1]["proximity"] > 0
+    assert metrics[1]["minimum_matched_query_span"] <= 32
+    assert set(metrics[1]["local_proximity_terms"]) == {"skill", "craft"}
+    assert metrics[2]["proximity"] == 0
+    assert metrics[2]["minimum_matched_query_span"] is None
+    assert json.dumps(rows, sort_keys=True) == original
+
+
+@pytest.mark.parametrize("separator", [". ", "\n\n", " " + "distant " * 40])
+def test_local_proximity_never_crosses_sentence_paragraph_or_window_bounds(separator: str) -> None:
+    from book_rag.query_planning import rerank_planned_candidates
+
+    row = {"id": 1, "verified": True, "text": "Skill" + separator + "craft"}
+    result = rerank_planned_candidates("skill craft", ["skill craft"], [row], language="en")[0]
+    assert result["planned_lexical_rerank"]["proximity"] == 0
+    assert result["planned_lexical_rerank"]["local_proximity_terms"] == []
+
+
+def test_cross_language_planned_pool_remains_unchanged_without_invoking_reranker(
+    planning_library: Library, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    from book_rag.query_planning import retrieve_plan_candidates
+
+    question = "Что описывает дневник?"
+    books = BOOKS[:1]
+    original = {books[0]["id"]: planning_library.search("harbour lamp", "lexical", books[0]["id"])}
+    plan = plan_queries(
+        question,
+        books,
+        generator=Fake(
+            {"response_language": "ru", "books": [{"book_id": books[0]["id"], "queries": ["harbour lamp"]}]}
+        ),
+    )
+    control = retrieve_plan_candidates(planning_library, question, books, plan, original)
+
+    def forbidden(*args: Any, **kwargs: Any) -> Any:
+        pytest.fail("A cross-language question must preserve the existing caller guard")
+
+    monkeypatch.setattr("book_rag.query_planning.rerank_planned_candidates", forbidden)
+    candidate = retrieve_plan_candidates(planning_library, question, books, plan, original, rerank_candidates=True)
+    assert candidate["used"]
+    assert candidate["candidates_by_book"] == control["candidates_by_book"]
+    assert candidate["rerank_by_book"][books[0]["id"]]["applied"] is False
