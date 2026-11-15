@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "authorized_by": "Root explicit authorization: only named owned span/FTS benchmark DB copies",
+  "created_at": "2026-11-15T00:55:15.756798+00:00",
+  "source": "data/snapshots/library1308-v1/library.sqlite3",
+  "source_sha256": "2d77675ba2a68f63e25f507355272e3206db8f9abbe959f326cea96f774939f0",
+  "source_unchanged": true,
+  "free_bytes_before": 12460761088,
+  "receipts_preserved": [
+    "experiments/span-storage-v1.json",
+    "experiments/fts-maintenance1308-v1.json"
+  ],
+  "status": "removed_named_owned_copies",
+  "free_bytes_after": 12460929024,
+  "removed_logical_bytes": 2539282432,
+  "observed_free_delta_bytes": 167936,
+  "concurrency_note": "Live corpus ingest and authorized GGUF download may change free space concurrently.",
+  "removed": [
+    {
+      "path": "data/benchmarks/span-storage1308-v1/library.sqlite3",
+      "logical_bytes": 940126208,
+      "allocated_bytes": 940126208,
+      "sha256": "6cee45e961666ad6969d24fa09b9517c7c9df28184396c6eb5d06c3ae623894e",
+      "logical_receipt_verified": true
+    },
+    {
+      "path": "data/benchmarks/fts-maintenance1308-v1/library.sqlite3",
+      "logical_bytes": 1599156224,
+      "allocated_bytes": 1599156224,
+      "sha256": "f84790f7e48bec439c93903bf7a92228ab656db3f92988ae8053090ea8d74760",
+      "logical_receipt_verified": true,
+      "passage_fingerprint": "5fc148db4f88d6941973cafa1df0992b81cf43348ead9ff2e0e86bc5313470bb"
+    }
+  ]
+}

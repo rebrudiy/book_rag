@@ -78,6 +78,11 @@ def _parse_rdf(data: bytes) -> Iterator[dict[str, Any]]:
             "issued": _value(book.find("dc:issued", NS)),
             "subjects": [_value(n) for n in book.findall("dc:subject/rdf:Description/rdf:value", NS)],
             "formats": formats,
+            "format_extents": {
+                str(resource.get(f"{{{RDF_NS}}}about", "")): int(size)
+                for resource in book.findall("dc:hasFormat/pg:file", NS)
+                if (size := _value(resource.find("dc:extent", NS))).isdigit() and int(size) > 0
+            },
         }
 
 

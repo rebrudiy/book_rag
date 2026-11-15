@@ -1,0 +1,266 @@
+{
+  "schema_version": 1,
+  "recorded_at": "2026-11-15T01:13:52.917191+00:00",
+  "experiment": "Resource-aware acquisition and indexing toward 10000 searchable candidate workgroups",
+  "scope": "Metadata-screened provisional workgroups; current observed counts remain below target, not authority-verified unique works",
+  "catalog": {
+    "url": "https://www.gutenberg.org/cache/epub/feeds/rdf-files.tar.bz2",
+    "sha256": "86a11d5cf64ac9bf3f8c59cbc6bdbe505185884c66d84a0930be48b02f6d31a3",
+    "local_bytes": 126917244,
+    "records": {
+      "scanned": 79811,
+      "existing_id": 3984,
+      "language": 1791,
+      "missing_explicit_utf8_size": 239,
+      "rights_unverified": 425,
+      "not_text": 1251,
+      "explicit_collection": 1560,
+      "periodical_issue": 4154,
+      "text_size_outside_screen": 2677,
+      "unresolved_collective_author": 295,
+      "explicit_volume_or_component": 7653,
+      "duplicate_candidate_author_title": 464,
+      "invalid": 1,
+      "duplicate_existing_author_title": 50
+    },
+    "eligible_candidate_groups": 55267,
+    "available_by_language": {
+      "ru": 0,
+      "de": 1200,
+      "fr": 2257,
+      "es": 718,
+      "it": 834,
+      "pt": 500,
+      "nl": 937,
+      "fi": 3594,
+      "sv": 231,
+      "da": 82,
+      "en": 44914
+    }
+  },
+  "sealed_queue": {
+    "queue": "data/catalog/scale10000-v2/queue.json",
+    "queue_sha256": "e78a1938e31ad2fdd62e5fbf9f491936ce16bfb2b12955c4bf163f2848a76837",
+    "selected": 7000,
+    "selected_by_language": {
+      "de": 605,
+      "fr": 605,
+      "es": 605,
+      "it": 605,
+      "pt": 500,
+      "nl": 605,
+      "fi": 605,
+      "sv": 231,
+      "da": 82,
+      "en": 2557
+    },
+    "selected_by_subject": {
+      "fiction": 3394,
+      "other": 2425,
+      "history": 626,
+      "philosophy": 131,
+      "science": 129,
+      "economics": 104,
+      "biography": 190,
+      "technical": 1
+    },
+    "selected_by_format": {
+      "epub": 6959,
+      "txt": 41
+    },
+    "baseline_searchable_editions": 4001,
+    "baseline_workgroups": 3997,
+    "projected_added_bytes": 8883817179,
+    "free_bytes_before": 14980038656,
+    "reserve_bytes": 4831838208,
+    "budget_bytes": 10148200448,
+    "rdf_utf8_text_bytes": 1234395540
+  },
+  "screening": {
+    "work_keys": "NFKC/casefold word-token title plus lifespan-stripped normalized sorted explicit coauthors; provisional only",
+    "source_rights": "Explicit record Public domain in the USA; not a worldwide rights claim",
+    "components": "Explicit periodicals/volumes/chapters/collections excluded",
+    "canonical_duplicates": "Library.import_book exact canonical SHA rejection, not fuzzy similarity",
+    "coverage": "All selected artifacts text-only without illustrations",
+    "source_alternates": "Same Gutenberg ID approved HTTPS UTF8 TXT size proof and explicit no-image EPUB source provenance"
+  },
+  "disk_model": {
+    "formula": "6 * official UTF8 TXT bytes + artifact RDF extent + 65536 per book",
+    "measured_baseline": {
+      "indexed_editions": 4001,
+      "candidate_workgroups": 3997,
+      "db_bytes": 5367955456,
+      "source_canonical_characters": 1692584643,
+      "measured_db_bytes_per_canonical_character": 3.171454661484838,
+      "selected_forecast_bytes_per_utf8_text_byte": 6.0,
+      "per_book_fixed_forecast_bytes": 65536,
+      "artifact_extent": "explicit_official_RDF",
+      "reserve_gib": 4.5
+    },
+    "runtime_guard": "Stop before next book if free bytes < 4 GiB + max(512 MiB, 2 * next estimated added bytes)",
+    "concurrent_disk_users": "Local GGUF acquisition and parent application work share actual disk; forecasts are not guaranteed"
+  },
+  "protected_ids": {
+    "observed_at": "2026-11-15T01:09:30.236322+00:00",
+    "queue": "data/catalog/scale10000-v2/queue.json",
+    "queue_entries": 7000,
+    "protected_1308_ids": 1308,
+    "protected_ids_in_queue": 0,
+    "baseline_4001_ids": 4001,
+    "baseline_ids_in_queue": 0,
+    "all_first150_indexed_once_before_v2": true,
+    "noimage_epub_entries": 6959,
+    "all_entries_text_only": true,
+    "all_identity_provisional": true
+  },
+  "resume_first150": {
+    "events": {
+      "downloaded": 150,
+      "indexed": 150,
+      "processed": 150
+    },
+    "indexed_at_min": "2026-11-15 00:51:14",
+    "indexed_at_max": "2026-11-15 00:58:15",
+    "indexed_rows": 150,
+    "v2_started_at": "2026-11-15T00:58:19.837099+00:00"
+  },
+  "owned_cleanup": {
+    "receipt": "experiments/corpus-benchmark-cleanup-v1.json",
+    "runtime_receipt": "data/runtime/corpus-benchmark-cleanup-v1.json",
+    "logical_bytes_removed": 2539282432,
+    "frozen_source_unchanged": true,
+    "scope": "Exactly two authorized owned benchmark DB copies; measurement reports retained"
+  },
+  "observed_pipeline_status": {
+    "observed_at": "2026-11-15T01:13:43.608385+00:00",
+    "pid": 37343,
+    "process_alive": true,
+    "stage": "running",
+    "run_state_updated_at": "2026-11-15T01:13:41.047327+00:00",
+    "last_completed_ordinal": 472,
+    "last_completed_book_id": "pg14181-full",
+    "queue": "data/catalog/scale10000-v2/queue.json",
+    "queued_candidates": 7000,
+    "downloaded_source_available": 472,
+    "extracted": 472,
+    "indexed_from_queue": 472,
+    "canonical_duplicates": 0,
+    "failed_current": 0,
+    "deferred_current": 0,
+    "not_yet_registered": 6527,
+    "registered_statuses": {
+      "discovered": 1,
+      "indexed": 472
+    },
+    "searchable_editions": 4473,
+    "searchable_candidate_workgroups": 4469,
+    "confirmed_unique_work_claim": false,
+    "free_bytes": 13841764352,
+    "measured_rate": {
+      "window_seconds": 300.0,
+      "indexed_in_window": 102,
+      "books_per_minute": 20.4
+    },
+    "eta_to_10000_candidate_groups_seconds": 16268,
+    "eta_scope": "Extrapolated only from observed recent indexing rate; no estimate while runner stopped/deferred",
+    "resume_skipped_previously_indexed": 150
+  },
+  "read_only_search_smoke": {
+    "observed_at": "2026-11-15T01:11:06.851765+00:00",
+    "scope": "Read-only live GET baseline search on three newly indexed queue books; citation/index plumbing check, not relevance evaluation. No model, saved-item or corpus writes",
+    "checks": [
+      {
+        "language": "de",
+        "book_id": "pg24571-full",
+        "title": "Der Struwwelpeter oder lustige Geschichten und drollige Bilder",
+        "query": "Sonne schien ihm aufs Gehirn da",
+        "http_status": 200,
+        "elapsed_ms": 58.63,
+        "results": 3,
+        "all_verified": true,
+        "all_scoped": true,
+        "has_citation_reader_source": true,
+        "sample_source_slice_hash_valid": true,
+        "sample_passage_id": 2576586,
+        "sample_position": "middle passage by ID within book"
+      },
+      {
+        "language": "fr",
+        "book_id": "pg77414-full",
+        "title": "Le debat de Cuidier et de Fortune",
+        "query": "le fort theseüs Par deux femmes",
+        "http_status": 200,
+        "elapsed_ms": 57.54,
+        "results": 3,
+        "all_verified": true,
+        "all_scoped": true,
+        "has_citation_reader_source": true,
+        "sample_source_slice_hash_valid": true,
+        "sample_passage_id": 2576603,
+        "sample_position": "middle passage by ID within book"
+      },
+      {
+        "language": "en",
+        "book_id": "pg51751-full",
+        "title": "Oh, Rats!",
+        "query": "regained her usual calm Philip Vinson",
+        "http_status": 200,
+        "elapsed_ms": 26.87,
+        "results": 3,
+        "all_verified": true,
+        "all_scoped": true,
+        "has_citation_reader_source": true,
+        "sample_source_slice_hash_valid": true,
+        "sample_passage_id": 2576768,
+        "sample_position": "middle passage by ID within book"
+      }
+    ]
+  },
+  "verification": {
+    "pytest": "105 passed in 0.25s",
+    "ruff": "pass (scale planner, scripts/status/cleanup, catalog, tests)",
+    "ty": "pass (same owned code)",
+    "tests": [
+      "tests/test_corpus_scale.py",
+      "tests/test_corpus_scale_status.py",
+      "tests/test_catalog.py",
+      "tests/test_corpus_planning.py",
+      "tests/test_source_variants.py"
+    ]
+  },
+  "resume_command": ".venv/bin/python -u scripts/scale_corpus.py --manifest data/catalog/scale10000-v2/queue.json --limit 7000 --run",
+  "status_command": ".venv/bin/python scripts/corpus_scale_status.py --output data/catalog/scale10000-v2/status-latest.json",
+  "known_limits": [
+    "Metadata screening does not establish all distinct work identities or remove all retitled/translated/hidden collection duplicates",
+    "No-image text-only coverage does not preserve illustrations/facsimile or all visual equations",
+    "Gutenberg record rights determination is US-specific",
+    "Topic coverage follows explicit catalog subjects; technical classifier is narrow",
+    "Recent-rate ETA assumes sustained observed throughput; absent for stopped/deferred process",
+    "Whole-live corpus is changing during acquisition; no frozen evaluation claim"
+  ],
+  "read_only_integrity_snapshot": {
+    "observed_at": "2026-11-15T01:13:06.175240+00:00",
+    "scope": "Read-only SQLite transaction snapshot of currently indexed queue entries; original files hashed; exact passage ownership/bounds/text/SHA checked",
+    "queue": "data/catalog/scale10000-v2/queue.json",
+    "books": 458,
+    "passages": 40304,
+    "passage_characters": 45866615,
+    "original_artifact_bytes": 54500991,
+    "artifact_and_cache_same_inode": 458,
+    "by_language": {
+      "da": 45,
+      "es": 46,
+      "it": 46,
+      "nl": 46,
+      "fr": 46,
+      "sv": 46,
+      "en": 46,
+      "fi": 46,
+      "pt": 46,
+      "de": 45
+    },
+    "errors": [],
+    "elapsed_seconds": 4.211,
+    "live_or_original_database_writes": 0
+  }
+}
