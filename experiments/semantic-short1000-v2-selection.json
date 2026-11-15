@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "kind": "explicit-next-semantic-batch-selection",
+  "created_at": "2026-11-15T05:28:36.050647+00:00",
+  "selection": "1000 shortest remaining indexed editions by canonical SUM(LENGTH(p.text)), then edition ID; no semantic/relevance/final-set selection",
+  "excluded_served_editions": 2415,
+  "remaining_before": 8586,
+  "editions": 1000,
+  "canonical_passages": 20960,
+  "canonical_characters": 21290272,
+  "catalogue_languages": {
+    "pt": 32,
+    "de": 28,
+    "en": 922,
+    "fr": 13,
+    "fi": 5
+  },
+  "ids_path": "corpus/semantic-batches/short1000-v2.ids.json",
+  "ids_sha256": "93564ad07272bc08afbb12302cb5bbc4e70054423358416149298ec5101377e5",
+  "source_query_snapshot": "data/bench/semantic-next-candidates-20261115.json",
+  "source_query_sha256": "f2dc5cba77ddfdb52bbbe08ef92b15856ea8040da91251f5aebab31480569353",
+  "closed_final_used": false,
+  "status": "interrupted_for_extraction_integrity_investigation_not_registered",
+  "unique_complete_work_count": "unknown",
+  "user_coverage_added": 0,
+  "reason": "Spotcheck pg16384-full O Mandarim retained only456 canonicalcharacters despite substantial raw EPUB body outside recognized block tags; shortest-first selection risks prioritizing extraction failures.",
+  "do_not_resume": "Audit and repair extraction before accepting this selection; original namespace vectors become stale if reimported.",
+  "runtime_output": "data/semantic-batches/short1000-v2",
+  "runtime_log": "data/bench/semantic-short1000-v2.log",
+  "workers": "parent87843 andchildren87845/87846/87926 verifiedclosed after explicitSIGINT",
+  "checkpoint_path": "data/semantic-batches/short1000-v2/compressed/incremental-b9e0054acbd09475e3d954d4226e7d0c0d04c8b31a8fd036b7894d7fadffaffb/checkpoint.json",
+  "checkpoint": {
+    "chunk_chain": "1062e870e41e55707f4abe1626fdf7e4711d164d153aef329a17820c87b73192",
+    "completed_chunks": 19,
+    "completed_rows": 4864,
+    "identity": "b9e0054acbd09475e3d954d4226e7d0c0d04c8b31a8fd036b7894d7fadffaffb",
+    "input_chain": "71f032a7778377d5a4c7af3984e564880e9aaa98454e05fcba7830044537bb86",
+    "schema_version": 1
+  },
+  "checkpoint_sha256": "8c28e4edae02b0fbd888a2d3de90a2ef2e74002812a54b9e00a3221ff5f896a3"
+}

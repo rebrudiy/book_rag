@@ -1,10 +1,10 @@
 # Plan
 
-Goal ACTIVE until authentic Codex weekly remainder3%, user stop, or real environment limit. Never use token counts as quota. Preserve a concrete running app and state at the stop condition.
+PAUSED at the user-requested stop condition: authentic weekly Codex remainder **3%**, recorded 2026-11-15T05:31:07.930Z. No new development, downloads or indexing. Servers remain available. Resume only on user instruction.
 
-1. Keep http://127.0.0.1:8001 and ./scripts/run_full.sh usable. Lexical/reading/metadata discovery11,001 editions; semantic scope union2,415, global1,308. Counts come from actual ID sets, not edition/work assumptions.
-2. Finish the independent compact-window-manifest prototype: verify all190,601 existing inputs/offsets/hashchain and byte reduction, without modifying existing indexes or activating a new contract. Preserve state if quota reaches3%.
-3. Next release: version the compact registration/reader contract, then stream remaining8,586 editions under disk/RSS guards; expand global semantic routing only with measured candidate/negative behavior. Existing registry caps and duplicate text manifests constrain full11k scale.
-4. Continue RAG quality from OPENdevelopment data: preserve actual sources and qualifiers, compare old/new retrieval, retain failures. Local4B/source planning improved some scenarios but does not certify paraphrases. No unsafe NLI/partial-claim gate or paid API.
-5. Audit unique complete-work/edition/language/author identities; never equate11,001 editions or10,997 provisional groups with10kverified works. Preserve provenance, rights, originals, structure, resumability and notes.
-6. Publish coherent tested commits, green CI and browser receipts. Keep original20/E5/1308 controls byte-identical and closed final labels unread until an appropriate frozen evaluation. Maintain compact STATUS and ignored continuation details; all agents must save their state at3%.
+1. FIRST: fix HTML/EPUB extraction of raw text and inline/BR flow between headings or nested block containers. Confirmed missing prose in pg16384-full; original artifact retained. Preserve ordering, headings, tables, verse, code and no duplicate text. Add original CC0 regressions before any real reimport.
+2. Audit extraction against cached source artifacts, starting with the biased 32-shortest sample. 25/32 low ratios are triage flags, not a corpus-wide error rate. Do not equate indexed status/full metadata labels with source completeness.
+3. Plan controlled reimports with citation/notes migration and source-epoch/vector invalidation. Preserve frozen controls, original namespaces and receipts. NEVER simply resume short1000-v2 or rebind stale vectors after changing passages.
+4. Review compact-registry-v2 branch, run real native integration and read-only registration/equivalence checks before enabling it. Main retains v1; no existing manifest was deleted. Then advance full-text vector coverage from the verified ID-set union2,415; global remains1,308.
+5. Preserve running http://127.0.0.1:8001 and ./scripts/run_full.sh, source provenance/rights, exact quotes and all source/RAG failures. Improve retrieval and qualifier preservation using open development data. Closed final labels remain unread.
+6. On authorized resume, recheck actual quota, processes, Git state and source artifacts. Continue measured product/corpus improvements; project is unfinished, not complete.
