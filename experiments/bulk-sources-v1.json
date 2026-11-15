@@ -1,0 +1,400 @@
+{
+  "version": 1,
+  "recorded_at": "2026-11-15T01:46:26.866899+00:00",
+  "scope": "Selected official Gutenberg generated-EPUB rsync acquisition; candidate work identities remain provisional",
+  "policy_url": "https://www.gutenberg.org/help/mirroring.html",
+  "origin": "rsync://gutenberg.pglaf.org/gutenberg-epub/",
+  "source_metadata": {
+    "metadata": "data/transport-research/pg-generated-metadata-v2.json",
+    "selected_metadata_sha256": "496f36e2baded0ee27e00d02d610cc1bb20e2a8a36531e5c2a1ad78e0c6eb9ea",
+    "metadata_url": "rsync://gutenberg.pglaf.org/gutenberg-epub/",
+    "metadata_kind": "rsync-list-only-selected-files",
+    "metadata_sha256": "b860d8d6de7d27948bedb1e437bafef4a9e7c889763509f3a5b3afe5c01de9b0",
+    "metadata_retrieved_at": "2026-11-15T01:34:37.449568+00:00"
+  },
+  "plan": {
+    "queue": "data/catalog/scale10000-v2/queue.json",
+    "queue_sha256": "e78a1938e31ad2fdd62e5fbf9f491936ce16bfb2b12955c4bf163f2848a76837",
+    "protected_existing_ids": 4949,
+    "selected": 6014,
+    "selected_artifact_bytes": 894083711,
+    "selected_by_language": {
+      "nl": 503,
+      "it": 507,
+      "es": 508,
+      "pt": 403,
+      "fr": 505,
+      "sv": 135,
+      "de": 506,
+      "en": 2445,
+      "fi": 502
+    },
+    "projected_added_bytes": 7849490486,
+    "free_bytes_before": 13872238592,
+    "reserve_bytes": 4831838208,
+    "budget_bytes": 9040400384,
+    "rejections": {
+      "already_registered": 948,
+      "not_generated_epub": 38
+    }
+  },
+  "plan_sha256": "519b22886d1eb97ffe316fbf60b02fa54d10763b79aa5a4be2448f656b39d29b",
+  "pilot": {
+    "pid": 44620,
+    "stage": "pilot_limit_complete",
+    "started_at": "2026-11-15T01:38:39.524495+00:00",
+    "completed": {
+      "indexed_untouched": 29,
+      "existing_registered_untouched": 1,
+      "downloaded": 20,
+      "indexed": 20
+    },
+    "processed_this_run": 20,
+    "elapsed_seconds": 51.158,
+    "transfer_seconds": 48.892,
+    "import_seconds": 1.951,
+    "free_bytes": 13873070080,
+    "updated_at": "2026-11-15T01:39:30.682593+00:00"
+  },
+  "pilot_actual_verification": {
+    "observed_at": "2026-11-15T01:40:54.350823+00:00",
+    "books": 20,
+    "passages_verified": 1587,
+    "source_bytes": 2455988,
+    "by_language": {
+      "pt": 3,
+      "fr": 3,
+      "sv": 2,
+      "de": 2,
+      "en": 2,
+      "fi": 2,
+      "nl": 2,
+      "it": 2,
+      "es": 2
+    },
+    "protected_old_book_rows_unchanged": 4979,
+    "saved_notes_unchanged": 0,
+    "all_original_download_hashes_verified": true,
+    "all_cache_archive_pairs_same_inode": true,
+    "actual_reader_chromium": [
+      {
+        "book_id": "pg29394-full",
+        "language": "pt",
+        "section_ordinal": 6,
+        "exact_dom_text": true,
+        "title_visible": true,
+        "noimages_notice_visible": true
+      },
+      {
+        "book_id": "pg79457-full",
+        "language": "fr",
+        "section_ordinal": 9,
+        "exact_dom_text": true,
+        "title_visible": true,
+        "noimages_notice_visible": true
+      },
+      {
+        "book_id": "pg48269-full",
+        "language": "sv",
+        "section_ordinal": 7,
+        "exact_dom_text": true,
+        "title_visible": true,
+        "noimages_notice_visible": true
+      }
+    ],
+    "books_detail": [
+      {
+        "id": "pg29394-full",
+        "language": "pt",
+        "sha256": "c8721c2587c3903b50a7b059d70768f042412678d4b9f1c4ad431349bc01c6f6",
+        "source_bytes": 167818,
+        "same_inode": true,
+        "sections": 12,
+        "canonical_characters": 212686
+      },
+      {
+        "id": "pg79457-full",
+        "language": "fr",
+        "sha256": "e7f0c90fcd5a6dd171d5b5ba640051221b16ecd04ea15a8960b4c2421fdf8eeb",
+        "source_bytes": 131494,
+        "same_inode": true,
+        "sections": 17,
+        "canonical_characters": 54441
+      },
+      {
+        "id": "pg48269-full",
+        "language": "sv",
+        "sha256": "fcea821daf7a85c71c23f09535e26e1beb51908234eecf76c47f931ea3b3f184",
+        "source_bytes": 132313,
+        "same_inode": true,
+        "sections": 10,
+        "canonical_characters": 137390
+      },
+      {
+        "id": "pg24056-full",
+        "language": "de",
+        "sha256": "0f01b3d176c067b9bf0cb3ddb15b4cd401854f9be81a3c2f4d5acc161e0bc669",
+        "source_bytes": 94823,
+        "same_inode": true,
+        "sections": 22,
+        "canonical_characters": 60900
+      },
+      {
+        "id": "pg1682-full",
+        "language": "en",
+        "sha256": "c7cc8af318fd4c76deac30afdc2e12b0f0ebf0b462366e4deddcae21aa6419ff",
+        "source_bytes": 89046,
+        "same_inode": true,
+        "sections": 4,
+        "canonical_characters": 56976
+      },
+      {
+        "id": "pg16481-full",
+        "language": "fi",
+        "sha256": "6ddfb811dac966871d03f65794037749fdd4ac36a2798f28975804ad724e025a",
+        "source_bytes": 157238,
+        "same_inode": true,
+        "sections": 17,
+        "canonical_characters": 186937
+      },
+      {
+        "id": "pg19835-full",
+        "language": "nl",
+        "sha256": "adc28525b72594b3b5f47d94687319b8f441f5d6572bb8b10b090924a52722e6",
+        "source_bytes": 80747,
+        "same_inode": true,
+        "sections": 1,
+        "canonical_characters": 35685
+      },
+      {
+        "id": "pg17889-full",
+        "language": "it",
+        "sha256": "ca9b079c29cb839332b323b7494f6b299215ccee954f493b812031dd1bebc070",
+        "source_bytes": 125974,
+        "same_inode": true,
+        "sections": 39,
+        "canonical_characters": 109156
+      },
+      {
+        "id": "pg11081-full",
+        "language": "es",
+        "sha256": "337aa2056dc0cdfee34df52d9777cdad6521aa4cc9c930e67ade194a043928e9",
+        "source_bytes": 111758,
+        "same_inode": true,
+        "sections": 37,
+        "canonical_characters": 86361
+      },
+      {
+        "id": "pg24620-full",
+        "language": "pt",
+        "sha256": "ebfeeedc9e1383bd965c4a74f0aa049916c46062dd1e0e43200ea4627db05baf",
+        "source_bytes": 86484,
+        "same_inode": true,
+        "sections": 3,
+        "canonical_characters": 32464
+      },
+      {
+        "id": "pg35200-full",
+        "language": "fr",
+        "sha256": "0a03268db37d9164efe60b04119ba9372e9abf7b527ca294137f26eb8eba9135",
+        "source_bytes": 160759,
+        "same_inode": true,
+        "sections": 15,
+        "canonical_characters": 218526
+      },
+      {
+        "id": "pg50149-full",
+        "language": "sv",
+        "sha256": "0f99c636da63d1f36299239623fd1d20808ac99f6f390552df6be15d2438752c",
+        "source_bytes": 184523,
+        "same_inode": true,
+        "sections": 25,
+        "canonical_characters": 230487
+      },
+      {
+        "id": "pg41904-full",
+        "language": "de",
+        "sha256": "20930019cd22514aea948d01cd29aec69bdcd83d25d4b57bddb5235cf8b44435",
+        "source_bytes": 97303,
+        "same_inode": true,
+        "sections": 1,
+        "canonical_characters": 39917
+      },
+      {
+        "id": "pg8598-full",
+        "language": "en",
+        "sha256": "4ef8ec2364f2cf9ff204fe56b384183824166219fd73688795849866d0eb2a04",
+        "source_bytes": 83199,
+        "same_inode": true,
+        "sections": 4,
+        "canonical_characters": 22510
+      },
+      {
+        "id": "pg15967-full",
+        "language": "fi",
+        "sha256": "8224083d33d7c6234c4f690f56c6ac3278ea80c37b09b89f26642fc021702f3d",
+        "source_bytes": 91849,
+        "same_inode": true,
+        "sections": 12,
+        "canonical_characters": 37346
+      },
+      {
+        "id": "pg57772-full",
+        "language": "nl",
+        "sha256": "aa95dd2c7d054c77ba4f9b6b2352e659815f83e111be33fed866dacfca8b4a16",
+        "source_bytes": 201876,
+        "same_inode": true,
+        "sections": 93,
+        "canonical_characters": 76000
+      },
+      {
+        "id": "pg31702-full",
+        "language": "it",
+        "sha256": "55c80b7b61e73629eb1c3bd7a1fef7dedc4757f3e3c01fe4996aea6c08c44855",
+        "source_bytes": 92718,
+        "same_inode": true,
+        "sections": 19,
+        "canonical_characters": 57644
+      },
+      {
+        "id": "pg76860-full",
+        "language": "es",
+        "sha256": "f3ef1f5048b0d41063772b7179bc98edb3a4e11ec63633581b17ebb30efd4218",
+        "source_bytes": 187465,
+        "same_inode": true,
+        "sections": 31,
+        "canonical_characters": 98885
+      },
+      {
+        "id": "pg34961-full",
+        "language": "pt",
+        "sha256": "74e289e1198d8d9f24ad37a167d71baad082d3ff6ac6e081fc3afff7f481435f",
+        "source_bytes": 88444,
+        "same_inode": true,
+        "sections": 6,
+        "canonical_characters": 42511
+      },
+      {
+        "id": "pg21896-full",
+        "language": "fr",
+        "sha256": "4a55193c925035b8292a7f98f1426b851deccf166c54524ed025ff1f1992d634",
+        "source_bytes": 90157,
+        "same_inode": true,
+        "sections": 7,
+        "canonical_characters": 37057
+      }
+    ],
+    "database_writes": 0,
+    "generator_calls": 0
+  },
+  "full_launch": {
+    "pid": 45107,
+    "command": [
+      "/Users/rebrudiy/book_rag/.venv/bin/python",
+      "-u",
+      "scripts/run_bulk_sources.py",
+      "--run",
+      "--batch-size",
+      "128"
+    ],
+    "launched_at": "2026-11-15T01:41:38.219648+00:00",
+    "log": "data/catalog/bulk-generated-v1/pipeline.log",
+    "plan": "data/catalog/bulk-generated-v1/plan.json",
+    "pilot_receipt": "data/catalog/bulk-generated-v1/pilot.run-state.json",
+    "pilot_audit": "data/catalog/bulk-generated-v1/pilot-audit.json",
+    "serial_pid37343_stopped": true,
+    "free_bytes_at_launch": 13870104576
+  },
+  "full_observed_status": {
+    "observed_at": "2026-11-15T01:47:43.804667+00:00",
+    "pid": 45107,
+    "process_alive": true,
+    "provider_lock_held": true,
+    "stage": "transferring",
+    "last_state_update": "2026-11-15T01:46:03.918207+00:00",
+    "phase_started_at": "2026-11-15T01:46:03.935555+00:00",
+    "batch_offset": 128,
+    "batch_files": 128,
+    "batch_payload_bytes": 18969351,
+    "staged_files_present": 26,
+    "staged_logical_bytes_present": 3530358,
+    "staging_caveat": "Observed local file sizes, including partial files; not promoted source receipts or measured network byte counts",
+    "selected_plan_editions": 6014,
+    "registered_statuses_from_plan": {
+      "discovered": 1,
+      "indexed": 127
+    },
+    "downloaded_from_plan": 127,
+    "extracted_from_plan": 127,
+    "indexed_from_plan": 127,
+    "failed_from_plan": 0,
+    "canonical_duplicates_from_plan": 0,
+    "searchable_editions": 5076,
+    "searchable_candidate_workgroups": 5072,
+    "confirmed_unique_work_claim": false,
+    "searchable_by_language": {
+      "da": 82,
+      "de": 1119,
+      "en": 2051,
+      "es": 110,
+      "fi": 110,
+      "fr": 1141,
+      "it": 111,
+      "nl": 111,
+      "pt": 110,
+      "ru": 21,
+      "sv": 110
+    },
+    "free_bytes": 13843943424,
+    "completed_this_run": {
+      "indexed_untouched": 49,
+      "existing_registered_untouched": 1,
+      "downloaded": 78,
+      "indexed": 78
+    },
+    "eta_seconds": null,
+    "eta_note": "No completion estimate until multiple full batches establish observed transfer+index throughput"
+  },
+  "checks": {
+    "pytest": "21 passed in 1.37s (includes actual local SIGINT/child-reap/shared-lock test)",
+    "ruff": "pass on new bulk module/scripts/tests",
+    "ty": "pass on same owned code",
+    "live_database_writes": "20 new pilot book imports only before full launch;4979 existing book rows preserved",
+    "actual_model_calls": 0
+  },
+  "semantics": [
+    "Per-edition rights retained from explicit official RDF US public-domain statement, not inferred from mirror access",
+    "Original HTTPS catalog locator is separate from actual rsync origin/path; no invented HTTP sidecars",
+    "No-image EPUB text-only flags retained; no facsimile/illustration completeness claim",
+    "Actualreceivedfile SHA/size/mtime+archive+APIoriginal hashes checked; no upstream cryptographic SHA is claimed",
+    "Global acquisition lock shared with ordinaryrunner; no concurrent provider acquisition",
+    "Source download/processed/indexed counts remain separate; staging sizes do not mean verified/book-searchable",
+    "Pilot is not a controlled HTTPcomparison; full run speed and ETA await measured batches",
+    "Current candidate workgroup counts are not verified unique works"
+  ],
+  "runtime_monitor_command": ".venv/bin/python scripts/bulk_corpus_status.py",
+  "resume_command": ".venv/bin/python -u scripts/run_bulk_sources.py --run --batch-size 128",
+  "fallback": "After bulk processgone/lockreleased and anycooldownexpired, original scale10000-v2 runner canresume remaining TXT/unowned interruptedsource; allindexedIDs skipped",
+  "first_full_batch_actual_audit": {
+    "observed_at": "2026-11-15T01:48:42.103846+00:00",
+    "full_batch_index": 1,
+    "books": 78,
+    "source_bytes": 11153271,
+    "canonical_characters": 9962110,
+    "passages_verified": 8614,
+    "source_archive_sha_and_same_inode": true,
+    "protected_old_book_rows_unchanged": 4979,
+    "saved_notes_unchanged": 0,
+    "started_at": "2026-11-15T01:41:38.576951+00:00",
+    "transfer_completed_at": "2026-11-15T01:45:57.293371+00:00",
+    "all_searchable_at": "2026-11-15T01:46:03.918207+00:00",
+    "wall_end_to_search_seconds": 265.341,
+    "wall_transfer_interval_seconds": 258.716,
+    "wall_verification_import_interval_seconds": 6.625,
+    "books_per_minute_end_to_search": 17.64,
+    "measurement_note": "Different-book sample, not a controlled HTTPcomparison; wall intervals include process/provenance work. Does not establish acceleration.",
+    "database_writes": 0,
+    "actual_model_calls": 0,
+    "errors": []
+  }
+}

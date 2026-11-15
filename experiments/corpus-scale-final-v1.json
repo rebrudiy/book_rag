@@ -1,0 +1,131 @@
+{
+  "version": 1,
+  "recorded_at": "2026-11-15T02:22:28.774878+00:00",
+  "scope": "Completed resource-aware expansion, not a promotion of confirmed unique literary identities",
+  "initial_searchable_editions": 4001,
+  "initial_candidate_workgroups": 3997,
+  "final_searchable_editions": 11001,
+  "final_provisional_candidate_workgroups": 10997,
+  "new_indexed_editions": 7000,
+  "original_queue": "data/catalog/scale10000-v2/queue.json",
+  "original_queue_sha256": "e78a1938e31ad2fdd62e5fbf9f491936ce16bfb2b12955c4bf163f2848a76837",
+  "final_integrity_audit": {
+    "observed_at": "2026-11-15T02:19:16.763982+00:00",
+    "scope": "All 7000 authorized new public source entries; read-only canonical text, exact passages and original provenance verification",
+    "counts": {
+      "sections": 181321,
+      "passages": 891794,
+      "books": 7000
+    },
+    "source_bytes": 1020126599,
+    "canonical_characters": 1023911388,
+    "passage_identity_span_sha_fingerprint": "0f77ff7f7ed6633584f577b45c4564e7f481f29766bf13911236478128889b05",
+    "by_acquisition_method": {
+      "rsync://rsync.ibiblio.org/gutenberg-epub/": 5886,
+      "HTTPS source download with original sidecar": 1016,
+      "rsync://gutenberg.pglaf.org/gutenberg-epub/": 98
+    },
+    "by_language": {
+      "it": 605,
+      "nl": 605,
+      "sv": 231,
+      "da": 82,
+      "es": 605,
+      "en": 2557,
+      "fr": 605,
+      "pt": 500,
+      "fi": 605,
+      "de": 605
+    },
+    "by_format": {
+      "epub": 6959,
+      "txt": 41
+    },
+    "all_source_archive_hashes_verified": true,
+    "all_cache_archive_pairs_same_inode": true,
+    "all_canonical_book_hashes_verified": true,
+    "all_passage_ownership_bounds_text_sha_verified": true,
+    "all_metadata_match_immutable_queue": true,
+    "all_noimage_flags_retained": true,
+    "protected1308ids_in_queue": 0,
+    "protected1308indexed_events_during_expansion": 0,
+    "outside_queue_indexed_events_during_expansion": 0,
+    "frozen1308original_sha256": "2d77675ba2a68f63e25f507355272e3206db8f9abbe959f326cea96f774939f0",
+    "saved_notes_unchanged_count": 0,
+    "global_searchable_editions": 11001,
+    "global_provisional_candidate_workgroups": 10997,
+    "confirmed_unique_work_claim": false,
+    "errors": [],
+    "elapsed_seconds": 46.288,
+    "database_writes": 0,
+    "model_calls": 0
+  },
+  "ibiblio_full_run": {
+    "stage": "queue_complete",
+    "started_at": "2026-11-15T01:55:10.851997+00:00",
+    "updated_at": "2026-11-15T02:11:46.466112+00:00",
+    "completed": {
+      "downloaded": 5866,
+      "indexed": 5866,
+      "indexed_untouched": 20
+    },
+    "processed_this_run": 5866,
+    "elapsed_seconds": 995.628,
+    "transfer_seconds": 459.039,
+    "import_seconds": 481.003,
+    "free_bytes": 7502417920
+  },
+  "ibiblio_completed_batch_measurements": {
+    "complete_batches": 46,
+    "indexed_editions": 5866,
+    "received_source_bytes": 872545826,
+    "wall_elapsed_seconds_lower": 994.134,
+    "wall_elapsed_seconds_upper": 995.134,
+    "indexed_editions_per_minute_lower": 353.68,
+    "indexed_editions_per_minute_upper": 354.04
+  },
+  "residual_serial_run": {
+    "stage": "queue_complete",
+    "started_at": "2026-11-15T02:13:43.892703+00:00",
+    "updated_at": "2026-11-15T02:15:32.131546+00:00",
+    "completed": {
+      "already_indexed_untouched": 6961,
+      "indexed": 39
+    },
+    "elapsed_seconds": 108.24,
+    "free_bytes": 7604187136
+  },
+  "residual_scope": {
+    "txt": 38,
+    "previously_registered_epub_orphan": 1,
+    "already_indexed_sources_skipped": 6961
+  },
+  "book_identity_limitations": [
+    "Author/title candidate keys remain provisional; authority proposals require review",
+    "178 queued titles have collection-word heuristics needing contents review; this is not a declaration that all are collections",
+    "Exact source/hash consistency does not establish printed-edition completeness or semantic truth of generated claims"
+  ],
+  "identity_review_runtime": "data/catalog/scale10000-v2/identity-review-candidates.json",
+  "verification": {
+    "source_and_batches_offline_tests": "25 passed",
+    "ruff": "pass",
+    "ty": "pass",
+    "read_only_live_search_smoke": "EN/DE/FR unscoped exact-phrase queries found target new editions; every returned citation verified;253.02/81.70/96.47ms",
+    "reader_smoke": "Real Chromium pilot readers on PT/FR/SV and SV/DE/EN: canonical DOM text/headings/no-image notices passed"
+  },
+  "running_acquisition_processes": 0,
+  "next_task": "Cached CC0 Wikidata exact P2034 and bounded edition/work-root proposals; no automatic production work-ID/epoch/count changes",
+  "cumulative_source_stage_counts": {
+    "discovered_or_registered": 7000,
+    "downloaded": 7000,
+    "processed": 7000,
+    "searchable_indexed": 7000
+  },
+  "current_source_status_counts": {
+    "indexed": 7000,
+    "failed": 0,
+    "deferred": 0,
+    "canonical_duplicates": 0,
+    "not_registered": 0
+  }
+}
