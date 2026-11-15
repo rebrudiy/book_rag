@@ -7,6 +7,7 @@ transfers at most32 inputs/float32 vectors per request, with finite deadlines.
 from __future__ import annotations
 
 import hashlib
+import importlib
 import importlib.metadata
 import inspect
 import json
@@ -94,8 +95,8 @@ def _worker(connection: Connection, settings: dict[str, Any]) -> None:
         snapshot, files = model_snapshot(Path(settings["cache"]))
         before = {str(path): file_sha256(path) for path in files}
         import numpy as np
-        import torch
-        from sentence_transformers import SentenceTransformer
+        torch = importlib.import_module("torch")
+        SentenceTransformer = importlib.import_module("sentence_transformers").SentenceTransformer
 
         from book_rag.semantic import _windows, token_windows
         from book_rag.semantic_pilot import prepare_windows

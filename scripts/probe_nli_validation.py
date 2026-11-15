@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import importlib
 import json
 import os
 import signal
@@ -155,8 +156,8 @@ def worker(args: argparse.Namespace) -> int:
             model_load_seconds=round(predictor.load_seconds, 3),
         )
         _save(args.output, report)
-    import torch
-    import transformers
+    torch = importlib.import_module("torch")
+    transformers = importlib.import_module("transformers")
 
     devices = sorted({str(parameter.device) for parameter in predictor.model.parameters()})
     dtypes = sorted({str(parameter.dtype) for parameter in predictor.model.parameters()})

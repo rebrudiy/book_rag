@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import importlib
 import json
 import os
 import resource
@@ -121,8 +122,8 @@ def worker(args: argparse.Namespace) -> None:
     before = footprint(protected)
     started = time.perf_counter()
     import numpy as np
-    import torch
-    from sentence_transformers import SentenceTransformer
+    torch = importlib.import_module("torch")
+    SentenceTransformer = importlib.import_module("sentence_transformers").SentenceTransformer
 
     torch.set_num_threads(2)
     if args.device == "mps" and not torch.backends.mps.is_available():

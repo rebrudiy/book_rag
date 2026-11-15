@@ -7,6 +7,7 @@ No production answer code imports this module.
 from __future__ import annotations
 
 import hashlib
+import importlib
 import json
 import math
 import os
@@ -275,16 +276,16 @@ class NLIPredictor:
         os.environ["HF_HUB_OFFLINE"] = "1"
         os.environ["TRANSFORMERS_OFFLINE"] = "1"
         os.environ["TOKENIZERS_PARALLELISM"] = "false"
-        import torch
-        from transformers import AutoModelForSequenceClassification, AutoTokenizer
+        torch = importlib.import_module("torch")
+        transformers = importlib.import_module("transformers")
 
         torch.set_num_threads(2)
         if torch.get_num_interop_threads() != 1:
             torch.set_num_interop_threads(1)
-        self.tokenizer = AutoTokenizer.from_pretrained(
+        self.tokenizer = transformers.AutoTokenizer.from_pretrained(
             str(self.directory.resolve()), local_files_only=True, trust_remote_code=False, use_fast=True
         )
-        self.model = AutoModelForSequenceClassification.from_pretrained(
+        self.model = transformers.AutoModelForSequenceClassification.from_pretrained(
             str(self.directory.resolve()),
             local_files_only=True,
             trust_remote_code=False,
@@ -314,7 +315,7 @@ class NLIPredictor:
                 "scores": None,
                 "truncated": False,
             }
-        import torch
+        torch = importlib.import_module("torch")
 
         started = time.monotonic()
         inputs = {key: torch.tensor([value], dtype=torch.long, device="cpu") for key, value in encoded.items()}
