@@ -1,0 +1,14 @@
+{
+  "status": "complete",
+  "validated": true,
+  "dataset_sha256": "8955a6cf471318fa70d24f518c3a08f410865f9a9f4a751f47d29de3a94deb44",
+  "script_sha256": "9619576379906fa2e4480bcb4251ddda1f98b3e65e700da20c9e8ee3d7c9c4d4",
+  "id": "expanded-negative-10",
+  "index": 54,
+  "total": 54,
+  "mode": "hybrid",
+  "event": "query_finished",
+  "updated_at": "2026-11-14T23:18:10.031830+00:00",
+  "actual_mode": "lexical",
+  "elapsed_ms": 18.492
+}

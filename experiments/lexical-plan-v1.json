@@ -1,0 +1,441 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-11-14T22:50:39.223464+00:00",
+  "kind": "readonly_sql_plan_prototype_not_production_promotion",
+  "sqlite_version": "3.53.2",
+  "source": {
+    "snapshot": "data/snapshots/curated20-v3",
+    "indexed_editions": 20,
+    "passages": 12108,
+    "database_mode": "mode=ro&immutable=1; query_only=ON",
+    "full_database_sha256_rechecked": false,
+    "stat_identity_unchanged": true,
+    "legacy_projection": "empty source_pipeline; section_translator default empty string; no source migration"
+  },
+  "implementation_sha256": {
+    "scripts/benchmark_lexical_plan.py": "0b1cf336b624be845aef84dde106e2605dd3f599e6737871a1763e627a1d83a2",
+    "src/book_rag/library.py": "f7c913376a57222d8ace55162b24def3c3d9a56deb71cb6262272eb70d77b3b9"
+  },
+  "cases": [
+    {
+      "case": {
+        "name": "global-man",
+        "query": "man",
+        "book_id": null,
+        "language": null,
+        "mode": "lexical",
+        "limit": 5
+      },
+      "candidate_limit": 200,
+      "variants": {
+        "control": {
+          "milliseconds": [
+            21.807,
+            21.893
+          ],
+          "median_ms": 21.85,
+          "instrumented_quote_evaluations": 811,
+          "speedup_vs_same_query_control": 1.0,
+          "query_plan": [
+            "MATERIALIZE i",
+            "SCAN CONSTANT ROW",
+            "SCAN passage_fts VIRTUAL TABLE INDEX 0:M4",
+            "SEARCH p USING INTEGER PRIMARY KEY (rowid=?)",
+            "SEARCH b USING INDEX sqlite_autoindex_books_1 (id=?)",
+            "SCAN i LEFT-JOIN",
+            "SEARCH s USING INTEGER PRIMARY KEY (rowid=?)",
+            "SEARCH a USING INTEGER PRIMARY KEY (rowid=?) LEFT-JOIN",
+            "USE TEMP B-TREE FOR ORDER BY"
+          ],
+          "sql_sha256": "b6eaae1bf0e6db8e79e5013aebe1aaf8cb1bd4d9b8c20900d6c3d9f6d613b716",
+          "guard": {
+            "all_exact": true,
+            "bm25_hex_sha256": "22b5a7da8500d6435929308e81255a371b4d43aeb73039312b567ae1be0dd155",
+            "hydrated_records_sha256": "ffdff3fa52b1b37c4e5ef0d253c5fedae2a50a83da963682501bbaafe1ae9892",
+            "final_results_sha256": "994a323e40e396bf6a75deca62df647fba564aeecef3b354de2c318336bba4f6",
+            "returned_candidates": 200,
+            "verified_final_ids": [
+              218713,
+              228774,
+              227721,
+              226291,
+              227684
+            ]
+          }
+        },
+        "materialized": {
+          "milliseconds": [
+            11.723,
+            11.721
+          ],
+          "median_ms": 11.722000000000001,
+          "instrumented_quote_evaluations": 200,
+          "speedup_vs_same_query_control": 1.864,
+          "query_plan": [
+            "MATERIALIZE candidates",
+            "SCAN passage_fts VIRTUAL TABLE INDEX 0:M4",
+            "SEARCH p USING INTEGER PRIMARY KEY (rowid=?)",
+            "SEARCH b USING INDEX sqlite_autoindex_books_1 (id=?)",
+            "SEARCH s USING INTEGER PRIMARY KEY (rowid=?)",
+            "USE TEMP B-TREE FOR ORDER BY",
+            "MATERIALIZE i",
+            "SCAN CONSTANT ROW",
+            "SCAN c",
+            "SEARCH p USING INTEGER PRIMARY KEY (rowid=?)",
+            "SEARCH b USING INDEX sqlite_autoindex_books_1 (id=?)",
+            "SCAN i LEFT-JOIN",
+            "SEARCH s USING INTEGER PRIMARY KEY (rowid=?)",
+            "SEARCH a USING INTEGER PRIMARY KEY (rowid=?) LEFT-JOIN",
+            "USE TEMP B-TREE FOR LAST TERM OF ORDER BY"
+          ],
+          "sql_sha256": "9d698e3351ae696fabcfc2f0b0beeea28f95ff22bb2c5ad094445d4b8ea06d52",
+          "guard": {
+            "all_exact": true,
+            "bm25_hex_sha256": "22b5a7da8500d6435929308e81255a371b4d43aeb73039312b567ae1be0dd155",
+            "hydrated_records_sha256": "ffdff3fa52b1b37c4e5ef0d253c5fedae2a50a83da963682501bbaafe1ae9892",
+            "final_results_sha256": "994a323e40e396bf6a75deca62df647fba564aeecef3b354de2c318336bba4f6",
+            "returned_candidates": 200,
+            "verified_final_ids": [
+              218713,
+              228774,
+              227721,
+              226291,
+              227684
+            ]
+          }
+        },
+        "pure_fts_eligible": {
+          "milliseconds": [
+            12.92,
+            12.68
+          ],
+          "median_ms": 12.8,
+          "instrumented_quote_evaluations": 200,
+          "speedup_vs_same_query_control": 1.707,
+          "query_plan": [
+            "MATERIALIZE candidates",
+            "SCAN passage_fts VIRTUAL TABLE INDEX 0:M4",
+            "CORRELATED SCALAR SUBQUERY 1",
+            "SEARCH p USING INTEGER PRIMARY KEY (rowid=?)",
+            "SEARCH b USING INDEX sqlite_autoindex_books_1 (id=?)",
+            "SEARCH s USING INTEGER PRIMARY KEY (rowid=?)",
+            "USE TEMP B-TREE FOR ORDER BY",
+            "MATERIALIZE i",
+            "SCAN CONSTANT ROW",
+            "SCAN c",
+            "SEARCH p USING INTEGER PRIMARY KEY (rowid=?)",
+            "SEARCH b USING INDEX sqlite_autoindex_books_1 (id=?)",
+            "SCAN i LEFT-JOIN",
+            "SEARCH s USING INTEGER PRIMARY KEY (rowid=?)",
+            "SEARCH a USING INTEGER PRIMARY KEY (rowid=?) LEFT-JOIN",
+            "USE TEMP B-TREE FOR LAST TERM OF ORDER BY"
+          ],
+          "sql_sha256": "182da8013acbc5be4751fa3ae7de3538653424590dca0a64013e502e499640e9",
+          "guard": {
+            "all_exact": true,
+            "bm25_hex_sha256": "22b5a7da8500d6435929308e81255a371b4d43aeb73039312b567ae1be0dd155",
+            "hydrated_records_sha256": "ffdff3fa52b1b37c4e5ef0d253c5fedae2a50a83da963682501bbaafe1ae9892",
+            "final_results_sha256": "994a323e40e396bf6a75deca62df647fba564aeecef3b354de2c318336bba4f6",
+            "returned_candidates": 200,
+            "verified_final_ids": [
+              218713,
+              228774,
+              227721,
+              226291,
+              227684
+            ]
+          }
+        }
+      }
+    },
+    {
+      "case": {
+        "name": "scoped-meditations-man",
+        "query": "man",
+        "book_id": "pg2680-full",
+        "language": null,
+        "mode": "lexical",
+        "limit": 5
+      },
+      "candidate_limit": 200,
+      "variants": {
+        "control": {
+          "milliseconds": [
+            51.192,
+            8.959
+          ],
+          "median_ms": 30.075499999999998,
+          "instrumented_quote_evaluations": 197,
+          "speedup_vs_same_query_control": 1.0,
+          "query_plan": [
+            "MATERIALIZE i",
+            "SCAN CONSTANT ROW",
+            "SCAN passage_fts VIRTUAL TABLE INDEX 0:M4",
+            "SEARCH p USING INTEGER PRIMARY KEY (rowid=?)",
+            "SEARCH b USING INDEX sqlite_autoindex_books_1 (id=?)",
+            "SCAN i LEFT-JOIN",
+            "SEARCH s USING INTEGER PRIMARY KEY (rowid=?)",
+            "SEARCH a USING INTEGER PRIMARY KEY (rowid=?) LEFT-JOIN",
+            "USE TEMP B-TREE FOR ORDER BY"
+          ],
+          "sql_sha256": "b6eaae1bf0e6db8e79e5013aebe1aaf8cb1bd4d9b8c20900d6c3d9f6d613b716",
+          "guard": {
+            "all_exact": true,
+            "bm25_hex_sha256": "ce394ea6d6a9e3f55ef3ea3adfced0e7738fa7d613d33b6216e087329fab69a3",
+            "hydrated_records_sha256": "741703c0ddadd271dea5abadf4060ec80b8d15128cf2c26c6b17e2144e701d5d",
+            "final_results_sha256": "2442b0059e2256407120e3fc5f52d71335915eda2834d14009741e101e00f6df",
+            "returned_candidates": 197,
+            "verified_final_ids": [
+              218713,
+              218929,
+              218699,
+              218639,
+              218677
+            ]
+          }
+        },
+        "materialized": {
+          "milliseconds": [
+            11.791,
+            9.384
+          ],
+          "median_ms": 10.5875,
+          "instrumented_quote_evaluations": 197,
+          "speedup_vs_same_query_control": 2.841,
+          "query_plan": [
+            "MATERIALIZE candidates",
+            "SCAN passage_fts VIRTUAL TABLE INDEX 0:M4",
+            "SEARCH p USING INTEGER PRIMARY KEY (rowid=?)",
+            "SEARCH b USING INDEX sqlite_autoindex_books_1 (id=?)",
+            "SEARCH s USING INTEGER PRIMARY KEY (rowid=?)",
+            "USE TEMP B-TREE FOR ORDER BY",
+            "MATERIALIZE i",
+            "SCAN CONSTANT ROW",
+            "SCAN c",
+            "SEARCH p USING INTEGER PRIMARY KEY (rowid=?)",
+            "SEARCH b USING INDEX sqlite_autoindex_books_1 (id=?)",
+            "SCAN i LEFT-JOIN",
+            "SEARCH s USING INTEGER PRIMARY KEY (rowid=?)",
+            "SEARCH a USING INTEGER PRIMARY KEY (rowid=?) LEFT-JOIN",
+            "USE TEMP B-TREE FOR LAST TERM OF ORDER BY"
+          ],
+          "sql_sha256": "9d698e3351ae696fabcfc2f0b0beeea28f95ff22bb2c5ad094445d4b8ea06d52",
+          "guard": {
+            "all_exact": true,
+            "bm25_hex_sha256": "ce394ea6d6a9e3f55ef3ea3adfced0e7738fa7d613d33b6216e087329fab69a3",
+            "hydrated_records_sha256": "741703c0ddadd271dea5abadf4060ec80b8d15128cf2c26c6b17e2144e701d5d",
+            "final_results_sha256": "2442b0059e2256407120e3fc5f52d71335915eda2834d14009741e101e00f6df",
+            "returned_candidates": 197,
+            "verified_final_ids": [
+              218713,
+              218929,
+              218699,
+              218639,
+              218677
+            ]
+          }
+        },
+        "materialized_envelope": {
+          "milliseconds": [
+            7.094,
+            7.36
+          ],
+          "median_ms": 7.227,
+          "instrumented_quote_evaluations": 197,
+          "speedup_vs_same_query_control": 4.162,
+          "query_plan": [
+            "MATERIALIZE candidates",
+            "SCAN passage_fts VIRTUAL TABLE INDEX 0:M4><",
+            "SEARCH p USING INTEGER PRIMARY KEY (rowid=?)",
+            "SEARCH b USING INDEX sqlite_autoindex_books_1 (id=?)",
+            "SEARCH s USING INTEGER PRIMARY KEY (rowid=?)",
+            "USE TEMP B-TREE FOR ORDER BY",
+            "MATERIALIZE i",
+            "SCAN CONSTANT ROW",
+            "SCAN c",
+            "SEARCH p USING INTEGER PRIMARY KEY (rowid=?)",
+            "SEARCH b USING INDEX sqlite_autoindex_books_1 (id=?)",
+            "SCAN i LEFT-JOIN",
+            "SEARCH s USING INTEGER PRIMARY KEY (rowid=?)",
+            "SEARCH a USING INTEGER PRIMARY KEY (rowid=?) LEFT-JOIN",
+            "USE TEMP B-TREE FOR LAST TERM OF ORDER BY"
+          ],
+          "sql_sha256": "3bf86cbdaa902ffe340480bd977e51f0587bff8c7570379f6a22114de30a1389",
+          "guard": {
+            "all_exact": true,
+            "bm25_hex_sha256": "ce394ea6d6a9e3f55ef3ea3adfced0e7738fa7d613d33b6216e087329fab69a3",
+            "hydrated_records_sha256": "741703c0ddadd271dea5abadf4060ec80b8d15128cf2c26c6b17e2144e701d5d",
+            "final_results_sha256": "2442b0059e2256407120e3fc5f52d71335915eda2834d14009741e101e00f6df",
+            "returned_candidates": 197,
+            "verified_final_ids": [
+              218713,
+              218929,
+              218699,
+              218639,
+              218677
+            ]
+          }
+        }
+      }
+    },
+    {
+      "case": {
+        "name": "scoped-origin-struggle",
+        "query": "struggle for existence",
+        "book_id": "pg1228-full",
+        "language": null,
+        "mode": "lexical",
+        "limit": 5
+      },
+      "candidate_limit": 200,
+      "variants": {
+        "control": {
+          "milliseconds": [
+            13.223,
+            13.193
+          ],
+          "median_ms": 13.208,
+          "instrumented_quote_evaluations": 451,
+          "speedup_vs_same_query_control": 1.0,
+          "query_plan": [
+            "MATERIALIZE i",
+            "SCAN CONSTANT ROW",
+            "SCAN passage_fts VIRTUAL TABLE INDEX 0:M4",
+            "SEARCH p USING INTEGER PRIMARY KEY (rowid=?)",
+            "SEARCH b USING INDEX sqlite_autoindex_books_1 (id=?)",
+            "SCAN i LEFT-JOIN",
+            "SEARCH s USING INTEGER PRIMARY KEY (rowid=?)",
+            "SEARCH a USING INTEGER PRIMARY KEY (rowid=?) LEFT-JOIN",
+            "USE TEMP B-TREE FOR ORDER BY"
+          ],
+          "sql_sha256": "b6eaae1bf0e6db8e79e5013aebe1aaf8cb1bd4d9b8c20900d6c3d9f6d613b716",
+          "guard": {
+            "all_exact": true,
+            "bm25_hex_sha256": "6616c6ce8a0de5c33621840e275c60d8eb020ae63c5416aa471196e84bad92ea",
+            "hydrated_records_sha256": "ad908f8a37525aed6aeec5ff6d7724d2d79c8de2ce0ff471a405bd90771f270d",
+            "final_results_sha256": "bf4522dbe966561949e6bb585f62d4095434ff4b5bb980601653b75c3154935c",
+            "returned_candidates": 200,
+            "verified_final_ids": [
+              217957,
+              217958,
+              217967,
+              217954,
+              217977
+            ]
+          }
+        },
+        "materialized": {
+          "milliseconds": [
+            7.55,
+            7.497
+          ],
+          "median_ms": 7.5235,
+          "instrumented_quote_evaluations": 200,
+          "speedup_vs_same_query_control": 1.756,
+          "query_plan": [
+            "MATERIALIZE candidates",
+            "SCAN passage_fts VIRTUAL TABLE INDEX 0:M4",
+            "SEARCH p USING INTEGER PRIMARY KEY (rowid=?)",
+            "SEARCH b USING INDEX sqlite_autoindex_books_1 (id=?)",
+            "SEARCH s USING INTEGER PRIMARY KEY (rowid=?)",
+            "USE TEMP B-TREE FOR ORDER BY",
+            "MATERIALIZE i",
+            "SCAN CONSTANT ROW",
+            "SCAN c",
+            "SEARCH p USING INTEGER PRIMARY KEY (rowid=?)",
+            "SEARCH b USING INDEX sqlite_autoindex_books_1 (id=?)",
+            "SCAN i LEFT-JOIN",
+            "SEARCH s USING INTEGER PRIMARY KEY (rowid=?)",
+            "SEARCH a USING INTEGER PRIMARY KEY (rowid=?) LEFT-JOIN",
+            "USE TEMP B-TREE FOR LAST TERM OF ORDER BY"
+          ],
+          "sql_sha256": "9d698e3351ae696fabcfc2f0b0beeea28f95ff22bb2c5ad094445d4b8ea06d52",
+          "guard": {
+            "all_exact": true,
+            "bm25_hex_sha256": "6616c6ce8a0de5c33621840e275c60d8eb020ae63c5416aa471196e84bad92ea",
+            "hydrated_records_sha256": "ad908f8a37525aed6aeec5ff6d7724d2d79c8de2ce0ff471a405bd90771f270d",
+            "final_results_sha256": "bf4522dbe966561949e6bb585f62d4095434ff4b5bb980601653b75c3154935c",
+            "returned_candidates": 200,
+            "verified_final_ids": [
+              217957,
+              217958,
+              217967,
+              217954,
+              217977
+            ]
+          }
+        },
+        "materialized_envelope": {
+          "milliseconds": [
+            6.728,
+            6.828
+          ],
+          "median_ms": 6.7780000000000005,
+          "instrumented_quote_evaluations": 200,
+          "speedup_vs_same_query_control": 1.949,
+          "query_plan": [
+            "MATERIALIZE candidates",
+            "SCAN passage_fts VIRTUAL TABLE INDEX 0:M4><",
+            "SEARCH p USING INTEGER PRIMARY KEY (rowid=?)",
+            "SEARCH b USING INDEX sqlite_autoindex_books_1 (id=?)",
+            "SEARCH s USING INTEGER PRIMARY KEY (rowid=?)",
+            "USE TEMP B-TREE FOR ORDER BY",
+            "MATERIALIZE i",
+            "SCAN CONSTANT ROW",
+            "SCAN c",
+            "SEARCH p USING INTEGER PRIMARY KEY (rowid=?)",
+            "SEARCH b USING INDEX sqlite_autoindex_books_1 (id=?)",
+            "SCAN i LEFT-JOIN",
+            "SEARCH s USING INTEGER PRIMARY KEY (rowid=?)",
+            "SEARCH a USING INTEGER PRIMARY KEY (rowid=?) LEFT-JOIN",
+            "USE TEMP B-TREE FOR LAST TERM OF ORDER BY"
+          ],
+          "sql_sha256": "3bf86cbdaa902ffe340480bd977e51f0587bff8c7570379f6a22114de30a1389",
+          "guard": {
+            "all_exact": true,
+            "bm25_hex_sha256": "6616c6ce8a0de5c33621840e275c60d8eb020ae63c5416aa471196e84bad92ea",
+            "hydrated_records_sha256": "ad908f8a37525aed6aeec5ff6d7724d2d79c8de2ce0ff471a405bd90771f270d",
+            "final_results_sha256": "bf4522dbe966561949e6bb585f62d4095434ff4b5bb980601653b75c3154935c",
+            "returned_candidates": 200,
+            "verified_final_ids": [
+              217957,
+              217958,
+              217967,
+              217954,
+              217977
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "synthetic": {
+    "passages": 2410,
+    "cases": 6,
+    "all_guards_exact": true,
+    "features": [
+      "original_CC0",
+      "Unicode_offsets",
+      "noncontiguous_book_ids",
+      "nonindexed_books",
+      "missing_FTS_passage",
+      "orphan_book",
+      "orphan_section",
+      "corrupt_quote_hash",
+      "editorial_and_translation_attribution",
+      "failed_refresh_old_indexed_edition"
+    ]
+  },
+  "limitations": [
+    "Warm same-process paired SQL timings; no cold-cache or live 4k throughput claim.",
+    "Timed construction includes rowid-envelope index seeks and schema compatibility inspection.",
+    "The legacy frozen source uses read-only empty/default projections for later schema columns.",
+    "Indexed status and section eligibility precede LIMIT; ancillary roles/pipeline hydrate later.",
+    "A rowid envelope is only a bound; exact book/language/status/section eligibility remains mandatory.",
+    "Quote-probe counts use a separate instrumented pass, never the timed SQL.",
+    "SQLite query-plan descriptions are version-specific diagnostics, not a stable application API.",
+    "No core code, live corpus, final-test set, models or indexes were changed.",
+    "Two timed observations per frozen20 variant; Meditations control has a 51.192ms/8.959ms outlier pair, so its median ratio is not a stable speedup estimate.",
+    "Original source arrays/models and the live3991 library were not opened or queried by this benchmark."
+  ]
+}

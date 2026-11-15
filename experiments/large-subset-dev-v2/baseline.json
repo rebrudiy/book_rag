@@ -1,0 +1,1315 @@
+{
+  "schema_version": 1,
+  "evaluation_input": {
+    "source_directory": "/Users/rebrudiy/book_rag/data/full",
+    "source_database_sha256": "f4332904dbef180cef2f5fcd03a257ee6a3546125b128fed050806b0bb1d6e12",
+    "source_sqlite_files_sha256": {
+      "library.sqlite3": "f4332904dbef180cef2f5fcd03a257ee6a3546125b128fed050806b0bb1d6e12"
+    },
+    "copied_database_bytes": 5367955456,
+    "database_access": "owned migrated copy; read-only evaluation connections",
+    "vector_generation": "gen-1812f290f02e09f392e2c880bbcee602de30282ec4ad406300e1c6ff1393555f-a8b86bbaa7d0",
+    "active_metadata_sha256": "12c07f5fd54799f1cd3d5d05457e3690df7b84043651e168593bb117424d22f7",
+    "vector_access": "selected generation reused without copying; mmap_mode=r",
+    "reused_vector_bytes": 3054341798,
+    "model_cache_access": "owned metadata cache; large completed files reused by reference",
+    "model_cache_reuse": {
+      "linked_files": 9,
+      "linked_bytes": 1482343568,
+      "copied_files": 57,
+      "copied_bytes": 689500
+    },
+    "partial_index_reference": {
+      "validation": "original checkpointed read-only immutable reference",
+      "evidence": "owned migrated SQLite copy",
+      "generation": "original immutable files; mmap_mode=r",
+      "coordination_sidecars": "SHM and empty WAL are not canonical inputs; immutable reads never open them"
+    },
+    "preparation_seconds": 10.294925
+  },
+  "created_at": "2026-11-14T23:16:49.561145+00:00",
+  "dataset": "dev-expanded.json",
+  "dataset_sha256": "8955a6cf471318fa70d24f518c3a08f410865f9a9f4a751f47d29de3a94deb44",
+  "split": "dev",
+  "mode": "baseline",
+  "actual_search_modes": {
+    "baseline": 54
+  },
+  "embedding_models": [],
+  "environment": {
+    "python": "3.12.12",
+    "platform": "macOS-26.6.2-arm64-arm-64bit"
+  },
+  "implementation_sha256": {
+    "__init__.py": "75f47d5ed1cd9a5bbcae9f15abdf4122ce48bd6ca996d1a795c26ecc5a82ea96",
+    "api.py": "fb0f89102caa903569e907a5b38d6eb01eae22a3a3cd00f997e5c21a4e94e7f7",
+    "artifacts.py": "f7254ca2ae60ea7b309cbb06f4703b46a39bf8588ff70935679f24150111cd47",
+    "attribution.py": "d44814a74a7fbb3fd91f95ddabe14fd39c4e441e490ed02bf36de4c498d6a953",
+    "authority_audit.py": "459644d0aef98fa0871b245af2047a7db02f58cea70ea891b9194edca576f244",
+    "calibration.py": "77fe2569e5c449d3e758686440e6a205de617df77a5d467b9fd62039424e9a0f",
+    "canonical_versions.py": "97ad8b045023e6837139fca3281b94413fe0e8e41d285ca7e1cc84785fe32d11",
+    "catalog.py": "96a84adadb383abcdba667e4329f3adf1ba71aa4ef38a6c152b467d188eb823b",
+    "cli.py": "e990721b1a7903af8e93f13129533f6b8374d402c2e32f33bbebd456018d239a",
+    "config.py": "913d11f0397cd2ba78ac518890dd39aa8256feb092bba168fd0aa464136f7144",
+    "corpus_planning.py": "f23e9b9e6f38f6b764005918328e2ceee14748233c4509bb617396dbad8e6093",
+    "embedding_profiles.py": "f12a8d92767f3ca0b7dba8181c231db612d341ef11fc734a348fb56d228b9e0d",
+    "evaluation.py": "b4d75a03ee6d7cb82e479d85ff0cec56e8e6cea77b913a5a2eb05659ea028535",
+    "explore.py": "35cc481c26d2a6b21ef27e34ce36b23a3d763d9decf8b0bab9b12ada17ba46e2",
+    "exporting.py": "ba4d2ae53fdfc1686d1407d17648bd1933f24045b478a37aa1b33580221d8b08",
+    "index_coverage.py": "3b269c26b0417874559f63f4def0bb13cfb9d0cc191d2acacc2ce70e95c92216",
+    "index_installation.py": "2bcd30235b27365b7915d75da788d01684be64dc72b935c180e136b9a08cf8db",
+    "integrity.py": "257a977d1df8a91d06e3b1ecf03ae246c4eadef1f26d67674c951aeb38ca2f26",
+    "library.py": "68ab698b046ec06483b96a50a12bd55426a32c63c24c33ef208ef4931e3d8843",
+    "modern_sources.py": "0ac2b7c24127907e3de287717a373147fea16567c91739f7d97a2185bdf5c26b",
+    "parsers.py": "d5fc18a6dca4569de494e166933904b67f2bd50a5f45a671827badcec7609718",
+    "reranking.py": "8584e76239d4cc4b84349cef360ec805c179ac5eab4fa9fda6f00fb459724873",
+    "retrieval.py": "bc65b445a6d8d85c72c3c9c956d91e132a58161c7ea5afae42ea120793afa24a",
+    "russian_short_sources.py": "d36fa1f439d6ae3dcf0c0cc45fd3e7bff8d1f2b117ec983686ca8c4718740c27",
+    "russian_sources.py": "146c52dfe0d5aedf7655f4f4e1692564185a0cee0e98a6ebb89b9fba58c2d5c4",
+    "semantic.py": "3d2ff8b293e9d01cf28890e442002e6989206ba41cfcfed0a8083b771ec644f2",
+    "snapshots.py": "c51a51a600e6d878b94e16989cf5a1f131b77160968476406adecb612b8e26e0",
+    "source_variants.py": "dc279c83b364b10e2b732a6e177b5769f48eaae5e41bf9957945ad0ac8dbe66e",
+    "sources.py": "432e4309ff98c5deb6becec728e332e4ef2d02a55bb5edf2668f348900fbb63e",
+    "vector_reuse.py": "cb369950b70a0df757c1be1383c5d989827a815bd69b7fe5448c2c9b89450f6a",
+    "wikibooks_sources.py": "f9d31f7cd2f9e78fa5aa578a0e5b74d637423998c923f03a32c40b3bb7ad1a7c",
+    "wikimedia_dump.py": "35da1d510dcfb1d501214f32db95829861c90d926fe22729c418b1cb8182486f",
+    "work_identity.py": "d537a3fdc53d6ef8fe90e1569a64fe875c1b474071c3c7a45d8023dd9407a6b4"
+  },
+  "k": 5,
+  "corpus": {
+    "books": 3991,
+    "searchable_books": 3991,
+    "works": 3987,
+    "passages": 1401120,
+    "status_counts": {
+      "indexed": 3991
+    },
+    "ingestion_status_counts": {
+      "indexed": 3991
+    },
+    "coverage_counts": {
+      "full": 3989,
+      "partial": 1,
+      "selected_chapters": 1
+    },
+    "work_count_is_provisional": true,
+    "curated_work_groups": 25,
+    "confirmed_full_works_lower_bound": 24,
+    "periodical_editions": 60,
+    "languages": [
+      {
+        "language": "de",
+        "count": 1009
+      },
+      {
+        "language": "en",
+        "count": 1940
+      },
+      {
+        "language": "fr",
+        "count": 1031
+      },
+      {
+        "language": "ru",
+        "count": 11
+      }
+    ]
+  },
+  "corpus_sha256": "6fec59a830b3f4cc6d9eab9b59dbd15dc9a852224b4c2c573b4ecb965288c8d6",
+  "queries": 54,
+  "answerable_queries": 44,
+  "negative_queries": 10,
+  "metrics": {
+    "mrr_at_k": 0.5803030303030303,
+    "hit_at_k": 0.6818181818181818,
+    "work_recall_at_k": 0.8522727272727273,
+    "precision_at_k": 0.15454545454545457,
+    "negative_abstention_accuracy": 0.4,
+    "quote_exact_rate": 1.0,
+    "metadata_exact_rate": 1.0,
+    "reader_anchor_exact_rate": 1.0,
+    "returned_passages": 235,
+    "latency_p50_ms": 116.295,
+    "latency_p95_ms": 12921.051,
+    "elapsed_seconds": 148.738,
+    "process_peak_rss_mib": 157.2
+  },
+  "by_type": {
+    "approx_book_description": {
+      "queries": 2,
+      "mrr_at_k": 1.0,
+      "hit_at_k": 1.0
+    },
+    "argument": {
+      "queries": 5,
+      "mrr_at_k": 0.8,
+      "hit_at_k": 0.8
+    },
+    "compare": {
+      "queries": 4,
+      "mrr_at_k": 0.0625,
+      "hit_at_k": 0.25
+    },
+    "cross_language": {
+      "queries": 12,
+      "mrr_at_k": 0.23611111111111113,
+      "hit_at_k": 0.3333333333333333
+    },
+    "exact_quote": {
+      "queries": 5,
+      "mrr_at_k": 0.75,
+      "hit_at_k": 1.0
+    },
+    "explanation": {
+      "queries": 4,
+      "mrr_at_k": 0.675,
+      "hit_at_k": 1.0
+    },
+    "footnote": {
+      "queries": 2,
+      "mrr_at_k": 1.0,
+      "hit_at_k": 1.0
+    },
+    "idea": {
+      "queries": 3,
+      "mrr_at_k": 1.0,
+      "hit_at_k": 1.0
+    },
+    "scene": {
+      "queries": 5,
+      "mrr_at_k": 0.6,
+      "hit_at_k": 0.6
+    },
+    "source_role": {
+      "queries": 2,
+      "mrr_at_k": 1.0,
+      "hit_at_k": 1.0
+    }
+  },
+  "by_language": {
+    "de": {
+      "queries": 5,
+      "mrr_at_k": 0.36666666666666664
+    },
+    "en": {
+      "queries": 29,
+      "mrr_at_k": 0.6793103448275862
+    },
+    "fr": {
+      "queries": 5,
+      "mrr_at_k": 0.6
+    },
+    "ru": {
+      "queries": 5,
+      "mrr_at_k": 0.2
+    }
+  },
+  "cases": [
+    {
+      "id": "expanded-01",
+      "query": "\"Sentence first—verdict afterwards\"",
+      "type": "exact_quote",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 0.5,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        1281812,
+        885025,
+        2449758,
+        2396721,
+        2555814
+      ],
+      "elapsed_ms": 8750.58,
+      "warnings": []
+    },
+    {
+      "id": "expanded-02",
+      "query": "\"My affections and wishes are unchanged\"",
+      "type": "exact_quote",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 1.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        1094270,
+        1053168,
+        1223455,
+        2542925,
+        909662
+      ],
+      "elapsed_ms": 10718.401,
+      "warnings": []
+    },
+    {
+      "id": "expanded-03",
+      "query": "\"There is grandeur in this view of life\"",
+      "type": "exact_quote",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 0.25,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        1041909,
+        2519615,
+        1285703,
+        1078120,
+        1307921
+      ],
+      "elapsed_ms": 15265.253,
+      "warnings": []
+    },
+    {
+      "id": "expanded-04",
+      "query": "How does Marcus Aurelius compare accepting death with leaving a play after three acts?",
+      "type": "idea",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 1.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        1051239,
+        1050964,
+        1051050,
+        1051051,
+        1051040
+      ],
+      "elapsed_ms": 142.964,
+      "warnings": []
+    },
+    {
+      "id": "expanded-05",
+      "query": "Pourquoi le travail protège-t-il de l’ennui, du vice et du besoin à la fin de Candide?",
+      "type": "argument",
+      "language": "fr",
+      "answerable": true,
+      "reciprocal_rank": 1.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        924763,
+        924703,
+        924761,
+        924698,
+        924759
+      ],
+      "elapsed_ms": 206.851,
+      "warnings": []
+    },
+    {
+      "id": "expanded-06",
+      "query": "Wie verletzt Gregors Vater ihn mit einem Apfel?",
+      "type": "scene",
+      "language": "de",
+      "answerable": true,
+      "reciprocal_rank": 1.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        944730,
+        944731,
+        944737,
+        944736,
+        944752
+      ],
+      "elapsed_ms": 36.689,
+      "warnings": []
+    },
+    {
+      "id": "expanded-07",
+      "query": "Найди стихотворение, в котором влюблённый мечтает превратиться в табак и попасть в табакерку красавицы.",
+      "type": "approx_book_description",
+      "language": "ru",
+      "answerable": true,
+      "reciprocal_rank": 1.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        1320860,
+        1321457,
+        1320675,
+        1321103,
+        1321065
+      ],
+      "elapsed_ms": 33.157,
+      "warnings": []
+    },
+    {
+      "id": "expanded-08",
+      "query": "Why does Adam Smith worry that repeating a few simple tasks makes workers ignorant?",
+      "type": "argument",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 0.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": false,
+      "precision_at_k": 0.0,
+      "correct_abstention": null,
+      "results": [
+        893125,
+        894447,
+        894450,
+        893225,
+        893419
+      ],
+      "elapsed_ms": 95.891,
+      "warnings": []
+    },
+    {
+      "id": "expanded-09",
+      "query": "In the sixth edition, how does Darwin argue that a complex eye can arise through useful intermediate stages?",
+      "type": "explanation",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 0.5,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        1234872,
+        1234310,
+        1234141,
+        1234834,
+        1234106
+      ],
+      "elapsed_ms": 194.869,
+      "warnings": []
+    },
+    {
+      "id": "expanded-10",
+      "query": "Find the detective story where a bell rope and a ventilator allow a snake to enter a bedroom.",
+      "type": "scene",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 0.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": false,
+      "precision_at_k": 0.0,
+      "correct_abstention": null,
+      "results": [
+        1134376,
+        1134389,
+        1134381,
+        1229821,
+        1184611
+      ],
+      "elapsed_ms": 14378.868,
+      "warnings": []
+    },
+    {
+      "id": "expanded-11",
+      "query": "Why does Frankenstein’s creature say he should have been Adam rather than a fallen angel?",
+      "type": "idea",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 1.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        972441,
+        972573,
+        972490,
+        972416,
+        972641
+      ],
+      "elapsed_ms": 179.598,
+      "warnings": []
+    },
+    {
+      "id": "expanded-12",
+      "query": "\"from hell’s heart I stab at thee\"",
+      "type": "exact_quote",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 1.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        1069053,
+        1011259,
+        1090846,
+        1292035,
+        1158875
+      ],
+      "elapsed_ms": 13127.736,
+      "warnings": []
+    },
+    {
+      "id": "expanded-13",
+      "query": "Where does the wounded Prince Andrew see the lofty sky and rethink the importance of the battle?",
+      "type": "scene",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 1.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        1303971,
+        1303993,
+        1303999,
+        1303692,
+        1305337
+      ],
+      "elapsed_ms": 10359.339,
+      "warnings": []
+    },
+    {
+      "id": "expanded-14",
+      "query": "Why does Machiavelli say a ruler is safer being feared than loved if both are impossible?",
+      "type": "argument",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 1.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        1241634,
+        1241633,
+        1241637,
+        1241635,
+        1241528
+      ],
+      "elapsed_ms": 116.961,
+      "warnings": []
+    },
+    {
+      "id": "expanded-15",
+      "query": "How does the cave image describe people unable to turn their heads toward the light?",
+      "type": "explanation",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 1.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        1247736,
+        1247170,
+        1247737,
+        1247179,
+        1247826
+      ],
+      "elapsed_ms": 131.957,
+      "warnings": []
+    },
+    {
+      "id": "expanded-16",
+      "query": "\"solitary, poore, nasty, brutish, and short\"",
+      "type": "exact_quote",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 1.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        1039062,
+        966695,
+        2552007,
+        966692,
+        1168314
+      ],
+      "elapsed_ms": 7375.272,
+      "warnings": []
+    },
+    {
+      "id": "expanded-17",
+      "query": "What is Nietzsche warning about when a person fights monsters or gazes into an abyss?",
+      "type": "idea",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 1.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        914943,
+        914941,
+        914966,
+        915059,
+        914867
+      ],
+      "elapsed_ms": 155.344,
+      "warnings": []
+    },
+    {
+      "id": "expanded-18",
+      "query": "Why does a stone dropped from a moving railway carriage follow different paths for different observers?",
+      "type": "explanation",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 0.2,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        1101981,
+        1101931,
+        1101934,
+        1101929,
+        1101928
+      ],
+      "elapsed_ms": 109.67,
+      "warnings": []
+    },
+    {
+      "id": "expanded-19",
+      "query": "Why does the Communist Manifesto describe over-production as an epidemic rather than a shortage?",
+      "type": "argument",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 1.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        1154170,
+        1154195,
+        1154174,
+        1154192,
+        1154198
+      ],
+      "elapsed_ms": 139.275,
+      "warnings": []
+    },
+    {
+      "id": "expanded-20",
+      "query": "Find the time-travel novel where future humanity has split into the Eloi and the underground Morlocks.",
+      "type": "approx_book_description",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 1.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 1.0,
+      "correct_abstention": null,
+      "results": [
+        1259672,
+        1259682,
+        1259691,
+        1259671,
+        1259670
+      ],
+      "elapsed_ms": 8700.901,
+      "warnings": []
+    },
+    {
+      "id": "expanded-cross-01",
+      "query": "Где девочка играет в крокет живыми фламинго вместо молотков и ежами вместо шаров?",
+      "type": "cross_language",
+      "language": "ru",
+      "answerable": true,
+      "reciprocal_rank": 0.0,
+      "work_recall_at_k": 0.0,
+      "hit_at_k": false,
+      "precision_at_k": 0.0,
+      "correct_abstention": null,
+      "results": [
+        1320709,
+        1321525,
+        1320798,
+        1321105,
+        1321157
+      ],
+      "elapsed_ms": 22.384,
+      "warnings": []
+    },
+    {
+      "id": "expanded-cross-02",
+      "query": "Dans quelle lettre Darcy révèle-t-il que Wickham convoitait la fortune de sa sœur?",
+      "type": "cross_language",
+      "language": "fr",
+      "answerable": true,
+      "reciprocal_rank": 0.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": false,
+      "precision_at_k": 0.0,
+      "correct_abstention": null,
+      "results": [
+        2034785,
+        1976585,
+        1928364,
+        2012435,
+        1094297
+      ],
+      "elapsed_ms": 8547.214,
+      "warnings": []
+    },
+    {
+      "id": "expanded-cross-03",
+      "query": "Wie erklärt Darwin verkümmerte Organe durch Vererbung und Nichtgebrauch?",
+      "type": "cross_language",
+      "language": "de",
+      "answerable": true,
+      "reciprocal_rank": 0.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": false,
+      "precision_at_k": 0.0,
+      "correct_abstention": null,
+      "results": [
+        1077395,
+        1077397,
+        1077655,
+        1077866,
+        1078073
+      ],
+      "elapsed_ms": 43.895,
+      "warnings": []
+    },
+    {
+      "id": "expanded-cross-04",
+      "query": "Почему Смит считает общественное образование особенно важным для простых людей?",
+      "type": "cross_language",
+      "language": "ru",
+      "answerable": true,
+      "reciprocal_rank": 0.0,
+      "work_recall_at_k": 0.0,
+      "hit_at_k": false,
+      "precision_at_k": 0.0,
+      "correct_abstention": null,
+      "results": [],
+      "elapsed_ms": 3.445,
+      "warnings": []
+    },
+    {
+      "id": "expanded-cross-05",
+      "query": "Pourquoi la créature exige-t-elle que Frankenstein lui crée une compagne?",
+      "type": "cross_language",
+      "language": "fr",
+      "answerable": true,
+      "reciprocal_rank": 0.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": false,
+      "precision_at_k": 0.0,
+      "correct_abstention": null,
+      "results": [
+        972441,
+        972429,
+        972442,
+        972518,
+        972622
+      ],
+      "elapsed_ms": 57.685,
+      "warnings": []
+    },
+    {
+      "id": "expanded-cross-06",
+      "query": "Warum weigert sich Ahab, der Rachel bei der Suche nach dem vermissten Sohn des Kapitäns zu helfen?",
+      "type": "cross_language",
+      "language": "de",
+      "answerable": true,
+      "reciprocal_rank": 0.5,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        1068980,
+        1068984,
+        1068991,
+        1068982,
+        1068983
+      ],
+      "elapsed_ms": 117.875,
+      "warnings": []
+    },
+    {
+      "id": "expanded-cross-07",
+      "query": "Как взгляд на высокое небо меняет отношение раненого Андрея к славе Наполеона?",
+      "type": "cross_language",
+      "language": "ru",
+      "answerable": true,
+      "reciprocal_rank": 0.0,
+      "work_recall_at_k": 0.0,
+      "hit_at_k": false,
+      "precision_at_k": 0.0,
+      "correct_abstention": null,
+      "results": [],
+      "elapsed_ms": 2.741,
+      "warnings": []
+    },
+    {
+      "id": "expanded-cross-08",
+      "query": "Pourquoi le prince doit-il savoir être à la fois renard et lion?",
+      "type": "cross_language",
+      "language": "fr",
+      "answerable": true,
+      "reciprocal_rank": 1.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        1241639,
+        1241652,
+        1241547,
+        1241653,
+        1241638
+      ],
+      "elapsed_ms": 93.493,
+      "warnings": []
+    },
+    {
+      "id": "expanded-cross-09",
+      "query": "Wie veranschaulichen die Gefangenen in der Höhle den Übergang von Unwissenheit zu Erkenntnis?",
+      "type": "cross_language",
+      "language": "de",
+      "answerable": true,
+      "reciprocal_rank": 0.3333333333333333,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        1247152,
+        1247179,
+        1247736,
+        1247154,
+        1247740
+      ],
+      "elapsed_ms": 107.401,
+      "warnings": []
+    },
+    {
+      "id": "expanded-cross-10",
+      "query": "Почему два удара молнии могут быть одновременными для насыпи, но не для движущегося поезда?",
+      "type": "cross_language",
+      "language": "ru",
+      "answerable": true,
+      "reciprocal_rank": 0.0,
+      "work_recall_at_k": 0.0,
+      "hit_at_k": false,
+      "precision_at_k": 0.0,
+      "correct_abstention": null,
+      "results": [],
+      "elapsed_ms": 2.695,
+      "warnings": []
+    },
+    {
+      "id": "expanded-cross-11",
+      "query": "Comment le manifeste décrit-il les crises dans lesquelles la société produit trop de marchandises?",
+      "type": "cross_language",
+      "language": "fr",
+      "answerable": true,
+      "reciprocal_rank": 1.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        1154171,
+        1154170,
+        1154176,
+        1154204,
+        1154210
+      ],
+      "elapsed_ms": 69.944,
+      "warnings": []
+    },
+    {
+      "id": "expanded-cross-12",
+      "query": "Wie hält der Zeitreisende die Morlocks mit Streichhölzern und Licht auf Abstand?",
+      "type": "cross_language",
+      "language": "de",
+      "answerable": true,
+      "reciprocal_rank": 0.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": false,
+      "precision_at_k": 0.0,
+      "correct_abstention": null,
+      "results": [
+        1259711,
+        1259708,
+        1259682,
+        1259719,
+        1259677
+      ],
+      "elapsed_ms": 51.038,
+      "warnings": []
+    },
+    {
+      "id": "expanded-note-01",
+      "query": "Which footnote identifies Cardinal Rouen as Georges d’Amboise and gives his dates?",
+      "type": "footnote",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 1.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        1241564,
+        1241588,
+        1241698,
+        1241533,
+        1241587
+      ],
+      "elapsed_ms": 135.125,
+      "warnings": []
+    },
+    {
+      "id": "expanded-note-02",
+      "query": "Find the note quoting Burd on why chapter XVIII gave greater offence than other parts of The Prince.",
+      "type": "footnote",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 1.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        1241638,
+        1241642,
+        1241708,
+        1241528,
+        1241639
+      ],
+      "elapsed_ms": 166.767,
+      "warnings": []
+    },
+    {
+      "id": "expanded-role-01",
+      "query": "How does Benjamin Jowett’s introduction compare the Republic with Plato’s Laws and other dialogues?",
+      "type": "source_role",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 1.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        1246962,
+        1247287,
+        1247032,
+        1247325,
+        1247368
+      ],
+      "elapsed_ms": 115.63,
+      "warnings": []
+    },
+    {
+      "id": "expanded-role-02",
+      "query": "Which editorial note explains why Casaubon’s own notes were omitted from this edition?",
+      "type": "source_role",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 1.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        1051267,
+        1051271,
+        1050987,
+        1050981,
+        1051270
+      ],
+      "elapsed_ms": 83.667,
+      "warnings": []
+    },
+    {
+      "id": "expanded-late-01",
+      "query": "How does the philosophy-of-history discussion propose to define freedom and necessity from observed events?",
+      "type": "argument",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 1.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        1305947,
+        1305964,
+        1305950,
+        1305966,
+        1305949
+      ],
+      "elapsed_ms": 140.629,
+      "warnings": []
+    },
+    {
+      "id": "expanded-late-02",
+      "query": "Why is a total solar eclipse useful for testing the predicted deflection of starlight?",
+      "type": "explanation",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 1.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        1102051,
+        1101998,
+        1102052,
+        1102035,
+        1102050
+      ],
+      "elapsed_ms": 102.186,
+      "warnings": []
+    },
+    {
+      "id": "expanded-late-03",
+      "query": "How does a coffin keep the surviving narrator afloat after the Pequod sinks?",
+      "type": "scene",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 0.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": false,
+      "precision_at_k": 0.0,
+      "correct_abstention": null,
+      "results": [
+        1068996,
+        1068965,
+        1068085,
+        1068995,
+        1068973
+      ],
+      "elapsed_ms": 86.117,
+      "warnings": []
+    },
+    {
+      "id": "expanded-late-04",
+      "query": "What photograph does Holmes request as his reward after Irene Adler outwits him?",
+      "type": "scene",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 1.0,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        1134125,
+        1134101,
+        1134124,
+        1134122,
+        1134121
+      ],
+      "elapsed_ms": 53.164,
+      "warnings": []
+    },
+    {
+      "id": "expanded-compare-01",
+      "query": "Compare Adam Smith and Marx on how narrow repetitive factory work changes the worker.",
+      "type": "compare",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 0.0,
+      "work_recall_at_k": 0.0,
+      "hit_at_k": false,
+      "precision_at_k": 0.0,
+      "correct_abstention": null,
+      "results": [
+        2486321,
+        2485088,
+        2485147,
+        982466,
+        2356232
+      ],
+      "elapsed_ms": 11173.979,
+      "warnings": []
+    },
+    {
+      "id": "expanded-compare-02",
+      "query": "Compare Machiavelli and Hobbes on fear, security and the force behind political order.",
+      "type": "compare",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 0.0,
+      "work_recall_at_k": 0.0,
+      "hit_at_k": false,
+      "precision_at_k": 0.0,
+      "correct_abstention": null,
+      "results": [
+        1170388,
+        2446651,
+        1168367,
+        1230627,
+        2324556
+      ],
+      "elapsed_ms": 11171.599,
+      "warnings": []
+    },
+    {
+      "id": "expanded-compare-03",
+      "query": "Compare Marcus Aurelius and Nietzsche on the danger of becoming like the people one opposes.",
+      "type": "compare",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 0.0,
+      "work_recall_at_k": 0.5,
+      "hit_at_k": false,
+      "precision_at_k": 0.0,
+      "correct_abstention": null,
+      "results": [
+        2336088,
+        1117307,
+        908444,
+        1051183,
+        2336332
+      ],
+      "elapsed_ms": 11463.856,
+      "warnings": []
+    },
+    {
+      "id": "expanded-compare-04",
+      "query": "Compare how the 1859 and sixth editions of Origin of Species explain the evolution of a complex eye.",
+      "type": "compare",
+      "language": "en",
+      "answerable": true,
+      "reciprocal_rank": 0.25,
+      "work_recall_at_k": 1.0,
+      "hit_at_k": true,
+      "precision_at_k": 0.2,
+      "correct_abstention": null,
+      "results": [
+        1077395,
+        1233981,
+        2395606,
+        1077680,
+        2227992
+      ],
+      "elapsed_ms": 12809.759,
+      "warnings": []
+    },
+    {
+      "id": "expanded-negative-01",
+      "query": "How does the captain use a gold doubloon to motivate his crew?",
+      "type": "negative",
+      "language": "en",
+      "answerable": false,
+      "reciprocal_rank": 0.0,
+      "work_recall_at_k": null,
+      "hit_at_k": false,
+      "precision_at_k": 0.0,
+      "correct_abstention": false,
+      "results": [
+        1134268,
+        1134273,
+        1134114,
+        1134193,
+        1134129
+      ],
+      "elapsed_ms": 123.677,
+      "warnings": []
+    },
+    {
+      "id": "expanded-negative-02",
+      "query": "Что письмо Дарси раскрывает о намерении Уикхема жениться на его сестре ради денег?",
+      "type": "negative",
+      "language": "ru",
+      "answerable": false,
+      "reciprocal_rank": 0.0,
+      "work_recall_at_k": null,
+      "hit_at_k": false,
+      "precision_at_k": 0.0,
+      "correct_abstention": true,
+      "results": [],
+      "elapsed_ms": 3.825,
+      "warnings": []
+    },
+    {
+      "id": "expanded-negative-03",
+      "query": "Why do covenants need a sword behind them to keep people secure?",
+      "type": "negative",
+      "language": "en",
+      "answerable": false,
+      "reciprocal_rank": 0.0,
+      "work_recall_at_k": null,
+      "hit_at_k": false,
+      "precision_at_k": 0.0,
+      "correct_abstention": false,
+      "results": [
+        1102034,
+        1101932,
+        1101978,
+        1102005,
+        1102030
+      ],
+      "elapsed_ms": 82.296,
+      "warnings": []
+    },
+    {
+      "id": "expanded-negative-04",
+      "query": "Почему Адам Смит опасается, что однообразный труд делает рабочих невежественными?",
+      "type": "negative",
+      "language": "ru",
+      "answerable": false,
+      "reciprocal_rank": 0.0,
+      "work_recall_at_k": null,
+      "hit_at_k": false,
+      "precision_at_k": 0.0,
+      "correct_abstention": true,
+      "results": [],
+      "elapsed_ms": 2.12,
+      "warnings": []
+    },
+    {
+      "id": "expanded-negative-05",
+      "query": "Comment la créature apprend-elle à parler en observant la famille De Lacey?",
+      "type": "negative",
+      "language": "fr",
+      "answerable": false,
+      "reciprocal_rank": 0.0,
+      "work_recall_at_k": null,
+      "hit_at_k": false,
+      "precision_at_k": 0.0,
+      "correct_abstention": false,
+      "results": [
+        1068414,
+        1068702,
+        1068438,
+        1068549,
+        1068622
+      ],
+      "elapsed_ms": 87.77,
+      "warnings": []
+    },
+    {
+      "id": "expanded-negative-06",
+      "query": "Warum sind zwei Blitze am Bahndamm nicht gleichzeitig für einen fahrenden Zug?",
+      "type": "negative",
+      "language": "de",
+      "answerable": false,
+      "reciprocal_rank": 0.0,
+      "work_recall_at_k": null,
+      "hit_at_k": false,
+      "precision_at_k": 0.0,
+      "correct_abstention": false,
+      "results": [
+        1241737,
+        1241538,
+        1241743,
+        1241680,
+        1241539
+      ],
+      "elapsed_ms": 46.692,
+      "warnings": []
+    },
+    {
+      "id": "expanded-negative-07",
+      "query": "How do the Morlocks keep the Eloi as a source of food?",
+      "type": "negative",
+      "language": "en",
+      "answerable": false,
+      "reciprocal_rank": 0.0,
+      "work_recall_at_k": null,
+      "hit_at_k": false,
+      "precision_at_k": 0.0,
+      "correct_abstention": false,
+      "results": [
+        1234112,
+        1234107,
+        1234449,
+        1234379,
+        1234065
+      ],
+      "elapsed_ms": 126.394,
+      "warnings": []
+    },
+    {
+      "id": "expanded-negative-08",
+      "query": "How does the detective solve the mystery of the speckled band?",
+      "type": "negative",
+      "language": "en",
+      "answerable": false,
+      "reciprocal_rank": 0.0,
+      "work_recall_at_k": null,
+      "hit_at_k": false,
+      "precision_at_k": 0.0,
+      "correct_abstention": false,
+      "results": [
+        885001,
+        884992,
+        885006,
+        884921,
+        884924
+      ],
+      "elapsed_ms": 94.644,
+      "warnings": []
+    },
+    {
+      "id": "expanded-negative-09",
+      "query": "Как отец Грегора ранит его яблоком, застрявшим в спине?",
+      "type": "negative",
+      "language": "ru",
+      "answerable": false,
+      "reciprocal_rank": 0.0,
+      "work_recall_at_k": null,
+      "hit_at_k": false,
+      "precision_at_k": 0.0,
+      "correct_abstention": true,
+      "results": [],
+      "elapsed_ms": 2.323,
+      "warnings": []
+    },
+    {
+      "id": "expanded-negative-10",
+      "query": "What does the allegory of prisoners chained in a cave say about education?",
+      "type": "negative",
+      "language": "en",
+      "answerable": false,
+      "reciprocal_rank": 0.0,
+      "work_recall_at_k": null,
+      "hit_at_k": false,
+      "precision_at_k": 0.0,
+      "correct_abstention": true,
+      "results": [],
+      "elapsed_ms": 29.944,
+      "warnings": []
+    }
+  ],
+  "limitations": [
+    "Small curated excerpts; not representative of a 10–50k-work library.",
+    "Ground truth is manually authored and can be incomplete.",
+    "Quote integrity is relative to parsed text, not a facsimile or OCR audit.",
+    "Process peak RSS includes Python, imported libraries, and earlier work in this process.",
+    "No generated-answer correctness, index-build cost, or paid API spending is measured here.",
+    "Known targets have more distractors; other relevant editions may be unlabeled.",
+    "Scoped negatives apply to their selected book, not every library edition.",
+    "Runs share a process; RSS and warm caches are not isolated resource comparisons."
+  ],
+  "corpus_snapshot_artifact": {
+    "path": "../large-subset-dev-v3/corpus-metadata.json",
+    "sha256": "69199df19b09035166e6dceccb0d123af2b72a2e9cd74f66739148639fe2d401"
+  }
+}

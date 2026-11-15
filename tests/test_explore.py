@@ -66,7 +66,7 @@ def test_only_indexed_books_included_and_limits_disclosed(tmp_path: Path) -> Non
     assert len(result["books"]) == 2
     assert result["truncated"]
     assert len(result["themes"]) <= 3
-    assert any("первые 2" in limitation for limitation in result["limitations"])
+    assert any("выборк" in limitation.lower() for limitation in result["limitations"])
     assert all(book["id"] != "not-downloaded" for book in result["books"])
 
 
@@ -174,3 +174,117 @@ def test_concurrent_requests_build_once(tmp_path: Path, monkeypatch: MonkeyPatch
     assert builds == 1
     assert sum(result["cache_hit"] for result in results) == 3
     assert len({result["corpus_identity"] for result in results}) == 1
+
+
+def skewed_library(tmp_path: Path) -> Library:
+    library = Library(tmp_path / "skewed")
+    for language, count, prefix in (("en", 8, "Alpha"), ("fr", 3, "Zed"), ("ru", 2, "Язык")):
+        for ordinal in range(count):
+            identity = f"{language}-{ordinal}"
+            add(library, tmp_path, identity, f"Unique original CC0 {identity}. Ecology habitat forest.", language)
+            with library.connect() as conn:
+                conn.execute("UPDATE books SET title=? WHERE id=?", (f"{prefix} {ordinal}", identity))
+    return library
+
+
+def test_language_rounds_include_cyrillic_beyond_title_prefix(tmp_path: Path) -> None:
+    library = skewed_library(tmp_path)
+    with library.connect() as conn:
+        prefix = list(conn.execute("SELECT language FROM books ORDER BY title,id LIMIT 6"))
+    assert all(row["language"] == "en" for row in prefix)
+    result = build_map(library, max_books=6)
+    assert [book["id"] for book in result["books"]] == ["en-0", "fr-0", "ru-0", "en-1", "fr-1", "ru-1"]
+    assert result["sampling"]["available_by_language"] == {"en": 8, "fr": 3, "ru": 2}
+    assert result["sampling"]["selected_by_language"] == {"en": 2, "fr": 2, "ru": 2}
+    assert result["sampling"]["strategy"] == "language-round-robin-v1"
+    assert result["sampling"]["proportional"] is False
+    assert all(book["id"].split("-")[0] == book["language"] for book in result["books"])
+    assert any("ru: 2/2" in limitation for limitation in result["limitations"])
+
+
+def test_exhausted_language_does_not_waste_later_slots_and_prefix_is_stable(tmp_path: Path) -> None:
+    from book_rag.explore import _select_books
+
+    library = skewed_library(tmp_path)
+    with library.connect() as conn:
+        small, _ = _select_books(conn, 3)
+        large, _ = _select_books(conn, 10)
+    assert [book["id"] for book in large[:3]] == [book["id"] for book in small]
+    assert len(large) == 10
+    assert {language: sum(book["language"] == language for book in large) for language in ("en", "fr", "ru")} == {
+        "en": 5,
+        "fr": 3,
+        "ru": 2,
+    }
+
+
+def test_selection_reads_only_metadata_and_retains_hard_500_cap(tmp_path: Path) -> None:
+    import sqlite3
+
+    from book_rag.explore import _select_books
+
+    library = skewed_library(tmp_path)
+    with library.connect() as conn:
+        for ordinal in range(600):
+            conn.execute(
+                "INSERT INTO books(id,title,author,language,work_id,edition,source_url,rights,status) "
+                "VALUES(?,?,?,?,?,?,?,?,?)",
+                (
+                    f"metadata-{ordinal}",
+                    f"Alpha {ordinal}",
+                    "CC0 fixture",
+                    "en",
+                    str(ordinal),
+                    "Test",
+                    "",
+                    "CC0",
+                    "indexed",
+                ),
+            )
+
+        def metadata_only(action: int, table: str | None, *args: Any) -> int:
+            if action == sqlite3.SQLITE_READ and table in {"passages", "sections"}:
+                return sqlite3.SQLITE_DENY
+            return sqlite3.SQLITE_OK
+
+        conn.set_authorizer(metadata_only)
+        chosen, available = _select_books(conn, 9999)
+        conn.set_authorizer(None)
+    assert len(chosen) == 500 and available == {"en": 608, "fr": 3, "ru": 2}
+    assert sum(book["language"] == "ru" for book in chosen) == 2
+
+
+def test_missing_languages_are_explicit_when_cap_cannot_fit_them_all(tmp_path: Path) -> None:
+    library = skewed_library(tmp_path)
+    result = build_map(library, max_books=1)
+    assert result["sampling"]["omitted_languages"] == ["fr", "ru"]
+    assert result["sampling"]["selected_by_language"] == {"en": 1}
+    assert any("не поместились" in limitation for limitation in result["limitations"])
+
+
+def test_title_ties_are_resolved_by_id_not_insertion_order(tmp_path: Path) -> None:
+    from book_rag.explore import _select_books
+
+    library = Library(tmp_path / "ties")
+    for identity, language in (("b", "en"), ("a", "en"), ("я", "ru"), ("ю", "ru")):
+        add(library, tmp_path, identity, f"Exact original source {identity}.", language)
+        with library.connect() as conn:
+            conn.execute("UPDATE books SET title='Same title' WHERE id=?", (identity,))
+    with library.connect() as conn:
+        chosen, _ = _select_books(conn, 4)
+    assert [book["id"] for book in chosen] == ["a", "ю", "b", "я"]
+
+
+def test_new_sampling_metadata_is_deep_copied_and_strategy_versions_cache(
+    tmp_path: Path, monkeypatch: MonkeyPatch
+) -> None:
+    from book_rag import explore
+
+    library = skewed_library(tmp_path)
+    result = build_map(library, max_books=6)
+    result["sampling"]["available_by_language"]["ru"] = 999
+    cached = build_map(library, max_books=6)
+    assert cached["cache_hit"] and cached["sampling"]["available_by_language"]["ru"] == 2
+    monkeypatch.setattr(explore, "_MAP_SELECTION_STRATEGY", "test-next-strategy")
+    newer = build_map(library, max_books=6)
+    assert not newer["cache_hit"] and newer["sampling"]["strategy"] == "test-next-strategy"

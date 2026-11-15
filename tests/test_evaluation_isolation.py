@@ -268,6 +268,31 @@ def test_cleanup_and_cache_environment_restored_after_failure(tmp_path: Path, mo
     assert tree_hashes(source) == before
 
 
+def test_owned_cache_retains_real_hf_relative_snapshot_links(tmp_path: Path) -> None:
+    source = tmp_path / "shared-models"
+    repository = source / "models--fixture--owned"
+    blobs = repository / "blobs"
+    blobs.mkdir(parents=True)
+    (blobs / "config-object").write_text('{"model_type":"owned-fixture"}')
+    (blobs / "weight-object").write_bytes(b"w" * (evaluation._CACHE_COPY_LIMIT + 10))
+    snapshot = repository / "snapshots" / "pinned-revision"
+    snapshot.mkdir(parents=True)
+    (snapshot / "config.json").symlink_to("../../blobs/config-object")
+    (snapshot / "model.safetensors").symlink_to("../../blobs/weight-object")
+    (snapshot / "missing.json").symlink_to("../../blobs/not-acquired")
+    before = tree_hashes(source)
+    owned = tmp_path / "owned-models"
+    evaluation._copy_model_cache(source, owned)
+    copied_snapshot = owned / snapshot.relative_to(source)
+    assert (copied_snapshot / "config.json").read_text() == (snapshot / "config.json").read_text()
+    assert not (copied_snapshot / "config.json").is_symlink()
+    assert (copied_snapshot / "model.safetensors").is_symlink()
+    assert (copied_snapshot / "model.safetensors").resolve() == (blobs / "weight-object").resolve()
+    assert not (copied_snapshot / "missing.json").is_symlink()
+    (copied_snapshot / "config.json").write_text('{"model_type":"owned-update"}')
+    assert tree_hashes(source) == before
+
+
 @pytest.mark.parametrize("index_state", ["missing", "stale_without_generation"])
 def test_unavailable_semantic_index_keeps_explicit_fallback(tmp_path: Path, index_state: str) -> None:
     source, dataset = seed(tmp_path)
@@ -383,6 +408,44 @@ def test_evaluate_path_uses_actual_partial_hybrid_without_original_initializatio
     assert report["actual_search_modes"] == {"hybrid": 2}
     assert report["corpus"]["books"] == 2
     assert tree_hashes(target.data_dir) == before
+
+
+def test_partial_evaluation_tolerates_actual_external_readers_coordination_files(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    target, dataset, model = installed_partial(tmp_path, monkeypatch)
+    before = hashlib.sha256(target.db_path.read_bytes()).hexdigest()
+    calls = model.calls
+    reader = None
+    try:
+        with evaluation_library(target.data_dir) as library:
+            reader = sqlite3.connect(target.db_path.resolve().as_uri() + "?mode=ro", uri=True)
+            reader.execute("BEGIN")
+            assert reader.execute("SELECT COUNT(*) FROM books").fetchone()[0] == 2
+            assert target.db_path.with_name("library.sqlite3-shm").exists()
+            wal = target.db_path.with_name("library.sqlite3-wal")
+            assert not wal.exists() or wal.stat().st_size == 0
+            result = evaluate(library, dataset, mode="hybrid")
+            assert result["actual_search_modes"] == {"hybrid": 2}
+            assert model.calls == calls + 2
+            assert result["metrics"]["quote_exact_rate"] == 1
+            # Leave the coordination files present for the context-exit guard.
+            # The external reader owns them; the evaluator never opens them.
+    finally:
+        if reader is not None:
+            reader.close()
+    assert hashlib.sha256(target.db_path.read_bytes()).hexdigest() == before
+
+
+def test_empty_wal_is_not_canonical_input_but_nonempty_wal_is(tmp_path: Path) -> None:
+    (tmp_path / "library.sqlite3").write_bytes(b"owned test bytes")
+    before = evaluation._database_files(tmp_path)
+    wal = tmp_path / "library.sqlite3-wal"
+    wal.touch()
+    assert evaluation._database_files(tmp_path) == before
+    wal.write_bytes(b"a WAL header must fail closed even without a verified committed frame")
+    assert evaluation._database_files(tmp_path) != before
+    assert "library.sqlite3-wal" in evaluation._database_files(tmp_path)
 
 
 def test_partial_pending_wal_is_rejected_without_touching_main_wal_or_shm(

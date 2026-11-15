@@ -19,7 +19,7 @@ import tempfile
 import threading
 import time
 from collections import Counter
-from collections.abc import Generator, Mapping
+from collections.abc import Callable, Generator, Mapping
 from contextlib import contextmanager
 from dataclasses import dataclass
 from datetime import UTC, datetime
@@ -40,7 +40,21 @@ def _file_identity(path: Path) -> tuple[int, int, int, int, int]:
 
 def _database_files(directory: Path) -> dict[str, tuple[int, int, int, int, int]]:
     names = ("library.sqlite3", "library.sqlite3-wal")
-    return {name: _file_identity(directory / name) for name in names if (directory / name).exists()}
+    identities = {}
+    for name in names:
+        try:
+            identities[name] = _file_identity(directory / name)
+        except FileNotFoundError:
+            # A last external reader may remove an empty sidecar between the
+            # directory check and stat. Main-file changes remain guarded.
+            continue
+    # Read-only clients can create/delete empty WAL and SHM coordination files.
+    # They contain no canonical input. A nonempty WAL remains a strict input
+    # even if it has no committed frames: the evaluator never guesses that.
+    wal = identities.get("library.sqlite3-wal")
+    if wal is not None and wal[2] == 0:
+        identities.pop("library.sqlite3-wal")
+    return identities
 
 
 def _capture_database(
@@ -95,23 +109,31 @@ def _copy_model_cache(source: Path, destination: Path) -> dict[str, int]:
             reused["copied_bytes"] += size
         return copied
 
+    ignored_patterns = shutil.ignore_patterns(".locks", "*.lock", "*.incomplete")
+
+    def ignored(directory: str, names: list[str]) -> set[str]:
+        skipped = set(ignored_patterns(directory, names))
+        for name in names:
+            path = Path(directory) / name
+            if path.is_symlink() and not path.exists():
+                skipped.add(name)
+        return skipped
+
     shutil.copytree(
         source,
         destination,
         symlinks=False,
-        ignore_dangling_symlinks=True,
+        # shutil's dangling-link shortcut tests relative link text against the
+        # current working directory, dropping valid HF snapshot→blob links.
+        # Resolve existence from the source parent in our ignore callback.
+        ignore_dangling_symlinks=False,
         copy_function=copy_file,
-        ignore=shutil.ignore_patterns(".locks", "*.lock", "*.incomplete"),
+        ignore=ignored,
     )
     # Source directory permissions do not make this process's cache metadata readonly.
     for directory, _, _ in os.walk(destination):
         Path(directory).chmod(0o700)
     return reused
-
-
-def _shm_identity(directory: Path) -> tuple[int, int, int, int, int] | None:
-    path = directory / "library.sqlite3-shm"
-    return _file_identity(path) if path.exists() else None
 
 
 @dataclass(frozen=True, slots=True)
@@ -126,7 +148,6 @@ class EvaluationSemanticReference:
     data_dir: Path
     db_path: Path
     _database_identity: dict[str, tuple[int, int, int, int, int]]
-    _shm: tuple[int, int, int, int, int] | None
     _active_bytes: bytes
     _generation_path: Path | None
     _generation_state: dict[str, tuple[int, int, int, int, int]] | None
@@ -134,7 +155,7 @@ class EvaluationSemanticReference:
     _receipt_state: tuple[int, int, int, int, int] | None
 
     def ensure_unchanged(self) -> None:
-        if _database_files(self.data_dir) != self._database_identity or _shm_identity(self.data_dir) != self._shm:
+        if _database_files(self.data_dir) != self._database_identity:
             raise RuntimeError("Original partial-index SQLite input changed; discard this evaluation")
         active = self.data_dir / "vectors" / "active.json"
         if not active.is_file() or active.read_bytes() != self._active_bytes:
@@ -188,7 +209,6 @@ def _partial_reference(
         source,
         source / "library.sqlite3",
         database_identity.copy(),
-        _shm_identity(source),
         active_bytes,
         generation_path,
         generation_identity.copy() if generation_identity is not None else None,
@@ -293,6 +313,7 @@ def evaluation_library(directory: Path, *, model_cache: Path | None = None) -> G
                 "validation": "original checkpointed read-only immutable reference",
                 "evidence": "owned migrated SQLite copy",
                 "generation": "original immutable files; mmap_mode=r",
+                "coordination_sidecars": "SHM and empty WAL are not canonical inputs; immutable reads never open them",
             }
         provenance["preparation_seconds"] = round(time.perf_counter() - preparation_started, 6)
         os.environ["BOOKRAG_MODEL_CACHE"] = str(working / "models")
@@ -422,7 +443,14 @@ def load_dataset(path: Path) -> dict[str, Any]:
     return dataset
 
 
-def evaluate(library: SearchLibrary | Path, dataset: Path, mode: str = "lexical", limit: int = 5) -> dict[str, Any]:
+def evaluate(
+    library: SearchLibrary | Path,
+    dataset: Path,
+    mode: str = "lexical",
+    limit: int = 5,
+    *,
+    progress: Callable[[dict[str, Any]], None] | None = None,
+) -> dict[str, Any]:
     """Evaluate retrieval, work coverage, source anchors, abstention and latency.
 
     Reads both books and sections independently of the search response. An empty
@@ -433,7 +461,7 @@ def evaluate(library: SearchLibrary | Path, dataset: Path, mode: str = "lexical"
     """
     if isinstance(library, Path):
         with evaluation_library(library) as isolated:
-            return evaluate(isolated, dataset, mode, limit)
+            return evaluate(isolated, dataset, mode, limit, progress=progress)
     if not 1 <= limit <= 50:
         raise ValueError("limit must be between 1 and 50")
     fixture = load_dataset(dataset)
@@ -445,7 +473,10 @@ def evaluate(library: SearchLibrary | Path, dataset: Path, mode: str = "lexical"
     model_names: set[str] = set()
     result_count = 0
     started = time.perf_counter()
-    for case in fixture["queries"]:
+    for index, case in enumerate(fixture["queries"], 1):
+        event = {"id": case["id"], "index": index, "total": len(fixture["queries"]), "mode": mode}
+        if progress is not None:
+            progress(event | {"event": "query_started"})
         query_started = time.perf_counter()
         response = library.search(case["query"], mode=mode, limit=limit, **case.get("filters", {}))
         actual_modes[str(response.get("mode", mode))] += 1
@@ -453,6 +484,11 @@ def evaluate(library: SearchLibrary | Path, dataset: Path, mode: str = "lexical"
             model_names.add(str(response["model"]))
         elapsed_ms = (time.perf_counter() - query_started) * 1000
         latencies.append(elapsed_ms)
+        if progress is not None:
+            progress(
+                event
+                | {"event": "query_finished", "elapsed_ms": round(elapsed_ms, 3), "actual_mode": response.get("mode")}
+            )
         results = response["results"][:limit]
         first_relevant_rank = None
         retrieved_work_ids: set[str] = set()

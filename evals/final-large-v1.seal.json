@@ -1,0 +1,80 @@
+{
+  "version": 1,
+  "name": "final-large-v1",
+  "split": "heldout",
+  "status": "sealed",
+  "sealed_utc": "2026-11-14T23:05:40.832338+00:00",
+  "commitments": {
+    "labels_sha256": "2a2906f80e9a72d31220d2bac661d0788603495a66da81d159aa1f2c52e9d277",
+    "source_receipts_sha256": "e33c1669725e0eb339e21a1e42f082ab902e224fdd13c628caaae1969e0358b8",
+    "private_seal_sha256": "683b16f5c87a4cb29cf4880b14871ddb64549b7de796e02c243b48e388bf5e65",
+    "source_snapshot": "library1308-v1",
+    "source_database_sha256": "2d77675ba2a68f63e25f507355272e3206db8f9abbe959f326cea96f774939f0",
+    "source_database_bytes": 1594347520
+  },
+  "summary": {
+    "cases": 40,
+    "positives": 34,
+    "scoped_negatives": 6,
+    "positive_books": 28,
+    "prior_target_overlap": 0,
+    "source_indexed_editions": 1308,
+    "types": {
+      "cross_language": 6,
+      "description": 4,
+      "exact_quote": 6,
+      "explanation": 6,
+      "idea": 6,
+      "scene": 6,
+      "unanswerable": 6
+    },
+    "query_languages": {
+      "de": 9,
+      "en": 12,
+      "fr": 7,
+      "ru": 12
+    },
+    "source_languages_by_anchor": {
+      "de": 10,
+      "en": 11,
+      "fr": 7,
+      "ru": 8
+    },
+    "cross_language_directions": {
+      "de->en": 1,
+      "en->fr": 1,
+      "fr->de": 1,
+      "ru->de": 1,
+      "ru->en": 1,
+      "ru->fr": 1
+    },
+    "exact_anchor_checks": 42,
+    "retrieval_evaluations_run": 0,
+    "ground_truth": "agent-authored, not human-rated",
+    "source_unchanged": true
+  },
+  "known_fixture_sha256": {
+    "dev.json": "e637ab5be3467c2cc8294f1dd8395d80bc49fdb972107da35830caaf30fe75be",
+    "dev-expanded.json": "8955a6cf471318fa70d24f518c3a08f410865f9a9f4a751f47d29de3a94deb44",
+    "heldout.json": "f73de671c88309aebb715c53c78174b6a6b642da6ad6bab566a7271972b0f2d5"
+  },
+  "construction": {
+    "ground_truth": "agent-authored, not human-rated",
+    "source_access": "SQLite mode=ro&immutable=1 plus query_only; no Library initialization",
+    "retrieval_evaluations_run_at_sealing": 0,
+    "no_model_api_or_network_used_for_case_authoring": true,
+    "root_received": "aggregate counts, limitations and SHA commitments only",
+    "private_material": "Queries, anchors, real book identities and titles remain in ignored owner-read-only runtime files."
+  },
+  "limitations": [
+    "Agent-authored ground truth has no human rating or inter-rater validation.",
+    "Non-exhaustive anchors can miss other relevant passages; strict passage scoring can produce false negatives.",
+    "Queries were written after reading their target passages and may be easier than natural user requests.",
+    "Wrong-book negatives combine agent reasoning with absence checks for distinguishing terms; they do not prove corpus-wide absence or formal non-entailment.",
+    "Canonical exactness does not establish faithful transcription from a printed edition or present-day truth of historical assertions.",
+    "Scene cases include documentary situations as well as fictional scenes; sampling is not population-representative.",
+    "Procedural blinding within one agent team is not encryption or an independent human evaluation organization.",
+    "Zero retrieval runs is the status at sealing; later authorized final runs must be recorded separately without rewriting this commitment."
+  ],
+  "release_policy": "No case inspection or retrieval run before an explicit recorded candidate freeze. Publish fixtures/provenance after the one-time final check; never tune against them while calling them held out."
+}

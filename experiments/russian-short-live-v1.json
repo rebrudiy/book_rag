@@ -1,0 +1,83 @@
+{
+  "status": "passed",
+  "stats": {
+    "books": 4001,
+    "searchable_books": 4001,
+    "works": 3997,
+    "passages": 1401379,
+    "status_counts": {
+      "indexed": 4001
+    },
+    "ingestion_status_counts": {
+      "indexed": 4001
+    },
+    "coverage_counts": {
+      "full": 3998,
+      "partial": 2,
+      "selected_chapters": 1
+    },
+    "work_count_is_provisional": true,
+    "curated_work_groups": 35,
+    "confirmed_full_works_lower_bound": 33,
+    "periodical_editions": 60,
+    "languages": [
+      {
+        "language": "de",
+        "count": 1009
+      },
+      {
+        "language": "en",
+        "count": 1940
+      },
+      {
+        "language": "fr",
+        "count": 1031
+      },
+      {
+        "language": "ru",
+        "count": 21
+      }
+    ]
+  },
+  "new_editions": 10,
+  "new_confirmed_full_originals": 9,
+  "new_partial_original_editions": 1,
+  "new_passages": 259,
+  "source_report": "russian-short-v1.json",
+  "integrity_report": "full-integrity-4001-v1.json",
+  "live_probe": {
+    "query": "Герасим",
+    "book_id": "wsru-mumu-49cea43537bb",
+    "requested_mode": "semantic",
+    "actual_mode": "lexical",
+    "coverage": {
+      "indexed_books": 1308,
+      "searchable_books": 4001,
+      "active": true,
+      "requested_book_covered": false
+    },
+    "returned_passages": 3,
+    "independent_checks": [
+      {
+        "quote_exact": true,
+        "metadata_exact": true,
+        "reader_anchor_exact": true
+      },
+      {
+        "quote_exact": true,
+        "metadata_exact": true,
+        "reader_anchor_exact": true
+      },
+      {
+        "quote_exact": true,
+        "metadata_exact": true,
+        "reader_anchor_exact": true
+      }
+    ],
+    "reader_links": [
+      "/?book=wsru-mumu-49cea43537bb&section=343417&passage=2576471",
+      "/?book=wsru-mumu-49cea43537bb&section=343417&passage=2576509",
+      "/?book=wsru-mumu-49cea43537bb&section=343417&passage=2576486"
+    ]
+  }
+}

@@ -69,6 +69,11 @@ retains the language on refresh. An empty starter shelf still links to that
 catalogue; it does not imply that the language has no other books.
 **Искать в книге** clears any old query/results, pins the actual edition, and
 focuses the query field. It makes no search or model request until submission.
+Opening a book starts after generated Book RAG credit sections. Original
+front matter is preserved; the complete table of contents still opens the
+credit section, and explicit section/passage links retain their exact location.
+The acquired full Russian catalogue also places Pushkin's *Пиковая дама* on
+the six-card Russian shelf; the licensed demo keeps its available Pushkin poem.
 
 Verify the shelf without changing a live library:
 
@@ -256,6 +261,16 @@ limits are disclosed in the returned metadata and UI. Boilerplate patterns and
 stopwords for English, Russian, French, German and Spanish are removed. Other
 languages use word tokenization without a dedicated stopword list. Word forms
 are not merged, and cross-language lexical links are not generated.
+
+When more than 500 editions are available, metadata selection alternates
+languages deterministically, then follows title/ID order within each language.
+Exhausted languages release slots to the others. The response exposes available
+and selected counts, omitted languages and the non-proportional sampling rule;
+this is not a topic-prevalence estimate. On the measured 3,991-edition metadata,
+the former alphabetic prefix included de105/en328/fr66/ru1. Language rounds select
+de163/en163/fr163/ru11, including all five acquired Russian literary originals.
+`scripts/inventory_explore_languages.py` reproduces this metadata-only comparison
+without changing the library or loading a model.
 
 The homepage and library counts distinguish **indexed editions** from **work
 groups**. `work_count_is_provisional` triggers an explicit explanation that a

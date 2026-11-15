@@ -26,7 +26,7 @@
       { q: 'Смерть Ивана Ильича', title: ['смерть ивана ильича'], author: ['толстой'] },
       { q: 'Палата', title: ['палата'], author: ['чехов'] },
       { q: 'Шинель', title: ['шинель'], author: ['гоголь'] },
-      { q: 'Пушкин', title: ['красавице'], author: ['пушкин'] },
+      { q: 'Пушкин', titles: [['пиковая дама'], ['красавице']], author: ['пушкин'] },
     ],
     en: [
       { q: 'Wonderland', title: ['alice', 'wonderland'], author: ['carroll'] },
@@ -259,7 +259,8 @@
   }
   function starterText(value) { return String(value || '').normalize('NFKC').toLocaleLowerCase().replaceAll('ё', 'е'); }
   function starterMatch(book, seed, language) {
-    return bookSearchable(book) && book.language === language && seed.title.every((term) => starterText(book.title).includes(term)) && seed.author.every((term) => starterText(book.author).includes(term));
+    const titles = seed.titles || [seed.title];
+    return bookSearchable(book) && book.language === language && titles.some((terms) => terms.every((term) => starterText(book.title).includes(term))) && seed.author.every((term) => starterText(book.author).includes(term));
   }
   function starterPreference(book) {
     const full = ['full', 'complete poem'].includes(coverageType(book));
@@ -591,7 +592,8 @@
       state.currentBook = book;
       state.currentPassage = passage;
       const sections = sectionList(book);
-      state.currentSection = sections.find((section) => asID(section.id) === asID(sectionId)) || sections.find((section) => asID(section.id) === asID(passage?.section_id)) || sections[0] || null;
+      const opening = !sectionId && !passageId ? sections.find((section) => !(section.section_role === 'editorial' && String(section.section_author || '').replaceAll(' ', '').toLowerCase() === 'bookrag')) : sections[0];
+      state.currentSection = sections.find((section) => asID(section.id) === asID(sectionId)) || sections.find((section) => asID(section.id) === asID(passage?.section_id)) || opening || sections[0] || null;
       renderReader();
       if (push) updateReaderURL();
     } catch (error) { if (request === state.readerSequence) showError(error, $('reader-text')); }

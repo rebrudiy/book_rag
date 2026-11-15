@@ -1,0 +1,247 @@
+{
+  "created_at": "2026-11-14T23:18:11.394107+00:00",
+  "seconds": 241.986,
+  "dataset_sha256": "8955a6cf471318fa70d24f518c3a08f410865f9a9f4a751f47d29de3a94deb44",
+  "script_sha256": "9619576379906fa2e4480bcb4251ddda1f98b3e65e700da20c9e8ee3d7c9c4d4",
+  "index": {
+    "generation": "gen-1812f290f02e09f392e2c880bbcee602de30282ec4ad406300e1c6ff1393555f-a8b86bbaa7d0",
+    "vectors": 1865985,
+    "passages": 445466,
+    "model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+    "model_revision": "e8f8c211226b894fcb81acc59f3b34ba3efd5f42",
+    "installation_receipt": {
+      "path": "installations/install-fda51e49bb044a228a1e1d1ab70bb911.json",
+      "sha256": "5e80856e5fb35e1f02e743f433398edf8a593fc3a8e776c618f139b602e19599"
+    }
+  },
+  "semantic_editions": 1308,
+  "metrics": {
+    "baseline": {
+      "mrr_at_k": 0.5803030303030303,
+      "hit_at_k": 0.6818181818181818,
+      "work_recall_at_k": 0.8522727272727273,
+      "precision_at_k": 0.15454545454545457,
+      "negative_abstention_accuracy": 0.4,
+      "quote_exact_rate": 1.0,
+      "metadata_exact_rate": 1.0,
+      "reader_anchor_exact_rate": 1.0,
+      "returned_passages": 235,
+      "latency_p50_ms": 116.295,
+      "latency_p95_ms": 12921.051,
+      "elapsed_seconds": 148.738,
+      "process_peak_rss_mib": 157.2
+    },
+    "lexical": {
+      "mrr_at_k": 0.5075757575757576,
+      "hit_at_k": 0.5454545454545454,
+      "work_recall_at_k": 0.6590909090909091,
+      "precision_at_k": 0.11818181818181818,
+      "negative_abstention_accuracy": 0.9,
+      "quote_exact_rate": 1.0,
+      "metadata_exact_rate": 1.0,
+      "reader_anchor_exact_rate": 1.0,
+      "returned_passages": 123,
+      "latency_p50_ms": 42.136,
+      "latency_p95_ms": 6149.307,
+      "elapsed_seconds": 42.291,
+      "process_peak_rss_mib": 177.0
+    },
+    "hybrid": {
+      "mrr_at_k": 0.5075757575757576,
+      "hit_at_k": 0.5454545454545454,
+      "work_recall_at_k": 0.6590909090909091,
+      "precision_at_k": 0.11818181818181818,
+      "negative_abstention_accuracy": 0.9,
+      "quote_exact_rate": 1.0,
+      "metadata_exact_rate": 1.0,
+      "reader_anchor_exact_rate": 1.0,
+      "returned_passages": 123,
+      "latency_p50_ms": 76.03,
+      "latency_p95_ms": 4351.329,
+      "elapsed_seconds": 38.417,
+      "process_peak_rss_mib": 544.33
+    }
+  },
+  "actual_modes": {
+    "baseline": {
+      "baseline": 54
+    },
+    "lexical": {
+      "lexical": 54
+    },
+    "hybrid": {
+      "lexical": 54
+    }
+  },
+  "comparisons": {
+    "baseline_to_lexical": {
+      "schema_version": 1,
+      "dataset_sha256": "8955a6cf471318fa70d24f518c3a08f410865f9a9f4a751f47d29de3a94deb44",
+      "split": "dev",
+      "k": 5,
+      "baseline_mode": "baseline",
+      "candidate_mode": "lexical",
+      "metrics": {
+        "mrr_at_k": {
+          "baseline": 0.5803030303030303,
+          "candidate": 0.5075757575757576,
+          "delta": -0.07272727272727275,
+          "higher_is_better": true
+        },
+        "hit_at_k": {
+          "baseline": 0.6818181818181818,
+          "candidate": 0.5454545454545454,
+          "delta": -0.13636363636363635,
+          "higher_is_better": true
+        },
+        "work_recall_at_k": {
+          "baseline": 0.8522727272727273,
+          "candidate": 0.6590909090909091,
+          "delta": -0.19318181818181823,
+          "higher_is_better": true
+        },
+        "precision_at_k": {
+          "baseline": 0.15454545454545457,
+          "candidate": 0.11818181818181818,
+          "delta": -0.03636363636363639,
+          "higher_is_better": true
+        },
+        "negative_abstention_accuracy": {
+          "baseline": 0.4,
+          "candidate": 0.9,
+          "delta": 0.5,
+          "higher_is_better": true
+        },
+        "quote_exact_rate": {
+          "baseline": 1.0,
+          "candidate": 1.0,
+          "delta": 0.0,
+          "higher_is_better": true
+        },
+        "metadata_exact_rate": {
+          "baseline": 1.0,
+          "candidate": 1.0,
+          "delta": 0.0,
+          "higher_is_better": true
+        },
+        "reader_anchor_exact_rate": {
+          "baseline": 1.0,
+          "candidate": 1.0,
+          "delta": 0.0,
+          "higher_is_better": true
+        },
+        "latency_p50_ms": {
+          "baseline": 116.295,
+          "candidate": 42.136,
+          "delta": -74.15899999999999,
+          "higher_is_better": false
+        },
+        "latency_p95_ms": {
+          "baseline": 12921.051,
+          "candidate": 6149.307,
+          "delta": -6771.744,
+          "higher_is_better": false
+        },
+        "elapsed_seconds": {
+          "baseline": 148.738,
+          "candidate": 42.291,
+          "delta": -106.447,
+          "higher_is_better": false
+        },
+        "process_peak_rss_mib": {
+          "baseline": 157.2,
+          "candidate": 177.0,
+          "delta": 19.80000000000001,
+          "higher_is_better": false
+        }
+      },
+      "corpus_sha256": "6fec59a830b3f4cc6d9eab9b59dbd15dc9a852224b4c2c573b4ecb965288c8d6"
+    },
+    "lexical_to_hybrid": {
+      "schema_version": 1,
+      "dataset_sha256": "8955a6cf471318fa70d24f518c3a08f410865f9a9f4a751f47d29de3a94deb44",
+      "split": "dev",
+      "k": 5,
+      "baseline_mode": "lexical",
+      "candidate_mode": "hybrid",
+      "metrics": {
+        "mrr_at_k": {
+          "baseline": 0.5075757575757576,
+          "candidate": 0.5075757575757576,
+          "delta": 0.0,
+          "higher_is_better": true
+        },
+        "hit_at_k": {
+          "baseline": 0.5454545454545454,
+          "candidate": 0.5454545454545454,
+          "delta": 0.0,
+          "higher_is_better": true
+        },
+        "work_recall_at_k": {
+          "baseline": 0.6590909090909091,
+          "candidate": 0.6590909090909091,
+          "delta": 0.0,
+          "higher_is_better": true
+        },
+        "precision_at_k": {
+          "baseline": 0.11818181818181818,
+          "candidate": 0.11818181818181818,
+          "delta": 0.0,
+          "higher_is_better": true
+        },
+        "negative_abstention_accuracy": {
+          "baseline": 0.9,
+          "candidate": 0.9,
+          "delta": 0.0,
+          "higher_is_better": true
+        },
+        "quote_exact_rate": {
+          "baseline": 1.0,
+          "candidate": 1.0,
+          "delta": 0.0,
+          "higher_is_better": true
+        },
+        "metadata_exact_rate": {
+          "baseline": 1.0,
+          "candidate": 1.0,
+          "delta": 0.0,
+          "higher_is_better": true
+        },
+        "reader_anchor_exact_rate": {
+          "baseline": 1.0,
+          "candidate": 1.0,
+          "delta": 0.0,
+          "higher_is_better": true
+        },
+        "latency_p50_ms": {
+          "baseline": 42.136,
+          "candidate": 76.03,
+          "delta": 33.894,
+          "higher_is_better": false
+        },
+        "latency_p95_ms": {
+          "baseline": 6149.307,
+          "candidate": 4351.329,
+          "delta": -1797.978,
+          "higher_is_better": false
+        },
+        "elapsed_seconds": {
+          "baseline": 42.291,
+          "candidate": 38.417,
+          "delta": -3.8739999999999952,
+          "higher_is_better": false
+        },
+        "process_peak_rss_mib": {
+          "baseline": 177.0,
+          "candidate": 544.33,
+          "delta": 367.33000000000004,
+          "higher_is_better": false
+        }
+      },
+      "corpus_sha256": "6fec59a830b3f4cc6d9eab9b59dbd15dc9a852224b4c2c573b4ecb965288c8d6"
+    }
+  },
+  "source_guards_passed": true,
+  "semantic_candidate_exercised": false,
+  "interpretation": "All54 requested hybrid queries fell back to lexical because the owned HF snapshot cache lost valid relative symlinks. Baseline/lexical results are usable; the hybrid rows measure fallback availability, not semantic relevance."
+}

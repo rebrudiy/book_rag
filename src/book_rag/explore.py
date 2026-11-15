@@ -10,6 +10,7 @@ import hashlib
 import json
 import math
 import re
+import sqlite3
 import time
 import unicodedata
 from collections import Counter, OrderedDict, defaultdict
@@ -105,6 +106,31 @@ BOILERPLATE = re.compile(
 MAX_VOCABULARY = 8192
 MAX_FEATURES = 256
 MAX_PASSAGES = 2000
+_MAP_SELECTION_STRATEGY = "language-round-robin-v1"
+
+
+def _select_books(conn: sqlite3.Connection, max_books: int) -> tuple[list[dict[str, Any]], dict[str, int]]:
+    """Read bounded metadata in deterministic language rounds, never book text."""
+    limit = min(500, max(1, max_books))
+    available = {
+        row["language"]: row["count"]
+        for row in conn.execute(
+            "SELECT language,COUNT(*) count FROM books WHERE status='indexed' GROUP BY language ORDER BY language"
+        )
+    }
+    books = [
+        dict(row)
+        for row in conn.execute(
+            "WITH ranked AS ("
+            "SELECT id,title,author,language,edition,"
+            "ROW_NUMBER() OVER (PARTITION BY language ORDER BY title,id) language_rank "
+            "FROM books WHERE status='indexed') "
+            "SELECT id,title,author,language,edition FROM ranked "
+            "ORDER BY language_rank,language,title,id LIMIT ?",
+            (limit,),
+        )
+    ]
+    return books, available
 
 
 def tokens(text: str, language: str) -> list[str]:
@@ -133,14 +159,8 @@ def _build_map(library: Library, *, max_books: int = 500, max_themes: int = 60) 
     vocabulary_pruned = False
     with library.connect() as conn:
         conn.execute("BEGIN")
-        total = conn.execute("SELECT COUNT(*) FROM books WHERE status='indexed'").fetchone()[0]
-        books = [
-            dict(row)
-            for row in conn.execute(
-                "SELECT id,title,author,language,edition FROM books WHERE status='indexed' ORDER BY title,id LIMIT ?",
-                (max_books,),
-            )
-        ]
+        books, available_languages = _select_books(conn, max_books)
+        total = sum(available_languages.values())
         for book in books:
             counter: Counter[str] = Counter()
             rows = conn.execute(
@@ -246,8 +266,21 @@ def _build_map(library: Library, *, max_books: int = 500, max_themes: int = 60) 
     ]
     if total > len(books):
         limitations.append(
-            f"Показаны первые {len(books)} книг по названию из {total}; карта ограничена {max_books} книгами."
+            f"Показаны {len(books)} изданий из {total}; лимит карты — {max_books}. "
+            "Выборка чередует языки, а внутри языка следует названию и ID. "
+            "Это не пропорциональная выборка библиотеки."
         )
+        languages = sorted(available_languages)
+        summary = ", ".join(
+            f"{language or 'und'}: {language_counts[language]}/{available_languages[language]}"
+            for language in languages[:12]
+        )
+        if len(languages) > 12:
+            summary += f"; ещё языков: {len(languages) - 12}"
+        limitations.append(f"По языкам (показано/доступно): {summary}.")
+        omitted = set(available_languages) - set(language_counts)
+        if omitted:
+            limitations.append(f"В текущий лимит не поместились книги на {len(omitted)} языках.")
     if sampled:
         limitations.append(f"Для {len(sampled)} книг используются первые {MAX_PASSAGES} фрагментов.")
     if vocabulary_pruned:
@@ -259,12 +292,21 @@ def _build_map(library: Library, *, max_books: int = 500, max_themes: int = 60) 
         "edges": sorted(edges, key=lambda edge: (-edge["score"], edge["source"], edge["target"])),
         "corpus_books": total,
         "truncated": total > len(books),
+        "sampling": {
+            "strategy": _MAP_SELECTION_STRATEGY,
+            "limit": max_books,
+            "available_by_language": available_languages,
+            "selected_by_language": dict(sorted(language_counts.items())),
+            "omitted_languages": sorted(set(available_languages) - set(language_counts)),
+            "order_within_language": ["title", "id"],
+            "proportional": False,
+        },
         "elapsed_ms": round((time.perf_counter() - started) * 1000, 2),
         "limitations": limitations,
     }
 
 
-_MAP_CACHE: OrderedDict[tuple[str, str, int, int], dict[str, Any]] = OrderedDict()
+_MAP_CACHE: OrderedDict[tuple[str, str, int, int, str], dict[str, Any]] = OrderedDict()
 _MAP_CACHE_LOCK = Lock()
 _MAX_CACHED_MAPS = 4
 
@@ -302,7 +344,7 @@ def build_map(library: Library, *, max_books: int = 500, max_themes: int = 60) -
     max_themes = min(100, max(1, max_themes))
     with _MAP_CACHE_LOCK:
         before = _corpus_identity(library)
-        key = (str(library.db_path.resolve()), before, max_books, max_themes)
+        key = (str(library.db_path.resolve()), before, max_books, max_themes, _MAP_SELECTION_STRATEGY)
         if key in _MAP_CACHE:
             _MAP_CACHE.move_to_end(key)
             result = deepcopy(_MAP_CACHE[key])

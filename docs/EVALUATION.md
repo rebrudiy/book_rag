@@ -18,7 +18,7 @@ BOOKRAG_MODEL_CACHE="$PWD/data/models" uv run bookrag evaluate \
   --output experiments/expanded-hybrid-new-run.json
 ```
 
-The evaluator copies only the SQLite main file and an existing WAL, without
+The evaluator copies only the SQLite main file and an existing nonempty WAL, without
 opening either input through SQLite. It checks file identities around capture;
 SQLite reconstructs shared memory and runs migrations only in the temporary
 directory. Subsequent evaluation connections are read-only. A changing input
@@ -33,6 +33,16 @@ so existing weights are reused while loader metadata writes stay in the
 temporary cache. `BOOKRAG_MODEL_CACHE` is restored when the context exits. The
 temporary database, metadata and links are removed on success or failure; source
 artifacts are not copied because quote checks use canonical SQLite sections.
+
+Hugging Face snapshot files commonly use relative links into a sibling `blobs`
+directory. The copy checks dangling targets relative to the original link's
+parent, retaining valid snapshot paths. Small configuration files become owned
+regular files; large completed targets are referenced read-only. This matters
+offline: dropping valid relative links makes the model unavailable despite
+having the weight blobs. An isolated offline real MiniLM load/encode and a
+synthetic HF-layout regression verify this path. Requested semantic modes that
+all fall back to words are explicitly reported and do not measure semantic
+relevance.
 
 Installed subset indexes retain their target database path/inode binding and
 sealed generation receipts. They cannot be rebound implicitly to a temporary
@@ -57,8 +67,12 @@ prepare a checkpointed copy and explicitly reinstall a compatible ready index
 to establish **that copy's** binding. Copying a DB and its partial active pointer
 alone is not a valid recipe. A checkpoint does not repair a stale coverage proof.
 
-Original main/WAL/SHM, selected metadata/generation and the installation receipt
-are checked around reference reads and at evaluation exit. Any source change
+Original main/nonempty-WAL, selected metadata/generation and the installation receipt
+are checked around reference reads and at evaluation exit. SHM and zero-byte WAL
+are coordination sidecars that external read-only clients can create, update or
+remove without changing canonical data. They are not input-identity gates;
+immutable reference connections never open them. A WAL becoming nonempty still
+rejects the run, even without a known committed frame. Any canonical source change
 discards the run, including additions outside semantic coverage: a frozen
 evaluation must still compare the same complete lexical corpus. Corrupt or stale
 partial bindings retain the explicit lexical fallback and its actual-mode report;

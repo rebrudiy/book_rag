@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import tempfile
 import time
 from collections import Counter
@@ -336,8 +337,18 @@ def check_live(base: str, artifacts: Path) -> dict[str, Any]:
             identity = card.get_attribute("data-book-id")
             book = page.request.get(f"{base}/api/books/{identity}").json()
             card.get_by_role("link", name="Читать:", exact=False).click()
-            expect(page.locator("#reader-text")).to_have_text(book["sections"][0]["text"])
+            page.wait_for_url(re.compile(r"[?&]section=[0-9]+(?:&|$)"))
+            selected_id = parse_qs(urlsplit(page.url).query)["section"][0]
+            selected = next(section for section in book["sections"] if str(section["id"]) == selected_id)
+            expect(page.locator("#reader-text")).to_have_text(selected["text"])
             expect(page.locator("#reader-sidebar-title")).to_have_text(book["title"])
+            first = book["sections"][0]
+            if first.get("section_author") == "Book RAG" and first.get("section_role") == "editorial":
+                assert selected["id"] != first["id"], "Default reading must open the original, not generated credits"
+                page.locator("#reader-toc").get_by_role("button", name=first["title"], exact=True).click()
+                expect(page.locator("#reader-text")).to_have_text(first["text"])
+                page.reload(wait_until="networkidle")
+                expect(page.locator("#reader-text")).to_have_text(first["text"])
         page.set_viewport_size({"width": 390, "height": 844})
         no_overflow(page)
         assert all(method == "GET" for method in methods)

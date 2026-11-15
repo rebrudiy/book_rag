@@ -555,8 +555,8 @@ class Library:
     def passages(self, passage_ids: list[int]) -> list[dict[str, Any]]:
         """Read a bounded candidate batch in input order, verifying exact source slices.
 
-        Missing or nonsearchable passages are omitted. Corrupt evidence carries
-        verified=False so retrieval callers can suppress it and report a warning.
+        Missing, nonsearchable or misowned passages are omitted. Other corrupt
+        evidence carries verified=False for callers to suppress with a warning.
         """
         if len(passage_ids) > 500 or any(type(identity) is not int or identity < 1 for identity in passage_ids):
             raise ValueError("Expected at most 500 positive integer passage IDs")
@@ -571,7 +571,8 @@ class Library:
                 "substr(s.text,p.start+1,p.end-p.start) section_quote,"
                 "a.section_author,a.section_role,a.attribution_basis,a.section_translator,0.0 score,"
                 "COALESCE(i.stage,b.status) ingestion_status,i.error ingestion_error "
-                "FROM passages p JOIN books b ON b.id=p.book_id JOIN sections s ON s.id=p.section_id "
+                "FROM passages p JOIN books b ON b.id=p.book_id "
+                "JOIN sections s ON s.id=p.section_id AND s.book_id=p.book_id "
                 "LEFT JOIN source_pipeline i ON i.book_id=b.id "
                 "LEFT JOIN section_roles a ON a.section_id=s.id "
                 f"WHERE b.status='indexed' AND p.id IN ({placeholders})",
@@ -592,7 +593,7 @@ class Library:
             "s.title section_title,s.text section_text,a.section_author,a.section_role,a.attribution_basis,"
             "a.section_translator,"
             "0.0 score,COALESCE(i.stage,b.status) ingestion_status,i.error ingestion_error FROM passages p "
-            "JOIN books b ON p.book_id=b.id JOIN sections s ON p.section_id=s.id "
+            "JOIN books b ON p.book_id=b.id JOIN sections s ON p.section_id=s.id AND s.book_id=p.book_id "
             "LEFT JOIN source_pipeline i ON i.book_id=b.id "
             "LEFT JOIN section_roles a ON a.section_id=s.id WHERE p.id=? AND b.status='indexed'",
             (passage_id,),
@@ -654,19 +655,49 @@ class Library:
             warnings.append(plan.reason)
         if expression:
             with self.connect() as conn:
+                envelope = ""
+                bounds: tuple[Any, ...] = ()
+                if book_id is not None:
+                    # Keep the index seeks in this statement's read snapshot:
+                    # ingestion may replace passage IDs between separate SELECTs.
+                    # The envelope can contain other books; retain exact filters.
+                    envelope = (
+                        "AND passage_fts.rowid>=COALESCE((SELECT id FROM passages WHERE book_id=? "
+                        "ORDER BY id LIMIT 1),0) "
+                        "AND passage_fts.rowid<=COALESCE((SELECT id FROM passages WHERE book_id=? "
+                        "ORDER BY id DESC LIMIT 1),-1) "
+                    )
+                    bounds = (book_id, book_id)
                 rows = conn.execute(
+                    "WITH candidates AS MATERIALIZED ("
+                    "SELECT p.id,bm25(passage_fts,1.0,2.0,1.5,1.2) score "
+                    "FROM passage_fts JOIN passages p ON p.id=passage_fts.rowid "
+                    "JOIN books b ON b.id=p.book_id "
+                    "JOIN sections s ON s.id=p.section_id AND s.book_id=p.book_id "
+                    "WHERE passage_fts MATCH ? AND b.status='indexed' "
+                    "AND (? IS NULL OR b.id=?) AND (? IS NULL OR b.language=?) "
+                    + envelope
+                    + "ORDER BY score,p.id LIMIT ?) "
                     "SELECT p.*,b.title,b.author,b.language,b.edition,b.work_id,b.source_url,b.rights,"
                     "b.rights_url,b.artifact_sha256,b.content_sha256,"
                     "s.title section_title,substr(s.text,p.start+1,p.end-p.start) section_quote,"
                     "a.section_author,a.section_role,a.attribution_basis,a.section_translator,"
-                    "bm25(passage_fts,1.0,2.0,1.5,1.2) score,"
+                    "c.score,"
                     "COALESCE(i.stage,b.status) ingestion_status,i.error ingestion_error "
-                    "FROM passage_fts JOIN passages p ON p.id=passage_fts.rowid JOIN books b ON b.id=p.book_id "
+                    "FROM candidates c JOIN passages p ON p.id=c.id JOIN books b ON b.id=p.book_id "
                     "LEFT JOIN source_pipeline i ON i.book_id=b.id "
-                    "JOIN sections s ON s.id=p.section_id LEFT JOIN section_roles a ON a.section_id=s.id "
-                    "WHERE passage_fts MATCH ? AND b.status='indexed' "
-                    "AND (? IS NULL OR b.id=?) AND (? IS NULL OR b.language=?) ORDER BY score,p.id LIMIT ?",
-                    (expression, book_id, book_id, language, language, max(200, limit) if mode == "lexical" else limit),
+                    "JOIN sections s ON s.id=p.section_id AND s.book_id=p.book_id "
+                    "LEFT JOIN section_roles a ON a.section_id=s.id "
+                    "ORDER BY c.score,p.id",
+                    (
+                        expression,
+                        book_id,
+                        book_id,
+                        language,
+                        language,
+                        *bounds,
+                        max(200, limit) if mode == "lexical" else limit,
+                    ),
                 ).fetchall()
                 results = [self._result(row) for row in rows]
                 if any(not r["verified"] for r in results):

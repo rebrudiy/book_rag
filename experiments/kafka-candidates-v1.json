@@ -1,0 +1,450 @@
+{
+  "created_at": "2026-11-14T22:51:42.146718+00:00",
+  "kind": "known_inspected_failure_diagnostic_not_heldout_or_promotion",
+  "query": "Человек просыпается и обнаруживает, что превратился в насекомое",
+  "target_book": {
+    "id": "pg22367-full",
+    "title": "Die Verwandlung",
+    "author": "Kafka, Franz, 1883-1924",
+    "language": "de"
+  },
+  "target_passage_id": null,
+  "index": {
+    "generation": "gen-1812f290f02e09f392e2c880bbcee602de30282ec4ad406300e1c6ff1393555f-a8b86bbaa7d0",
+    "model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+    "model_revision": "e8f8c211226b894fcb81acc59f3b34ba3efd5f42",
+    "vectors": 1865985,
+    "passages": 445466
+  },
+  "model_device": "cpu",
+  "score_math": "blocked float32 cosine; exact ranks break score ties by immutable window position",
+  "semantic_floor": 0.3,
+  "pool": {
+    "passages": 100,
+    "windows": 2000
+  },
+  "best_target_window": {
+    "window_position": 374759,
+    "passage_id": 944665,
+    "passage_window_ordinal": 0,
+    "cosine": 0.3943069875240326,
+    "global_window_rank": 7826,
+    "target_language_window_rank": 2420,
+    "above_floor": true,
+    "in_global_2000_windows": false,
+    "in_first_stage_100_passages": false
+  },
+  "target_book_in_first_stage": false,
+  "target_book_candidates": [],
+  "top_window_distribution": {
+    "rows": 100,
+    "distinct_passages": 81,
+    "distinct_books": 26,
+    "books": [
+      {
+        "book_id": "pg38385-full",
+        "count": 35
+      },
+      {
+        "book_id": "pg74363-full",
+        "count": 20
+      },
+      {
+        "book_id": "pg10834-full",
+        "count": 7
+      },
+      {
+        "book_id": "pg79144-full",
+        "count": 5
+      },
+      {
+        "book_id": "pg48798-full",
+        "count": 3
+      },
+      {
+        "book_id": "pg48830-full",
+        "count": 3
+      },
+      {
+        "book_id": "pg10060-full",
+        "count": 3
+      },
+      {
+        "book_id": "wsru-underground-4d592d8e2fd1",
+        "count": 2
+      },
+      {
+        "book_id": "pg10685-full",
+        "count": 2
+      },
+      {
+        "book_id": "pg58109-full",
+        "count": 2
+      },
+      {
+        "book_id": "pg11075-full",
+        "count": 2
+      },
+      {
+        "book_id": "pg63371-full",
+        "count": 2
+      },
+      {
+        "book_id": "pg106-full",
+        "count": 1
+      },
+      {
+        "book_id": "pg59547-full",
+        "count": 1
+      },
+      {
+        "book_id": "pg61775-full",
+        "count": 1
+      },
+      {
+        "book_id": "pg46593-full",
+        "count": 1
+      },
+      {
+        "book_id": "pg10962-full",
+        "count": 1
+      },
+      {
+        "book_id": "pg11047-full",
+        "count": 1
+      },
+      {
+        "book_id": "pg33692-full",
+        "count": 1
+      },
+      {
+        "book_id": "pg10936-full",
+        "count": 1
+      },
+      {
+        "book_id": "pg10842-full",
+        "count": 1
+      },
+      {
+        "book_id": "pg73374-full",
+        "count": 1
+      },
+      {
+        "book_id": "pg69172-full",
+        "count": 1
+      },
+      {
+        "book_id": "pg10619-full",
+        "count": 1
+      },
+      {
+        "book_id": "pg56330-full",
+        "count": 1
+      },
+      {
+        "book_id": "pg10005-full",
+        "count": 1
+      }
+    ],
+    "languages": {
+      "fr": 46,
+      "de": 33,
+      "en": 19,
+      "ru": 2
+    }
+  },
+  "first_stage_distribution": {
+    "rows": 100,
+    "distinct_passages": 100,
+    "distinct_books": 30,
+    "books": [
+      {
+        "book_id": "pg38385-full",
+        "count": 29
+      },
+      {
+        "book_id": "pg74363-full",
+        "count": 18
+      },
+      {
+        "book_id": "pg10834-full",
+        "count": 9
+      },
+      {
+        "book_id": "pg79144-full",
+        "count": 5
+      },
+      {
+        "book_id": "pg48798-full",
+        "count": 4
+      },
+      {
+        "book_id": "pg11075-full",
+        "count": 3
+      },
+      {
+        "book_id": "pg63371-full",
+        "count": 3
+      },
+      {
+        "book_id": "pg69172-full",
+        "count": 3
+      },
+      {
+        "book_id": "pg106-full",
+        "count": 2
+      },
+      {
+        "book_id": "wsru-underground-4d592d8e2fd1",
+        "count": 2
+      },
+      {
+        "book_id": "pg10685-full",
+        "count": 2
+      },
+      {
+        "book_id": "pg58109-full",
+        "count": 2
+      },
+      {
+        "book_id": "pg48830-full",
+        "count": 1
+      },
+      {
+        "book_id": "pg59547-full",
+        "count": 1
+      },
+      {
+        "book_id": "pg10060-full",
+        "count": 1
+      },
+      {
+        "book_id": "pg61775-full",
+        "count": 1
+      },
+      {
+        "book_id": "pg46593-full",
+        "count": 1
+      },
+      {
+        "book_id": "pg10962-full",
+        "count": 1
+      },
+      {
+        "book_id": "pg11047-full",
+        "count": 1
+      },
+      {
+        "book_id": "pg33692-full",
+        "count": 1
+      },
+      {
+        "book_id": "pg10936-full",
+        "count": 1
+      },
+      {
+        "book_id": "pg10842-full",
+        "count": 1
+      },
+      {
+        "book_id": "pg73374-full",
+        "count": 1
+      },
+      {
+        "book_id": "pg10619-full",
+        "count": 1
+      },
+      {
+        "book_id": "pg56330-full",
+        "count": 1
+      },
+      {
+        "book_id": "pg10005-full",
+        "count": 1
+      },
+      {
+        "book_id": "pg20413-full",
+        "count": 1
+      },
+      {
+        "book_id": "pg1015-full",
+        "count": 1
+      },
+      {
+        "book_id": "pg1043-full",
+        "count": 1
+      },
+      {
+        "book_id": "pg10899-full",
+        "count": 1
+      }
+    ],
+    "languages": {
+      "fr": 38,
+      "de": 37,
+      "en": 23,
+      "ru": 2
+    }
+  },
+  "target_reencoding": [
+    {
+      "window_position": 374759,
+      "passage_id": 944665,
+      "passage_window_ordinal": 0,
+      "cosine": 0.3943069875240326,
+      "global_window_rank": 7826,
+      "target_language_window_rank": 2420,
+      "above_floor": true,
+      "in_global_2000_windows": false,
+      "in_first_stage_100_passages": false,
+      "canonical_text_sha256": "d5c7e9ef1526980b5c94a6b59b4b1b92bb1f2e72aa454738375f9ba6ae43445d",
+      "input_variants": [
+        {
+          "name": "frozen_header_window_128",
+          "input_sha256": "8500d6c1ae20b7674e0053cb4ddeb00aadef58c33e512a234fd3ed6a4d183b01",
+          "characters": 455,
+          "tokens_including_special": 124,
+          "truncated_by_128_limit": false,
+          "fresh_query_cosine": 0.3943069279193878,
+          "stored_query_cosine": 0.3943069875240326,
+          "fresh_stored_vector_cosine": 1.0,
+          "fresh_stored_max_abs_difference": 1.2293457984924316e-07
+        },
+        {
+          "name": "same_exact_window_without_header",
+          "input_sha256": "5da524ed2f1fd697d3cabbd49f1f30c90d7db56d2636509571d0c33b9ff28d2a",
+          "characters": 408,
+          "tokens_including_special": 109,
+          "truncated_by_128_limit": false,
+          "fresh_query_cosine": 0.445379376411438,
+          "stored_query_cosine": null,
+          "fresh_stored_vector_cosine": null,
+          "fresh_stored_max_abs_difference": null
+        },
+        {
+          "name": "exact_passage_first_sentence_without_header",
+          "input_sha256": "4d68fb95e386b1ba30d5e80542a843a4ba2191d6660194fbf510349b64cddd71",
+          "characters": 134,
+          "tokens_including_special": 37,
+          "truncated_by_128_limit": false,
+          "fresh_query_cosine": 0.39424073696136475,
+          "stored_query_cosine": null,
+          "fresh_stored_vector_cosine": null,
+          "fresh_stored_max_abs_difference": null
+        }
+      ]
+    },
+    {
+      "window_position": 374768,
+      "passage_id": 944667,
+      "passage_window_ordinal": 0,
+      "cosine": 0.3559649586677551,
+      "global_window_rank": 20837,
+      "target_language_window_rank": 5370,
+      "above_floor": true,
+      "in_global_2000_windows": false,
+      "in_first_stage_100_passages": false,
+      "canonical_text_sha256": "390927aa3ea77e42c5978a10a0bb7570de880e530e2b7b7012c32c7f514f708c",
+      "input_variants": [
+        {
+          "name": "frozen_header_window_128",
+          "input_sha256": "dd62c06126611d2428e4e961e30009523006b20c9e725745bdd0ab4cc342086a",
+          "characters": 487,
+          "tokens_including_special": 124,
+          "truncated_by_128_limit": false,
+          "fresh_query_cosine": 0.3559649586677551,
+          "stored_query_cosine": 0.3559649586677551,
+          "fresh_stored_vector_cosine": 0.9999998807907104,
+          "fresh_stored_max_abs_difference": 8.475035429000854e-08
+        },
+        {
+          "name": "same_exact_window_without_header",
+          "input_sha256": "75435bfe937fa0fb93f20ee34975b4541488f55c9a2dbea1b4791112604389b1",
+          "characters": 440,
+          "tokens_including_special": 109,
+          "truncated_by_128_limit": false,
+          "fresh_query_cosine": 0.44847995042800903,
+          "stored_query_cosine": null,
+          "fresh_stored_vector_cosine": null,
+          "fresh_stored_max_abs_difference": null
+        },
+        {
+          "name": "exact_passage_first_sentence_without_header",
+          "input_sha256": "0b0a2c8039e484dc4bce4bee464c1e0b4816b55fdb8d6032ce32ba68cb041021",
+          "characters": 45,
+          "tokens_including_special": 13,
+          "truncated_by_128_limit": false,
+          "fresh_query_cosine": 0.23473931849002838,
+          "stored_query_cosine": null,
+          "fresh_stored_vector_cosine": null,
+          "fresh_stored_max_abs_difference": null
+        }
+      ]
+    },
+    {
+      "window_position": 374782,
+      "passage_id": 944672,
+      "passage_window_ordinal": 0,
+      "cosine": 0.3390849530696869,
+      "global_window_rank": 31430,
+      "target_language_window_rank": 7444,
+      "above_floor": true,
+      "in_global_2000_windows": false,
+      "in_first_stage_100_passages": false,
+      "canonical_text_sha256": "a0b0667f55f4f635ecc8a2cca6122f3840c508ddb0275192f1324b8135a63a71",
+      "input_variants": [
+        {
+          "name": "frozen_header_window_128",
+          "input_sha256": "94cae7e6c26d892f4d2d3fdc39b78c2caf1bd37f48810a97319c9a8cd2b44ced",
+          "characters": 496,
+          "tokens_including_special": 124,
+          "truncated_by_128_limit": false,
+          "fresh_query_cosine": 0.3390849232673645,
+          "stored_query_cosine": 0.3390849530696869,
+          "fresh_stored_vector_cosine": 0.9999999403953552,
+          "fresh_stored_max_abs_difference": 7.450580596923828e-08
+        },
+        {
+          "name": "same_exact_window_without_header",
+          "input_sha256": "a812bffb78a1248db0c2aed745b2361df36e2e2099cd7e6fe9604e748b5d917a",
+          "characters": 449,
+          "tokens_including_special": 109,
+          "truncated_by_128_limit": false,
+          "fresh_query_cosine": 0.4153556227684021,
+          "stored_query_cosine": null,
+          "fresh_stored_vector_cosine": null,
+          "fresh_stored_max_abs_difference": null
+        },
+        {
+          "name": "exact_passage_first_sentence_without_header",
+          "input_sha256": "9461bdd40d9e2bdb7d1d302c91475a0baf6f047cdd9d733326cb9f219b2edc9f",
+          "characters": 225,
+          "tokens_including_special": 57,
+          "truncated_by_128_limit": false,
+          "fresh_query_cosine": 0.3689994215965271,
+          "stored_query_cosine": null,
+          "fresh_stored_vector_cosine": null,
+          "fresh_stored_max_abs_difference": null
+        }
+      ]
+    }
+  ],
+  "source_guards": {
+    "sqlite_mode": "ro&immutable=1; query_only; no Library constructor",
+    "database_stat_identity_unchanged": true,
+    "active_and_array_stat_identities_unchanged": true,
+    "source_passage_fingerprint_matches": true,
+    "complete_vector_and_id_payload_checksums_verified": true,
+    "database_full_file_sha256_checked": false
+  },
+  "limitations": [
+    "Known inspected regression, not a blind relevance test or evidence of improvement.",
+    "Input variants change only sampled inputs; there is no alternative full-corpus index or ranking.",
+    "Fresh device/batch arithmetic can differ from storage; drift is measured, not hidden.",
+    "First-sentence boundaries use simple punctuation and can stop at abbreviations.",
+    "Rank tie selection at the production argpartition boundary can differ from stable raw top-K.",
+    "No external text, translations, models or index generations are downloaded or activated."
+  ],
+  "elapsed_seconds": 15.669,
+  "process_peak_rss_mib": 3398.94
+}

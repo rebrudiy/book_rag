@@ -1,0 +1,82 @@
+{
+  "experiment": "sqlite-clone-v1",
+  "synthetic_only": true,
+  "license": "CC0-1.0",
+  "script_sha256": "cf57bac423d9a0ae94b37dc8f7261ff34e6899a49746c8617b0040df97880ea2",
+  "platform": {
+    "system": "Darwin",
+    "release": "25.6.0",
+    "machine": "arm64"
+  },
+  "requested_payload_mib": 20,
+  "capture": {
+    "method": "macos-fclonefileat",
+    "bytes": 21028864,
+    "sha256": "8c485231bc7a5e3b991f5ec769607dd9cc673aaabede4dd0034504a7452378e2",
+    "source_before": {
+      "main": {
+        "device": 16777229,
+        "inode": 23734727,
+        "bytes": 21028864,
+        "mtime_ns": 1794698250346096866,
+        "ctime_ns": 1794698250346096866,
+        "mode": 420,
+        "sha256": "8c485231bc7a5e3b991f5ec769607dd9cc673aaabede4dd0034504a7452378e2"
+      },
+      "-wal": null,
+      "-shm": null,
+      "-journal": null
+    },
+    "source_after": {
+      "main": {
+        "device": 16777229,
+        "inode": 23734727,
+        "bytes": 21028864,
+        "mtime_ns": 1794698250346096866,
+        "ctime_ns": 1794698250346096866,
+        "mode": 420,
+        "sha256": "8c485231bc7a5e3b991f5ec769607dd9cc673aaabede4dd0034504a7452378e2"
+      },
+      "-wal": null,
+      "-shm": null,
+      "-journal": null
+    },
+    "source_unchanged": true,
+    "target_device": 16777229,
+    "target_inode": 23734731,
+    "new_inode": true,
+    "sqlite_integrity": "ok",
+    "copy_budget_bytes": 0,
+    "native_or_copy_operation_ms": 0.19095838069915771,
+    "guarded_capture_ms": 55.35474978387356
+  },
+  "isolation": {
+    "target_mutation_preserves_source": true,
+    "source_mutation_preserves_target": true,
+    "initial_source_sha256": "8c485231bc7a5e3b991f5ec769607dd9cc673aaabede4dd0034504a7452378e2",
+    "source_after_target_mutation_sha256": "8c485231bc7a5e3b991f5ec769607dd9cc673aaabede4dd0034504a7452378e2",
+    "mutated_target_sha256": "15eccf21d2df06f9c0d6fc3e37f5a47507d672e603b56c79291035ee1da224ee",
+    "target_after_source_mutation_sha256": "15eccf21d2df06f9c0d6fc3e37f5a47507d672e603b56c79291035ee1da224ee",
+    "mutated_source_sha256": "60c19b08db9f93f17ee6118e27a6d1b6eff01dd750f371497d173a0861a992f2"
+  },
+  "limitations": [
+    "Only owned synthetic data was measured; no production/frozen corpus was read or cloned.",
+    "Callers must quiesce source writers; hash/sidecar guards are not a SQLite online-backup replacement.",
+    "Native clonefile success plus isolation verifies COW behavior; physical shared-block accounting was not measured.",
+    "Source SHA scans and target integrity checks are included in guarded time; only the clone/copy syscall stage is timed separately.",
+    "Later COW writes can need disk space; successful cloning does not reserve future write capacity."
+  ],
+  "filesystem_observation": {
+    "filesystem_type": "apfs",
+    "same_device": true,
+    "method": "df -P mount identification; diskutil info -plist; output/mount st_dev equality"
+  },
+  "checks": {
+    "pytest": {
+      "passed": 20,
+      "native_cow_passed": true
+    },
+    "ruff": "pass",
+    "ty": "pass"
+  }
+}

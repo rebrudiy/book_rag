@@ -1,0 +1,14 @@
+{
+  "status": "discarded",
+  "reason": "Original partial-index SQLite input changed; run discarded by the strict source guard",
+  "successful_quality_result": false,
+  "completed_phases_before_failure": [
+    "baseline",
+    "lexical"
+  ],
+  "failed_phase": "hybrid",
+  "report_files_published": false,
+  "log_sha256": "9e9596ff3f53b949f0d9dfda37938f46d9dd8fe8e155e542ad22589b547c9ddc",
+  "fix": "Canonical input identity retains main plus nonempty WAL; immutable reference never opens coordination sidecars. Regression covers an actual external SQLite reader.",
+  "cause_assessment": "Coordination-sidecar churn is the likely trigger: a real external read-only SQLite client reproduced the rejection, while the observed main-file size/mtime stayed unchanged. The original differing identity fields were not logged."
+}

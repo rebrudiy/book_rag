@@ -1,17 +1,22 @@
 # Local large-library MVP
 
 Measured on 14 November 2026. These are runtime results from the maintained
-development machine, not a corpus bundled with a fresh clone.
+development machine, not a corpus bundled with a fresh clone. Updated after the
+ten-work Russian import.
 
-The full interface is **http://127.0.0.1:8001**. It contains 3,991 searchable
-editions and 1,401,120 passages. Languages: English 1,940, French 1,031,
-German 1,009 and Russian 11. These are editions, not a verified unique-work total:
+The full interface is **http://127.0.0.1:8001**. It contains 4,001 searchable
+editions and 1,401,379 passages. Languages: English 1,940, French 1,031,
+German 1,009 and Russian 21. These are editions, not a verified unique-work total:
 the catalogue has 60 periodical editions and mostly provisional grouping.
-The manually confirmed full-work lower bound is 24.
+The manually confirmed full-work lower bound is 33.
 
 The home page's language shelves show real available titles. Russian originals
 include Dostoevsky's *Записки из подполья*, Turgenev's *Отцы и дети*, Tolstoy's
-*Смерть Ивана Ильича*, Chekhov's *Палата №6* and Gogol's *Шинель*. English,
+*Смерть Ивана Ильича*, Chekhov's *Палата №6* and Gogol's *Шинель*. The next
+audited selection adds nine complete originals, including *Пиковая дама*,
+*Левша*, *Муму*, *Хамелеон* and *Сон смешного человека*. *Человек в футляре*
+contains its full narrative but is marked partial because one note's attribution
+is unverified. [Source boundaries and proofs](RUSSIAN_SHORT_WORKS.md). English,
 French and German shelves include, when present in the actual catalogue,
 Carroll, Austen, Darwin, Plato, Voltaire, Flaubert, Kafka and others. A shelf is
 a small entry point; **Все книги на этом языке** opens the complete paginated
@@ -27,7 +32,7 @@ without another matrix or new encoding. The frozen source database SHA remained
 `2d77675ba2a68f63e25f507355272e3206db8f9abbe959f326cea96f774939f0`.
 
 Select **По смыслу** or **Гибридный**. The interface shows the exact edition
-coverage. Hybrid also searches words across all 3,991 editions. An uncovered
+coverage. Hybrid also searches words across all 4,001 editions. An uncovered
 selected book/language uses explicit lexical fallback. **По словам** works
 without any model. [Installation, checks and invalidation](INDEX_INSTALLATION.md)
 
@@ -75,7 +80,8 @@ metadata snapshot. It requires copy space plus a four-GiB reserve, accepts only
 development fixtures and never checkpoints the original database. Final held-out
 labels remain separate. Sequential RSS/cache measurements are not isolated
 mode-to-mode resource comparisons. No general relevance score is claimed here
-before those runs complete.
+from small-corpus scores. The completed 3,991-edition development run and its
+regressions are recorded in [large retrieval results](LARGE_RETRIEVAL.md).
 
 Restart the existing full library with:
 

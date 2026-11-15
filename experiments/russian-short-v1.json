@@ -1,0 +1,188 @@
+{
+  "schema_version": 1,
+  "recorded_at": "2026-11-14T23:24:37.734407+00:00",
+  "stage": "ready_for_root_review_not_imported",
+  "selection": {
+    "source_pages": 10,
+    "authors": 8,
+    "ready_editions": 10,
+    "full_original_works": 9,
+    "partial_editions": 1
+  },
+  "capture": {
+    "requests": 22,
+    "canonical_html_bytes": 1365989,
+    "deferred": false,
+    "first_html_retrieved_at": "2026-11-14T23:09:47.250072+00:00",
+    "last_html_retrieved_at": "2026-11-14T23:10:41.648996+00:00",
+    "immutable_raw_copies": 10,
+    "prior_cooldown_respected": true,
+    "same_shared_provider_state": true
+  },
+  "source_validation": {
+    "verified_projections": 10,
+    "coverage_counts": {
+      "full": 9,
+      "partial": 1
+    },
+    "matched_nonwhitespace_characters": 252157,
+    "source_chapter_markers": 47,
+    "retained_author_notes": 2,
+    "queen_of_spades_semantic_verse_lines": 12,
+    "source_canonical_character_stream_hashes_equal": true
+  },
+  "artifacts": {
+    "sections": 66,
+    "canonical_characters_including_attribution_wrappers": 313599,
+    "bytes": 577501,
+    "all_artifact_and_raw_hashes_verified": true,
+    "all_packaging_attributions_guarded_and_verified": true
+  },
+  "checks": {
+    "pytest": "61passed",
+    "ruff": "pass",
+    "ty": "pass",
+    "cached_repeat_http_requests": 0,
+    "cached_repeat_stable_artifact_and_receipt_books": 10
+  },
+  "live_import_performed": false,
+  "source_helper_sha256": "9ea0a97075435ebfc6d430baea9c45400de8258d932d10969312411aecfffc09",
+  "parser_fingerprint": "5e90d19c3bf4cd6a81a109bb8a29bb34d89094d2932f0b1b9fdfe8a65730964b",
+  "runtime_manifest": "data/russian/short-works-v1/manifest.json",
+  "public_review_spec": "corpus/russian-short-reviews.json",
+  "records": [
+    {
+      "id": "wsru-queen-of-spades-c63b9e94258c",
+      "title": "Пиковая дама",
+      "author": "Александр Сергеевич Пушкин",
+      "work_id": "ru-queen-of-spades",
+      "coverage": "full",
+      "source_url": "https://ru.wikisource.org/w/index.php?oldid=5644345",
+      "source_revision": 5644345,
+      "raw_sha256": "41f9af39e81543ef7420eb1c85c0a719eb39e2706013995e353c72c901fd88d4",
+      "artifact_sha256": "5c583dfd4f1b8ac3269857b01ff83f494a1d82d0ce02e78c4d98ae576e22104f",
+      "edition": "Викитека/ФЭБ; Пушкин, ПСС в 10 томах, Наука, 1978, т. 6, с. 210–237; оригинальный текст без поздних примечаний; captured wiki revision 5644345"
+    },
+    {
+      "id": "wsru-lefty-45ef2537b9d9",
+      "title": "Левша",
+      "author": "Николай Семёнович Лесков",
+      "work_id": "ru-lefty",
+      "coverage": "full",
+      "source_url": "https://ru.wikisource.org/w/index.php?oldid=2297917",
+      "source_revision": 2297917,
+      "raw_sha256": "fa06a2dfe7b3eb5ccead106407020c81703cc430d6fa7f8226f114ab72a335ad",
+      "artifact_sha256": "7c6f7469e7406bd72fac8f2bcd64d43dabd96ec28f386359619b1ce9e9338b5d",
+      "edition": "Викитека; Лесков, ПСС, 3-е изд., Типография А. Ф. Маркса, 1902, т. 4, с. 109–141; редакция ВТ с обновлённой орфографией; captured wiki revision 2297917"
+    },
+    {
+      "id": "wsru-chameleon-6a5f80896084",
+      "title": "Хамелеон",
+      "author": "Антон Павлович Чехов",
+      "work_id": "ru-chameleon",
+      "coverage": "full",
+      "source_url": "https://ru.wikisource.org/w/index.php?oldid=5321506",
+      "source_revision": 5321506,
+      "raw_sha256": "097c28b1018c9a971a9823106fcfd575a60ec61a0119a8a9b8d1d4aa34000e91",
+      "artifact_sha256": "742870899417a17df01d42785b1f24ddf3a3392f9bf77f070ec85dcb6b86a8a2",
+      "edition": "Викитека/ФЭБ; вариант журнала Осколки, 1884, № 36, с. 4; восстановлен по аппарату ПСС, Наука, 1975, т. 3, с. 52–55, 487; captured wiki revision 5321506"
+    },
+    {
+      "id": "wsru-man-in-a-case-28e726a2b8f0",
+      "title": "Человек в футляре",
+      "author": "Антон Павлович Чехов",
+      "work_id": "ru-man-in-a-case",
+      "coverage": "partial",
+      "source_url": "https://ru.wikisource.org/w/index.php?oldid=5680571",
+      "source_revision": 5680571,
+      "raw_sha256": "ddd6274b82aa89949021888ac6ce9c989b8e076dced1e12ae38f2f4ee5fa0fd9",
+      "artifact_sha256": "37317ca7365b170c94cdf3a09ad402d3868bbe4ccefb156c4cb01251475fd499",
+      "edition": "Викитека/Библиотека Комарова; Чехов, ПСС и писем в 30 томах, Наука, 1977, т. 10, с. 42–54; источник также указывает издание Маркса 1903, т. XII, с. 130–143; captured wiki revision 5680571"
+    },
+    {
+      "id": "wsru-dream-ridiculous-man-b5434c2c1b24",
+      "title": "Сон смешного человека",
+      "author": "Фёдор Михайлович Достоевский",
+      "work_id": "ru-dream-ridiculous-man",
+      "coverage": "full",
+      "source_url": "https://ru.wikisource.org/w/index.php?oldid=5627560",
+      "source_revision": 5627560,
+      "raw_sha256": "246e2d078755e87219c9a47bc94387315110827e53fc98950782308e4342dcc0",
+      "artifact_sha256": "611c32102adc4ad0cd8d29ebec9f378c48d11be213c64f8e8049c321f11e4223",
+      "edition": "Викитека; электронная транскрипция az.lib.ru; печатный экземпляр не установлен; captured wiki revision 5627560"
+    },
+    {
+      "id": "wsru-mumu-49cea43537bb",
+      "title": "Муму",
+      "author": "Иван Сергеевич Тургенев",
+      "work_id": "ru-mumu",
+      "coverage": "full",
+      "source_url": "https://ru.wikisource.org/w/index.php?oldid=5619020",
+      "source_revision": 5619020,
+      "raw_sha256": "115b7baef4b9cb5e5e3f2f6135291b972d3bc58edd1165c3a3744994dae2619f",
+      "artifact_sha256": "5a047b8958a4b16441be1cb5c7f32fd9f7848d63392a78c1b2737f554122553b",
+      "edition": "Викитека; электронная транскрипция turgenev.org.ru; печатный экземпляр не установлен; captured wiki revision 5619020"
+    },
+    {
+      "id": "wsru-wise-gudgeon-657bc443f59d",
+      "title": "Премудрый пискарь",
+      "author": "Михаил Евграфович Салтыков-Щедрин",
+      "work_id": "ru-wise-gudgeon",
+      "coverage": "full",
+      "source_url": "https://ru.wikisource.org/w/index.php?oldid=5617695",
+      "source_revision": 5617695,
+      "raw_sha256": "8c997af2ea5c151a3cb93cf837802a48f0fbe09fec62702abb504d06037da058",
+      "artifact_sha256": "3615c571b9d343f4d726864d4a9e1affb9d9b654d2a3ed7001987b0efe7bf6d0",
+      "edition": "Викитека/РВБ; Салтыков-Щедрин, Собрание сочинений в 20 томах, М.: Художественная литература, 1974, т. 16, кн. 1, с. 30–34; проверено по титульному листу РВБ; заголовок Викитеки содержит ошибочное описание издания; captured wiki revision 5617695"
+    },
+    {
+      "id": "wsru-red-flower-c5154930c63c",
+      "title": "Красный цветок",
+      "author": "Всеволод Михайлович Гаршин",
+      "work_id": "ru-red-flower",
+      "coverage": "full",
+      "source_url": "https://ru.wikisource.org/w/index.php?oldid=5628434",
+      "source_revision": 5628434,
+      "raw_sha256": "ba69e2b4745cd801b3831a4d2ecf6eeb807d3eb326b4c07fc6cea828316ce48f",
+      "artifact_sha256": "d36f90baff20775cb4103588ef001f1f9d6f53067af4d720088f82e8fef4d9e7",
+      "edition": "Викитека; электронная транскрипция Библиотеки Максима Мошкова (az.lib.ru); печатный экземпляр не установлен; captured wiki revision 5628434"
+    },
+    {
+      "id": "wsru-how-much-land-285bf7cc584e",
+      "title": "Много ли человеку земли нужно",
+      "author": "Лев Николаевич Толстой",
+      "work_id": "ru-how-much-land",
+      "coverage": "full",
+      "source_url": "https://ru.wikisource.org/w/index.php?oldid=1071293",
+      "source_revision": 1071293,
+      "raw_sha256": "553a87182babf3e9eaa578b95349a177625b150d719d1836bd51b6ef65c399bb",
+      "artifact_sha256": "0ebd281360393ff0d9dbf15d5e01f41dc8d4cb44ac7020ba9d1887126769fc68",
+      "edition": "Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1071293"
+    },
+    {
+      "id": "wsru-three-hermits-0c18bc8ae3e3",
+      "title": "Три старца",
+      "author": "Лев Николаевич Толстой",
+      "work_id": "ru-three-hermits",
+      "coverage": "full",
+      "source_url": "https://ru.wikisource.org/w/index.php?oldid=1074298",
+      "source_revision": 1074298,
+      "raw_sha256": "bf465bb96549bac64690ad9c3ec471bcef0e09b36a3ab2f34eced601bdfc9b85",
+      "artifact_sha256": "8535c620336d76a4b3307c13da8e1c9c96ec6609ce0384ba42ae8673eb50ecf7",
+      "edition": "Викитека/РВБ; Толстой, Собрание сочинений в 22 томах, Художественная литература, 1982, т. 10; captured wiki revision 1074298"
+    }
+  ],
+  "limitations": [
+    "Человек в футляре: complete narrative verified but Greek gloss cite_note-2 authorship unestablished; omitted with explicit partial scope, not counted among9fullworks.",
+    "Exact printed exemplar remains unknown for source transcriptions of Сон смешного человека,Муму,Красный цветок.",
+    "Images are not included; source/canonical whole-body proof allows NFC/whitespace normalization and excludes web controls/printed-page labels; verse12lines checked separately.",
+    "Левша printed pages109–141 retained as33rawHTMLanchors; no canonical offset-to-printed-page mapping or new reader page-navigation feature is claimed.",
+    "No live retrieval/reader scenario is claimed before root import; no new full-work count was written to the live database."
+  ],
+  "primary_bibliography_discrepancy": {
+    "work_id": "ru-wise-gudgeon",
+    "provider_header_claim": "ПСС,1837–1937,в16томах;АНСССР1974;т16;30–34",
+    "verified_upstream_titlepage": "Собрание сочинений в20томах. М.:Художественная литература,1974. Т16.Кн1.С30–34.",
+    "primary_source": "https://rvb.ru/saltykov-shchedrin/tocvol_16_1.htm"
+  }
+}
