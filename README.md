@@ -2,9 +2,9 @@
 
 An open, local-first library for finding passages, reading books in context and assembling research with verifiable sources. Search works without a generative model, API key or paid service.
 
-**Current scope:** functional prototype, not yet a 10–50k-work library. Includes eight small public-domain demo works/excerpts in English, French, German and Russian. Runtime books, models, indexes and user notes stay outside Git.
+**Current scope:** functional local prototype. The separately acquired development library contains **11,001 searchable editions in 11 languages**, with full-text semantic vectors for **1,308 editions**. These edition counts do not establish 10,000 unique complete works. A fresh checkout includes eight small public-domain demo works/excerpts in English, French, German and Russian. Runtime books, models, indexes and user notes stay outside Git.
 
-[Measured large-library MVP](docs/LARGE_LIBRARY.md): the 4,001-edition checkpoint has a verified semantic subset of 1,308. A [resumable acquisition queue](docs/CORPUS_SCALE.md) is expanding the local corpus toward10,000 candidate works; live counts are in `/api/stats`, and provisional identities do not establish unique-work totals. Runtime books are acquired separately from the demo. [Development measurements](docs/LARGE_RETRIEVAL.md) keep gains, regressions and a known global-description failure visible.
+[Measured large-library MVP](docs/LARGE_LIBRARY.md) documents the earlier 4,001-edition checkpoint. All 7,000 additions in the [resumable acquisition queue](docs/CORPUS_SCALE.md) are now indexed and audited. [Book discovery by description](docs/BOOK_DISCOVERY.md) searches title/author/subject metadata across all 11,001 editions and links to their readers. It has different coverage and limitations from full-text semantic search. Live counts are in `/api/stats`; [development measurements](docs/LARGE_RETRIEVAL.md) retain gains, regressions and known retrieval failures.
 
 ## Run
 
@@ -30,6 +30,7 @@ Open **http://127.0.0.1:8000**. The initial demo requires no network after insta
 - Extractive research board across books: verified evidence, with explicit empty results. No generated prose or inferred author positions.
 - Durable fragments, queries, editable notes/titles and thematic collections in local SQLite. Edits preserve the exact quotation and its provenance.
 - Optional local multilingual semantic search and reciprocal-rank fusion; explicit lexical fallback when vectors are missing/stale.
+- Multilingual book suggestions from descriptions and catalogue topics, with explicit metadata evidence, source-language filters and reader links.
 - Optional [local generated answers](docs/ANSWERS.md) from retrieved evidence, with mandatory exact supporting quotations, source links, abstention and source-version checks. Generated paraphrases can still be wrong; only source quotations are verified.
 - Reproducible development and held-out evaluation, independent citation checks and CI.
 

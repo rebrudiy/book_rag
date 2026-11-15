@@ -102,6 +102,39 @@ def create_app(directory: Path | None = None, *, answer_generator: AnswerGenerat
     ) -> dict[str, Any]:
         return library.book_page(language, q, status, offset, limit, ingestion_status)
 
+    @app.get("/api/discover/books")
+    def discover_books(
+        q: str = Query(default="", max_length=2000),
+        language: str | None = Query(default=None, max_length=20),
+        limit: int = Query(default=12, ge=1, le=48),
+    ) -> dict[str, Any]:
+        if not q.strip():
+            raise HTTPException(400, "Describe the book you want to find")
+        try:
+            from book_rag.book_discovery import discover_books as discover
+        except ImportError:
+            return {
+                "kind": "metadata_semantic",
+                "status": "unavailable",
+                "books": [],
+                "coverage": {},
+                "warnings": ["Поиск по описанию пока недоступен. Доступен каталог по названию и автору."],
+            }
+        result = discover(library, q.strip(), language=language, limit=limit)
+        messages = {
+            "metadata_index_partial_coverage": (
+                "По описанию доступны не все издания; покрытие показано рядом с результатами."
+            ),
+            "metadata_query_exceeds_three_token_windows": "Описание слишком длинное. Сократите его до основных тем.",
+            "metadata_discovery_unavailable_or_stale": (
+                "Поиск по описанию сейчас недоступен. Каталог по названию и автору работает."
+            ),
+        }
+        codes = result.get("warnings", [])
+        result["warning_codes"] = codes
+        result["warnings"] = [messages.get(code, "Поиск по описанию выполнен с ограничениями.") for code in codes]
+        return result
+
     @app.get("/api/books/{book_id}")
     def book(book_id: str) -> dict[str, Any]:
         result = library.get_book(book_id)

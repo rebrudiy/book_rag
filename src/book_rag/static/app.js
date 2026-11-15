@@ -16,7 +16,7 @@
     panel: 'fragments', answerSequence: 0, answerController: null, answerResponse: null,
     answerRouteSequence: 0, answerScopeBlocked: null, answerScopeLoading: false,
   };
-  const languageNames = { ru: 'Русский', en: 'English', fr: 'Français', de: 'Deutsch', es: 'Español', it: 'Italiano', zh: '中文', ja: '日本語', la: 'Latina', el: 'Ελληνικά', pt: 'Português', uk: 'Українська', ar: 'العربية' };
+  const languageNames = { ru: 'Русский', en: 'English', fr: 'Français', de: 'Deutsch', es: 'Español', it: 'Italiano', nl: 'Nederlands', fi: 'Suomi', sv: 'Svenska', da: 'Dansk', zh: '中文', ja: '日本語', la: 'Latina', el: 'Ελληνικά', pt: 'Português', uk: 'Українська', ar: 'العربية' };
   const statusNames = { discovered: 'Найдены', downloaded: 'Скачаны', processed: 'Обработаны', indexed: 'В поиске', searchable: 'В поиске', failed: 'Пока недоступны · ошибка', deferred: 'Пока недоступны · отложены', error: 'Требуют внимания', duplicate: 'Дубли' };
   const ingestionNames = { discovered: 'Ожидают загрузки', downloaded: 'Файл получен', processed: 'Текст извлечён', indexed: 'Завершены', failed: 'Не удались', deferred: 'Отложены', duplicate: 'Дубли' };
   // These are catalogue lookup hints, never fabricated book cards. Every match
@@ -150,6 +150,11 @@
     if (push && view !== 'reader') {
       const params = new URLSearchParams();
       if (view !== 'search') params.set('view', view);
+      if (view === 'library') {
+        if ($('library-search-mode').value === 'description') params.set('book_mode', 'description');
+        if ($('library-query').value.trim()) params.set('book_q', $('library-query').value.trim());
+        if ($('library-language').value) params.set('language', $('library-language').value);
+      }
       if (view === 'search' && state.query) params.set('q', state.query);
       if (view === 'search' && state.panel === 'answer') params.set('panel', 'answer');
       if (view === 'search' && state.panel === 'answer' && $('book-filter').value) params.set('scope', $('book-filter').value);
@@ -238,13 +243,15 @@
   }
   function createBookCard(book, index) {
     const card = node('article', 'book-card');
+    card.dataset.bookId = asID(book.id);
     const cover = node('div', `book-cover cover-${index % 6}`);
     cover.setAttribute('aria-hidden', 'true');
     cover.append(node('span', 'cover-title', book.title));
     const info = node('div', 'book-card-info');
     const language = node('div', 'book-language');
     language.append(node('span', '', labelLanguage(book.language)), node('span', 'book-status', bookSearchable(book) ? '● В поиске' : statusNames[book.status] || book.status || 'В библиотеке'));
-    info.append(language, node('h3', '', book.title), node('p', 'book-author', book.author));
+    const title = node('h3', '', book.title); title.title = book.title;
+    info.append(language, title, node('p', 'book-author', book.author));
     const selectedChapters = coverageType(book) === 'selected_chapters';
     const excerpt = coverageType(book) === 'excerpt' || /extract|excerpt|отрывок|фрагмент/i.test(book.edition || '');
     if (selectedChapters) info.append(node('p', 'book-excerpt-label', 'Выбранные главы'));
@@ -470,16 +477,53 @@
   }
   async function loadLibrary(offset = state.libraryOffset) {
     const request = ++state.libraryRequest;
-    const params = new URLSearchParams({ q: $('library-query').value.trim(), offset: String(offset), limit: '48' });
+    const description = $('library-search-mode').value === 'description';
+    const query = $('library-query').value.trim();
+    if (state.view === 'library') {
+      const route = new URLSearchParams({ view: 'library' });
+      if (description) route.set('book_mode', 'description');
+      if (query) route.set('book_q', query);
+      if ($('library-language').value) route.set('language', $('library-language').value);
+      history.replaceState({}, '', '/?' + route);
+    }
+    const params = new URLSearchParams({ q: query, offset: String(offset), limit: description ? '12' : '48' });
+    $('library-status').disabled = description; $('library-ingestion-status').disabled = description;
+    $('library-query').placeholder = description ? 'Опишите тему, идею или сюжет книги' : 'Название или автор';
+    $('book-discovery-context').classList.toggle('hidden', !description);
+    $('book-discovery-context').textContent = description ? 'Ищем по названию, автору и темам каталога. Это поиск книг по метаданным; поиск фрагментов внутри текста доступен отдельно.' : '';
+    $('book-discovery-warnings').classList.add('hidden'); $('book-discovery-warnings').textContent = '';
+    $('library-books').nextElementSibling.classList.toggle('hidden', description);
+    if (description && !query) {
+      empty($('library-books'), 'Какую книгу вы хотите найти?', 'Опишите тему, идею или сюжет. Название и язык запроса могут отличаться от языка издания.');
+      $('library-count').textContent = ''; $('library-page').textContent = ''; state.libraryOffset = 0; return;
+    }
     if ($('library-language').value) params.set('language', $('library-language').value);
-    if ($('library-status').value) params.set('status', $('library-status').value);
-    if ($('library-ingestion-status').value) params.set('ingestion_status', $('library-ingestion-status').value);
-    loading($('library-books'), 'Загружаем страницу каталога');
+    if (!description && $('library-status').value) params.set('status', $('library-status').value);
+    if (!description && $('library-ingestion-status').value) params.set('ingestion_status', $('library-ingestion-status').value);
+    loading($('library-books'), description ? 'Ищем книги по описанию' : 'Загружаем страницу каталога');
     $('library-prev').disabled = true; $('library-next').disabled = true; $('library-count').textContent = 'Загружаем…';
     try {
-      const result = await api(`/api/books?${params}`);
+      const result = await api(`${description ? '/api/discover/books' : '/api/books'}?${params}`);
       if (request !== state.libraryRequest) return;
       const books = result.books || []; const total = result.total ?? books.length;
+      if (description) {
+        state.libraryOffset = 0; state.libraryHasMore = false;
+        const coverage = result.coverage || {};
+        $('library-count').textContent = `Ближайшие совпадения: ${formatNumber(books.length)}`;
+        if (Number.isFinite(coverage.indexed_editions) && Number.isFinite(coverage.searchable_editions)) $('book-discovery-context').textContent += ` В поиске по описанию: ${formatNumber(coverage.indexed_editions)} из ${formatNumber(coverage.searchable_editions)} доступных изданий.`;
+        const warnings = Array.isArray(result.warnings) ? result.warnings.filter((value) => typeof value === 'string') : [];
+        $('book-discovery-warnings').textContent = warnings.join('\n'); $('book-discovery-warnings').classList.toggle('hidden', !warnings.length);
+        if (books.length) $('library-books').replaceChildren(...books.map((book, index) => {
+          const card = createBookCard(book, index);
+          const evidence = book.metadata_evidence || {};
+          const subjects = Array.isArray(evidence.subjects) ? evidence.subjects.filter((value) => typeof value === 'string') : [];
+          card.querySelector('.book-card-info').insertBefore(node('p', 'book-discovery-evidence', subjects.length ? `Темы каталога: ${subjects.slice(0, 4).join(' · ')}` : 'Подобрано по метаданным издания'), card.querySelector('.book-card-footer'));
+          return card;
+        }));
+        else if (result.status === 'unavailable') empty($('library-books'), 'Поиск по описанию пока недоступен', 'Доступен обычный каталог по названию и автору.');
+        else empty($('library-books'), 'Совпадения пока не найдены', 'Попробуйте уточнить описание или изменить язык источников.');
+        announce($('library-count').textContent); return;
+      }
       if (!books.length && total > 0 && offset >= total) { loadLibrary(Math.floor((total - 1) / 48) * 48); return; }
       state.libraryOffset = result.offset ?? offset;
       state.libraryTotal = total;
@@ -1202,7 +1246,11 @@
     const params = new URLSearchParams(location.search);
     if (params.has('saved')) { await openSaved(params.get('saved'), params.has('chapter') ? params.get('chapter') : null, false); return; }
     if (params.get('book')) { await openBook(params.get('book'), params.get('section'), params.get('passage'), false); return; }
-    if (params.get('view') === 'library' && [...$('library-language').options].some((option) => option.value === params.get('language'))) shelfCatalogFilters(params.get('language'));
+    if (params.get('view') === 'library') {
+      if ([...$('library-language').options].some((option) => option.value === params.get('language'))) shelfCatalogFilters(params.get('language'));
+      $('library-search-mode').value = params.get('book_mode') === 'description' ? 'description' : 'title';
+      if (params.has('book_q')) $('library-query').value = params.get('book_q');
+    }
     showView(params.get('view') || 'search', false);
     if (params.get('panel') === 'answer' && state.view === 'search') {
       const query = params.get('q') || '';
@@ -1292,6 +1340,8 @@
   $('export-saved').addEventListener('click', exportSaved);
   $('export-markdown').addEventListener('click', exportMarkdown);
   $('library-query').addEventListener('input', debounce(() => loadLibrary(0)));
+  $('library-search-mode').addEventListener('change', () => loadLibrary(0));
+  $('open-book-discovery').addEventListener('click', () => { $('library-search-mode').value = 'description'; $('library-query').value = $('query').value.trim(); showView('library'); $('library-query').focus(); });
   $('library-language').addEventListener('change', () => loadLibrary(0));
   $('library-status').addEventListener('change', () => loadLibrary(0));
   $('library-ingestion-status').addEventListener('change', () => loadLibrary(0));

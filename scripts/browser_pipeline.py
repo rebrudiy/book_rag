@@ -30,6 +30,9 @@ def integer(text: str) -> int:
 
 
 def assert_counters(page: Page, stats: dict[str, Any]) -> None:
+    details = page.locator(".library-state-details")
+    if details.count() and not details.evaluate("element => element.open"):
+        details.locator("summary").click()
     expect(page.get_by_role("heading", name="Доступность изданий", exact=True)).to_be_visible()
     expect(page.get_by_role("heading", name="Загрузка и обработка · последняя попытка")).to_be_visible()
     assert integer(page.locator('#pipeline-stats [data-status="indexed"] b').inner_text()) == stats.get(

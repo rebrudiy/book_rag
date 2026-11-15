@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "kind": "metadata_semantic",
+  "scope": "All searchable editions metadata only; no passage/fulltext semantic coverage or newunique-work claim",
+  "ready_generation": "generation-27a6f685f21c76fca520e1a3",
+  "ready_sha256": "2ad72805d2f7e972503c7133b4033e6573bee73d68bd2a3ba24995721cd21817",
+  "build": {
+    "indexed_editions": 11001,
+    "searchable_editions_at_build": 11001,
+    "vector_bytes": 16897664,
+    "vector_shape": [
+      11001,
+      384
+    ],
+    "dtype": "float32",
+    "device": "mps",
+    "elapsed_seconds": 31.724,
+    "metadata_windows": 11059,
+    "token_truncated_editions": 0,
+    "field_truncated_editions": 11,
+    "database_modified": false,
+    "passage_semantic_coverage_claimed": false
+  },
+  "model": {
+    "embedding_profile": {
+      "document_prefix": "",
+      "max_tokens": null,
+      "model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+      "name": "minilm-v2",
+      "query_prefix": "",
+      "revision": "e8f8c211226b894fcb81acc59f3b34ba3efd5f42",
+      "strategy": "token-windows-v2"
+    },
+    "files": {
+      "1_Pooling/config.json": "4be450dde3b0273bb9787637cfbd28fe04a7ba6ab9d36ac48e92b11e350ffc23",
+      "README.md": "1e98ea05b0de579fcaad3d625b62ea55647142ed674d5f5ebf1440e4bbbb6f23",
+      "config.json": "6300193cb75e01cf80c96decef7187dfb33094d97cc1490b7ead6ff134476e4e",
+      "config_sentence_transformers.json": "b8c64b5cece00d8424b4896ea75b512b6008576088497609dfeb6bd63e6d36b8",
+      "model.safetensors": "eaa086f0ffee582aeb45b36e34cdd1fe2d6de2bef61f8a559a1bbc9bd955917b",
+      "modules.json": "8f4b264b80206c830bebbdcae377e137925650a433b689343a63bdc9b3145460",
+      "sentence_bert_config.json": "70f4448f31320443fe3557cacea5abf2dcc4915dda8c80646bec9f3bb0aa5a1f",
+      "special_tokens_map.json": "378eb3bf733eb16e65792d7e3fda5b8a4631387ca04d2015199c4d4f22ae554d",
+      "tokenizer.json": "2c3387be76557bd40970cec13153b3bbf80407865484b209e655e5e4729076b8",
+      "tokenizer_config.json": "5036ea374ffedd706e3bef33e2e0d6953cb868ef8a490e76e32ba0faa37a6b9b"
+    },
+    "model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+    "revision": "e8f8c211226b894fcb81acc59f3b34ba3efd5f42"
+  },
+  "metadata_fingerprint": "37a557b081fdee9b61f16be9a7f49454e3e31c5edcd3523871c9404b2fc12c0d",
+  "generation_total_bytes": 27399295,
+  "development": {
+    "fixture_sha256": "fbe071cad32cd65d79a88028f1301288f51820fa26800564c846ad3641def0a6",
+    "cases": 25,
+    "positive_cases": 23,
+    "negative_curated_scope_controls": 2,
+    "known_curated_target_recall_at": {
+      "1": 0.17391304347826086,
+      "12": 0.391304347826087,
+      "5": 0.391304347826087
+    },
+    "known_curated_target_mrr_at12": 0.26956521739130435,
+    "cold_query_seconds": 5.682025250047445,
+    "warm_median_seconds": 1.4042411870323122,
+    "human_gold_labels": false,
+    "interpretation": "Recall of fixed knowncurated target editions/groups on authored open metadata descriptions; alternate uncatalogued translations may be relevant but receive no posthoc credit. Negative controls assert no curated20 target, not whole-library absence."
+  },
+  "negative_controls": [
+    {
+      "id": "negative-nonsense",
+      "query": "zzqv mnlp frrtx",
+      "top3": [
+        {
+          "id": "pg25704-full",
+          "title": "Zola",
+          "score": 0.39167678356170654
+        },
+        {
+          "id": "pg728-full",
+          "title": "Emile Zola",
+          "score": 0.36787712574005127
+        },
+        {
+          "id": "pg50468-full",
+          "title": "The Oak Ridge ALGOL Compiler for the Control Data Corporation 1604 Preliminary Programmer's Manual",
+          "score": 0.34670671820640564
+        }
+      ],
+      "scope": "No relevant curated20 target is asserted; absence across all11001 full texts is not claimed"
+    },
+    {
+      "id": "negative-modern-device",
+      "query": "How do I enable Bluetooth on a2026 smartphone?",
+      "top3": [
+        {
+          "id": "pg59817-full",
+          "title": "Blue Ridge Parkway, Virginia and North Carolina (1949)",
+          "score": 0.25351452827453613
+        },
+        {
+          "id": "pg62116-full",
+          "title": "A Working Plan for Colored Antituberculosis Leagues",
+          "score": 0.19179315865039825
+        },
+        {
+          "id": "pg78066-full",
+          "title": "How to write Little Blue Books",
+          "score": 0.19148343801498413
+        }
+      ],
+      "scope": "No relevant curated20 target is asserted; absence across all11001 full texts is not claimed"
+    }
+  ],
+  "cpu_mps_alignment": {
+    "curated_inputs": 20,
+    "minimum_same_input_cosine": 1.0,
+    "max_component_difference": 1.5087425708770752e-07,
+    "relevance_accuracy_claim": false
+  },
+  "runtime_results": "data/evaluations/book-discovery-v1/results.json",
+  "checks": [
+    "12 isolated metadata/checkpoint/coverage tests passed",
+    "Ruff passed",
+    "ty passed"
+  ],
+  "implementation_files": {
+    "src/book_rag/book_discovery.py": "f2b60509f24f549b44247944a8ecae6439484be028093883d0261d02ca0cf05c"
+  },
+  "production_API_UI_integration": "Parent-owned separate integration; backend function ready"
+}

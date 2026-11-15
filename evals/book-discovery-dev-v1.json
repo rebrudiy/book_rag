@@ -1,0 +1,308 @@
+{
+  "schema_version": 1,
+  "license": "CC0-1.0 for authored query text",
+  "scope": "OPEN development only;25 descriptions/controls authored from knowncurated20 metadata,19 existing curated groups; no sealed inputs or newfinaltargets",
+  "full_text_relevance_gold": false,
+  "cases": [
+    {
+      "id": "curated-01",
+      "query": "A children's fantasy about a girl entering a strange underground world of talking animals.",
+      "relevant_edition_ids": [
+        "pg11-full"
+      ],
+      "curated_work_id": "pg11-alice",
+      "target_edition": "pg11-full",
+      "kind": "positive_curated_metadata_description",
+      "language": null,
+      "human_gold_label": false
+    },
+    {
+      "id": "curated-02",
+      "query": "An English social comedy about courtship, marriage and class among country families.",
+      "relevant_edition_ids": [
+        "pg1342-full"
+      ],
+      "curated_work_id": "pg1342-pride",
+      "target_edition": "pg1342-full",
+      "kind": "positive_curated_metadata_description",
+      "language": null,
+      "human_gold_label": false
+    },
+    {
+      "id": "curated-03",
+      "query": "An early scientific explanation of biological evolution through natural selection.",
+      "relevant_edition_ids": [
+        "pg1228-full",
+        "pg2009-full"
+      ],
+      "curated_work_id": "pg1228-origin",
+      "target_edition": "pg1228-full",
+      "kind": "positive_curated_metadata_description",
+      "language": null,
+      "human_gold_label": false
+    },
+    {
+      "id": "curated-04",
+      "query": "Personal reflections by a Roman emperor on Stoic ethics and how to live well.",
+      "relevant_edition_ids": [
+        "pg2680-full"
+      ],
+      "curated_work_id": "pg2680-meditations",
+      "target_edition": "pg2680-full",
+      "kind": "positive_curated_metadata_description",
+      "language": null,
+      "human_gold_label": false
+    },
+    {
+      "id": "curated-05",
+      "query": "Un conte philosophique satirique qui met en cause l’optimisme face aux malheurs du monde.",
+      "relevant_edition_ids": [
+        "pg4650-full"
+      ],
+      "curated_work_id": "pg4650-candide",
+      "target_edition": "pg4650-full",
+      "kind": "positive_curated_metadata_description",
+      "language": null,
+      "human_gold_label": false
+    },
+    {
+      "id": "curated-06",
+      "query": "Eine surreale Erzählung über einen Mann, dessen Verwandlung seinen Platz in der Familie zerstört.",
+      "relevant_edition_ids": [
+        "pg22367-full"
+      ],
+      "curated_work_id": "pg22367-metamorphosis",
+      "target_edition": "pg22367-full",
+      "kind": "positive_curated_metadata_description",
+      "language": null,
+      "human_gold_label": false
+    },
+    {
+      "id": "curated-07",
+      "query": "Шутливое русское стихотворение, обращённое к женщине, которая нюхает табак.",
+      "relevant_edition_ids": [
+        "pg5316-full"
+      ],
+      "curated_work_id": "pg5316-pushkin",
+      "target_edition": "pg5316-full",
+      "kind": "positive_curated_metadata_description",
+      "language": null,
+      "human_gold_label": false
+    },
+    {
+      "id": "curated-08",
+      "query": "Классический экономический трактат о разделении труда, рынках и богатстве общества.",
+      "relevant_edition_ids": [
+        "pg3300-full"
+      ],
+      "curated_work_id": "pg3300-wealth",
+      "target_edition": "pg3300-full",
+      "kind": "positive_curated_metadata_description",
+      "language": null,
+      "human_gold_label": false
+    },
+    {
+      "id": "curated-09",
+      "query": "Научная книга XIX века о происхождении видов и естественном отборе.",
+      "relevant_edition_ids": [
+        "pg1228-full",
+        "pg2009-full"
+      ],
+      "curated_work_id": "pg1228-origin",
+      "target_edition": "pg2009-full",
+      "kind": "positive_curated_metadata_description",
+      "language": null,
+      "human_gold_label": false
+    },
+    {
+      "id": "curated-10",
+      "query": "Detective short stories in Victorian London about solving crimes through close observation.",
+      "relevant_edition_ids": [
+        "pg1661-full"
+      ],
+      "curated_work_id": "pg1661",
+      "target_edition": "pg1661-full",
+      "kind": "positive_curated_metadata_description",
+      "language": null,
+      "human_gold_label": false
+    },
+    {
+      "id": "curated-11",
+      "query": "A Gothic novel about a scientist who creates an artificial human being and faces the consequences.",
+      "relevant_edition_ids": [
+        "pg84-full"
+      ],
+      "curated_work_id": "pg84",
+      "target_edition": "pg84-full",
+      "kind": "positive_curated_metadata_description",
+      "language": null,
+      "human_gold_label": false
+    },
+    {
+      "id": "curated-12",
+      "query": "A sea novel about a captain obsessed with hunting a great white whale.",
+      "relevant_edition_ids": [
+        "pg2701-full"
+      ],
+      "curated_work_id": "pg2701",
+      "target_edition": "pg2701-full",
+      "kind": "positive_curated_metadata_description",
+      "language": null,
+      "human_gold_label": false
+    },
+    {
+      "id": "curated-13",
+      "query": "An epic Russian novel about aristocratic families during the Napoleonic wars.",
+      "relevant_edition_ids": [
+        "pg2600-full"
+      ],
+      "curated_work_id": "pg2600",
+      "target_edition": "pg2600-full",
+      "kind": "positive_curated_metadata_description",
+      "language": null,
+      "human_gold_label": false
+    },
+    {
+      "id": "curated-14",
+      "query": "A Renaissance treatise on political power and how rulers acquire and maintain a state.",
+      "relevant_edition_ids": [
+        "pg1232-full"
+      ],
+      "curated_work_id": "pg1232",
+      "target_edition": "pg1232-full",
+      "kind": "positive_curated_metadata_description",
+      "language": null,
+      "human_gold_label": false
+    },
+    {
+      "id": "curated-15",
+      "query": "A philosophical dialogue on justice, the ideal state and the education of its guardians.",
+      "relevant_edition_ids": [
+        "pg1497-full"
+      ],
+      "curated_work_id": "pg1497",
+      "target_edition": "pg1497-full",
+      "kind": "positive_curated_metadata_description",
+      "language": null,
+      "human_gold_label": false
+    },
+    {
+      "id": "curated-16",
+      "query": "A political theory of the social contract and sovereign authority as an answer to civil conflict.",
+      "relevant_edition_ids": [
+        "pg3207-full"
+      ],
+      "curated_work_id": "pg3207",
+      "target_edition": "pg3207-full",
+      "kind": "positive_curated_metadata_description",
+      "language": null,
+      "human_gold_label": false
+    },
+    {
+      "id": "curated-17",
+      "query": "A critique of conventional morality, religious assumptions and the prejudices of philosophers.",
+      "relevant_edition_ids": [
+        "pg4363-full"
+      ],
+      "curated_work_id": "pg4363",
+      "target_edition": "pg4363-full",
+      "kind": "positive_curated_metadata_description",
+      "language": null,
+      "human_gold_label": false
+    },
+    {
+      "id": "curated-18",
+      "query": "An accessible explanation of special and general relativity by the scientist who formulated them.",
+      "relevant_edition_ids": [
+        "pg5001-full"
+      ],
+      "curated_work_id": "pg5001",
+      "target_edition": "pg5001-full",
+      "kind": "positive_curated_metadata_description",
+      "language": null,
+      "human_gold_label": false
+    },
+    {
+      "id": "curated-19",
+      "query": "A revolutionary political pamphlet about class struggle, capitalism and the workers’ movement.",
+      "relevant_edition_ids": [
+        "pg61-full"
+      ],
+      "curated_work_id": "pg61",
+      "target_edition": "pg61-full",
+      "kind": "positive_curated_metadata_description",
+      "language": null,
+      "human_gold_label": false
+    },
+    {
+      "id": "curated-20",
+      "query": "A science fiction story about travelling to a distant future of humanity.",
+      "relevant_edition_ids": [
+        "pg35-full"
+      ],
+      "curated_work_id": "pg35",
+      "target_edition": "pg35-full",
+      "kind": "positive_curated_metadata_description",
+      "language": null,
+      "human_gold_label": false
+    },
+    {
+      "id": "crosslingual-relativity",
+      "query": "Доступное объяснение специальной и общей теории относительности.",
+      "relevant_edition_ids": [
+        "pg5001-full"
+      ],
+      "curated_work_id": "pg5001",
+      "target_edition": "pg5001-full",
+      "kind": "crosslingual_curated_metadata_description",
+      "language": "en",
+      "human_gold_label": false
+    },
+    {
+      "id": "crosslingual-kafka",
+      "query": "A surreal German story about alienation and transformation within a family.",
+      "relevant_edition_ids": [
+        "pg22367-full"
+      ],
+      "curated_work_id": "pg22367-metamorphosis",
+      "target_edition": "pg22367-full",
+      "kind": "crosslingual_curated_metadata_description",
+      "language": "de",
+      "human_gold_label": false
+    },
+    {
+      "id": "crosslingual-plato",
+      "query": "Философский диалог о справедливом государстве, воспитании и правителях.",
+      "relevant_edition_ids": [
+        "pg1497-full"
+      ],
+      "curated_work_id": "pg1497",
+      "target_edition": "pg1497-full",
+      "kind": "crosslingual_curated_metadata_description",
+      "language": "en",
+      "human_gold_label": false
+    },
+    {
+      "id": "negative-nonsense",
+      "query": "zzqv mnlp frrtx",
+      "relevant_edition_ids": [],
+      "curated_work_id": null,
+      "target_edition": null,
+      "kind": "negative_curated_scope_only",
+      "language": null,
+      "human_gold_label": false,
+      "scope": "No relevant curated20 target is asserted; absence across all11001 full texts is not claimed"
+    },
+    {
+      "id": "negative-modern-device",
+      "query": "How do I enable Bluetooth on a2026 smartphone?",
+      "relevant_edition_ids": [],
+      "curated_work_id": null,
+      "target_edition": null,
+      "kind": "negative_curated_scope_only",
+      "language": null,
+      "human_gold_label": false,
+      "scope": "No relevant curated20 target is asserted; absence across all11001 full texts is not claimed"
+    }
+  ]
+}
