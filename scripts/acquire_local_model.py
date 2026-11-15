@@ -1,4 +1,4 @@
-"""Explicitly acquire the pinned official Qwen GGUF; inference stays offline."""
+"""Explicitly acquire the reviewed pinned GGUF; inference stays offline."""
 
 from __future__ import annotations
 

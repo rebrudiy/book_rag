@@ -6,7 +6,7 @@ It contains no retrieval, answer-writing policy, citation validation, or QA prom
 Application orchestration must supply source context and validate generated claims and
 references before presenting them as supported answers.
 
-The selected public model is the official
+The default public model is the official
 [Qwen2.5-1.5B-Instruct-GGUF repository](https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct-GGUF).
 Its [pinned license](https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct-GGUF/blob/91cad51170dc346986eccefdc2dd33a9da36ead9/LICENSE)
 is Apache-2.0. The [pinned Q4_K_M artifact](https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct-GGUF/blob/91cad51170dc346986eccefdc2dd33a9da36ead9/qwen2.5-1.5b-instruct-q4_k_m.gguf)
@@ -185,3 +185,49 @@ Reports are in ignored `data/bench/local-generation-*.json`; provenance is in
 `data/models/local-generation/runtime-receipt.json`. These are individual runtime checks,
 not RAG accuracy, citation correctness, complete memory profiling, or multilingual quality
 evaluation. No real book query, retrieval evaluation, or sealed final case was used.
+
+## Reviewed model profiles
+
+`BOOKRAG_GENERATION_PROFILE` selects a fixed artifact at application import time;
+restart the service when changing it. The default is `qwen2.5-1.5b`. An unknown
+profile leaves ordinary search available and fails generation lazily. Parent
+file length/SHA pins are passed explicitly into spawned workers, so a later
+environment change cannot silently choose another worker model.
+
+The optional `qwen3-4b-instruct-2507` candidate uses
+[Unsloth's GGUF conversion](https://huggingface.co/unsloth/Qwen3-4B-Instruct-2507-GGUF/tree/a06e946bb6b655725eafa393f4a9745d460374c9)
+of [Qwen3-4B-Instruct-2507](https://huggingface.co/Qwen/Qwen3-4B-Instruct-2507).
+This is an Unsloth conversion, not an official Qwen GGUF release. The original
+model card describes this variant as a non-thinking instruct model. Its
+[reviewed base license snapshot](https://huggingface.co/Qwen/Qwen3-4B-Instruct-2507/blob/cdbee75f17c01a7cc42f958dc650907174af0554/LICENSE)
+is Apache-2.0; that reviewed revision identifies the license/base snapshot,
+not a proven exact source-weight commit used by the converter. Conversion base
+revision remains explicitly unknown.
+
+| Candidate artifact | Pin |
+| --- | --- |
+| Converter repository/revision | `unsloth/Qwen3-4B-Instruct-2507-GGUF` / `a06e946bb6b655725eafa393f4a9745d460374c9` |
+| Filename | `Qwen3-4B-Instruct-2507-Q4_K_M.gguf` |
+| Bytes | `2497281120` |
+| SHA-256 | `3605803b982cb64aead44f6c1b2ae36e3acdb41d8e46c8a94c6533bc4c67e597` |
+
+The exact file metadata was checked against the converter's primary Hugging Face
+API/LFS response; downloaded bytes independently matched the pin. Profiles use
+separate default directories and per-model acquisition receipts. A custom shared
+directory keeps another model's common `receipt.json` and writes the new model's
+own `.gguf.receipt.json`. Existing weights and licenses are not replaced.
+
+```sh
+BOOKRAG_GENERATION_PROFILE=qwen3-4b-instruct-2507 \
+  .venv/bin/python scripts/acquire_local_model.py --reserve-gib 2
+BOOKRAG_GENERATION_PROFILE=qwen3-4b-instruct-2507 \
+  .venv/bin/python scripts/smoke_local_generation.py --json-schema \
+  --output data/bench/qwen3-runtime-reproduce.json
+```
+
+The candidate's default directory is
+`data/models/local-generation/qwen3-4b-instruct-2507/`. An explicitly configured
+`BOOKRAG_GENERATION_MODEL` must contain the selected profile's pinned bytes.
+The same finite generation/context limits apply. A successful runtime smoke is
+not a reason to promote a model: compare actual open development questions,
+source integrity, factual support and resource costs separately.

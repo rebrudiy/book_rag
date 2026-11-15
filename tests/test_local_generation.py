@@ -385,6 +385,41 @@ def test_receipt_failed_publication_cleans_only_owned_temp(tmp_path: Path, monke
     assert set(tmp_path.iterdir()) == {receipt, unrelated}
 
 
+def test_shared_directory_preserves_another_models_common_receipt(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    acquisition: tuple[bytes, bytes],
+) -> None:
+    data, license_bytes = acquisition
+    previous = {"repository": "Original CC0 other fixture", "revision": "older", "filename": "other.gguf"}
+    common = tmp_path / "receipt.json"
+    common.write_text(json.dumps(previous))
+    monkeypatch.setattr(
+        generation.urllib.request,
+        "urlopen",
+        lambda url, **kwargs: FakeResponse(
+            data if getattr(url, "full_url", url) == generation.MODEL_URL else license_bytes,
+        ),
+    )
+    receipt = generation.acquire_model(tmp_path)
+    assert json.loads(common.read_text()) == previous
+    specific = tmp_path / (generation.MODEL_FILENAME + ".receipt.json")
+    assert json.loads(specific.read_text()) == receipt
+
+
+def test_malformed_shared_receipt_stops_before_network_or_file_publication(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    acquisition: tuple[bytes, bytes],
+) -> None:
+    common = tmp_path / "receipt.json"
+    common.write_text("[]")
+    monkeypatch.setattr(generation.urllib.request, "urlopen", lambda *args, **kwargs: pytest.fail("No network"))
+    with pytest.raises(generation.ModelUnavailable, match="preserved"):
+        generation.acquire_model(tmp_path)
+    assert common.read_text() == "[]" and not (tmp_path / generation.MODEL_FILENAME).exists()
+
+
 @pytest.mark.parametrize(
     "schema",
     [

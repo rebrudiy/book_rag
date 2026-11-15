@@ -27,18 +27,29 @@ from multiprocessing.connection import Connection
 from pathlib import Path
 from typing import Any
 
-MODEL_REPOSITORY = "Qwen/Qwen2.5-1.5B-Instruct-GGUF"
-MODEL_REVISION = "91cad51170dc346986eccefdc2dd33a9da36ead9"
-MODEL_FILENAME = "qwen2.5-1.5b-instruct-q4_k_m.gguf"
-MODEL_SHA256 = "6a1a2eb6d15622bf3c96857206351ba97e1af16c30d7a74ee38970e434e9407e"
-MODEL_BYTES = 1_117_320_736
-MODEL_LICENSE = "Apache-2.0"
-LICENSE_SHA256 = "832dd9e00a68dd83b3c3fb9f5588dad7dcf337a0db50f7d9483f310cd292e92e"
+from book_rag.generation_profiles import DEFAULT_PROFILE, generation_profile
+
+_PROFILE_ERROR = False
+try:
+    _PROFILE = generation_profile(os.getenv("BOOKRAG_GENERATION_PROFILE", DEFAULT_PROFILE))
+except ValueError:
+    # Invalid optional configuration must not prevent ordinary search startup.
+    _PROFILE_ERROR = True
+    _PROFILE = generation_profile()
+MODEL_REPOSITORY = _PROFILE.repository
+MODEL_REVISION = _PROFILE.revision
+MODEL_FILENAME = _PROFILE.filename
+MODEL_SHA256 = _PROFILE.sha256
+MODEL_BYTES = _PROFILE.bytes
+MODEL_LICENSE = _PROFILE.license
+LICENSE_SHA256 = _PROFILE.license_sha256
 RUNTIME_VERSION = "0.3.19"
 MODEL_URL = f"https://huggingface.co/{MODEL_REPOSITORY}/resolve/{MODEL_REVISION}/{MODEL_FILENAME}"
-LICENSE_URL = f"https://huggingface.co/{MODEL_REPOSITORY}/resolve/{MODEL_REVISION}/LICENSE"
+LICENSE_URL = _PROFILE.license_url
 GIB = 1024**3
 DEFAULT_MODEL_DIRECTORY = Path("data/models/local-generation")
+if _PROFILE.key != DEFAULT_PROFILE:
+    DEFAULT_MODEL_DIRECTORY = DEFAULT_MODEL_DIRECTORY / _PROFILE.key
 CONTROL_TOKENS = ("<|im_start|>", "<|im_end|>", "<|endoftext|>")
 GRAMMAR_REPEAT_LIMIT = 64
 GRAMMAR_PATH_BUDGET = 256
@@ -59,6 +70,11 @@ class GenerationTimeout(GenerationError):
 
 class ContextLimitExceeded(GenerationError):
     """The complete prompt and requested output do not fit the configured context."""
+
+
+def _ensure_profile() -> None:
+    if _PROFILE_ERROR:
+        raise ModelUnavailable("The configured local generation profile is unsupported")
 
 
 @dataclass(frozen=True)
@@ -297,25 +313,32 @@ def _schema_grammar(native: Any, schema: dict[str, Any]) -> Any:
     return native.LlamaGrammar.from_string(grammar, verbose=False)
 
 
-def _model_stamp(path: Path) -> tuple[int, int, int, int, int]:
+def _model_stamp(path: Path, *, expected_bytes: int | None = None) -> tuple[int, int, int, int, int]:
     if path.is_symlink():
         raise ModelUnavailable("The local model must be an acquired regular file")
     try:
         value = path.stat()
     except OSError as error:
         raise ModelUnavailable("Pinned local model is missing; run the explicit acquisition command") from error
-    if not stat.S_ISREG(value.st_mode) or value.st_size != MODEL_BYTES:
+    if not stat.S_ISREG(value.st_mode) or value.st_size != (MODEL_BYTES if expected_bytes is None else expected_bytes):
         raise ModelUnavailable("Local model has an unexpected file type or byte length")
     return value.st_dev, value.st_ino, value.st_size, value.st_mtime_ns, value.st_ctime_ns
 
 
-def _verify_model(path: Path, expected_stamp: tuple[int, int, int, int, int]) -> None:
-    if _model_stamp(path) != expected_stamp:
+def _verify_model(
+    path: Path,
+    expected_stamp: tuple[int, int, int, int, int],
+    *,
+    expected_bytes: int | None = None,
+    expected_sha256: str | None = None,
+) -> None:
+    if _model_stamp(path, expected_bytes=expected_bytes) != expected_stamp:
         raise ModelUnavailable("Local model identity changed before verification")
     with path.open("rb") as stream:
         if stream.read(4) != b"GGUF":
             raise ModelUnavailable("Local artifact is not GGUF")
-    if _sha256(path) != MODEL_SHA256 or _model_stamp(path) != expected_stamp:
+    digest = MODEL_SHA256 if expected_sha256 is None else expected_sha256
+    if _sha256(path) != digest or _model_stamp(path, expected_bytes=expected_bytes) != expected_stamp:
         raise ModelUnavailable("Local model checksum or identity does not match the pinned official artifact")
 
 
@@ -367,7 +390,10 @@ def _worker_main(connection: Connection, settings: dict[str, Any]) -> None:
     try:
         path = Path(settings["model_path"])
         expected = tuple(settings["model_stamp"])
-        _verify_model(path, expected)
+        pinned_bytes = settings.get("model_bytes", MODEL_BYTES)
+        _verify_model(
+            path, expected, expected_bytes=pinned_bytes, expected_sha256=settings.get("model_sha256", MODEL_SHA256)
+        )
         llama_cpp = importlib.import_module("llama_cpp")
 
         if llama_cpp.__version__ != RUNTIME_VERSION:
@@ -388,7 +414,7 @@ def _worker_main(connection: Connection, settings: dict[str, Any]) -> None:
         template = model.metadata.get("tokenizer.chat_template", "")
         if "<|im_start|>" not in template or "<|im_end|>" not in template:
             raise ModelUnavailable("Pinned model does not advertise the expected ChatML template")
-        if _model_stamp(path) != expected:
+        if _model_stamp(path, expected_bytes=pinned_bytes) != expected:
             raise ModelUnavailable("Local model changed during loading")
         backend = {
             "gpu_offload_supported": bool(llama_cpp.llama_supports_gpu_offload()),
@@ -435,6 +461,7 @@ class LocalGenerator:
         n_threads: int = 4,
         gpu_layers: int = -1,
     ) -> None:
+        _ensure_profile()
         if type(context_tokens) is not int or not 512 <= context_tokens <= 8192:
             raise ValueError("context_tokens must be an integer between 512 and 8192")
         if type(n_threads) is not int or not 1 <= n_threads <= 8:
@@ -481,6 +508,9 @@ class LocalGenerator:
         settings = {
             "model_path": str(self.model_path),
             "model_stamp": stamp,
+            "model_bytes": MODEL_BYTES,
+            "model_sha256": MODEL_SHA256,
+            "profile": _PROFILE.key,
             "context_tokens": self.context_tokens,
             "n_threads": self.n_threads,
             "gpu_layers": self.gpu_layers,
@@ -566,10 +596,15 @@ class LocalGenerator:
                 raise GenerationError("Local runtime returned an invalid bounded response")
             return result | {
                 "model": {
+                    "profile": _PROFILE.key,
                     "repository": MODEL_REPOSITORY,
                     "revision": MODEL_REVISION,
                     "sha256": MODEL_SHA256,
                     "quantization": "Q4_K_M",
+                    "upstream_repository": _PROFILE.upstream_repository,
+                    "reviewed_upstream_revision": _PROFILE.reviewed_upstream_revision,
+                    "conversion_base_revision": None,
+                    "conversion": _PROFILE.conversion,
                 },
                 "elapsed_ms": (time.monotonic() - started) * 1000,
             }
@@ -622,12 +657,15 @@ def capabilities(model_path: Path | None = None) -> dict[str, Any]:
     configured = model_path or Path(os.getenv("BOOKRAG_GENERATION_MODEL", DEFAULT_MODEL_DIRECTORY / MODEL_FILENAME))
     present = False
     try:
+        _ensure_profile()
         _model_stamp(configured)
         present = True
     except ModelUnavailable:
         pass
     return {
         "runtime_installed": importlib.util.find_spec("llama_cpp") is not None,
+        "profile_supported": not _PROFILE_ERROR,
+        "profile": _PROFILE.key if not _PROFILE_ERROR else None,
         "model_present": present,
         "verification": "full pinned SHA-256 on worker load",
         "repository": MODEL_REPOSITORY,
@@ -731,12 +769,13 @@ def acquire_model(
     reserve_bytes: int = 3 * GIB,
     timeout_seconds: float = 60,
 ) -> dict[str, Any]:
-    """Resume a pinned official download, verifying SHA before atomic publication.
+    """Resume a reviewed pinned artifact, verifying SHA before atomic publication.
 
     Inference never calls this function implicitly. A partial is owned and retained
     for a later explicit retry. No global Hugging Face cache or second model copy
     is created. Concurrent acquisitions of the same directory are rejected.
     """
+    _ensure_profile()
     if type(min_free_bytes) is not int or min_free_bytes < 4 * GIB:
         raise ValueError("min_free_bytes must preserve at least 4 GiB")
     if type(reserve_bytes) is not int or reserve_bytes < 0:
@@ -752,6 +791,22 @@ def acquire_model(
     target = directory / MODEL_FILENAME
     partial = target.with_suffix(target.suffix + ".part")
     with _acquisition_lock(directory):
+        common_receipt = directory / "receipt.json"
+        preserve_common_receipt = False
+        if common_receipt.exists():
+            if common_receipt.is_symlink() or common_receipt.stat().st_size > 64 * 1024:
+                raise ModelUnavailable("Existing acquisition receipt must be a bounded owned regular file")
+            previous_receipt = json.loads(common_receipt.read_text())
+            if not isinstance(previous_receipt, dict):
+                raise ModelUnavailable("Existing acquisition receipt is not a metadata object; it was preserved")
+            preserve_common_receipt = any(
+                previous_receipt.get(key) != value
+                for key, value in (
+                    ("repository", MODEL_REPOSITORY),
+                    ("revision", MODEL_REVISION),
+                    ("filename", MODEL_FILENAME),
+                )
+            )
         _disk_guard(directory, 0, min_free_bytes, reserve_bytes)
         if target.exists():
             if target.is_symlink() or target.stat().st_size != MODEL_BYTES or _sha256(target) != MODEL_SHA256:
@@ -762,7 +817,7 @@ def acquire_model(
             # Publish without replacing an independently existing acquired model.
             os.link(partial, target)
             partial.unlink()
-        license_path = directory / "Qwen2.5-1.5B-Instruct.LICENSE"
+        license_path = directory / _PROFILE.license_filename
         if license_path.is_symlink():
             raise ModelUnavailable("Official license path must be an owned regular file")
         if not license_path.exists():
@@ -775,6 +830,7 @@ def acquire_model(
             raise ModelUnavailable("Pinned official license checksum failed")
         receipt = {
             "version": 1,
+            "profile": _PROFILE.key,
             "repository": MODEL_REPOSITORY,
             "revision": MODEL_REVISION,
             "filename": MODEL_FILENAME,
@@ -784,10 +840,16 @@ def acquire_model(
             "source_url": MODEL_URL,
             "license_url": LICENSE_URL,
             "license_sha256": _sha256(license_path),
+            "upstream_repository": _PROFILE.upstream_repository,
+            "reviewed_upstream_revision": _PROFILE.reviewed_upstream_revision,
+            "conversion_base_revision": None,
+            "conversion": _PROFILE.conversion,
             "acquired_utc": datetime.now(UTC).isoformat(),
             "min_free_bytes": min_free_bytes,
             "concurrent_work_reserve_bytes": reserve_bytes,
             "free_bytes_after": shutil.disk_usage(directory).free,
         }
-        _write_json(directory / "receipt.json", receipt)
+        _write_json(target.with_suffix(target.suffix + ".receipt.json"), receipt)
+        if not preserve_common_receipt:
+            _write_json(common_receipt, receipt)
         return receipt
