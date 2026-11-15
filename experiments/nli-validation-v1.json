@@ -1,0 +1,287 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-11-15T03:04:41.143600+00:00",
+  "model": "MoritzLaurer/mDeBERTa-v3-base-mnli-xnli",
+  "revision": "8adb042d524ecd5c26d3e3ba0e3fbcf7e2d0864c",
+  "device": "cpu",
+  "dtype": "float32",
+  "threads": 2,
+  "labels": {
+    "0": "entailment",
+    "1": "neutral",
+    "2": "contradiction"
+  },
+  "captured_run04_sha256": "4709e7d4d7753c6e4309a6a0ee32222563a8ad71262f7d07a0ed22aed61329c6",
+  "authored_fixture_sha256": "afe80f6af25649dbcbd889294671dacc5fdc564e81f86af72eef37a4da8130e3",
+  "AI_review_sha256": "942fd0c218bc4bdc6d67cfd8630160ab4ff011a77bd799146098be9a8e34a8af",
+  "human_gold_labels": false,
+  "semantic_truth_verified": false,
+  "question_axis_coverage_verified": false,
+  "production_integrated": false,
+  "truncation_allowed": false,
+  "status": "complete",
+  "elapsed_seconds": 5.299,
+  "peak_memory_bytes": 2287583232,
+  "model_load_seconds": 2.539,
+  "torch_version": "2.15.0",
+  "transformers_version": "5.23.0",
+  "observed_parameter_devices": [
+    "cpu"
+  ],
+  "observed_parameter_dtypes": [
+    "torch.float32"
+  ],
+  "observed_threads": 2,
+  "observed_interop_threads": 1,
+  "tokenizer_is_fast": true,
+  "status_counts": {
+    "scored": 38,
+    "context_limit": 8
+  },
+  "predicted_label_counts": {
+    "neutral": 11,
+    "entailment": 18,
+    "contradiction": 9
+  },
+  "authored_assumption_agreement": {
+    "agrees": 13,
+    "disagrees": 6
+  },
+  "agreement_interpretation": "Exploratory agreement with authored assumptions, not measured accuracy or independent human validation",
+  "kind": "OPEN_DEVELOPMENT_NLI_PROTOTYPE_NOT_HUMAN_ACCURACY",
+  "acquisition": {
+    "repository": "MoritzLaurer/mDeBERTa-v3-base-mnli-xnli",
+    "revision": "8adb042d524ecd5c26d3e3ba0e3fbcf7e2d0864c",
+    "total_bytes": 578297589,
+    "elapsed_seconds": 57.574,
+    "new_files": 7,
+    "free_bytes_after": 6867386368,
+    "license": "MIT",
+    "files": [
+      {
+        "name": "README.md",
+        "size": 6514,
+        "digest": "79c1d900c4aa86ad9263c6eb90577608831d5468",
+        "algorithm": "git-sha1",
+        "sha256": "c6cc8ca44d55e6ff3dd75672c8fcc41c22ca18b551aa52fb5d611d720a5f966b"
+      },
+      {
+        "name": "config.json",
+        "size": 1066,
+        "digest": "25b875998a15441ca06ee6d96b4cae362514549d",
+        "algorithm": "git-sha1",
+        "sha256": "4e4430c95100d613df80fa01276f231931e1b535557cf62fbb3cc50323e50cca"
+      },
+      {
+        "name": "model.safetensors",
+        "size": 557652046,
+        "digest": "65af59b1ff4450b09ecbf13ca35c840dbf038b26ff8e10e5ea89ca724828ed1e",
+        "algorithm": "sha256",
+        "sha256": "65af59b1ff4450b09ecbf13ca35c840dbf038b26ff8e10e5ea89ca724828ed1e"
+      },
+      {
+        "name": "special_tokens_map.json",
+        "size": 286,
+        "digest": "2c9cb07c8fdeeb5ac3ceafb170592e990b204dcd",
+        "algorithm": "git-sha1",
+        "sha256": "9463f61e1b109a8eb4688b829260d7c6b1e6dff04c98ff7269bb89e2b92369b9"
+      },
+      {
+        "name": "spm.model",
+        "size": 4305025,
+        "digest": "13c8d666d62a7bc4ac8f040aab68e942c861f93303156cc28f5c7e885d86d6e3",
+        "algorithm": "sha256",
+        "sha256": "13c8d666d62a7bc4ac8f040aab68e942c861f93303156cc28f5c7e885d86d6e3"
+      },
+      {
+        "name": "tokenizer.json",
+        "size": 16331396,
+        "digest": "3aca3ce69a0a35aeb144a52c4f1d41c4246b8785f8f398315cc8fb6b24057810",
+        "algorithm": "sha256",
+        "sha256": "3aca3ce69a0a35aeb144a52c4f1d41c4246b8785f8f398315cc8fb6b24057810"
+      },
+      {
+        "name": "tokenizer_config.json",
+        "size": 1256,
+        "digest": "173d68ceeb1e02125bda27f0867401b1deaad258",
+        "algorithm": "git-sha1",
+        "sha256": "df9fd3a4482cc4a866788244824573fab8e74dadd1609d4f0e5997f9e96921dc"
+      }
+    ]
+  },
+  "cache_repeat": {
+    "new_files": 0,
+    "elapsed_seconds": 0.428,
+    "verified": true
+  },
+  "actual_variants": {
+    "quote_only": {
+      "pairs": 13,
+      "status_counts": {
+        "scored": 12,
+        "context_limit": 1
+      },
+      "label_counts": {
+        "neutral": 7,
+        "entailment": 5
+      },
+      "forward_seconds": 0.821396,
+      "median_forward_seconds": 0.0630165
+    },
+    "captured_source_context": {
+      "pairs": 13,
+      "status_counts": {
+        "scored": 7,
+        "context_limit": 6
+      },
+      "label_counts": {
+        "neutral": 3,
+        "entailment": 4
+      },
+      "forward_seconds": 1.006523,
+      "median_forward_seconds": 0.139043
+    },
+    "authored": {
+      "pairs": 19,
+      "status_counts": {
+        "scored": 19
+      },
+      "label_counts": {
+        "entailment": 9,
+        "contradiction": 9,
+        "neutral": 1
+      },
+      "forward_seconds": 0.584649,
+      "median_forward_seconds": 0.030521
+    },
+    "context_limit": {
+      "pairs": 1,
+      "status_counts": {
+        "context_limit": 1
+      },
+      "label_counts": {},
+      "forward_seconds": 0,
+      "median_forward_seconds": null
+    }
+  },
+  "captured_claims": 13,
+  "captured_questions": 14,
+  "exact_support_spans_checked": 22,
+  "authored_contrastive_cases": 19,
+  "repeat_max_score_difference": 0.0,
+  "inference_seconds_sum": 2.412568,
+  "threshold_diagnostics": [
+    {
+      "threshold": 0.5,
+      "accepted_authored_expected_entailment": 7,
+      "accepted_authored_expected_nonentailment": 2,
+      "interpretation": "Illustrative authored-assumption counts, not human precision/recall or calibrated truth probabilities"
+    },
+    {
+      "threshold": 0.9,
+      "accepted_authored_expected_entailment": 7,
+      "accepted_authored_expected_nonentailment": 2,
+      "interpretation": "Illustrative authored-assumption counts, not human precision/recall or calibrated truth probabilities"
+    },
+    {
+      "threshold": 0.95,
+      "accepted_authored_expected_entailment": 7,
+      "accepted_authored_expected_nonentailment": 2,
+      "interpretation": "Illustrative authored-assumption counts, not human precision/recall or calibrated truth probabilities"
+    },
+    {
+      "threshold": 0.99,
+      "accepted_authored_expected_entailment": 6,
+      "accepted_authored_expected_nonentailment": 2,
+      "interpretation": "Illustrative authored-assumption counts, not human precision/recall or calibrated truth probabilities"
+    },
+    {
+      "threshold": 0.999,
+      "accepted_authored_expected_entailment": 1,
+      "accepted_authored_expected_nonentailment": 0,
+      "interpretation": "Illustrative authored-assumption counts, not human precision/recall or calibrated truth probabilities"
+    }
+  ],
+  "counterexamples": [
+    {
+      "id": "alice-watch:claim1:quote_only",
+      "hypothesis": "A watch",
+      "predicted_label": "neutral",
+      "scores": {
+        "entailment": 0.10167761892080307,
+        "neutral": 0.678244948387146,
+        "contradiction": 0.22007744014263153
+      },
+      "tokens": 124,
+      "AI_case_review_category": "fully_supported_direct_answer"
+    },
+    {
+      "id": "ru-chameleon-owner:claim1:quote_only",
+      "hypothesis": "Повар Прохор в конце концов говорит, что собака принадлежит брату генерала, который недавно приехал в гости.",
+      "predicted_label": "neutral",
+      "scores": {
+        "entailment": 0.00813467800617218,
+        "neutral": 0.9906745553016663,
+        "contradiction": 0.0011907456209883094
+      },
+      "tokens": 166,
+      "AI_case_review_category": "fully_supported_direct_answer"
+    },
+    {
+      "id": "ru-lefty-warning:claim1:quote_only",
+      "hypothesis": "Левша предупреждает государю, чтобы у англичан ружья кирпичом не чистили, и чтобы у нас тоже не чистили, иначе ружья не годятся к стрельбе.",
+      "predicted_label": "entailment",
+      "scores": {
+        "entailment": 0.9989475607872009,
+        "neutral": 0.0008875663625076413,
+        "contradiction": 0.00016498123295605183
+      },
+      "tokens": 159,
+      "AI_case_review_category": "partially_correct_answer_observation_instruction_shift"
+    },
+    {
+      "id": "number-tenfold",
+      "hypothesis": "The ten workers made 4,800 pins in a day.",
+      "predicted_label": "entailment",
+      "scores": {
+        "entailment": 0.9925853610038757,
+        "neutral": 0.006731098517775536,
+        "contradiction": 0.0006835637032054365
+      },
+      "tokens": 35,
+      "AI_case_review_category": null
+    },
+    {
+      "id": "ru-observation-to-instruction",
+      "hypothesis": "Левша просит англичан прекратить чистку ружей кирпичом.",
+      "predicted_label": "entailment",
+      "scores": {
+        "entailment": 0.9986652135848999,
+        "neutral": 0.001006960985250771,
+        "contradiction": 0.00032782836933620274
+      },
+      "tokens": 59,
+      "AI_case_review_category": null
+    },
+    {
+      "id": "wrong-axis-entailment",
+      "hypothesis": "Smith contrasts immobile land with movable stock.",
+      "predicted_label": "entailment",
+      "scores": {
+        "entailment": 0.982932448387146,
+        "neutral": 0.01526531670242548,
+        "contradiction": 0.0018022068543359637
+      },
+      "tokens": 40,
+      "AI_case_review_category": null
+    }
+  ],
+  "runtime_results": "data/evaluations/nli-v1/results-device-audit.json",
+  "decision": "Diagnostic only; high-confidence number/actor failures prohibit treating a simple entailment threshold as a production publication gate",
+  "checks": [
+    "8 isolated boundary/provenance tests passed",
+    "Ruff passed",
+    "ty passed"
+  ],
+  "primary_model_card": "https://huggingface.co/MoritzLaurer/mDeBERTa-v3-base-mnli-xnli"
+}

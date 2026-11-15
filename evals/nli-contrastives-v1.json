@@ -1,0 +1,179 @@
+{
+  "schema_version": 1,
+  "license": "CC0-1.0",
+  "scope": "Authored open DEVELOPMENT contrastive sentences; expected relations are author assumptions, not independent human gold labels",
+  "sealed_evaluation": false,
+  "cases": [
+    {
+      "id": "actor-positive",
+      "premise": "The Queen demanded sentence before verdict. Alice called the idea nonsense.",
+      "hypothesis": "The Queen demanded sentence before verdict.",
+      "author_assumed_relation": "entailment",
+      "contrast_kind": "actor",
+      "question": null,
+      "human_reviewed": false
+    },
+    {
+      "id": "actor-swap",
+      "premise": "The Queen demanded sentence before verdict. Alice called the idea nonsense.",
+      "hypothesis": "The King demanded sentence before verdict.",
+      "author_assumed_relation": "contradiction",
+      "contrast_kind": "actor",
+      "question": null,
+      "human_reviewed": false
+    },
+    {
+      "id": "actor-negation",
+      "premise": "The Queen demanded sentence before verdict. Alice called the idea nonsense.",
+      "hypothesis": "Alice did not respond to the demand.",
+      "author_assumed_relation": "contradiction",
+      "contrast_kind": "negation",
+      "question": null,
+      "human_reviewed": false
+    },
+    {
+      "id": "number-positive",
+      "premise": "Ten workers together produced forty-eight thousand pins during one day.",
+      "hypothesis": "The ten workers made 48,000 pins in a day.",
+      "author_assumed_relation": "entailment",
+      "contrast_kind": "number",
+      "question": null,
+      "human_reviewed": false
+    },
+    {
+      "id": "number-tenfold",
+      "premise": "Ten workers together produced forty-eight thousand pins during one day.",
+      "hypothesis": "The ten workers made 4,800 pins in a day.",
+      "author_assumed_relation": "contradiction",
+      "contrast_kind": "number",
+      "question": null,
+      "human_reviewed": false
+    },
+    {
+      "id": "number-hundredfold",
+      "premise": "Ten workers together produced forty-eight thousand pins during one day.",
+      "hypothesis": "The ten workers made 480,000 pins in a day.",
+      "author_assumed_relation": "contradiction",
+      "contrast_kind": "number",
+      "question": null,
+      "human_reviewed": false
+    },
+    {
+      "id": "number-bound",
+      "premise": "The workers made at least 48,000 pins in one day.",
+      "hypothesis": "The workers made at most 48,000 pins in one day.",
+      "author_assumed_relation": "neutral",
+      "contrast_kind": "quantifier",
+      "question": null,
+      "human_reviewed": false
+    },
+    {
+      "id": "crosslingual-interest",
+      "premise": "The butcher, brewer and baker supply dinner because of their own interest, rather than benevolence.",
+      "hypothesis": "Мясник, пивовар и булочник обеспечивают обед из собственного интереса.",
+      "author_assumed_relation": "entailment",
+      "contrast_kind": "crosslingual",
+      "question": null,
+      "human_reviewed": false
+    },
+    {
+      "id": "crosslingual-kindness",
+      "premise": "The butcher, brewer and baker supply dinner because of their own interest, rather than benevolence.",
+      "hypothesis": "Мясник, пивовар и булочник обеспечивают обед из благожелательности.",
+      "author_assumed_relation": "contradiction",
+      "contrast_kind": "crosslingual_negation",
+      "question": null,
+      "human_reviewed": false
+    },
+    {
+      "id": "ru-owner-positive",
+      "premise": "Повар Прохор говорит, что собака принадлежит брату генерала, который приехал в гости.",
+      "hypothesis": "Собака принадлежит брату генерала.",
+      "author_assumed_relation": "entailment",
+      "contrast_kind": "actor",
+      "question": null,
+      "human_reviewed": false
+    },
+    {
+      "id": "ru-owner-swap",
+      "premise": "Повар Прохор говорит, что собака принадлежит брату генерала, который приехал в гости.",
+      "hypothesis": "Собака принадлежит самому генералу.",
+      "author_assumed_relation": "contradiction",
+      "contrast_kind": "actor",
+      "question": null,
+      "human_reviewed": false
+    },
+    {
+      "id": "ru-warning-positive",
+      "premise": "Левша просит передать государю: у англичан ружья кирпичом не чистят; пусть и у нас прекратят чистить их кирпичом.",
+      "hypothesis": "Левша просит прекратить в России чистку ружей кирпичом.",
+      "author_assumed_relation": "entailment",
+      "contrast_kind": "instruction_recipient",
+      "question": null,
+      "human_reviewed": false
+    },
+    {
+      "id": "ru-observation-to-instruction",
+      "premise": "Левша просит передать государю: у англичан ружья кирпичом не чистят; пусть и у нас прекратят чистить их кирпичом.",
+      "hypothesis": "Левша просит англичан прекратить чистку ружей кирпичом.",
+      "author_assumed_relation": "neutral",
+      "contrast_kind": "observation_to_instruction",
+      "question": null,
+      "human_reviewed": false
+    },
+    {
+      "id": "ru-negation",
+      "premise": "Левша просит передать государю: у англичан ружья кирпичом не чистят; пусть и у нас прекратят чистить их кирпичом.",
+      "hypothesis": "У англичан ружья чистят кирпичом.",
+      "author_assumed_relation": "contradiction",
+      "contrast_kind": "negation",
+      "question": null,
+      "human_reviewed": false
+    },
+    {
+      "id": "absence-ru",
+      "premise": "Пахом договорился купить землю и начал обходить участок. В этом фрагменте описывается начало обхода.",
+      "hypothesis": "Во всём рассказе нигде не сказано, сколько земли заняла могила Пахома.",
+      "author_assumed_relation": "neutral",
+      "contrast_kind": "unsupported_whole_text_absence",
+      "question": null,
+      "human_reviewed": false
+    },
+    {
+      "id": "absence-en",
+      "premise": "Pakhom agreed to buy some land and began walking around its boundary.",
+      "hypothesis": "The story never states the size of Pakhom's grave.",
+      "author_assumed_relation": "neutral",
+      "contrast_kind": "unsupported_whole_text_absence",
+      "question": null,
+      "human_reviewed": false
+    },
+    {
+      "id": "grave-number",
+      "premise": "В конце рассказа могила Пахома от головы до ног заняла ровно три аршина земли.",
+      "hypothesis": "Могила Пахома заняла три аршина земли.",
+      "author_assumed_relation": "entailment",
+      "contrast_kind": "number",
+      "question": null,
+      "human_reviewed": false
+    },
+    {
+      "id": "grave-number-swap",
+      "premise": "В конце рассказа могила Пахома от головы до ног заняла ровно три аршина земли.",
+      "hypothesis": "Могила Пахома заняла тридцать аршин земли.",
+      "author_assumed_relation": "contradiction",
+      "contrast_kind": "number",
+      "question": null,
+      "human_reviewed": false
+    },
+    {
+      "id": "wrong-axis-entailment",
+      "premise": "Smith says that land cannot be moved, whereas stock can be moved from one country to another.",
+      "hypothesis": "Smith contrasts immobile land with movable stock.",
+      "author_assumed_relation": "entailment",
+      "contrast_kind": "supported_wrong_question_axis",
+      "question": "Compare property in a person's own labour with bourgeois property.",
+      "human_reviewed": false
+    }
+  ]
+}
