@@ -1,0 +1,177 @@
+{
+  "schema_version": 1,
+  "experiment": "ivfpq-capacity-v2",
+  "status": "experimental-only-no-production-promotion",
+  "purpose": "Stored-vector ANN candidate recall and storage capacity; no relevance or RAG evaluation",
+  "report_sha256": "65441a1c96cac5305b0e422794b961bc5ccb049d2d1ad1c9c892d63bd490a335",
+  "report_runtime_path": "data/bench/ivfpq-frozen1308-sample-v2/report.json",
+  "model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+  "model_revision": "e8f8c211226b894fcb81acc59f3b34ba3efd5f42",
+  "embedding_profile": {
+    "document_prefix": "",
+    "max_tokens": null,
+    "model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+    "name": "minilm-v2",
+    "query_prefix": "",
+    "revision": "e8f8c211226b894fcb81acc59f3b34ba3efd5f42",
+    "strategy": "token-windows-v2"
+  },
+  "source_generation": "gen-1812f290f02e09f392e2c880bbcee602de30282ec4ad406300e1c6ff1393555f-a8b86bbaa7d0",
+  "source_array_sha256": {
+    "embeddings.npy": "92239c409e85432d6da95a54a2b9da4fc750433d8c45b0f6bceade7d80b3707e",
+    "ids.npy": "f95cf7c638bc8f6c76ae219b07a866e0fcef005af812727f7702b68d283dda72"
+  },
+  "source_byte_identical_before_after": true,
+  "original_database_opened": false,
+  "sample_windows": 65536,
+  "sample_unique_passages": 61639,
+  "query_vectors": 64,
+  "training_vectors": 32768,
+  "query_passages_excluded_from_training_and_neighbors": true,
+  "configuration": {
+    "dimensions": 384,
+    "nlist": 128,
+    "subquantizers": 64,
+    "bits": 8,
+    "iterations": 12,
+    "seed": 20261115,
+    "threads": 2
+  },
+  "candidate_window_pool": 4096,
+  "candidate_unique_passage_cap": 1000,
+  "trials": [
+    {
+      "nprobe": 1,
+      "recall": {
+        "exact_top10_in_ann_top10": 0.453125,
+        "exact_top100_in_ann_top100": 0.46796875000000004,
+        "exact_top10_in_ann_top100": 0.5828125,
+        "exact_top100_in_ann_top1000": 0.500625
+      },
+      "unique_candidate_count_min": 175,
+      "unique_candidate_count_median": 586.5,
+      "top100_score_absolute_error_mean": 0.016314073530957103,
+      "top100_score_absolute_error_p95": 0.041948550939559924,
+      "batch_search_seconds": 0.07072770828381181,
+      "batch_search_includes": "Sequential shard IO+SHA verification+FAISS search+stable window merge; excludes passage dedup",
+      "queries_in_batch": 64
+    },
+    {
+      "nprobe": 8,
+      "recall": {
+        "exact_top10_in_ann_top10": 0.6578125,
+        "exact_top100_in_ann_top100": 0.7356250000000001,
+        "exact_top10_in_ann_top100": 0.9109375,
+        "exact_top100_in_ann_top1000": 0.84546875
+      },
+      "unique_candidate_count_min": 1000,
+      "unique_candidate_count_median": 1000.0,
+      "top100_score_absolute_error_mean": 0.018658859804272652,
+      "top100_score_absolute_error_p95": 0.051998159289360045,
+      "batch_search_seconds": 0.1675578746944666,
+      "batch_search_includes": "Sequential shard IO+SHA verification+FAISS search+stable window merge; excludes passage dedup",
+      "queries_in_batch": 64
+    },
+    {
+      "nprobe": 32,
+      "recall": {
+        "exact_top10_in_ann_top10": 0.6796875,
+        "exact_top100_in_ann_top100": 0.78734375,
+        "exact_top10_in_ann_top100": 0.98125,
+        "exact_top100_in_ann_top1000": 0.9740625
+      },
+      "unique_candidate_count_min": 1000,
+      "unique_candidate_count_median": 1000.0,
+      "top100_score_absolute_error_mean": 0.020101468809880316,
+      "top100_score_absolute_error_p95": 0.057908549904823296,
+      "batch_search_seconds": 0.3182593327946961,
+      "batch_search_includes": "Sequential shard IO+SHA verification+FAISS search+stable window merge; excludes passage dedup",
+      "queries_in_batch": 64
+    },
+    {
+      "nprobe": 128,
+      "recall": {
+        "exact_top10_in_ann_top10": 0.68125,
+        "exact_top100_in_ann_top100": 0.7931250000000001,
+        "exact_top10_in_ann_top100": 0.9953125,
+        "exact_top100_in_ann_top1000": 0.99890625
+      },
+      "unique_candidate_count_min": 1000,
+      "unique_candidate_count_median": 1000.0,
+      "top100_score_absolute_error_mean": 0.02044145413674414,
+      "top100_score_absolute_error_p95": 0.05858605802059171,
+      "batch_search_seconds": 0.4479253329336643,
+      "batch_search_includes": "Sequential shard IO+SHA verification+FAISS search+stable window merge; excludes passage dedup",
+      "queries_in_batch": 64
+    }
+  ],
+  "resources": {
+    "process_peak_rss_bytes": 451952640,
+    "owned_output_bytes": 11092604,
+    "free_bytes_at_end": 7577501696,
+    "limits": {
+      "disk_bytes": 314572800,
+      "rss_bytes": 1073741824,
+      "free_reserve_bytes": 4831838208
+    }
+  },
+  "encoded_shards_bytes_including_repeated_codebooks": 9446816,
+  "first_phase_seconds": 1.234252457972616,
+  "resume_phase_seconds": 1.4649035418406129,
+  "first_phase_created_shards": 1,
+  "resume_phase_reused_shards": 1,
+  "resume_phase_created_shards": 7,
+  "capacity_projections": [
+    {
+      "editions": 11000,
+      "assumption": "Linear1308mean-window-density; not an actual11k count",
+      "vectors": 15692534,
+      "float32_matrix_bytes": 24103732224,
+      "ivfpq_codes_plus_window_ids_bytes": 1129862448,
+      "window_to_passage_mapping_bytes": 125540272,
+      "ivfpq_plus_mapping_bytes": 1255402720,
+      "float16_plus_mapping_bytes": 12177406384,
+      "scalar_int8_plus_scale_and_mapping_bytes": 6214243464
+    },
+    {
+      "editions": 50000,
+      "assumption": "Linear1308mean-window-density; not an actual11k count",
+      "vectors": 71329702,
+      "float32_matrix_bytes": 109562422272,
+      "ivfpq_codes_plus_window_ids_bytes": 5135738544,
+      "window_to_passage_mapping_bytes": 570637616,
+      "ivfpq_plus_mapping_bytes": 5706376160,
+      "float16_plus_mapping_bytes": 55351848752,
+      "scalar_int8_plus_scale_and_mapping_bytes": 28246561992
+    }
+  ],
+  "dependency": {
+    "package": "faiss-cpu",
+    "version": "1.16.0",
+    "license": "MIT",
+    "release_url": "https://github.com/facebookresearch/faiss/releases/tag/v1.16.0",
+    "wheel": "faiss_cpu-1.16.0-cp310-abi3-macosx_15_0_arm64.whl",
+    "wheel_sha256": "fe430200c5b91eff67ebb9fe3958963d3ae7dfb341e3af7c1102ecf6ade4378e",
+    "isolation": "Native FAISS subprocess; never share process with Torch"
+  },
+  "implementation_sha256": {
+    "benchmark_ivfpq.py": "b2f8305e63305bd76325807f043316ea48388bde73fdaeb77bfb70fadf3dae26",
+    "experimental_ivfpq.py": "7b78c9b14d979b1ae28dc8a9822b9365182dd88b1422e3ae4fa8bcb986153cd8"
+  },
+  "limitations": [
+    "Deterministic sampled corpus document vectors are not natural-language user query embeddings.",
+    "ANN recall is against exact top passages within this sample, not the full1308 or a relevance evaluation.",
+    "All windows sharing the query passage ID are excluded; other neighboring passages/editions may remain.",
+    "Training excludes all query passages, but index and codebooks use other sample corpus vectors.",
+    "Approximate IP scores have quantization error; existing semantic thresholds are not calibrated here.",
+    "Batch ANN timing and sequential exact-query timing are different workloads, not a speedup ratio.",
+    "Peak RSS includes imports, source mmap pages, training and integrity scans; not online resident usage.",
+    "No live source binding, filters, production activation or embedding throughput are evaluated.",
+    "Linear source window density is a planning assumption, not an actual11000-edition count.",
+    "Codebook/manifests/proofs/temporary/native allocator overhead is additional to capacity formulas.",
+    "Native FAISS plus Torch in one pytest process caused an abort; subprocess isolation regression passes.",
+    "The earlier v1 query selection was biased; its report is retained but superseded by v2 spread-query coverage."
+  ],
+  "final_evaluation_labels_accessed": false,
+  "final_evaluation_runs": 0
+}
