@@ -74,3 +74,5 @@ jobs:
           tests/test_semantic_overlay.py
           tests/test_semantic_overlay_integration.py
           tests/test_semantic_batches.py
+          tests/test_semantic_batch_overlay.py
+          tests/test_semantic_batch_dispatch.py

@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "kind": "actual-direct-live-scoped-batch-registry-installation",
+  "recorded_at": "2026-11-15T04:14:13.497201+00:00",
+  "prepared": true,
+  "enabled_by_this_operation": false,
+  "server_restarted": false,
+  "embedding_or_generation_invoked": false,
+  "sealed_cases_used": false,
+  "registry": "data/semantic-overlays/fr-de-96-registry-v1/registry.json",
+  "registry_sha256": "79738f5a058f23470cb9e06c0dcf1923ee2e3db895f0a3475d6cbff31568baa3",
+  "source_ready_sha256": "860c549b0f3fa77e490a007b8454b2782439f7a466705254c0390d6fef69da17",
+  "source_descriptor_sha256": "55a9fb28d73cc5a608ff6398abc1fa17d3c4ad2ddff8716f1aad8be5953fea95",
+  "producer_manifest_sha256": "2d0123a9669f4451c2240149257e86b2ff218a7e536146df5419604049ef9aba",
+  "producer_receipt_sha256": "cdd8e951e9d3c9c61529c7c69921cc24a361a736648de2ec1ac31d7b31445f9e",
+  "model_space_sha256": "c01762b290d574e88d8ee6a37ef529e667ac6f7b4eb99b4a0aa4d54a922235b2",
+  "codec_sha256": "2af559dc93e3eaddc983c25361a20ad4f43583285e031975fb50a32247a610a0",
+  "registered_batches": 1,
+  "registered_editions": 96,
+  "encoded_windows_reused": 8518,
+  "canonical_passages": 2451,
+  "canonical_sections": 1212,
+  "original_namespace_source_guard_valid": true,
+  "original_shard_bindings_validated": true,
+  "source_bindings_rewritten": false,
+  "source_database_migrated": false,
+  "source_index_files_copied_or_linked": false,
+  "native_validation_completed_by_cli": true,
+  "post_install_source_guard_elapsed_ms": 211.57616609707475,
+  "control_files_checked": 52,
+  "all_control_bytes_unchanged": true,
+  "primary_active_sha256": "12c07f5fd54799f1cd3d5d05457e3690df7b84043651e168593bb117424d22f7",
+  "ru21_installation_sha256": "ea20d7c7576c1a944f68449994a2a5486fc0f8d8362564d1c3a5ad819a1748dc",
+  "original_binding_sha256": {
+    "/Users/rebrudiy/book_rag/data/semantic-batches/fr-de-96-v1/compressed/incremental-d63922f0006f8864c2821f0ee702d32ae17bc3d8c93c8221a2a89bc62d602298/shard-000000000-000008192.binding.json": "269bd32803806722d6b0b2091fba2c0db378be7339dcd5c902a45467cf645b1b",
+    "/Users/rebrudiy/book_rag/data/semantic-batches/fr-de-96-v1/compressed/incremental-d63922f0006f8864c2821f0ee702d32ae17bc3d8c93c8221a2a89bc62d602298/shard-000008192-000008518.binding.json": "969461163b8024ad5b70d5bfa50dcc50aeacea156570e2a71189e82c539e1616"
+  },
+  "scope": {
+    "explicit_covered_book_required": true,
+    "language_only_route_added": false,
+    "unscoped_global_route_added": false,
+    "ru21_precedence_preserved": true
+  },
+  "validation": {
+    "independent_registry_tests": 41,
+    "dispatch_and_legacy_tests": 92,
+    "producer_tests": 28,
+    "ruff": "pass",
+    "ty": "pass"
+  },
+  "limitations": [
+    "Prepared registry only; root still owns environment activation, serving restart and real browser/model checks.",
+    "Exact bytes, source provenance and immutable native indices do not prove relevance or answer correctness.",
+    "The full96-edition source guard conservatively disables this batch if any covered edition changes.",
+    "Global corpus writes may continue; selected source state, original bindings and52 immutable/control files were checked instead of claiming an unchanged whole-live-file SHA."
+  ]
+}

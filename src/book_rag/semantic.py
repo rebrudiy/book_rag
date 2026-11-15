@@ -692,6 +692,18 @@ def semantic_search(
         except (ImportError, OSError, ValueError, TypeError, RuntimeError, sqlite3.Error):
             return fallback("Дополнительный русский смысловой индекс недоступен. Показан поиск по словам.")
 
+    # Generic direct-live batches serve explicit books only. RU21 keeps its
+    # existing precedence; language-only/global queries never consult this route.
+    if book_id is not None and os.getenv("BOOKRAG_SEMANTIC_BATCH_REGISTRY"):
+        try:
+            from book_rag.semantic_batch_overlay import batch_overlay_search
+
+            batch = batch_overlay_search(library, query, mode, book_id, language, limit)
+            if batch is not None:
+                return batch
+        except (ImportError, OSError, ValueError, TypeError, RuntimeError, sqlite3.Error):
+            return fallback("Дополнительный поиск в выбранной книге недоступен. Показан поиск по словам.")
+
     if not active.exists():
         return fallback("Semantic index unavailable. Showing lexical search. Run bookrag embed.")
     receipt: dict[str, Any] | None = None
