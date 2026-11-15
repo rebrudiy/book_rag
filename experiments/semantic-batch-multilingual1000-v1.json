@@ -45,8 +45,8 @@
   "combined_registry_sha256": "33af8c628c00c0a762f8278234eec0dcf6fe5c61f692bec0b4df70426c2269d5",
   "registered_batch_editions_total": 1096,
   "global_baseline_editions": 1308,
-  "additional_ru_editions_outside_baseline": 16,
-  "book_scoped_served_union_editions": 2420,
+  "additional_ru_editions_outside_baseline": 11,
+  "book_scoped_served_union_editions": 2415,
   "whole_library_dense_search_editions": 1308,
   "live_probe": {
     "book_id": "pg38336-full",
@@ -64,5 +64,6 @@
     "The13.77s warm probe motivates runtime optimization; these two observations are not a representative latency benchmark.",
     "Resume peak is not peak for the earlier interrupted run or all concurrent processes.",
     "Per-query source inspection was conservative at this measurement; post-measurement performance work must preserve result/source validity."
-  ]
+  ],
+  "coverage_union_audit": "experiments/semantic-coverage-union-v1.json"
 }

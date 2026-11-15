@@ -1,0 +1,20 @@
+{
+  "global_baseline_editions": 1308,
+  "russian_layer_editions": 21,
+  "batch_editions": 1096,
+  "baseline_ru_overlap": 10,
+  "baseline_batch_overlap": 0,
+  "ru_batch_overlap": 0,
+  "served_book_scoped_union": 2415,
+  "indexed_lexical_editions": 11001,
+  "without_full_text_vectors": 8586,
+  "schema_version": 1,
+  "kind": "actual-edition-id-set-union",
+  "closed_final_used": false,
+  "source_receipts_sha256": {
+    "data/full/vectors/active.json": "12c07f5fd54799f1cd3d5d05457e3690df7b84043651e168593bb117424d22f7",
+    "data/semantic-overlays/ru21-live-v1/installation.json": "ea20d7c7576c1a944f68449994a2a5486fc0f8d8362564d1c3a5ad819a1748dc",
+    "data/semantic-overlays/multilingual1096-registry-v1/registry.json": "33af8c628c00c0a762f8278234eec0dcf6fe5c61f692bec0b4df70426c2269d5"
+  },
+  "correction": "Earlier derived total2420 assumed five Russian overlaps. Actual ID intersection is ten, giving2415 distinct served scoped editions."
+}

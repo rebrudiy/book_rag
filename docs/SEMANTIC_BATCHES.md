@@ -127,8 +127,8 @@ rewriting their original live bindings:
 
 The actual local server enables that registry through the environment variable
 documented in [the batch overlay contract](SEMANTIC_BATCH_OVERLAY.md). The union
-of editions served through book-scoped routes is now 2,420: the original 1,308,
-16 additional Russian editions and 1,096 additional batch editions. **Unscoped
+of editions served through book-scoped routes is now 2,415: the original 1,308,
+11 additional Russian editions and 1,096 additional batch editions. **Unscoped
 global dense search still covers 1,308 editions.** All 11,001 editions retain
 lexical search, metadata discovery and reading. Edition counts remain distinct
 from confirmed unique complete works.
