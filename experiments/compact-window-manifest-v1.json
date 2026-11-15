@@ -1,0 +1,159 @@
+{
+  "schema_version": 1,
+  "kind": "COMPACT_OFFSET_WINDOW_MANIFEST_INACTIVE_FORMAT_PROTOTYPE",
+  "created_at": "2026-11-15T05:23:22.018081+00:00",
+  "scope": {
+    "production_activation": false,
+    "original_source_or_manifest_mutations": false,
+    "registry_changes": false,
+    "vectors_or_gpu_used": false,
+    "downloads": false,
+    "sealed_evaluation_labels_accessed": false,
+    "sealed_input_manifest_accessed_for_format_repack_only": true
+  },
+  "measurement": {
+    "kind": "bookrag-compact-offset-window-manifest-prototype-v1",
+    "prototype_only": true,
+    "rows": 190601,
+    "books": 1000,
+    "prefixes": 10933,
+    "input_chain": "8e6ede77bf7851263d480224f1253113266446d06f6c39a541e578df73eb363a",
+    "database_sha256": "1d2b2620d1b7538e4a31bce8197c6f5836bf573bead6a78f42f4b08c2cde9b68",
+    "original_bytes": 99586048,
+    "compact_bytes": 12857344,
+    "reduction_fraction": 0.8708921153292477,
+    "elapsed_seconds": 29.831908541731536,
+    "peak_rss_bytes": 516947968,
+    "forbidden_runtime_modules_loaded": [],
+    "tokenizer_only": true,
+    "old_manifest_retained": true,
+    "source_guards_verified_before_after": true,
+    "output": "data/bench/compact-windows1000-v1/compact.sqlite3",
+    "production_activation": false,
+    "free_bytes_after": 7520419840
+  },
+  "proof": {
+    "rows_exactly_reconstructed_twice": 190601,
+    "all_input_strings_and_utf8_sha256_equal_to_original": true,
+    "ordered_window_key_input_chain_equal": true,
+    "input_chain": "8e6ede77bf7851263d480224f1253113266446d06f6c39a541e578df73eb363a",
+    "source_guards_before_after": "verify_batch_source binds canonical text, attribution, origin, epochs and SQL namespace",
+    "source_guards_verified": true,
+    "old_manifest_sha256_rechecked": "d89e36e1c9e1edc080cedbfdb769a97ef70aa31e8bad86e252f3a85a30eeeded",
+    "compact_manifest_sha256_rechecked": "1d2b2620d1b7538e4a31bce8197c6f5836bf573bead6a78f42f4b08c2cde9b68",
+    "original_manifest_retained": true
+  },
+  "format": {
+    "windows": [
+      "dense_original_window_id",
+      "original_passage_id",
+      "book_index",
+      "deduplicated_exact_prefix_id",
+      "passage_relative_start_char",
+      "passage_relative_end_char",
+      "binary_input_sha256_32_bytes"
+    ],
+    "body_text_stored": false,
+    "offset_unit": "Python Unicode code points relative to canonical passage.text",
+    "offset_derivation": "Production128-token recipe using pinned cached AutoTokenizer offsets; no substring find/matching",
+    "prefixes": 10933,
+    "book_indices": 1000,
+    "max_tokens": 128,
+    "header_tokens_max": 24,
+    "overlap_tokens": 20,
+    "reserved_tokens": 6
+  },
+  "tokenizer": {
+    "files_sha256": {
+      "config.json": "6300193cb75e01cf80c96decef7187dfb33094d97cc1490b7ead6ff134476e4e",
+      "special_tokens_map.json": "378eb3bf733eb16e65792d7e3fda5b8a4631387ca04d2015199c4d4f22ae554d",
+      "tokenizer.json": "2c3387be76557bd40970cec13153b3bbf80407865484b209e655e5e4729076b8",
+      "tokenizer_config.json": "5036ea374ffedd706e3bef33e2e0d6953cb868ef8a490e76e32ba0faa37a6b9b"
+    },
+    "model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+    "revision": "e8f8c211226b894fcb81acc59f3b34ba3efd5f42",
+    "torch_import_disabled": true
+  },
+  "runtime_receipts": {
+    "full_receipt": "data/bench/compact-windows1000-v1/compact.sqlite3.receipt.json",
+    "full_receipt_sha256": "bcfcc98f4575922d2ab85bc24015c8d8fc41dcc8257ed435f4ae10c68d389add",
+    "probe": "data/bench/compact-windows1000-v1/compact.sqlite3.probe.json",
+    "probe_sha256": "bf84ac256a356b817f8936cf7ca28bd08b4cff9f1d2eb93e3ed59851092a6989",
+    "startup_probes": "data/bench/compact-windows1000-v1/startup-probes.json"
+  },
+  "verification": {
+    "pytest": "16 passed in0.54s",
+    "ruff_check": "passed",
+    "ruff_format": "unchanged",
+    "ty": "passed",
+    "unit_scenarios": [
+      "Repeated Unicode inputs retain distinct exact offsets",
+      "Corrupt offsets and compact payload fail closed",
+      "Canonical source changes invalidate reconstruction",
+      "Original sealed checksum and output ownership guards",
+      "Different tokenizer pins fail before publication",
+      "Only production128-token recipe accepted",
+      "Extra raw windows cannot disappear through joins; missing edition/prefix references reject staging too",
+      "Final compact-file SHA rechecked before and after streaming, including non-window-byte mutation",
+      "Receipt publication failure removes only owned output inode and preserves replacement files",
+      "CLI rejects preexisting probe symlinks before tokenization/repack and uses atomic no-overwrite publication against late symlink races"
+    ]
+  },
+  "source_files": {
+    "src/book_rag/compact_window_manifest.py": "bd94a402b79f46417d6d401292a5437820d503e9da724e27ada16553f8c4b478",
+    "scripts/repack_window_manifest.py": "a1232e430823662432eb2bdc658be86772a8f98e1e4ef2ffdd9c8da2cd43a33f",
+    "tests/test_compact_window_manifest.py": "8ebd46af86924c31cebd48022ab054860caf4f821e6df40ab4539849086c7c9d",
+    "docs/COMPACT_WINDOW_MANIFEST.md": "0255e176b09086b0a8517aa4d6abbebdec5ae6be143ce46b7b2a4b50396d1a96"
+  },
+  "measurement_code_note": "The actual190601-window measurement was performed before subsequent integrity/publication hardening. Its exact input/chain equivalence, bytes, time and RSS remain the original measured values, not a rerun of the hardened code. Current source hashes and16CC0 tests describe the final implementation; old source/artifacts/registry were not changed.",
+  "startup_attempts": [
+    {
+      "kind": "repack_startup_failure",
+      "reason": "Cached tokenizer files are symlinks to owned cache blobs; regular-file hash helper initially rejected the symlink. Fixed by validating cache containment then hashing resolved files.",
+      "output_published": false,
+      "model_weights_loaded": false,
+      "torch_imported": false
+    },
+    {
+      "kind": "repack_startup_failure",
+      "reason": "Installed Transformers availability detection imported Torch despite USE_TORCH=0. The post-load no-Torch guard rejected the run before any output. No model construction/inference was called.",
+      "output_published": false,
+      "model_weights_loaded": false,
+      "torch_imported": true
+    },
+    {
+      "kind": "diagnostic_probe",
+      "reason": "A cold environment-only AutoTokenizer probe confirmed Torch import; no model/weights/inference. An explicit import-blocking finder failed during availability discovery; a None sentinel successfully represented Torch as unavailable.",
+      "model_weights_loaded": false,
+      "final_measured_process_affected": false
+    }
+  ],
+  "limitations": [
+    "No production disk space has been freed: both original and compact files remain. The new representation adds12.86MB of prototype data.",
+    "Existing registry and builders still require old windows.sqlite3; never remove it or claim increased semantic/search coverage based on this prototype.",
+    "Canonical source namespace and exact source guards are required for reconstruction; this is not an independent text archive.",
+    "Partial staging transactions are removed on failure; resumable compact production consumption and migration are separate unimplemented work.",
+    "Peak RSS is493MiB on this measured environment, not a guarantee for different libraries/tokenizers.",
+    "The final measured process loaded no actual Torch/FAISS/llama.cpp module. Earlier explicitly recorded diagnostic attempts did import Torch, without model weights or inference."
+  ],
+  "next_task": "Implement a separately reviewed read-only compact-window iterator for incremental builders, preserving source guards, batch/registry compatibility and atomic resume; activate only after equivalence/integration tests. No automatic production migration.",
+  "updated_at": "2026-11-15T05:29:14.400088+00:00",
+  "integrity_hardening_after_measurement": {
+    "measured_artifacts_not_repacked": true,
+    "production_or_original_artifact_mutations": false,
+    "reviewer_findings_fixed": [
+      "INNER JOIN could hide orphan window rows",
+      "Compact final-file hash was not checked by verifier",
+      "Receipt publication failure could leave an unready linked output",
+      "CLI probe write_text could follow a preexisting symlink"
+    ],
+    "implementation": [
+      "Count every raw window row; LEFT JOIN and reject missing book/prefix",
+      "If database_sha256 exists, require exact compact bytes before and after verification; staging receipt still permits full row proof before hash sealing",
+      "On publication error, unlink output only if its current device/inode matches owned staging inode",
+      "CLI absent/nonsymlink preflight before model/tokenizer/source operations, then existing atomic hardlink-based _publish_json without overwriting"
+    ],
+    "tests_added": 9,
+    "independent_review": "Parent-provided concrete reproduction; temporary CC0 regressions reproduced and fixed each issue"
+  }
+}
