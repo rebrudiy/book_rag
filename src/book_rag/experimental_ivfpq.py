@@ -111,14 +111,19 @@ def _write_index(backend: Any, index: Any, path: Path) -> str:
 
 def read_verified_index(path: Path, expected_sha256: str) -> Any:
     """Read only self-produced trusted indexes, verifying bytes before native IO."""
+
+    def identity(info: os.stat_result) -> tuple[int, int, int, int, int]:
+        # Hashing a cold file can update access time without changing bytes.
+        return info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns, info.st_ctime_ns
+
     before = path.stat()
     if not re.fullmatch(r"[0-9a-f]{64}", expected_sha256) or file_sha256(path) != expected_sha256:
         raise ValueError("Experimental FAISS index checksum mismatch")
-    if path.stat() != before:
+    if identity(path.stat()) != identity(before):
         raise ValueError("Experimental FAISS index changed during verification")
     index = faiss_backend().read_index(str(path))
     after = path.stat()
-    if (before.st_ino, before.st_size, before.st_mtime_ns) != (after.st_ino, after.st_size, after.st_mtime_ns):
+    if identity(before) != identity(after):
         raise ValueError("Experimental FAISS index changed during read")
     return index
 

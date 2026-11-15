@@ -57,3 +57,20 @@ jobs:
           name: browser-screenshots
           path: artifacts/browser-ci
           retention-days: 7
+  compact-index:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+          python-version: '3.12'
+      - run: uv sync --locked --extra dev --extra ann
+      - name: Source-bound compact indexes with isolated native workers
+        run: >-
+          uv run pytest -q
+          tests/test_experimental_ivfpq.py
+          tests/test_incremental_ivfpq.py
+          tests/test_semantic_overlay.py
+          tests/test_semantic_overlay_integration.py
+          tests/test_semantic_batches.py

@@ -1,0 +1,252 @@
+{
+  "schema_version": 1,
+  "kind": "actual-source-bound-RU21-overlay-installation",
+  "recorded_at": "2026-11-15T04:00:20.437548+00:00",
+  "prepared": true,
+  "enabled_by_this_operation": false,
+  "server_restarted": false,
+  "models_or_embeddings_invoked": false,
+  "sealed_cases_used": false,
+  "installation": "data/semantic-overlays/ru21-live-v1/installation.json",
+  "installation_sha256": "ea20d7c7576c1a944f68449994a2a5486fc0f8d8362564d1c3a5ad819a1748dc",
+  "source_ready_sha256": "afc30fc45350227353c261fc59e55dd2f355d29fa30fb74f73d84df515909002",
+  "wrapper_ready_sha256": "aec7db91ad4e8114edfdaf260e44ba78baf32f55713d939ab3338d1f8166092d",
+  "covered_editions": 21,
+  "passages": 1282,
+  "sections": 252,
+  "encoded_windows_reused": 6162,
+  "original_live_namespace_verified": true,
+  "original_live_inode_bound": true,
+  "live_full_source_guard_valid": true,
+  "native_validation_completed_by_cli": true,
+  "source_schema_migrated": false,
+  "source_content_sql_mutations_authorized": false,
+  "control_file_hashes_before": {
+    "data/full/vectors/active.json": "12c07f5fd54799f1cd3d5d05457e3690df7b84043651e168593bb117424d22f7",
+    "/Users/rebrudiy/book_rag/data/semantic-pilots/ru21-v1/compressed/incremental-74edb6d2546bd5658a05c50a089a9804996c400a057d14fb6e610aa1abdf2c46/ready.json": "afc30fc45350227353c261fc59e55dd2f355d29fa30fb74f73d84df515909002",
+    "data/semantic-pilots/ru21-v1/canonical/library.sqlite3": "a7f7e7cc90b216c810c6dc2b8391e597d876379542208e5f236a20a091e27b5b",
+    "data/semantic-pilots/ru21-v1/report.json": "c73b2e8aa3a2d06e8528f0d02934321d396e14d70b45420f250c6d61b09aa378"
+  },
+  "control_file_hashes_after": {
+    "data/full/vectors/active.json": "12c07f5fd54799f1cd3d5d05457e3690df7b84043651e168593bb117424d22f7",
+    "/Users/rebrudiy/book_rag/data/semantic-pilots/ru21-v1/compressed/incremental-74edb6d2546bd5658a05c50a089a9804996c400a057d14fb6e610aa1abdf2c46/ready.json": "afc30fc45350227353c261fc59e55dd2f355d29fa30fb74f73d84df515909002",
+    "data/semantic-pilots/ru21-v1/canonical/library.sqlite3": "a7f7e7cc90b216c810c6dc2b8391e597d876379542208e5f236a20a091e27b5b",
+    "data/semantic-pilots/ru21-v1/report.json": "c73b2e8aa3a2d06e8528f0d02934321d396e14d70b45420f250c6d61b09aa378"
+  },
+  "all_control_bytes_unchanged": true,
+  "immutable_artifacts": [
+    {
+      "name": "chunk-00000000.json",
+      "bytes": 389,
+      "same_inode": true
+    },
+    {
+      "name": "chunk-00000001.json",
+      "bytes": 391,
+      "same_inode": true
+    },
+    {
+      "name": "chunk-00000002.json",
+      "bytes": 391,
+      "same_inode": true
+    },
+    {
+      "name": "chunk-00000003.json",
+      "bytes": 392,
+      "same_inode": true
+    },
+    {
+      "name": "chunk-00000004.json",
+      "bytes": 393,
+      "same_inode": true
+    },
+    {
+      "name": "chunk-00000005.json",
+      "bytes": 393,
+      "same_inode": true
+    },
+    {
+      "name": "chunk-00000006.json",
+      "bytes": 393,
+      "same_inode": true
+    },
+    {
+      "name": "chunk-00000007.json",
+      "bytes": 393,
+      "same_inode": true
+    },
+    {
+      "name": "chunk-00000008.json",
+      "bytes": 393,
+      "same_inode": true
+    },
+    {
+      "name": "chunk-00000009.json",
+      "bytes": 393,
+      "same_inode": true
+    },
+    {
+      "name": "chunk-00000010.json",
+      "bytes": 394,
+      "same_inode": true
+    },
+    {
+      "name": "chunk-00000011.json",
+      "bytes": 394,
+      "same_inode": true
+    },
+    {
+      "name": "chunk-00000012.json",
+      "bytes": 394,
+      "same_inode": true
+    },
+    {
+      "name": "chunk-00000013.json",
+      "bytes": 394,
+      "same_inode": true
+    },
+    {
+      "name": "chunk-00000014.json",
+      "bytes": 394,
+      "same_inode": true
+    },
+    {
+      "name": "chunk-00000015.json",
+      "bytes": 394,
+      "same_inode": true
+    },
+    {
+      "name": "chunk-00000016.json",
+      "bytes": 394,
+      "same_inode": true
+    },
+    {
+      "name": "chunk-00000017.json",
+      "bytes": 394,
+      "same_inode": true
+    },
+    {
+      "name": "chunk-00000018.json",
+      "bytes": 394,
+      "same_inode": true
+    },
+    {
+      "name": "chunk-00000019.json",
+      "bytes": 394,
+      "same_inode": true
+    },
+    {
+      "name": "chunk-00000020.json",
+      "bytes": 394,
+      "same_inode": true
+    },
+    {
+      "name": "chunk-00000021.json",
+      "bytes": 394,
+      "same_inode": true
+    },
+    {
+      "name": "chunk-00000022.json",
+      "bytes": 394,
+      "same_inode": true
+    },
+    {
+      "name": "chunk-00000023.json",
+      "bytes": 394,
+      "same_inode": true
+    },
+    {
+      "name": "chunk-00000024.json",
+      "bytes": 394,
+      "same_inode": true
+    },
+    {
+      "name": "codec.faiss",
+      "bytes": 590004,
+      "same_inode": false
+    },
+    {
+      "name": "descriptor.json",
+      "bytes": 6239,
+      "same_inode": true
+    },
+    {
+      "name": "shard-000000000-000002048.faiss",
+      "bytes": 738484,
+      "same_inode": true
+    },
+    {
+      "name": "shard-000000000-000002048.mapping.npz",
+      "bytes": 20992,
+      "same_inode": true
+    },
+    {
+      "name": "shard-000000000-000002048.receipt.json",
+      "bytes": 1980,
+      "same_inode": true
+    },
+    {
+      "name": "shard-000002048-000004096.faiss",
+      "bytes": 738324,
+      "same_inode": true
+    },
+    {
+      "name": "shard-000002048-000004096.mapping.npz",
+      "bytes": 20992,
+      "same_inode": true
+    },
+    {
+      "name": "shard-000002048-000004096.receipt.json",
+      "bytes": 2156,
+      "same_inode": true
+    },
+    {
+      "name": "shard-000004096-000006144.faiss",
+      "bytes": 738484,
+      "same_inode": true
+    },
+    {
+      "name": "shard-000004096-000006144.mapping.npz",
+      "bytes": 20992,
+      "same_inode": true
+    },
+    {
+      "name": "shard-000004096-000006144.receipt.json",
+      "bytes": 3391,
+      "same_inode": true
+    },
+    {
+      "name": "shard-000006144-000006162.faiss",
+      "bytes": 591412,
+      "same_inode": true
+    },
+    {
+      "name": "shard-000006144-000006162.mapping.npz",
+      "bytes": 692,
+      "same_inode": true
+    },
+    {
+      "name": "shard-000006144-000006162.receipt.json",
+      "bytes": 1016,
+      "same_inode": true
+    }
+  ],
+  "scope": {
+    "kind": "ru21-scoped-overlay",
+    "language": "ru",
+    "explicit_book_or_language_required": true,
+    "unscoped_global_index_changed": false
+  },
+  "validation": {
+    "focused_tests": 201,
+    "ruff": "pass",
+    "ty": "pass",
+    "actual_native_cli_fixture": "pass"
+  },
+  "limitations": [
+    "Prepared wrapper only; serving8001 has not been switched or browser-tested by this operation.",
+    "Native ready/index checks and original live source proofs do not establish query relevance or answer correctness.",
+    "Original live database may change from unrelated authorised work; covered21 source fingerprints/namespace were checked, not an unchanged whole-live-fileSHA.",
+    "Shared immutable artifact hardlinks preserve bytes while their inode link counts/ctime may change; no original content or attributes were overwritten."
+  ]
+}

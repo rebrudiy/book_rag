@@ -1,0 +1,127 @@
+{
+  "schema_version": 1,
+  "experiment": "minilm-offline-encoder-capacity-v1",
+  "purpose": "Capacity only; not relevance/RAG quality or complete index-build throughput",
+  "model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+  "revision": "e8f8c211226b894fcb81acc59f3b34ba3efd5f42",
+  "max_sequence_tokens": 128,
+  "source": "Known20 checkpointed frozen canonical source; read-only immutable SQLite, no Library constructor",
+  "source_db_sha256": "ea1feab7c1d1c58acd7457529ef70885f2767ceeab6050ec12db0fa4f74bb4b8",
+  "protected_artifact_sha256": [
+    "1e98ea05b0de579fcaad3d625b62ea55647142ed674d5f5ebf1440e4bbbb6f23",
+    "2c3387be76557bd40970cec13153b3bbf80407865484b209e655e5e4729076b8",
+    "378eb3bf733eb16e65792d7e3fda5b8a4631387ca04d2015199c4d4f22ae554d",
+    "4be450dde3b0273bb9787637cfbd28fe04a7ba6ab9d36ac48e92b11e350ffc23",
+    "5036ea374ffedd706e3bef33e2e0d6953cb868ef8a490e76e32ba0faa37a6b9b",
+    "6300193cb75e01cf80c96decef7187dfb33094d97cc1490b7ead6ff134476e4e",
+    "70f4448f31320443fe3557cacea5abf2dcc4915dda8c80646bec9f3bb0aa5a1f",
+    "8f4b264b80206c830bebbdcae377e137925650a433b689343a63bdc9b3145460",
+    "b8c64b5cece00d8424b4896ea75b512b6008576088497609dfeb6bd63e6d36b8",
+    "ea1feab7c1d1c58acd7457529ef70885f2767ceeab6050ec12db0fa4f74bb4b8",
+    "eaa086f0ffee582aeb45b36e34cdd1fe2d6de2bef61f8a559a1bbc9bd955917b"
+  ],
+  "protected_sources_identical_before_after_both_devices": true,
+  "identical_input_windows_across_devices": true,
+  "sequential_fresh_torch_only_workers": true,
+  "faiss_imported": false,
+  "network_downloads": 0,
+  "full_corpus_embedding_build_started": false,
+  "max_windows_per_worker": 1024,
+  "rss_limit_bytes": 2147483648,
+  "wall_timeout_seconds": 120,
+  "devices": [
+    {
+      "device": "cpu",
+      "torch_version": "2.15.0",
+      "threads": 2,
+      "batch_size": 32,
+      "total_encoded_windows_including_warmup": 1024,
+      "warmup_windows": 32,
+      "measured_windows": 992,
+      "model_load_seconds_including_imports": 2.814800708089024,
+      "window_preparation_seconds": 0.09463154105469584,
+      "first_batch_seconds": 0.2578875836916268,
+      "steady_encoding_seconds": 7.241627837065607,
+      "steady_vectors_per_second": 136.98577478982543,
+      "batch_seconds_p50": 0.23254108289256692,
+      "batch_seconds_p95": 0.23825610452331603,
+      "input_token_length_min": 23,
+      "input_token_length_p50": 124.0,
+      "input_token_length_max": 125,
+      "windows_over_model_token_limit": 0,
+      "input_windows_sha256": "b8eda6a8fb666c597f9dc4ee1423bd593ca753c99aefc3294aacb38e5ff4044a",
+      "output_vectors_sha256": "ba91311192e8b81670841cbc8d5c7cacd2fabcf8373dcae8d8af87c017a11936",
+      "process_peak_rss_bytes": 1168654336,
+      "projections": [
+        {
+          "windows": 1865985,
+          "encoding_hours_at_measured_rate": 3.7838174617906777
+        },
+        {
+          "windows": 15692534,
+          "encoding_hours_at_measured_rate": 31.821094043598375
+        }
+      ],
+      "runtime_report": "data/bench/encoder-capacity-minilm-cpu-v1.json",
+      "runtime_report_sha256": "1dd87ba471e4cfc3c3fd320bdc9c9b1729c578f699e48ba9aca391e024a932a9",
+      "measured_at_utc": "2026-11-15T02:46:29.171250+00:00"
+    },
+    {
+      "device": "mps",
+      "torch_version": "2.15.0",
+      "threads": 2,
+      "batch_size": 32,
+      "total_encoded_windows_including_warmup": 1024,
+      "warmup_windows": 32,
+      "measured_windows": 992,
+      "model_load_seconds_including_imports": 3.9229626250453293,
+      "window_preparation_seconds": 0.12244208436459303,
+      "first_batch_seconds": 0.9433928746730089,
+      "steady_encoding_seconds": 3.482940375804901,
+      "steady_vectors_per_second": 284.8168194009783,
+      "batch_seconds_p50": 0.1094332910142839,
+      "batch_seconds_p95": 0.11098156264051795,
+      "input_token_length_min": 23,
+      "input_token_length_p50": 124.0,
+      "input_token_length_max": 125,
+      "windows_over_model_token_limit": 0,
+      "input_windows_sha256": "b8eda6a8fb666c597f9dc4ee1423bd593ca753c99aefc3294aacb38e5ff4044a",
+      "output_vectors_sha256": "fa259a0a1cbabc421fb6dd0765093a1e2625022de74dc98283baee4379a197ce",
+      "process_peak_rss_bytes": 867368960,
+      "projections": [
+        {
+          "windows": 1865985,
+          "encoding_hours_at_measured_rate": 1.8198685307869367
+        },
+        {
+          "windows": 15692534,
+          "encoding_hours_at_measured_rate": 15.30470437592159
+        }
+      ],
+      "runtime_report": "data/bench/encoder-capacity-minilm-mps-v1.json",
+      "runtime_report_sha256": "663c1b2615f2e10f34e2e98f77d7282ea060da6aab31b8a83895be5056e9bc8d",
+      "measured_at_utc": "2026-11-15T02:44:59.335170+00:00",
+      "mps_driver_allocated_max_bytes": 1108033536,
+      "mps_tensor_allocated_max_bytes": 472442368
+    }
+  ],
+  "mps_over_cpu_steady_rate_ratio": 2.0791707740308594,
+  "package_versions": {
+    "numpy": "2.5.4",
+    "torch": "2.15.0",
+    "transformers": "5.23.0",
+    "sentence-transformers": "6.3.0"
+  },
+  "benchmark_script_sha256": "1342c22913ab29d487dce9e5990ae7e5ccdfcbe25a1ddc1bcf3c026ee7a4d9a1",
+  "limitations": [
+    "At most1024 prepared windows from the known20 source, not full corpus tokenization/indexing.",
+    "Model load and window preparation are reported separately; first batch excluded from steady rate.",
+    "Projected hours exclude IO, source proofs, compression, retries, variable lengths and contention.",
+    "CPU and MPS output hashes can differ numerically; no bit-exact cross-device claim is made.",
+    "RSS and MPS driver allocations overlap; do not add them as an exact physical-memory total.",
+    "Actual inputs were23..125tokens; tokenizer warning for an unsplit passage does not mean encoded windows were truncated.",
+    "Two CPU threads were measured, not an optimized all-core CPU ceiling.",
+    "The15.69m projection uses a linear1308-edition mean window density, not an actual11000-edition count.",
+    "MPS memory counters and synchronization follow https://docs.pytorch.org/docs/2.15/mps.html ."
+  ]
+}

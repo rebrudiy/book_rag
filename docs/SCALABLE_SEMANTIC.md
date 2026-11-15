@@ -118,8 +118,18 @@ spread-query run for the final aggregate; no prior report is overwritten.
 The accepted v2 report is
 `data/bench/ivfpq-frozen1308-sample-v2/report.json`, SHA-256
 `65441a1c96cac5305b0e422794b961bc5ccb049d2d1ad1c9c892d63bd490a335`.
-It includes source and implementation hashes. Results are means over 64 stored
-queries on 65,536 sampled windows representing 61,639 distinct passage IDs:
+It includes source and implementation hashes.
+
+The measured implementation is retained in Git commit `c47a674`. A subsequent
+loader-only fix ignores legitimate access-time updates while hashing a cold
+index file. It still checks device, inode, size, modification/change timestamps
+before/after checksum verification and native loading. Regression tests cover
+cold reads and actual file replacement/modification races. The published v2
+measurements and hashes are unchanged; use the historical commit for exact
+source reproduction of that measurement.
+
+Results are means over 64 stored queries on 65,536 sampled windows representing
+61,639 distinct passage IDs:
 
 | nprobe | Exact top-10 in ANN top-10 | Exact top-10 in ANN top-100 | Exact top-100 in ANN top-1000 |
 | ---: | ---: | ---: | ---: |

@@ -1,0 +1,109 @@
+{
+  "schema_version": 1,
+  "experiment": "incremental-IVFPQ-mechanics-v1",
+  "status": "owned-pilot-only-no-production-switch",
+  "runtime_report": "data/bench/incremental-ivfpq-frozen-sample-v3/report.json",
+  "runtime_report_sha256": "7ea220e2365bc8c91b2ac81662db4bdcb02437a3b02dbd8e416f88468fa2178e",
+  "result": {
+    "passed": true,
+    "rows": 16384,
+    "build_seconds": 1.1186675829812884,
+    "encoded_rows_total": 16384,
+    "resumed_chunks": 2,
+    "checkpoint_bytes": 306,
+    "generation": "incremental-697feea3f1ea3d24187a8757b0eac0bf24b9fb636b5f7a4d5308ba11d5f4d5f7",
+    "standalone_vs_original_float_add_top100_equal": true,
+    "source_assignment": "TEST ONLY: external stored vectors assigned to CC0 records; no text embedding claim",
+    "scenarios": [
+      "interruption-resume-zero-durable-reencode",
+      "atomic-ready",
+      "sealed-chunk-reclamation",
+      "source-bound-4-of-5",
+      "true-native-book-selector",
+      "true-native-language-selector",
+      "fixed-pool-limit-prefix",
+      "outside-book-fallback",
+      "outside-mutation-preserves-results",
+      "outside-addition-4-of-6",
+      "covered-change-invalidates-whole-affected-shards",
+      "concurrent-covered-change-discards-results",
+      "corrupt-index-fails-before-native-read"
+    ],
+    "atomic_failures": [
+      {
+        "event": "chunk-payload-published",
+        "passed": true,
+        "first_attempt_encoded_rows": 128,
+        "total_encoded_rows": 1152,
+        "repeated_uncommitted_rows": 128,
+        "resumed_chunks": 0
+      },
+      {
+        "event": "chunk-receipt-published",
+        "passed": true,
+        "first_attempt_encoded_rows": 128,
+        "total_encoded_rows": 1024,
+        "repeated_uncommitted_rows": 0,
+        "resumed_chunks": 1
+      },
+      {
+        "event": "checkpoint-published",
+        "passed": true,
+        "first_attempt_encoded_rows": 128,
+        "total_encoded_rows": 1024,
+        "repeated_uncommitted_rows": 0,
+        "resumed_chunks": 1
+      },
+      {
+        "event": "shard-index-published",
+        "passed": true,
+        "first_attempt_encoded_rows": 512,
+        "total_encoded_rows": 1024,
+        "repeated_uncommitted_rows": 0,
+        "resumed_chunks": 4
+      },
+      {
+        "event": "shard-receipt-published",
+        "passed": true,
+        "first_attempt_encoded_rows": 512,
+        "total_encoded_rows": 1024,
+        "repeated_uncommitted_rows": 0,
+        "resumed_chunks": 4
+      },
+      {
+        "event": "before-ready-publication",
+        "passed": true,
+        "first_attempt_encoded_rows": 1024,
+        "total_encoded_rows": 1024,
+        "repeated_uncommitted_rows": 0,
+        "resumed_chunks": 8
+      }
+    ]
+  },
+  "original_sources_unchanged": true,
+  "original_database_opened": false,
+  "faiss_version": "1.16.0",
+  "torch_imported": false,
+  "peak_rss_bytes": 73367552,
+  "owned_output_bytes": 31328526,
+  "implementation_sha256": {
+    "scripts/probe_incremental_ivfpq.py": "dca5552e3d78d65d2c92dcaf3e2cfc26a898a3c1e803eaa1058c2652fc7f5275",
+    "src/book_rag/incremental_ivfpq.py": "3fe193546dbefd5446902f28b5debfe13d732e10cc252659ed51b070fae95404",
+    "src/book_rag/experimental_ivfpq.py": "2c54e27d71c50426e119f0c0fbebbd85ac7300738aabb6a9f26db096878c050a",
+    "src/book_rag/index_coverage.py": "3b269c26b0417874559f63f4def0bb13cfb9d0cc191d2acacc2ce70e95c92216"
+  },
+  "protected_source_sha256": [
+    "2af559dc93e3eaddc983c25361a20ad4f43583285e031975fb50a32247a610a0",
+    "638c8a955e6231601d41aa97ee7e3e7c7781ce23a310871bc66c46140d6fe298",
+    "65441a1c96cac5305b0e422794b961bc5ccb049d2d1ad1c9c892d63bd490a335",
+    "92239c409e85432d6da95a54a2b9da4fc750433d8c45b0f6bceade7d80b3707e"
+  ],
+  "limitations": [
+    "Stored external vectors are assigned to synthetic CC0 records, not embeddings of those records.",
+    "No relevance, RAG quality, production source admission or embedding throughput is measured here.",
+    "No original float32 matrix is copied; source vectors are read in bounded batches.",
+    "Source passage membership and ownership are proven, but external-vector-to-CC0 assignment is deliberately synthetic.",
+    "Atomic failpoints simulate process exceptions; this is not a hardware power-loss test.",
+    "Per-shard byte checks are conservative; production would need a measured bounded immutable-artifact cache."
+  ]
+}

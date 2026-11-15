@@ -1,0 +1,317 @@
+{
+  "schema_version": 1,
+  "kind": "actual-owned-RU21-semantic-pilot",
+  "production_promoted": false,
+  "full_corpus_build": false,
+  "sealed_fixture_accessed": false,
+  "raw_report": {
+    "path": "data/semantic-pilots/ru21-v1/report.json",
+    "sha256": "c73b2e8aa3a2d06e8528f0d02934321d396e14d70b45420f250c6d61b09aa378"
+  },
+  "reader_report": {
+    "path": "data/semantic-pilots/ru21-v1/reader-report.json",
+    "sha256": "d918cbd71ea69c2e19267630deb5041c8518373958b50fce9c579d1c37d0894e"
+  },
+  "source": {
+    "kind": "read-only-selected-canonical-copy",
+    "original_constructor_called": false,
+    "original_selected_sources_unchanged": true,
+    "book_ids": [
+      "pg14741-full",
+      "pg16527-full",
+      "pg30774-full",
+      "pg37196-full",
+      "pg5316-full",
+      "ruwikibooks-regex-266423",
+      "wsru-chameleon-6a5f80896084",
+      "wsru-dream-ridiculous-man-b5434c2c1b24",
+      "wsru-fathers-and-sons-492401072288",
+      "wsru-how-much-land-285bf7cc584e",
+      "wsru-ivan-ilyich-f20f7ddf97c0",
+      "wsru-lefty-45ef2537b9d9",
+      "wsru-man-in-a-case-28e726a2b8f0",
+      "wsru-mumu-49cea43537bb",
+      "wsru-overcoat-4efb1fb3e2e1",
+      "wsru-queen-of-spades-c63b9e94258c",
+      "wsru-red-flower-c5154930c63c",
+      "wsru-three-hermits-0c18bc8ae3e3",
+      "wsru-underground-4d592d8e2fd1",
+      "wsru-ward-six-740d89bd5ddc",
+      "wsru-wise-gudgeon-657bc443f59d"
+    ],
+    "snapshot_db_sha256": "a7f7e7cc90b216c810c6dc2b8391e597d876379542208e5f236a20a091e27b5b",
+    "snapshot_bytes": 9498624,
+    "table_counts": {
+      "books": 21,
+      "book_metadata": 21,
+      "index_versions": 21,
+      "sections": 252,
+      "section_roles": 252,
+      "passages": 1282
+    },
+    "table_sha256": {
+      "books": "47c94c0f5403c7196e96f567e57485462c025a480c19337b6c5c8e8460789893",
+      "book_metadata": "80d3cfa2a1c4394bd324a3f717400824d97f27d994b8e463a0c5f1237a7bc8d2",
+      "index_versions": "566f966cc1b57cabd64f5b95425539c5ebd72a439dc8e7a442f6b7478a77ffd3",
+      "sections": "2e2378ffac9c23b14f47df7c1d704503ecc2b7b5f8d22f3c53c72aa3ab6ef0cd",
+      "section_roles": "15aa16fce5e790900d33d39c4a84893a69f592451ac7eee99789bec19d35165e",
+      "passages": "025aafcd76e8a213d61328a3401f5b64d2980eb1e01d55bb05c4b0252256aa68"
+    },
+    "coverage": {
+      "kind": "subset",
+      "books": 21,
+      "passages": 1282,
+      "sections": 252,
+      "passage_fingerprint": "ce3ed110920d9e2213e44a1983bd407a2be15f5d6a11109ffa5b5f36d936838b",
+      "mapping_fingerprint": "515148d1809970202ccfd8130d109e0b59a2328a36e99491d2f8ca12f7b91d05",
+      "section_text_fingerprint": "e1c50ff4cdcd3c7b3cfe77ab85bb37e6e534ebdba7f93414cd87b361082e869f"
+    },
+    "notes_artifacts_models_vectors_copied": false
+  },
+  "model_space": {
+    "model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+    "revision": "e8f8c211226b894fcb81acc59f3b34ba3efd5f42",
+    "dimensions": 384,
+    "profile": {
+      "name": "minilm-v2",
+      "model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+      "revision": "e8f8c211226b894fcb81acc59f3b34ba3efd5f42",
+      "query_prefix": "",
+      "document_prefix": "",
+      "max_tokens": null,
+      "strategy": "token-windows-v2"
+    },
+    "strategy": "token-windows-v2",
+    "assignment": "Actual canonical production _windows inputs, offline normalized MiniLM float32",
+    "window_recipe_sha256": "7fe3eda8a5c787b5813862df2903ec0e8e451fa193314569ad77005b056b0aa7",
+    "model_files_sha256": [
+      "1e98ea05b0de579fcaad3d625b62ea55647142ed674d5f5ebf1440e4bbbb6f23",
+      "2c3387be76557bd40970cec13153b3bbf80407865484b209e655e5e4729076b8",
+      "378eb3bf733eb16e65792d7e3fda5b8a4631387ca04d2015199c4d4f22ae554d",
+      "4be450dde3b0273bb9787637cfbd28fe04a7ba6ab9d36ac48e92b11e350ffc23",
+      "5036ea374ffedd706e3bef33e2e0d6953cb868ef8a490e76e32ba0faa37a6b9b",
+      "6300193cb75e01cf80c96decef7187dfb33094d97cc1490b7ead6ff134476e4e",
+      "70f4448f31320443fe3557cacea5abf2dcc4915dda8c80646bec9f3bb0aa5a1f",
+      "8f4b264b80206c830bebbdcae377e137925650a433b689343a63bdc9b3145460",
+      "b8c64b5cece00d8424b4896ea75b512b6008576088497609dfeb6bd63e6d36b8",
+      "eaa086f0ffee582aeb45b36e34cdd1fe2d6de2bef61f8a559a1bbc9bd955917b"
+    ],
+    "torch_version": "2.15.0",
+    "sentence_transformers_version": "6.3.0"
+  },
+  "codebook": {
+    "source_report_sha256": "65441a1c96cac5305b0e422794b961bc5ccb049d2d1ad1c9c892d63bd490a335",
+    "sha256": "2af559dc93e3eaddc983c25361a20ad4f43583285e031975fb50a32247a610a0",
+    "lists": 128,
+    "pq_subquantizers": 64,
+    "pq_bits": 8,
+    "nprobe": 32,
+    "source_unchanged": true
+  },
+  "window_manifest": {
+    "windows": 6162,
+    "database_sha256": "807cb2a4a4a0d1849d985c6af1e2144a1d6a1b149bbc15a2cadb7fcf3ce63e4d",
+    "input_chain": "e212d73059c4c2fa388a8a565816cac4b29bc210c390c26dc16e04212c51c274",
+    "rows_by_book": {
+      "pg14741-full": 475,
+      "pg16527-full": 623,
+      "pg30774-full": 201,
+      "pg37196-full": 87,
+      "pg5316-full": 7,
+      "ruwikibooks-regex-266423": 209,
+      "wsru-chameleon-6a5f80896084": 29,
+      "wsru-dream-ridiculous-man-b5434c2c1b24": 149,
+      "wsru-fathers-and-sons-492401072288": 1465,
+      "wsru-how-much-land-285bf7cc584e": 91,
+      "wsru-ivan-ilyich-f20f7ddf97c0": 393,
+      "wsru-lefty-45ef2537b9d9": 217,
+      "wsru-man-in-a-case-28e726a2b8f0": 98,
+      "wsru-mumu-49cea43537bb": 194,
+      "wsru-overcoat-4efb1fb3e2e1": 247,
+      "wsru-queen-of-spades-c63b9e94258c": 166,
+      "wsru-red-flower-c5154930c63c": 110,
+      "wsru-three-hermits-0c18bc8ae3e3": 47,
+      "wsru-underground-4d592d8e2fd1": 879,
+      "wsru-ward-six-740d89bd5ddc": 422,
+      "wsru-wise-gudgeon-657bc443f59d": 53
+    },
+    "full_float_matrix_stored": false
+  },
+  "resume": {
+    "deliberate_stop_durable_windows": 512,
+    "first_phase_encoded_windows": 512,
+    "resumed_encoded_windows": 5650,
+    "resumed_chunks": 2,
+    "completed_windows": 6162,
+    "durable_rows_reencoded": 0,
+    "ready_sha256": "afc30fc45350227353c261fc59e55dd2f355d29fa30fb74f73d84df515909002"
+  },
+  "runtime": {
+    "device": "mps",
+    "rows_encoded": 6170,
+    "encode_requests": 200,
+    "encode_seconds": 23.263161920476705,
+    "load_seconds": 3.24350224994123,
+    "peak_rss_bytes": 834060288,
+    "faiss_imported": false,
+    "model_files_unchanged": true
+  },
+  "resources": {
+    "faiss_worker_peak_rss_bytes": 75431936,
+    "combined_worker_rss_limit_bytes": 2147483648,
+    "owned_disk_limit_bytes": 262144000,
+    "free_disk_reserve_bytes": 4831838208,
+    "owned_output_bytes_including_reader_report": 19709020,
+    "rss_excludes_gpu_driver_allocations": true
+  },
+  "public_dev_cases": [
+    {
+      "id": "ru-chameleon-owner",
+      "book_ids": [
+        "wsru-chameleon-6a5f80896084"
+      ],
+      "expected_answerability": true,
+      "semantic_anchor_rank": 2,
+      "lexical_anchor_rank": null,
+      "morph_anchor_rank": null,
+      "lexical_count": 0,
+      "morph_count": 0,
+      "morph_used": false,
+      "morph_reason": "quoted_query_unchanged",
+      "all_semantic_sources_exact": true,
+      "score_is_not_answerability": true,
+      "coverage": {
+        "covered_books": 21,
+        "indexed_books": 21,
+        "coverage_kind": "explicit-subset"
+      }
+    },
+    {
+      "id": "ru-lefty-warning",
+      "book_ids": [
+        "wsru-lefty-45ef2537b9d9"
+      ],
+      "expected_answerability": true,
+      "semantic_anchor_rank": 1,
+      "lexical_anchor_rank": null,
+      "morph_anchor_rank": 1,
+      "lexical_count": 0,
+      "morph_count": 1,
+      "morph_used": true,
+      "morph_reason": "stem_matches",
+      "all_semantic_sources_exact": true,
+      "score_is_not_answerability": true,
+      "coverage": {
+        "covered_books": 21,
+        "indexed_books": 21,
+        "coverage_kind": "explicit-subset"
+      }
+    },
+    {
+      "id": "ru-land-grave",
+      "book_ids": [
+        "wsru-how-much-land-285bf7cc584e"
+      ],
+      "expected_answerability": true,
+      "semantic_anchor_rank": 2,
+      "lexical_anchor_rank": null,
+      "morph_anchor_rank": null,
+      "lexical_count": 0,
+      "morph_count": 0,
+      "morph_used": false,
+      "morph_reason": "quoted_query_unchanged",
+      "all_semantic_sources_exact": true,
+      "score_is_not_answerability": true,
+      "coverage": {
+        "covered_books": 21,
+        "indexed_books": 21,
+        "coverage_kind": "explicit-subset"
+      }
+    }
+  ],
+  "own_cc0_cases": [
+    {
+      "id": "cc0-blue-chest",
+      "book_ids": [
+        "cc0-island"
+      ],
+      "expected_answerability": true,
+      "semantic_anchor_rank": 1,
+      "lexical_anchor_rank": 1,
+      "morph_anchor_rank": 1,
+      "lexical_count": 1,
+      "morph_count": 1,
+      "morph_used": false,
+      "morph_reason": "ineligible",
+      "all_semantic_sources_exact": true,
+      "score_is_not_answerability": true,
+      "coverage": {
+        "covered_books": 2,
+        "indexed_books": 2,
+        "coverage_kind": "explicit-subset"
+      }
+    },
+    {
+      "id": "cc0-observatory",
+      "book_ids": [
+        "cc0-observatory"
+      ],
+      "expected_answerability": true,
+      "semantic_anchor_rank": 1,
+      "lexical_anchor_rank": 1,
+      "morph_anchor_rank": 1,
+      "lexical_count": 1,
+      "morph_count": 1,
+      "morph_used": false,
+      "morph_reason": "ineligible",
+      "all_semantic_sources_exact": true,
+      "score_is_not_answerability": true,
+      "coverage": {
+        "covered_books": 2,
+        "indexed_books": 2,
+        "coverage_kind": "explicit-subset"
+      }
+    },
+    {
+      "id": "cc0-wrong-book",
+      "book_ids": [
+        "cc0-observatory"
+      ],
+      "expected_answerability": false,
+      "semantic_anchor_rank": null,
+      "lexical_anchor_rank": null,
+      "morph_anchor_rank": null,
+      "lexical_count": 0,
+      "morph_count": 0,
+      "morph_used": true,
+      "morph_reason": "no_supported_stem_matches",
+      "all_semantic_sources_exact": true,
+      "score_is_not_answerability": true,
+      "coverage": {
+        "covered_books": 2,
+        "indexed_books": 2,
+        "coverage_kind": "explicit-subset"
+      }
+    }
+  ],
+  "reader_validation": {
+    "get_only": true,
+    "journeys": 9,
+    "javascript_errors": 0,
+    "non_get_requests": 0,
+    "all_highlights_verified_exact": true,
+    "desktop_mobile_screenshots_inspected": true,
+    "production_api_semantic_backend_changed": false
+  },
+  "limitations": [
+    "21-edition experimental coverage only; the growing full library is not covered or promoted.",
+    "Three known book-scoped public development anchors are not an unbiased final evaluation.",
+    "ANN limit100 vs lexical/morphology limit40; all reported positive ranks are at most2 and missing lexical controls have zero hits.",
+    "Each own CC0 book has one passage; positives prove integration, not difficult retrieval.",
+    "The genuine wrong-book CC0 negative still returns an irrelevant exact passage; no calibrated abstention or entailment claim.",
+    "Scores are approximate distances, not probabilities; no LLM or final heldout evaluation was run.",
+    "Timing is encoder-only for this bounded MPS job, not full indexing throughput; RSS excludes GPU driver allocations.",
+    "Durable checkpoints resume without reencoding; a crash before checkpoint can recompute uncommitted work.",
+    "Additional manifest/IPC hardening was tested after this run without rewriting its original reports."
+  ]
+}

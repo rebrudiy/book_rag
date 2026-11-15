@@ -246,6 +246,73 @@ def test_unsealed_owned_shard_after_crash_rebuilt(tmp_path: Path, vectors: np.nd
     assert pq.file_sha256(directory / resumed["shards"][1]["file"]) == resumed["shards"][1]["sha256"]
 
 
+def test_cold_file_atime_update_does_not_reject_verified_bytes(tmp_path: Path, backend: FakeBackend) -> None:
+    path = tmp_path / "owned-cold-index"
+    backend.write_index(FakeIndex(8), str(path))
+    checksum = pq.file_sha256(path)
+    info = path.stat()
+    os.utime(path, ns=(1, info.st_mtime_ns))
+    before = path.stat()
+    index = pq.read_verified_index(path, checksum)
+    after = path.stat()
+    assert index.d == 8
+    assert (before.st_dev, before.st_ino, before.st_size, before.st_mtime_ns, before.st_ctime_ns) == (
+        after.st_dev,
+        after.st_ino,
+        after.st_size,
+        after.st_mtime_ns,
+        after.st_ctime_ns,
+    )
+    assert pq.file_sha256(path) == checksum
+
+
+@pytest.mark.parametrize("change", ["mtime", "inode", "size"])
+def test_real_changes_during_checksum_are_still_rejected(
+    change: str, tmp_path: Path, backend: FakeBackend, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    path = tmp_path / "owned-index"
+    backend.write_index(FakeIndex(8), str(path))
+    original_sha = pq.file_sha256
+    checksum = original_sha(path)
+
+    def hash_then_change(target: Path) -> str:
+        value = original_sha(target)
+        if change == "mtime":
+            info = target.stat()
+            os.utime(target, ns=(info.st_atime_ns, info.st_mtime_ns + 1_000_000_000))
+        elif change == "inode":
+            replacement = target.with_suffix(".replacement")
+            replacement.write_bytes(target.read_bytes())
+            replacement.replace(target)
+        else:
+            with target.open("ab") as handle:
+                handle.write(b"owned race")
+        return value
+
+    monkeypatch.setattr(pq, "file_sha256", hash_then_change)
+    with pytest.raises(ValueError, match="changed during verification"):
+        pq.read_verified_index(path, checksum)
+
+
+def test_change_during_native_read_is_rejected(
+    tmp_path: Path, backend: FakeBackend, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    path = tmp_path / "owned-index"
+    backend.write_index(FakeIndex(8), str(path))
+    checksum = pq.file_sha256(path)
+    original_read = backend.read_index
+
+    def read_then_change(filename: str) -> FakeIndex:
+        index = original_read(filename)
+        with Path(filename).open("ab") as handle:
+            handle.write(b"owned post-verification race")
+        return index
+
+    monkeypatch.setattr(backend, "read_index", read_then_change)
+    with pytest.raises(ValueError, match="changed during read"):
+        pq.read_verified_index(path, checksum)
+
+
 def test_shard_search_merge_matches_exact_with_stable_ids(
     tmp_path: Path, vectors: np.ndarray, backend: FakeBackend
 ) -> None:

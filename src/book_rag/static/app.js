@@ -580,7 +580,12 @@
   function renderSemanticCoverage(coverage, target = $('semantic-coverage')) {
     target.replaceChildren(); target.classList.add('hidden'); target.dataset.active = 'false';
     if (!coverage || coverage.active !== true || !Number.isSafeInteger(coverage.indexed_books) || !Number.isSafeInteger(coverage.searchable_books) || coverage.indexed_books < 1 || coverage.searchable_books < coverage.indexed_books) return;
-    target.append(node('p', 'semantic-coverage-title', `Поиск по смыслу: ${formatNumber(coverage.indexed_books)} из ${formatNumber(coverage.searchable_books)} изданий`));
+    const russianScope = coverage.scope === 'ru21-scoped-overlay' && coverage.scope_language === 'ru' && Number.isSafeInteger(coverage.scope_searchable_books) && coverage.scope_searchable_books >= coverage.indexed_books;
+    const title = russianScope
+      ? `Поиск по смыслу на русском: ${formatNumber(coverage.indexed_books)} из ${formatNumber(coverage.scope_searchable_books)} изданий`
+      : `Поиск по смыслу: ${formatNumber(coverage.indexed_books)} из ${formatNumber(coverage.searchable_books)} изданий`;
+    target.append(node('p', 'semantic-coverage-title', title));
+    if (russianScope) target.append(node('p', 'semantic-coverage-scope', 'Подключён отдельный индекс русских текстов. Порядок фрагментов рассчитан приближённо; откройте источник, чтобы проверить содержание.'));
     if (coverage.requested_book_covered === false) target.append(node('p', 'semantic-coverage-scope', 'Для выбранной книги доступен поиск по словам.'));
     target.append(node('p', 'semantic-coverage-note', 'Поиск по словам доступен по всей библиотеке.'));
     target.dataset.active = 'true';

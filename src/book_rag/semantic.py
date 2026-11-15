@@ -680,6 +680,18 @@ def semantic_search(
             result["semantic_coverage"] = coverage
         return result
 
+    # An explicitly configured, source-bound overlay may serve a narrow scope.
+    # Global queries and ordinary installations retain the original index path.
+    if os.getenv("BOOKRAG_SEMANTIC_OVERLAY") and (book_id is not None or language == "ru"):
+        try:
+            from book_rag.semantic_overlay import overlay_search
+
+            overlay = overlay_search(library, query, mode, book_id, language, limit)
+            if overlay is not None:
+                return overlay
+        except (ImportError, OSError, ValueError, TypeError, RuntimeError, sqlite3.Error):
+            return fallback("Дополнительный русский смысловой индекс недоступен. Показан поиск по словам.")
+
     if not active.exists():
         return fallback("Semantic index unavailable. Showing lexical search. Run bookrag embed.")
     receipt: dict[str, Any] | None = None

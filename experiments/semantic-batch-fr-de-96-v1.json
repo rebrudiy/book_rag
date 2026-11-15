@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "experiment": "direct-live-complete-edition-batch-fr-de-96-v1",
+  "status": "built-not-yet-registered-in-production",
+  "closed_final_used": false,
+  "editions": 96,
+  "languages": {
+    "fr": 48,
+    "de": 48
+  },
+  "canonical_passages": 2451,
+  "canonical_characters": 2272993,
+  "windows": 8518,
+  "first_run": {
+    "durable_windows": 512,
+    "encode_seconds": 2.2078452087007463
+  },
+  "resume": {
+    "durable_before": 512,
+    "encoded_windows": 8006,
+    "encode_seconds": 28.794948594644666,
+    "resumed_chunks": 2
+  },
+  "durable_windows_reencoded": 0,
+  "source_unchanged": true,
+  "source_database_copied": false,
+  "full_float32_matrix_stored": false,
+  "peak_rss_bytes": {
+    "encoder": 870383616,
+    "native": 67452928
+  },
+  "owned_output_bytes": 7108373,
+  "runtime_report": "data/semantic-batches/fr-de-96-v1/report.json",
+  "runtime_report_sha256": "64db483607fb999fb449a5a5ed100e0df87ea72060f87e507bd26701eda4ba60",
+  "manifest_sha256": "2d0123a9669f4451c2240149257e86b2ff218a7e536146df5419604049ef9aba",
+  "ready_sha256": "860c549b0f3fa77e490a007b8454b2782439f7a466705254c0390d6fef69da17",
+  "codec_report_sha256": "65441a1c96cac5305b0e422794b961bc5ccb049d2d1ad1c9c892d63bd490a335",
+  "codec_sha256": "2af559dc93e3eaddc983c25361a20ad4f43583285e031975fb50a32247a610a0",
+  "input_chain": "5f163976ac1ea6baa77a5d868c5911268094c49bb21a573c9a8666bf2a80f914",
+  "limitations": [
+    "Selected short editions, not a representative throughput/relevance benchmark.",
+    "Full canonical passage coverage does not confirm complete unique-work identities or catalogue language accuracy.",
+    "No production activation, generated answer accuracy or calibrated negative rejection is established.",
+    "Per-worker RSS is not a measurement of combined process, GPU-driver or whole-system memory.",
+    "A post-measurement hardening adds a wall-clock deadline and aborts unsynchronized encoder IPC on failure; window recipe and actual successful inputs are unchanged."
+  ]
+}
