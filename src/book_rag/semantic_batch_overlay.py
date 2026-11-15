@@ -35,6 +35,7 @@ from book_rag.semantic_overlay import _encode_query, _snapshot, _space
 from book_rag.semantic_pilot import ReadOnlyLibrary, _publish_json, _selected_rows, manifest_windows
 
 KIND = "bookrag-explicit-book-semantic-batch-registry-v1"
+KIND_V2 = "bookrag-explicit-book-semantic-batch-registry-v2"
 MAX_BATCHES = 16
 MAX_BOOKS = 8192
 MAX_WINDOWS_PER_BATCH = 200_000
@@ -156,7 +157,26 @@ def _source_guard(source: Library, manifest: dict[str, Any], *, full: bool = Fal
     return expected
 
 
-def _inspect_batch(directory: Path) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any], dict[str, Any]]:
+def _compact_spec(value: Any) -> dict[str, Any]:
+    value = _object(value, "window_manifest")
+    if set(value) != {"format", "path", "sha256", "receipt_path", "receipt_sha256"}:
+        raise ValueError("Invalid compact manifest registration fields")
+    if value["format"] != "canonical-offset-v1":
+        raise ValueError("Unknown registered window manifest format")
+    for name in ("path", "receipt_path"):
+        if not isinstance(value[name], str) or not Path(value[name]).is_absolute():
+            raise ValueError("Compact artifacts must use explicit absolute paths")
+    for name in ("sha256", "receipt_sha256"):
+        text = value[name]
+        if not isinstance(text, str) or len(text) != 64 or any(c not in "0123456789abcdef" for c in text):
+            raise ValueError("Compact artifact pin must be a SHA256")
+    return value
+
+
+def _inspect_batch(
+    directory: Path,
+    window_manifest: dict[str, Any] | None = None,
+) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any], dict[str, Any]]:
     if directory.is_symlink():
         raise ValueError("Batch directory cannot be a symlink")
     root = directory.expanduser().resolve(strict=True)
@@ -185,6 +205,22 @@ def _inspect_batch(directory: Path) -> tuple[dict[str, Any], dict[str, Any], dic
     ready = _read(generation / "ready.json")
     descriptor = _read(generation / "descriptor.json")
     manifest = _read(root / "windows.sqlite3.receipt.json")
+    if window_manifest is None:
+        if file_sha256(root / "windows.sqlite3") != manifest["database_sha256"]:
+            raise ValueError("Original window manifest checksum changed")
+    else:
+        from book_rag.compact_window_reader import compact_receipt
+
+        spec = _compact_spec(window_manifest)
+        proof = compact_receipt(
+            Path(spec["path"]),
+            Path(spec["receipt_path"]),
+            expected_sha256=spec["sha256"],
+            expected_receipt_sha256=spec["receipt_sha256"],
+            producer_receipt=manifest,
+        )
+        if proof["original_receipt_sha256"] != file_sha256(root / "windows.sqlite3.receipt.json"):
+            raise ValueError("Compact conversion pins a different producer receipt")
     producer = _object(manifest.get("descriptor"), "manifest.descriptor")
     state = _object(producer.get("source_state"), "source_state")
     _object(state.get("coverage"), "source_state.coverage")
@@ -220,7 +256,6 @@ def _inspect_batch(directory: Path) -> tuple[dict[str, Any], dict[str, Any], dic
         or descriptor["rows"] != manifest["rows"]
         or native["durable_rows"] != manifest["rows"]
         or not 1 <= manifest["rows"] <= MAX_WINDOWS_PER_BATCH
-        or file_sha256(root / "windows.sqlite3") != manifest["database_sha256"]
         or file_sha256(generation / "codec.faiss") != descriptor["codec_sha256"]
         or report["codec_sha256"] != descriptor["codec_sha256"]
         or report["source"] != producer["source_state"]["source_directory"]
@@ -275,6 +310,8 @@ def _inspect_batch(directory: Path) -> tuple[dict[str, Any], dict[str, Any], dic
         "covered_book_ids": books,
         "rows": manifest["rows"],
     }
+    if window_manifest is not None:
+        entry["window_manifest"] = dict(window_manifest)
     return entry, ready, descriptor, manifest
 
 
@@ -282,7 +319,12 @@ def _entry(
     registry: dict[str, Any], number: int
 ) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any], dict[str, Any]]:
     expected = registry["entries"][number]
-    actual, ready, descriptor, manifest = _inspect_batch(Path(expected["batch_directory"]))
+    spec = (
+        _compact_spec(expected["window_manifest"])
+        if registry["schema_version"] == 2 and "window_manifest" in expected
+        else None
+    )
+    actual, ready, descriptor, manifest = _inspect_batch(Path(expected["batch_directory"]), spec)
     if actual != expected:
         raise ValueError("Registered immutable batch identity changed")
     return actual, ready, descriptor, manifest
@@ -290,13 +332,17 @@ def _entry(
 
 def _registry(path: Path) -> dict[str, Any]:
     value = _read(path, 4 * 1024**2)
-    if value.get("kind") != KIND or value.get("schema_version") != 1:
+    if (value.get("schema_version"), value.get("kind")) not in ((1, KIND), (2, KIND_V2)):
         raise ValueError("Unknown semantic batch registry")
     entries, mapping = value["entries"], value["book_to_entry"]
     if not isinstance(entries, list) or not 1 <= len(entries) <= MAX_BATCHES or not isinstance(mapping, dict):
         raise ValueError("Invalid bounded registry entries")
     expected = {}
     for number, entry in enumerate(entries):
+        if "window_manifest" in entry:
+            if value["schema_version"] != 2:
+                raise ValueError("Compact format requires an explicit v2 registry")
+            _compact_spec(entry["window_manifest"])
         for identity in entry["covered_book_ids"]:
             if identity in expected:
                 raise ValueError("An edition cannot route to multiple batches")
@@ -317,7 +363,23 @@ def _bindings(source: Library, entry: dict[str, Any], ready: dict[str, Any]) -> 
 
 
 def _mapping_proof(source: Library, entry: dict[str, Any], ready: dict[str, Any], descriptor: dict[str, Any]) -> None:
-    records = iter(manifest_windows(Path(entry["batch_directory"]) / "windows.sqlite3"))
+    if "window_manifest" in entry:
+        from book_rag.compact_window_reader import compact_windows
+
+        spec = _compact_spec(entry["window_manifest"])
+        producer = _read(Path(entry["batch_directory"]) / "windows.sqlite3.receipt.json")
+        records = iter(
+            compact_windows(
+                source,
+                Path(spec["path"]),
+                Path(spec["receipt_path"]),
+                expected_sha256=spec["sha256"],
+                expected_receipt_sha256=spec["receipt_sha256"],
+                producer_receipt=producer,
+            )
+        )
+    else:
+        records = iter(manifest_windows(Path(entry["batch_directory"]) / "windows.sqlite3"))
     count = 0
     previous = 0
     with source.connect() as conn:
@@ -353,7 +415,13 @@ def _mapping_proof(source: Library, entry: dict[str, Any], ready: dict[str, Any]
             raise ValueError("Manifest does not completely cover selected canonical passages")
 
 
-def install_batch_registry(library: Library, batch_directories: list[Path], destination: Path) -> dict[str, Any]:
+def install_batch_registry(
+    library: Library,
+    batch_directories: list[Path],
+    destination: Path,
+    *,
+    compact_manifests: dict[Path, Path] | None = None,
+) -> dict[str, Any]:
     """Explicit immutable registry installation; no source/generation mutation."""
     if not isinstance(batch_directories, list) or not 1 <= len(batch_directories) <= MAX_BATCHES:
         raise ValueError("Select a bounded explicit batch list")
@@ -362,9 +430,28 @@ def install_batch_registry(library: Library, batch_directories: list[Path], dest
         raise FileExistsError("Use a new immutable registry destination")
     if destination.resolve().is_relative_to(library.data_dir.resolve()):
         raise ValueError("Keep registry metadata outside the original library")
+    compact = {key.resolve(strict=True): value for key, value in (compact_manifests or {}).items()}
+    if len(compact) != len(compact_manifests or {}):
+        raise ValueError("A batch may have only one explicit compact manifest")
+    if set(compact) - {path.resolve(strict=True) for path in batch_directories}:
+        raise ValueError("Compact selection references an unselected batch")
     entries = []
     for directory in batch_directories:
-        entry, _, _, _ = _inspect_batch(directory)
+        spec = None
+        if directory.resolve(strict=True) in compact:
+            payload = compact[directory.resolve(strict=True)].absolute()
+            sidecar = payload.with_suffix(payload.suffix + ".receipt.json")
+            from book_rag.compact_window_reader import validate_compact_paths
+
+            validate_compact_paths(payload, sidecar)
+            spec = {
+                "format": "canonical-offset-v1",
+                "path": str(payload),
+                "sha256": file_sha256(payload),
+                "receipt_path": str(sidecar),
+                "receipt_sha256": file_sha256(sidecar),
+            }
+        entry, _, _, _ = _inspect_batch(directory, spec)
         if destination.resolve().is_relative_to(Path(entry["batch_directory"])):
             raise ValueError("Keep registry outside immutable batch directories")
         entries.append(entry)
@@ -381,8 +468,8 @@ def install_batch_registry(library: Library, batch_directories: list[Path], dest
     staging.mkdir()
     try:
         registry = {
-            "kind": KIND,
-            "schema_version": 1,
+            "kind": KIND_V2 if compact else KIND,
+            "schema_version": 2 if compact else 1,
             "target_db_path": str(library.db_path.resolve()),
             "entries": entries,
             "book_to_entry": mapping,

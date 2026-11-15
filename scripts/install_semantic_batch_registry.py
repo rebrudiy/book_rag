@@ -17,8 +17,20 @@ def main() -> None:
         "--batch", type=Path, action="append", required=True, help="Repeat for each completed batch root"
     )
     parser.add_argument("--destination", type=Path, required=True)
+    parser.add_argument(
+        "--compact",
+        type=Path,
+        nargs=2,
+        action="append",
+        metavar=("BATCH", "PAYLOAD"),
+        help="Explicit compact-v2 manifest for a selected batch; repeat as needed",
+    )
     args = parser.parse_args()
-    install_batch_registry(InstallationTarget(args.library), args.batch, args.destination)
+    pairs = args.compact or []
+    compact = dict(pairs)
+    if len(compact) != len(pairs):
+        parser.error("A batch may have only one compact payload")
+    install_batch_registry(InstallationTarget(args.library), args.batch, args.destination, compact_manifests=compact)
     print(
         json.dumps(
             {
