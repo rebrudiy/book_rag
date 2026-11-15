@@ -53,6 +53,14 @@ bounds gathered matrix blocks; it avoids mapping all vector pages into resident
 working sets for these scopes. No index bytes, ranking floor or model defaults
 were changed by this experiment.
 
+The recorded macOS pairs were bit-exact. This is an observed property of those
+inputs/backend, not a cross-platform arithmetic guarantee. Linux OpenBLAS CI
+observed one float32 ULP (5.96e-8) on a tiny four-dimensional final block. The
+portable regression therefore checks rounding-level score tolerance, exact
+eligible masks, unchanged candidate IDs/order and bounded matrix reads. Very
+near score ties or cutoffs may differ across BLAS kernels/platforms; this change
+does not establish universal bit-exact ranking at such boundaries.
+
 ```sh
 uv run python scripts/benchmark_scoped_vectors.py --self-test
 uv run python scripts/benchmark_scoped_vectors.py

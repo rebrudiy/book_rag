@@ -40,7 +40,11 @@ def test_scoped_scores_rankings_and_duplicate_windows_match_dense_mask(ordered: 
     dense[~keep] = -np.inf
     matrix = ScopedMatrix(values, set(np.flatnonzero(keep).tolist()), maximum=5)
     actual = _score_vectors(matrix, ids, query, eligible, ordered_ids=ordered, block_rows=5)
-    np.testing.assert_array_equal(actual, dense)
+    # OpenBLAS may choose a different reduction kernel for the final small
+    # gathered block (observed one float32 ULP on Linux). Scope/masks and actual
+    # candidate ordering remain exact; allow only rounding-level score drift.
+    np.testing.assert_array_equal(np.isfinite(actual), np.isfinite(dense))
+    np.testing.assert_allclose(actual[keep], dense[keep], rtol=2e-7, atol=2e-7)
     assert _candidate_passages(actual, ids, -1)[0] == _candidate_passages(dense, ids, -1)[0]
     assert sorted(matrix.visited) == np.flatnonzero(keep).tolist()
 
