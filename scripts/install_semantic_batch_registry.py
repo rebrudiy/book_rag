@@ -7,7 +7,6 @@ import json
 from pathlib import Path
 
 from book_rag.semantic_batch_overlay import install_batch_registry
-
 from book_rag.semantic_overlay import InstallationTarget
 
 

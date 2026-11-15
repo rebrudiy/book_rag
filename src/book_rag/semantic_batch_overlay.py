@@ -8,6 +8,7 @@ only by the bounded fresh JSON subprocess at the bottom of this module.
 from __future__ import annotations
 
 import atexit
+import hashlib
 import json
 import os
 import shutil
@@ -17,19 +18,21 @@ import sys
 import threading
 import time
 import uuid
+from collections import OrderedDict
 from pathlib import Path
 from typing import Any
 
 import numpy as np
 
-from book_rag.experimental_ivfpq import file_sha256
+from book_rag.experimental_ivfpq import canonical_bytes
+from book_rag.experimental_ivfpq import file_sha256 as _file_sha256
 from book_rag.incremental_ivfpq import _shard_mapping, _shard_name, _shard_receipt, digest
 from book_rag.index_coverage import validate_coverage
 from book_rag.library import Library
 from book_rag.semantic_batches import KIND as PRODUCER_KIND
 from book_rag.semantic_batches import batch_source_state
 from book_rag.semantic_overlay import _encode_query, _snapshot, _space
-from book_rag.semantic_pilot import ReadOnlyLibrary, _publish_json, manifest_windows
+from book_rag.semantic_pilot import ReadOnlyLibrary, _publish_json, _selected_rows, manifest_windows
 
 KIND = "bookrag-explicit-book-semantic-batch-registry-v1"
 MAX_BATCHES = 16
@@ -41,6 +44,42 @@ WORKER_RSS = 512 * 1024**2
 _SLOT = threading.BoundedSemaphore(1)
 _WORKERS: set[subprocess.Popen[Any]] = set()
 _LOCK = threading.RLock()
+_HASH_CACHE: OrderedDict[tuple[Any, ...], str] = OrderedDict()
+_HASH_CACHE_LIMIT = 256
+
+
+def _file_identity(path: Path) -> tuple[Any, ...]:
+    if path.is_symlink() or not path.is_file():
+        raise ValueError("Expected a regular nonsymlink registered artifact")
+    info = path.stat()
+    return str(path.absolute()), info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns, info.st_ctime_ns
+
+
+def file_sha256(path: Path) -> str:
+    """Cache bytes' digest, never a validity verdict; callers still compare SHA.
+
+    Every hit rechecks inode/device/size/mtime/ctime and rejects missing/symlink
+    files. Access time is intentionally absent because hashing itself changes it.
+    A different expected receipt hash is still compared with this digest by each
+    caller and cannot reuse a previous successful validation verdict.
+    """
+    before = _file_identity(path)
+    with _LOCK:
+        cached = _HASH_CACHE.get(before)
+        if cached is not None:
+            _HASH_CACHE.move_to_end(before)
+            if _file_identity(path) != before:
+                raise ValueError("Registered artifact changed during cached validation")
+            return cached
+    value = _file_sha256(path)
+    if _file_identity(path) != before:
+        raise ValueError("Registered artifact changed while hashing")
+    with _LOCK:
+        _HASH_CACHE[before] = value
+        _HASH_CACHE.move_to_end(before)
+        while len(_HASH_CACHE) > _HASH_CACHE_LIMIT:
+            _HASH_CACHE.popitem(last=False)
+    return value
 
 
 def _read(path: Path, budget: int = 1024**2) -> dict[str, Any]:
@@ -58,12 +97,63 @@ def _object(value: Any, name: str) -> dict[str, Any]:
     return value
 
 
-def _source_guard(source: Library, manifest: dict[str, Any]) -> dict[str, Any]:
+def _source_guard(source: Library, manifest: dict[str, Any], *, full: bool = False) -> dict[str, Any]:
     expected = manifest["descriptor"]["source_state"]
-    actual = batch_source_state(source, manifest["descriptor"]["book_ids"])
-    if actual != expected:
-        raise ValueError("Direct batch source, provenance or original namespace changed")
-    return actual
+    if full:
+        actual = batch_source_state(source, manifest["descriptor"]["book_ids"])
+        if actual != expected:
+            raise ValueError("Direct batch source, provenance or original namespace changed")
+        return actual
+    # Registration performed the complete canonical scan. Runtime can reuse that
+    # proof only while exact trigger DDL/schema/namespace/inode and every covered
+    # epoch/header remain identical to the producer's SAME-snapshot state token.
+    before = source.db_path.stat()
+    with source.connect() as conn:
+        if not conn.in_transaction:
+            conn.execute("BEGIN")
+
+        class SnapshotSource:
+            db_path = source.db_path
+
+            def connect(self) -> Any:
+                from contextlib import nullcontext
+
+                return nullcontext(conn)
+
+        state = validate_coverage(SnapshotSource(), expected["coverage"])
+        if (
+            not state["tracked"]
+            or state["state_token"] != expected["state_token"]
+            or str(source.data_dir) != expected["source_directory"]
+            or before.st_dev != expected["database_device"]
+            or before.st_ino != expected["database_inode"]
+        ):
+            raise ValueError("Direct batch canonical epochs, schema or original namespace changed")
+        # These provenance/attribution tables are deliberately NOT covered by
+        # embedding epochs. Compare their exact producer-format hashes/counts in
+        # this same SQL snapshot; do not substitute timestamps or global versions.
+        signature = expected["signature"]
+        books = manifest["descriptor"]["book_ids"]
+        if books != signature["book_ids"] or books != expected["coverage"]["covered_book_ids"]:
+            raise ValueError("Direct batch metadata coverage differs")
+        for table in ("books", "book_metadata", "index_versions", "section_roles"):
+            checksum, count = hashlib.sha256(), 0
+            for row in _selected_rows(conn, table, books):
+                value = dict(row)
+                if table == "books":
+                    value = {
+                        key: item
+                        for key, item in value.items()
+                        if key not in {"created_at", "indexed_at", "local_path", "error"}
+                    }
+                checksum.update(canonical_bytes(value) + b"\n")
+                count += 1
+            if checksum.hexdigest() != signature["table_sha256"][table] or count != signature["table_counts"][table]:
+                raise ValueError("Direct batch edition, attribution or provenance changed")
+    after = source.db_path.stat()
+    if (before.st_dev, before.st_ino) != (after.st_dev, after.st_ino):
+        raise ValueError("Direct batch database replaced during runtime proof")
+    return expected
 
 
 def _inspect_batch(directory: Path) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any], dict[str, Any]]:
@@ -301,7 +391,7 @@ def install_batch_registry(library: Library, batch_directories: list[Path], dest
         for number in range(len(entries)):
             entry, ready, descriptor, manifest = _entry(registry, number)
             with _snapshot(library) as coherent:
-                _source_guard(coherent, manifest)
+                _source_guard(coherent, manifest, full=True)
                 _bindings(coherent, entry, ready)
                 _mapping_proof(coherent, entry, ready, descriptor)
         _publish_json(staging / "registry.json", registry)
@@ -318,7 +408,7 @@ def install_batch_registry(library: Library, batch_directories: list[Path], dest
         with _snapshot(library, installing=True) as coherent:
             for number in range(len(entries)):
                 entry, ready, _, manifest = _entry(registry, number)
-                _source_guard(coherent, manifest)
+                _source_guard(coherent, manifest, full=True)
                 _bindings(coherent, entry, ready)
             if file_sha256(staging / "registry.json") != registry_sha:
                 raise ValueError("Registry changed before publication")

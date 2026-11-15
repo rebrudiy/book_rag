@@ -102,12 +102,25 @@ uses the same verified offline MiniLM adapter as RU21; no paid API is required.
 
 ## Guards, isolation and limitations
 
-Before and after native search and live hydration, the route compares the entire
-selected batch state with the producer receipt. Its coherent SQL snapshot
-includes canonical bytes, headers, passage/section IDs, original database
-inode/namespace, embedding epochs and edition/source/rights/attribution/indexer
-metadata. A fresh transaction after hydration catches concurrent writers that a
-held read snapshot cannot observe.
+Registration performs the complete canonical source scan. Before and after
+native search and live hydration, runtime verifies the original producer epoch
+token, exact epoch-trigger DDL/schema, namespace, inode and covered headers in
+one coherent SQL snapshot. These triggers cover all relevant passage and section
+mutations, including replacement and deletion. The unchanged token permits reuse
+of the registered canonical proof without repeatedly scanning every passage body.
+Edition/source/rights/attribution/indexer fields outside those triggers still
+require exact hashes and counts for `books`, `book_metadata`, `index_versions`
+and `section_roles`, compared with the existing producer signature. No receipt
+is rebound or rewritten. Returned quotes are independently verified against the
+live canonical sections. A fresh transaction after hydration catches concurrent
+writers that a held read snapshot cannot observe.
+
+Artifact digests use a bounded 256-entry cache keyed by path, device, inode,
+size, modification time and change time. Access time is excluded. This caches
+only the digest: every caller still compares its expected receipt SHA. Missing,
+symlinked, replaced or modified files invalidate the entry; metadata is checked
+again after hashing and cached reads. The native child remains isolated from
+Torch and uses its own bounded cache.
 
 This first version conservatively disables the whole affected batch if any
 covered edition or its provenance changes. Other batches can retain their own
@@ -124,7 +137,7 @@ model adapter verifies cached weight SHAs and post-encode file stamps. Optional
 FAISS absence does not affect ordinary lexical operation.
 
 Aggregate producer signatures cannot supply an independently trusted per-book
-provenance baseline. Therefore current queries retain the full batch proof;
+provenance baseline. Therefore current queries retain the full batch scope;
 this is intentionally stricter than inspecting only one selected book. A
 read-only preflight on the actual96-edition,2,451-passage,1,212-section batch
 matched its saved state in all four trials:351.0ms cold, then98.6/92.8/105.8ms

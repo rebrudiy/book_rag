@@ -1,0 +1,65 @@
+{
+  "kind": "semantic1000-source-guard-runtime-v2",
+  "created_at": "2026-11-15T04:43:34.288987+00:00",
+  "book_id": "pg38336-full",
+  "query": "Почему люди отказываются от свободы ради хлеба и спокойствия?",
+  "limit": 10,
+  "original_report_sha256": "b85d38c47b966e188c056d5e3e5828a9de0c89e48e64fb6a1b579f38b02dc10f",
+  "baseline_seconds": [
+    21.37321058381349,
+    13.766719625331461
+  ],
+  "live_db_constructor_called": false,
+  "source_writes": false,
+  "new_generation": false,
+  "closed_final_used": false,
+  "llm_generation": false,
+  "caveat": "Separate read-only process, one cold model load then warm; no paired throughput or relevance claim.",
+  "cases": [
+    {
+      "attempt": 0,
+      "seconds": 4.2203115420416,
+      "response_elapsed_ms": 4219.88,
+      "ids_identical": true,
+      "result_count": 10,
+      "max_abs_score_delta": 0.0,
+      "all_sources_exact": true,
+      "coverage": {
+        "indexed_books": 1000,
+        "searchable_books": 11001,
+        "active": true,
+        "requested_book_covered": true,
+        "scope": "book-batch-overlay",
+        "scope_book_id": "pg38336-full",
+        "scope_language": "de",
+        "scope_searchable_books": 1
+      }
+    },
+    {
+      "attempt": 1,
+      "seconds": 0.9158538752235472,
+      "response_elapsed_ms": 915.42,
+      "ids_identical": true,
+      "result_count": 10,
+      "max_abs_score_delta": 0.0,
+      "all_sources_exact": true,
+      "coverage": {
+        "indexed_books": 1000,
+        "searchable_books": 11001,
+        "active": true,
+        "requested_book_covered": true,
+        "scope": "book-batch-overlay",
+        "scope_book_id": "pg38336-full",
+        "scope_language": "de",
+        "scope_searchable_books": 1
+      }
+    }
+  ],
+  "runtime_report_sha256": "b68b660919ed72d9b39e41e0692dc9f285edc98f8f426549824c7943f4a36ee0",
+  "implementation": {
+    "registration": "Full canonical source and input-mapping proofs retained",
+    "runtime": "Strict original epoch DDL/schema/namespace/inode plus exact untracked metadata table hashes and live canonical quote verification",
+    "artifact_digest_cache": "Bounded256; device/inode/size/mtime_ns/ctime_ns; no access-time or cached validation verdict",
+    "mutation_regressions": 39
+  }
+}
