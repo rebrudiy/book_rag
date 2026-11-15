@@ -7,7 +7,9 @@ original ebook byte stream. Original artifact hashes remain separately recorded.
 from __future__ import annotations
 
 import hashlib
+import heapq
 import json
+import math
 import os
 import re
 import sqlite3
@@ -604,6 +606,85 @@ class Library:
         result["context"] = row["section_text"][max(0, row["start"] - 800) : row["end"] + 800]
         return result
 
+    @staticmethod
+    def _lexical_rows(
+        conn: sqlite3.Connection,
+        expression: str,
+        book_id: str | None,
+        language: str | None,
+        limit: int,
+    ) -> list[sqlite3.Row]:
+        """Stream eligible BM25 ranks, retain exact score/ID ties, hydrate one snapshot."""
+        if not 1 <= limit <= 200:
+            raise ValueError("Expected a lexical candidate limit between 1 and 200")
+        owns_snapshot = not conn.in_transaction
+        if owns_snapshot:
+            conn.execute("BEGIN")
+        try:
+            envelope = ""
+            parameters: tuple[Any, ...] = (expression, book_id, book_id, language, language)
+            if book_id is not None:
+                envelope = (
+                    "AND passage_fts.rowid>=COALESCE((SELECT id FROM passages WHERE book_id=? "
+                    "ORDER BY id LIMIT 1),0) "
+                    "AND passage_fts.rowid<=COALESCE((SELECT id FROM passages WHERE book_id=? "
+                    "ORDER BY id DESC LIMIT 1),-1) "
+                )
+                parameters += (book_id, book_id)
+            cursor = conn.execute(
+                "SELECT passage_fts.rowid id,rank score FROM passage_fts WHERE passage_fts MATCH ? "
+                "AND rank MATCH 'bm25(1.0,2.0,1.5,1.2)' AND EXISTS ("
+                "SELECT 1 FROM passages p JOIN books b ON b.id=p.book_id "
+                "JOIN sections s ON s.id=p.section_id AND s.book_id=p.book_id "
+                "WHERE p.id=passage_fts.rowid AND b.status='indexed' "
+                "AND (? IS NULL OR b.id=?) AND (? IS NULL OR b.language=?)) " + envelope + "ORDER BY rank",
+                parameters,
+            )
+            # Negated score/ID makes the heap root the worst selected key.
+            # Native rank sorts only scores; all boundary ties must be consumed
+            # before the smaller IDs are known. Never store a whole tie group.
+            heap: list[tuple[float, int, int, float]] = []
+            previous_score = -math.inf
+            try:
+                for row in cursor:
+                    identity, score = int(row["id"]), float(row["score"])
+                    if not math.isfinite(score) or score < previous_score:
+                        raise ValueError("Invalid lexical rank stream; rebuild the search index")
+                    previous_score = score
+                    if len(heap) == limit and score > heap[0][3]:
+                        break
+                    entry = (-score, -identity, identity, score)
+                    if len(heap) < limit:
+                        heapq.heappush(heap, entry)
+                    elif (score, identity) < (heap[0][3], heap[0][2]):
+                        heapq.heapreplace(heap, entry)
+            finally:
+                cursor.close()
+            if not heap:
+                return []
+            selected = sorted(heap, key=lambda entry: (entry[3], entry[2]))
+            values = ",".join("(?,?)" for _ in selected)
+            hydrated_parameters: list[Any] = [value for entry in selected for value in (entry[2], entry[3])]
+            hydrated_parameters.extend((book_id, book_id, language, language))
+            return conn.execute(
+                f"WITH selected(id,score) AS (VALUES {values}) "
+                "SELECT p.*,b.title,b.author,b.language,b.edition,b.work_id,b.source_url,b.rights,"
+                "b.rights_url,b.artifact_sha256,b.content_sha256,"
+                "s.title section_title,substr(s.text,p.start+1,p.end-p.start) section_quote,"
+                "a.section_author,a.section_role,a.attribution_basis,a.section_translator,c.score,"
+                "COALESCE(i.stage,b.status) ingestion_status,i.error ingestion_error "
+                "FROM selected c JOIN passages p ON p.id=c.id JOIN books b ON b.id=p.book_id "
+                "LEFT JOIN source_pipeline i ON i.book_id=b.id "
+                "JOIN sections s ON s.id=p.section_id AND s.book_id=p.book_id "
+                "LEFT JOIN section_roles a ON a.section_id=s.id "
+                "WHERE b.status='indexed' AND (? IS NULL OR b.id=?) AND (? IS NULL OR b.language=?) "
+                "ORDER BY c.score,p.id",
+                hydrated_parameters,
+            ).fetchall()
+        finally:
+            if owns_snapshot and conn.in_transaction:
+                conn.rollback()
+
     def search(
         self,
         query: str,
@@ -655,50 +736,9 @@ class Library:
             warnings.append(plan.reason)
         if expression:
             with self.connect() as conn:
-                envelope = ""
-                bounds: tuple[Any, ...] = ()
-                if book_id is not None:
-                    # Keep the index seeks in this statement's read snapshot:
-                    # ingestion may replace passage IDs between separate SELECTs.
-                    # The envelope can contain other books; retain exact filters.
-                    envelope = (
-                        "AND passage_fts.rowid>=COALESCE((SELECT id FROM passages WHERE book_id=? "
-                        "ORDER BY id LIMIT 1),0) "
-                        "AND passage_fts.rowid<=COALESCE((SELECT id FROM passages WHERE book_id=? "
-                        "ORDER BY id DESC LIMIT 1),-1) "
-                    )
-                    bounds = (book_id, book_id)
-                rows = conn.execute(
-                    "WITH candidates AS MATERIALIZED ("
-                    "SELECT p.id,bm25(passage_fts,1.0,2.0,1.5,1.2) score "
-                    "FROM passage_fts JOIN passages p ON p.id=passage_fts.rowid "
-                    "JOIN books b ON b.id=p.book_id "
-                    "JOIN sections s ON s.id=p.section_id AND s.book_id=p.book_id "
-                    "WHERE passage_fts MATCH ? AND b.status='indexed' "
-                    "AND (? IS NULL OR b.id=?) AND (? IS NULL OR b.language=?) "
-                    + envelope
-                    + "ORDER BY score,p.id LIMIT ?) "
-                    "SELECT p.*,b.title,b.author,b.language,b.edition,b.work_id,b.source_url,b.rights,"
-                    "b.rights_url,b.artifact_sha256,b.content_sha256,"
-                    "s.title section_title,substr(s.text,p.start+1,p.end-p.start) section_quote,"
-                    "a.section_author,a.section_role,a.attribution_basis,a.section_translator,"
-                    "c.score,"
-                    "COALESCE(i.stage,b.status) ingestion_status,i.error ingestion_error "
-                    "FROM candidates c JOIN passages p ON p.id=c.id JOIN books b ON b.id=p.book_id "
-                    "LEFT JOIN source_pipeline i ON i.book_id=b.id "
-                    "JOIN sections s ON s.id=p.section_id AND s.book_id=p.book_id "
-                    "LEFT JOIN section_roles a ON a.section_id=s.id "
-                    "ORDER BY c.score,p.id",
-                    (
-                        expression,
-                        book_id,
-                        book_id,
-                        language,
-                        language,
-                        *bounds,
-                        max(200, limit) if mode == "lexical" else limit,
-                    ),
-                ).fetchall()
+                rows = self._lexical_rows(
+                    conn, expression, book_id, language, max(200, limit) if mode == "lexical" else limit
+                )
                 results = [self._result(row) for row in rows]
                 if any(not r["verified"] for r in results):
                     warnings.append("Corrupt citation suppressed; rebuild the affected book")

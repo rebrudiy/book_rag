@@ -606,6 +606,45 @@ def _candidate_passages(scores: Any, ids: Any, threshold: float) -> tuple[list[i
     return ordered, best, k
 
 
+def _score_vectors(
+    vectors: Any,
+    ids: Any,
+    query_vector: np.ndarray,
+    eligible_ids: np.ndarray | None = None,
+    *,
+    ordered_ids: bool = False,
+    block_rows: int = 8192,
+) -> np.ndarray:
+    """Score only an explicit scope with bounded matrix reads.
+
+    Installed receipts prove window IDs follow ascending source passage order.
+    Only that path may use binary-search bounds. Legacy arrays can be unordered.
+    Unfiltered retrieval retains its existing single matrix multiplication.
+    """
+    if eligible_ids is None:
+        scores = np.asarray(vectors @ query_vector)
+        if not np.isfinite(scores).all():
+            raise ValueError("Nonfinite semantic scores")
+        return scores
+    if block_rows < 1:
+        raise ValueError("Scoring blocks must contain at least one row")
+    scores = np.full(len(ids), -np.inf, dtype=np.result_type(vectors.dtype, query_vector.dtype))
+    if not len(eligible_ids):
+        return scores
+    low, high = 0, len(ids)
+    if ordered_ids:
+        low = int(np.searchsorted(ids, eligible_ids.min(), side="left"))
+        high = int(np.searchsorted(ids, eligible_ids.max(), side="right"))
+    positions = np.flatnonzero(np.isin(ids[low:high], eligible_ids)) + low
+    for start in range(0, len(positions), block_rows):
+        selected = positions[start : start + block_rows]
+        values = np.asarray(vectors[selected] @ query_vector)
+        if not np.isfinite(values).all():
+            raise ValueError("Nonfinite scoped semantic scores")
+        scores[selected] = values
+    return scores
+
+
 def semantic_search(
     library: Library, query: str, mode: str, book_id: str | None, language: str | None, limit: int
 ) -> dict[str, Any]:
@@ -689,6 +728,21 @@ def semantic_search(
             or metadata.get("vectors", len(ids)) != len(ids)
         ):
             raise ValueError("Vector/ID arrays have incompatible shapes or types")
+        eligible = None
+        if book_id is not None or language is not None:
+            with library.connect() as conn:
+                eligible = np.fromiter(
+                    (
+                        row[0]
+                        for row in conn.execute(
+                            "SELECT p.id FROM passages p JOIN books b ON b.id=p.book_id "
+                            "JOIN sections s ON s.id=p.section_id AND s.book_id=p.book_id "
+                            "WHERE (? IS NULL OR b.id=?) AND (? IS NULL OR b.language=?) AND b.status='indexed'",
+                            (book_id, book_id, language, language),
+                        )
+                    ),
+                    dtype=np.int64,
+                )
         profile = profile_from_metadata(metadata)
         model = _model(metadata["model"], str(_model_cache(library)), metadata.get("model_revision"))
         query_vector = np.asarray(
@@ -696,24 +750,11 @@ def semantic_search(
         )
         if query_vector.shape != (vectors.shape[1],) or not np.isfinite(query_vector).all():
             raise ValueError("Invalid query vector")
-        scores = np.asarray(vectors @ query_vector)
-        if not np.isfinite(scores).all():
-            raise ValueError("Nonfinite semantic scores")
+        scores = _score_vectors(vectors, ids, query_vector, eligible, ordered_ids=receipt is not None)
     except ImportError:
         return fallback("Install the semantic extra to enable multilingual embeddings.")
     except (OSError, ValueError, KeyError, TypeError, RuntimeError, MemoryError, sqlite3.Error):
         return fallback("Смысловой индекс недоступен или не прошёл проверку. Показан поиск по словам.")
-    if book_id or language:
-        with library.connect() as conn:
-            eligible = {
-                r[0]
-                for r in conn.execute(
-                    "SELECT p.id FROM passages p JOIN books b ON b.id=p.book_id "
-                    "WHERE (? IS NULL OR b.id=?) AND (? IS NULL OR b.language=?) AND b.status='indexed'",
-                    (book_id, book_id, language, language),
-                )
-            }
-        scores[~np.isin(ids, list(eligible))] = -np.inf
     threshold = float(os.getenv("BOOKRAG_SEMANTIC_THRESHOLD", "0.30"))
     candidate_ids, best_scores, window_count = _candidate_passages(scores, ids, threshold)
     evidence = {passage["id"]: passage for passage in library.passages(candidate_ids)}

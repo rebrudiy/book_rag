@@ -104,7 +104,9 @@ class ReadOnlyLibrary(Library):
         connection.execute("PRAGMA query_only=ON")
 
         def trace(statement: str) -> None:
-            if statement.startswith("WITH candidates AS MATERIALIZED"):
+            if statement.startswith("WITH candidates AS MATERIALIZED") or statement.startswith(
+                "SELECT passage_fts.rowid id,rank score FROM passage_fts"
+            ):
                 self.statement = statement
 
         connection.set_trace_callback(trace)

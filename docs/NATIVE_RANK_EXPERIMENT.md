@@ -1,8 +1,10 @@
 # Native FTS5 rank candidate
 
-This is a separate read-only prototype in `scripts/benchmark_native_rank.py`.
-It does not change `Library.search`, select a production strategy, access the
-large live corpus, load a model or inspect final-test labels.
+The initial read-only prototype is `scripts/benchmark_native_rank.py`.
+The same native ordering strategy is now implemented by
+`Library._lexical_rows`; the original weighted BM25 scores, eligibility,
+candidate limits and score/ID ordering are retained. No embedding model,
+semantic scoring threshold or final-test fixture changes are involved.
 
 [SQLite documents the hidden `rank` column](https://sqlite.org/fts5.html#sorting_by_auxiliary_function_results)
 as an alternative ordering path for BM25, with a per-query mapping for weighted
@@ -60,7 +62,7 @@ No original `Library` constructor or vector copy is used. The resulting source
 is queried read-only for both control and candidate.
 
 On SQLite 3.53.2, EXPLAIN reported `32:rM4` (scoped `32:rM4><`), with no temporary
-SQL ORDER BY tree for native rank. The original core uses its materialized CTE.
+SQL ORDER BY tree for native rank. The original control used its materialized CTE.
 These strings are diagnostic and version-dependent.
 
 | Frozen20 case | Current core ms | Native ms | Eligible rank rows read / pool size |
@@ -113,4 +115,81 @@ lookups until the native rank stream reaches a small eligible pool.
 
 The ignored receipt is `data/bench-native-large-v1/report.json`, including
 implementation hashes, guards, stream counts, plans and GPU-job context.
-The package search path remains frozen pending a separate integration decision.
+This observation motivated the separately verified package integration below.
+
+## Package integration and reproducible comparison
+
+`Library._lexical_rows` retains the existing lexical pool of 200 passages and
+the baseline output-sized pool. It hydrates only the selected rows, including
+the original bibliographic metadata, contributor/translator credits and latest
+ingestion warnings. Both selection and hydration require indexed status,
+matching book/language filters and strict section ownership. Hash/slice checks,
+corrupt-quote suppression and lexical reranking continue after hydration.
+
+The helper opens a read transaction only when it owns the snapshot; an existing
+caller transaction stays open. Twenty-five integration checks cover exact raw
+scores/records and output prefixes, reversed boundary ties, no-answer/Unicode
+queries, corrupt ownership, invalid rank streams, and a real WAL reindex after
+the rank cursor closes but before source hydration. The latter must preserve
+the old source text and attribution for that response and show the replacement
+only on the next query. These pass alongside the existing ownership, lexical,
+pipeline, saved-history and semantic fake-model checks.
+
+`scripts/compare_native_search.py` compares a preserved old control module with
+the current candidate, using only lexical/baseline modes and the public 54-query
+development fixture. It bypasses source constructors, uses immutable/query-only
+SQLite, refuses nonempty WALs and guards source/active-generation identities.
+It compares ordered raw IDs, exact BM25 float hex, hydrated records and complete
+final responses except elapsed time, including warnings. Each case/mode runs
+once; controls run first, so native timings may have warmer caches. Timeouts,
+skipped cases and source-guard failures receive no equivalence/speedup credit.
+The whole run is bounded to 20 seconds per query, 240 seconds of controls and
+300 seconds overall. Seven tiny owned-CC0 runner checks include timeout handling
+and refusal of model modes or nondevelopment fixtures.
+
+```sh
+mkdir -p artifacts/native-control
+git show b8606c4:src/book_rag/library.py > artifacts/native-control/library.py
+uv run python scripts/compare_native_search.py \
+  --control artifacts/native-control/library.py \
+  --output data/bench-native-dev54-reproduction
+uv run pytest -q tests/test_native_search.py tests/test_native_dev_comparator.py
+```
+
+Gold hydrated records contain source text and remain in the ignored output
+directory. Public reports contain only query IDs, timings and evidence hashes;
+this equality experiment does not create a new relevance or final-test score.
+
+## Bounded 4,001-edition dev54 comparison
+
+The first integrated comparison finished in **274.749 seconds**, within its
+300-second overall budget. Main/active-generation file identity and no-nonempty-WAL
+guards passed. All 108 native cases completed; no model was loaded and no source
+constructor, migration or corpus write ran.
+
+| Mode | Exact completed pairs | Paired CTE / native total | Paired p50 ms CTE / native | Paired p95 ms CTE / native |
+| --- | ---: | ---: | ---: | ---: |
+| Lexical | 54 / 54 | 86.979 / 5.772 s | 83.519 / 64.826 | 11,979.423 / 422.351 |
+| Baseline | 38 / 54 | 98.976 / 12.168 s | 159.105 / 156.019 | 14,797.731 / 1,344.806 |
+
+Every completed pair matched raw ordered IDs, BM25 float hex, full hydrated
+metadata/quote records and complete final responses including warnings. There
+were no mismatches among those **92 pairs**. Lexical verification covers all 54
+development cases. Full two-mode verification remains **incomplete**: three
+baseline controls timed out (two at 20 seconds, one at the remaining 14.044-second
+control budget) and 13 were skipped after the 240-second combined control budget.
+Those 16 cases receive no equality or speedup credit. All 54 native baseline
+cases completed in 24.542 seconds, including the unpaired cases.
+
+Controls ran before all native cases, so caches may have favored the candidate.
+These are single ordered measurements, not repeated isolated throughput estimates.
+The result demonstrates a smaller expensive tail on this public development set;
+it does not establish a general latency guarantee or improve the documented
+semantic relevance/abstention scores. Source guards compared file identities and
+nonempty WALs rather than recomputing all multi-GB source hashes.
+
+The public receipt is
+[`experiments/native-lexical-dev54-v1.json`](../experiments/native-lexical-dev54-v1.json).
+It deliberately retains `status: incomplete` and `validated: false` for the whole
+two-mode set, with separate per-mode exact-pair counts. Gold text stays only in
+`data/bench-native-dev54-v1/unvalidated-control/`.
