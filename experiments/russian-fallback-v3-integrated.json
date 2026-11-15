@@ -1,0 +1,289 @@
+{
+  "kind": "scoped_russian_morphology_prototype_open_development_only",
+  "production_integrated": true,
+  "dataset_sha256": "573155bfea71d0086b37f622e3bc24598bd1dd6595535436c05ae59bf7fdf92d",
+  "module_sha256": "20964a9785a6d117631ebd1dfdd34b61f9cba0bb335bf9d41180c10ea085b26c",
+  "dependency": {
+    "name": "snowballstemmer",
+    "version": "3.1.1",
+    "license": "BSD-3-Clause",
+    "primary_package": "https://pypi.org/project/snowballstemmer/3.1.1/",
+    "algorithm": "https://snowballstem.org/algorithms/russian/stemmer.html"
+  },
+  "selected_source_guards_passed": true,
+  "selected_sources_before": {
+    "wsru-chameleon-6a5f80896084": {
+      "book_metadata_sha256": "75e89322a5da64b8a649b691b04822618cbcdea2cf33e01fed5a7db1558e1485",
+      "artifact_sha256": "742870899417a17df01d42785b1f24ddf3a3392f9bf77f070ec85dcb6b86a8a2",
+      "content_sha256": "bab00ec65db8d6c9c930912f36e394cceb386a8cc62895b51e4105c71dbf6660",
+      "section_snapshot_sha256": "66a5461f9925c0a86fd2259d9583db3ea0e353f59af188978aed3ff29a5b7dc7",
+      "passage_identity_sha256": "09aaba8a3418ba12560ec05c495810cfe2fd758b0772ab007d21ceee80e8e611",
+      "roles_sha256": "534e29de24ab57dbb3e601fef29c30fc7c473d8885bf689e9890a52dd1cd6528",
+      "passages": 6
+    },
+    "wsru-how-much-land-285bf7cc584e": {
+      "book_metadata_sha256": "836f287d69a161cbac45cafb2a79f1841d3d08579425f17d44c80708eb081e6a",
+      "artifact_sha256": "0ebd281360393ff0d9dbf15d5e01f41dc8d4cb44ac7020ba9d1887126769fc68",
+      "content_sha256": "ccc134c7cab15ebae59a82b9ee6a5da946e8e697a104d264228cc0e299d2fb18",
+      "section_snapshot_sha256": "77eb716867351c1092928ff44fcc3a40bee6df6d45f0131fd1739dc0ccebd9c4",
+      "passage_identity_sha256": "6c0d64decafefeaf505e396195c3ce08a04e991bd653b206cef9ad952a3f5d34",
+      "roles_sha256": "4e1a5a855baaec6ad7e7e0ca69d9708fad5c9743e2b17490866f2251fa93d160",
+      "passages": 18
+    },
+    "wsru-lefty-45ef2537b9d9": {
+      "book_metadata_sha256": "9848a500c4b23b7293aa1408e9b8cb661f15b253b08c8482154a65278ea311ab",
+      "artifact_sha256": "7c6f7469e7406bd72fac8f2bcd64d43dabd96ec28f386359619b1ce9e9338b5d",
+      "content_sha256": "119c31080f2721368b615f39d90abf45253cd6557d780800507ec71da9bf1269",
+      "section_snapshot_sha256": "a60c7fcf13ec36c68a727bde0febe5de45eb79b61cd0abc88e9a87180007b290",
+      "passage_identity_sha256": "d50cd8ad1cc950a522080fc222081e45eecaa13c6dcf110f1062dfdf33e76be4",
+      "roles_sha256": "343c316e47fd5587ca4c05d9ec1e38dfd33b32953f932adb21bff9cf80ea49a5",
+      "passages": 46
+    }
+  },
+  "selected_sources_after": {
+    "wsru-chameleon-6a5f80896084": {
+      "book_metadata_sha256": "75e89322a5da64b8a649b691b04822618cbcdea2cf33e01fed5a7db1558e1485",
+      "artifact_sha256": "742870899417a17df01d42785b1f24ddf3a3392f9bf77f070ec85dcb6b86a8a2",
+      "content_sha256": "bab00ec65db8d6c9c930912f36e394cceb386a8cc62895b51e4105c71dbf6660",
+      "section_snapshot_sha256": "66a5461f9925c0a86fd2259d9583db3ea0e353f59af188978aed3ff29a5b7dc7",
+      "passage_identity_sha256": "09aaba8a3418ba12560ec05c495810cfe2fd758b0772ab007d21ceee80e8e611",
+      "roles_sha256": "534e29de24ab57dbb3e601fef29c30fc7c473d8885bf689e9890a52dd1cd6528",
+      "passages": 6
+    },
+    "wsru-how-much-land-285bf7cc584e": {
+      "book_metadata_sha256": "836f287d69a161cbac45cafb2a79f1841d3d08579425f17d44c80708eb081e6a",
+      "artifact_sha256": "0ebd281360393ff0d9dbf15d5e01f41dc8d4cb44ac7020ba9d1887126769fc68",
+      "content_sha256": "ccc134c7cab15ebae59a82b9ee6a5da946e8e697a104d264228cc0e299d2fb18",
+      "section_snapshot_sha256": "77eb716867351c1092928ff44fcc3a40bee6df6d45f0131fd1739dc0ccebd9c4",
+      "passage_identity_sha256": "6c0d64decafefeaf505e396195c3ce08a04e991bd653b206cef9ad952a3f5d34",
+      "roles_sha256": "4e1a5a855baaec6ad7e7e0ca69d9708fad5c9743e2b17490866f2251fa93d160",
+      "passages": 18
+    },
+    "wsru-lefty-45ef2537b9d9": {
+      "book_metadata_sha256": "9848a500c4b23b7293aa1408e9b8cb661f15b253b08c8482154a65278ea311ab",
+      "artifact_sha256": "7c6f7469e7406bd72fac8f2bcd64d43dabd96ec28f386359619b1ce9e9338b5d",
+      "content_sha256": "119c31080f2721368b615f39d90abf45253cd6557d780800507ec71da9bf1269",
+      "section_snapshot_sha256": "a60c7fcf13ec36c68a727bde0febe5de45eb79b61cd0abc88e9a87180007b290",
+      "passage_identity_sha256": "d50cd8ad1cc950a522080fc222081e45eecaa13c6dcf110f1062dfdf33e76be4",
+      "roles_sha256": "343c316e47fd5587ca4c05d9ec1e38dfd33b32953f932adb21bff9cf80ea49a5",
+      "passages": 46
+    }
+  },
+  "development_cases": [
+    {
+      "id": "ru-chameleon-owner",
+      "book_id": "wsru-chameleon-6a5f80896084",
+      "question": "Что повар Прохор в конце концов говорит о владельце собаки в «Хамелеоне»?",
+      "retrieval_query": "Что повар Прохор в конце концов говорит о владельце собаки в  Хамелеоне ?",
+      "strict_search_count": 0,
+      "softquote_normal_count": 1,
+      "fallback_used": false,
+      "fallback_reason": "ineligible",
+      "fallback_candidates": 0,
+      "fallback_count": 0,
+      "fallback_elapsed_ms": null,
+      "normal_reference_anchor_ranks": [
+        1
+      ],
+      "combined_reference_anchor_ranks": [
+        1
+      ],
+      "selected_evidence_count": 1,
+      "reference_anchor_hit_at8": true,
+      "selected_ids": [
+        2576410
+      ],
+      "all_sources_verified": true,
+      "integrated_matches_prototype_canonical_order": true,
+      "stem_matches": []
+    },
+    {
+      "id": "ru-lefty-warning",
+      "book_id": "wsru-lefty-45ef2537b9d9",
+      "question": "Какое предупреждение о чистке ружей Левша просит передать государю перед смертью?",
+      "retrieval_query": "Какое предупреждение о чистке ружей Левша просит передать государю перед смертью?",
+      "strict_search_count": 0,
+      "softquote_normal_count": 0,
+      "fallback_used": true,
+      "fallback_reason": "stem_matches",
+      "fallback_candidates": 46,
+      "fallback_count": 1,
+      "fallback_elapsed_ms": 56.438,
+      "normal_reference_anchor_ranks": [],
+      "combined_reference_anchor_ranks": [
+        1
+      ],
+      "selected_evidence_count": 1,
+      "reference_anchor_hit_at8": true,
+      "selected_ids": [
+        2576402
+      ],
+      "all_sources_verified": true,
+      "integrated_matches_prototype_canonical_order": true,
+      "stem_matches": [
+        {
+          "id": 2576402,
+          "coverage": 0.5,
+          "stems": [
+            "чистк",
+            "руж",
+            "левш",
+            "государ"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ru-land-grave",
+      "book_id": "wsru-how-much-land-285bf7cc584e",
+      "question": "Сколько земли в итоге занимает могила Пахома в рассказе Толстого «Много ли человеку земли нужно»?",
+      "retrieval_query": "Сколько земли в итоге занимает могила Пахома в рассказе Толстого  Много ли человеку земли нужно ?",
+      "strict_search_count": 0,
+      "softquote_normal_count": 18,
+      "fallback_used": false,
+      "fallback_reason": "ineligible",
+      "fallback_candidates": 0,
+      "fallback_count": 0,
+      "fallback_elapsed_ms": null,
+      "normal_reference_anchor_ranks": [
+        14
+      ],
+      "combined_reference_anchor_ranks": [
+        14
+      ],
+      "selected_evidence_count": 8,
+      "reference_anchor_hit_at8": false,
+      "selected_ids": [
+        2576558,
+        2576560,
+        2576555,
+        2576554,
+        2576561,
+        2576553,
+        2576557,
+        2576562
+      ],
+      "all_sources_verified": true,
+      "integrated_matches_prototype_canonical_order": true,
+      "stem_matches": []
+    }
+  ],
+  "independent_CC0": {
+    "cases": [
+      {
+        "id": "inflection-garden",
+        "normal_count": 0,
+        "fallback_count": 1,
+        "expected_positive": true,
+        "exact_gold_match": true,
+        "all_sources_verified": true,
+        "elapsed_ms": 0.767
+      },
+      {
+        "id": "inflection-crafts",
+        "normal_count": 0,
+        "fallback_count": 1,
+        "expected_positive": true,
+        "exact_gold_match": true,
+        "all_sources_verified": true,
+        "elapsed_ms": 0.749
+      },
+      {
+        "id": "spelling-yo",
+        "normal_count": 0,
+        "fallback_count": 1,
+        "expected_positive": true,
+        "exact_gold_match": true,
+        "all_sources_verified": true,
+        "elapsed_ms": 0.675
+      },
+      {
+        "id": "unicode-lantern",
+        "normal_count": 0,
+        "fallback_count": 1,
+        "expected_positive": true,
+        "exact_gold_match": true,
+        "all_sources_verified": true,
+        "elapsed_ms": 0.676
+      },
+      {
+        "id": "prefix-collision",
+        "normal_count": 0,
+        "fallback_count": 1,
+        "expected_positive": true,
+        "exact_gold_match": true,
+        "all_sources_verified": true,
+        "elapsed_ms": 0.691
+      },
+      {
+        "id": "absent-science",
+        "normal_count": 0,
+        "fallback_count": 0,
+        "expected_positive": false,
+        "exact_gold_match": true,
+        "all_sources_verified": true,
+        "elapsed_ms": 0.507
+      },
+      {
+        "id": "shared-anchor-negative",
+        "normal_count": 0,
+        "fallback_count": 0,
+        "expected_positive": false,
+        "exact_gold_match": true,
+        "all_sources_verified": true,
+        "elapsed_ms": 0.735
+      },
+      {
+        "id": "numeric-negative",
+        "normal_count": 0,
+        "fallback_count": 0,
+        "expected_positive": false,
+        "exact_gold_match": true,
+        "all_sources_verified": true,
+        "elapsed_ms": 0.583
+      },
+      {
+        "id": "negation-negative",
+        "normal_count": 0,
+        "fallback_count": 0,
+        "expected_positive": false,
+        "exact_gold_match": true,
+        "all_sources_verified": true,
+        "elapsed_ms": 0.566
+      },
+      {
+        "id": "short-stem-modal-collision",
+        "normal_count": 0,
+        "fallback_count": 0,
+        "expected_positive": false,
+        "exact_gold_match": true,
+        "all_sources_verified": true,
+        "elapsed_ms": 0.705
+      },
+      {
+        "id": "short-stem-verb-collision",
+        "normal_count": 0,
+        "fallback_count": 0,
+        "expected_positive": false,
+        "exact_gold_match": true,
+        "all_sources_verified": true,
+        "elapsed_ms": 0.622
+      }
+    ],
+    "returned_fragments": 5,
+    "gold_correct_fragments": 5,
+    "fixture_precision": 1.0,
+    "positive_recovered": 5,
+    "negative_empty": 6,
+    "all_expected_outcomes": true
+  },
+  "limitations": [
+    "Open development probes informed this prototype; no final/heldout or LLM evaluation.",
+    "Reference-anchor presence is not semantic precision or entailment. CC0 precision applies only to the small authored cases.",
+    "Ask softens question quote delimiters separately; Search quoted phrases and baseline remain unchanged.",
+    "Only empty scoped lexical results expand. Existing nonempty rankings, including missed lower-ranked evidence, remain unchanged.",
+    "Snowball is heuristic stemming, not lemmatization; irregular stems and prefix collisions limit recall.",
+    "Selected book headers/canonical sections/passages/roles are guarded. Other live corpus growth is allowed; no whole-DB hash/freeze is claimed.",
+    "No live writes, Library(original) construction, model encoding or generation; only owned CC0 fixture imports."
+  ]
+}

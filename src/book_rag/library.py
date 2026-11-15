@@ -732,6 +732,7 @@ class Library:
         expression = plan.expression if mode == "lexical" else " OR ".join('"' + t + '"' for t in tokens)
         results: list[dict[str, Any]] = []
         warnings: list[str] = []
+        lexical_fallback: dict[str, Any] | None = None
         if mode == "lexical" and not expression and plan.reason:
             warnings.append(plan.reason)
         if expression:
@@ -745,6 +746,20 @@ class Library:
                     results = [r for r in results if r["verified"]]
                 if mode == "lexical":
                     results = rerank_results(plan, results, limit=limit)
+        if mode == "lexical" and not results and book_id:
+            from book_rag.russian_retrieval import scoped_russian_fallback
+
+            expanded = scoped_russian_fallback(
+                self, query, book_id, language, prior_results=results, mode=mode, limit=limit
+            )
+            if expanded["used"]:
+                results = expanded["results"]
+                warnings.extend(message for message in expanded["warnings"] if message not in warnings)
+                lexical_fallback = {
+                    "method": "russian-snowball-prefix-v1",
+                    "candidates": expanded["candidates"],
+                    "reason": expanded["reason"],
+                }
         return self._ingestion_warnings(
             {
                 "query": query,
@@ -752,6 +767,7 @@ class Library:
                 "results": results,
                 "elapsed_ms": round((time.perf_counter() - started) * 1000, 2),
                 "warnings": warnings,
+                **({"lexical_fallback": lexical_fallback} if lexical_fallback is not None else {}),
             }
         )
 
