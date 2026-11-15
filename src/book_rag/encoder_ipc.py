@@ -95,6 +95,7 @@ def _worker(connection: Connection, settings: dict[str, Any]) -> None:
         snapshot, files = model_snapshot(Path(settings["cache"]))
         before = {str(path): file_sha256(path) for path in files}
         import numpy as np
+
         torch = importlib.import_module("torch")
         SentenceTransformer = importlib.import_module("sentence_transformers").SentenceTransformer
 

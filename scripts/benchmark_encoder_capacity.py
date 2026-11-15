@@ -122,6 +122,7 @@ def worker(args: argparse.Namespace) -> None:
     before = footprint(protected)
     started = time.perf_counter()
     import numpy as np
+
     torch = importlib.import_module("torch")
     SentenceTransformer = importlib.import_module("sentence_transformers").SentenceTransformer
 
