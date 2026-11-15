@@ -1,0 +1,121 @@
+{
+  "version": 1,
+  "observed_at": "2026-11-15T02:32:58.129211+00:00",
+  "scope": "Review-only exact public PG authority identifiers and bounded graph pilot; no work-count promotion",
+  "global_snapshot": {
+    "expected_non_deprecated_statements": 4125,
+    "observed_statement_rows": 4125,
+    "count_consistent": true,
+    "distinct_gutenberg_ids": 4072,
+    "mapped_statements": 4125,
+    "multiple_item_gutenberg_ids": 47,
+    "network_requests": 2,
+    "response_bytes": 334129
+  },
+  "local_editions": 10984,
+  "exact_identifier_matched_editions": 555,
+  "local_competing_item_editions": 7,
+  "confidence_counts": {
+    "ambiguous": 555,
+    "unresolved": 10429
+  },
+  "reason_counts": {
+    "work_graph_not_in_bounded_pilot": 548,
+    "no_exact_P2034_claim_in_observed_snapshot": 10429,
+    "multiple_P2034_items": 7
+  },
+  "graph_pilot": {
+    "seed_qids": [
+      "Q112864267",
+      "Q133836654",
+      "Q40591",
+      "Q140774045",
+      "Q695116",
+      "Q20968204",
+      "Q131719",
+      "Q170583",
+      "Q140795612",
+      "Q21948575",
+      "Q40896503",
+      "Q1152283",
+      "Q124130044",
+      "Q193034",
+      "Q140778161",
+      "Q28147127",
+      "Q140761941",
+      "Q5367959",
+      "Q117462584",
+      "Q1242501",
+      "Q140779644",
+      "Q63648026",
+      "Q43518802",
+      "Q10313526",
+      "Q110835159",
+      "Q11970411",
+      "Q68081807",
+      "Q94088110",
+      "Q117379357",
+      "Q68086345",
+      "Q3822202",
+      "Q68824278",
+      "Q43517615",
+      "Q137668249",
+      "Q58487976",
+      "Q28147103",
+      "Q323160",
+      "Q7713896",
+      "Q119924722",
+      "Q57084771"
+    ],
+    "network_requests": 1,
+    "response_bytes": 0,
+    "failures": [
+      {
+        "endpoint": "https://query.wikidata.org/sparql",
+        "error": "The read operation timed out",
+        "status": null,
+        "retry_at_epoch": 1794714178.294058,
+        "retry_at": "2026-11-15T03:42:58.294058+00:00",
+        "automatic_retry": false,
+        "query_sha256": "eb2e860cf799df098396b68a3c25500bcd2562bfa4b183b9c50fb16ae2c63f60"
+      }
+    ],
+    "deferred": true,
+    "metadata_nodes": 0
+  },
+  "offline_rerun_new_network_requests": 0,
+  "source_preview_review": {
+    "examples": 20,
+    "status_counts": {
+      "cached_artifact_sha_verified": 20
+    },
+    "opf_titles_equal_local": 20,
+    "catalog_author_surname_present": 20,
+    "semantic_work_identity_verified": false
+  },
+  "historical_cached50": {
+    "counts": {
+      "authority_linked": 16,
+      "unresolved": 31,
+      "ambiguous": 3
+    },
+    "canonical_query_caches_verified": 4,
+    "current_scope_promotion": false
+  },
+  "runtime_proposals": "data/identity/wikidata-catalog-v1/authority-proposals.json",
+  "database_modified": false,
+  "curated_links_modified": false,
+  "identity_count_promotion_allowed": false,
+  "verified_unique_work_count": null,
+  "primary_sources": [
+    "https://www.wikidata.org/wiki/Property:P2034",
+    "https://www.wikidata.org/wiki/Property:P629",
+    "https://www.wikidata.org/wiki/Wikidata:Licensing",
+    "https://www.mediawiki.org/wiki/Wikidata_Query_Service/User_Manual#Query_limits"
+  ],
+  "checks": [
+    "23 mocked tests passed",
+    "Ruff passed",
+    "ty passed"
+  ]
+}
