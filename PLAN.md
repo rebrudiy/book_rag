@@ -1,10 +1,10 @@
 # Plan
 
-Goal ACTIVE. Continue until authentic weekly Codex remainder reaches 3%, the user stops the run, or the environment imposes an actual limit. Never substitute token counts for quota.
+Goal ACTIVE until authentic Codex weekly remainder3%, user stop, or real environment limit. Never use token counts as quota. Preserve a concrete running app and state at the stop condition.
 
-1. Keep the running product easy to try at http://127.0.0.1:8001. Book descriptions now search metadata for all 11,001 editions; exact text search and reading work across the corpus. Preserve explicit coverage and uncertainty.
-2. Connect the completed 21-book Russian semantic pilot to live scoped search, with original-source bindings and isolated native workers. Preserve the frozen 1,308-book baseline and global behavior. Then extend compact, resumable full-text encoding to further editions under measured capacity.
-3. Improve actual RAG source selection: optional query hypotheses and general lexical proximity, tested on open development cases. Keep exact quotations and strict whole-answer rejection. The 4B candidate remains experimental; same-model and NLI judgments have demonstrated errors.
-4. Publish coherent commits and green CI for completed metadata discovery, Russian lexical fallback, local model profiles and compact-index experiments. Retain failed experiments and distinguish usability tests from relevance/factual accuracy.
-5. Expand and audit unique complete works beyond the current edition count. All 7,000 planned additions are indexed; authority and overlap proposals remain unconfirmed. Preserve origins, rights, artifact hashes, resumability and a 4.5 GiB disk reserve.
-6. Update STATUS.md and ignored continuation records after iterations. Keep original curated20/E5/1308 controls byte-identical; never read sealed final labels for tuning. No paid APIs or equipment.
+1. Keep http://127.0.0.1:8001 and ./scripts/run_full.sh usable. Lexical/reading/metadata discovery11,001 editions; semantic scope union2,415, global1,308. Counts come from actual ID sets, not edition/work assumptions.
+2. Finish the independent compact-window-manifest prototype: verify all190,601 existing inputs/offsets/hashchain and byte reduction, without modifying existing indexes or activating a new contract. Preserve state if quota reaches3%.
+3. Next release: version the compact registration/reader contract, then stream remaining8,586 editions under disk/RSS guards; expand global semantic routing only with measured candidate/negative behavior. Existing registry caps and duplicate text manifests constrain full11k scale.
+4. Continue RAG quality from OPENdevelopment data: preserve actual sources and qualifiers, compare old/new retrieval, retain failures. Local4B/source planning improved some scenarios but does not certify paraphrases. No unsafe NLI/partial-claim gate or paid API.
+5. Audit unique complete-work/edition/language/author identities; never equate11,001 editions or10,997 provisional groups with10kverified works. Preserve provenance, rights, originals, structure, resumability and notes.
+6. Publish coherent tested commits, green CI and browser receipts. Keep original20/E5/1308 controls byte-identical and closed final labels unread until an appropriate frozen evaluation. Maintain compact STATUS and ignored continuation details; all agents must save their state at3%.
