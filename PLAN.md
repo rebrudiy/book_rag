@@ -1,10 +1,10 @@
 # Plan
 
-Goal ACTIVE: continue until authentic weekly Codex remainder <=3%, explicit user stop, or actual environment limit. Never substitute token counts for quota.
+Goal ACTIVE. Continue until authentic weekly Codex remainder reaches 3%, the user stops the run, or the environment imposes an actual limit. Never substitute token counts for quota.
 
-1. **User priority: grow the searchable corpus toward10,000–50,000 unique complete works.** The serial, resumable7,000-candidate acquisition/index pipeline is running. Preserve4.5GiB free space, provider backoff, source/rights records and honest provisional work counts. Audit actual indexed text.
-2. **Deliver actual RAG.** Integrate local Qwen generation with retrieval, mandatory exact supporting quotations, strict source IDs, before/after source-version checks and explicit abstention. Complete real-model/browser checks and deploy to8001. Test-generator success is not model quality.
-3. Deploy native lexical rank and scoped vector scoring with the Answer UI. Native lexical dev54 exact; legacy baseline comparison incomplete. Finish the real frozen-matrix scoped proof, required integrated checks and CI, then publish coherent commits.
-4. Expand semantic coverage beyond1,308 under measured disk/memory limits. All current editions have lexical search; never count new books as embedded. Choose incremental/compact indexing after RAG and acquisition are stable.
-5. Measure multilingual/no-answer/retrieval quality and source integrity. Retain baseline/development results and failures. E5-base512 lost and is not promoted. Do not prioritize small experiments over corpus/RAG delivery.
-6. Keep original20/E5/1308 controls byte-identical. Never read closed final labels or tune from them; freeze a candidate before a final run. Keep state/receipts current and continue after milestones. No paid APIs/equipment.
+1. Keep the running product easy to try at http://127.0.0.1:8001. Book descriptions now search metadata for all 11,001 editions; exact text search and reading work across the corpus. Preserve explicit coverage and uncertainty.
+2. Connect the completed 21-book Russian semantic pilot to live scoped search, with original-source bindings and isolated native workers. Preserve the frozen 1,308-book baseline and global behavior. Then extend compact, resumable full-text encoding to further editions under measured capacity.
+3. Improve actual RAG source selection: optional query hypotheses and general lexical proximity, tested on open development cases. Keep exact quotations and strict whole-answer rejection. The 4B candidate remains experimental; same-model and NLI judgments have demonstrated errors.
+4. Publish coherent commits and green CI for completed metadata discovery, Russian lexical fallback, local model profiles and compact-index experiments. Retain failed experiments and distinguish usability tests from relevance/factual accuracy.
+5. Expand and audit unique complete works beyond the current edition count. All 7,000 planned additions are indexed; authority and overlap proposals remain unconfirmed. Preserve origins, rights, artifact hashes, resumability and a 4.5 GiB disk reserve.
+6. Update STATUS.md and ignored continuation records after iterations. Keep original curated20/E5/1308 controls byte-identical; never read sealed final labels for tuning. No paid APIs or equipment.
