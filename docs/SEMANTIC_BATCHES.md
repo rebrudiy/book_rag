@@ -98,3 +98,44 @@ work or correct source catalogue language. The measured batch was built before
 production registration. Its vectors do not increase the number of books the
 interface can semantically search until an explicitly source-bound registry is
 installed, enabled and checked in the live browser.
+
+## Measured 1,000-edition continuation
+
+The next explicitly selected batch contains 1,000 editions, 53,889 passages and
+49,491,880 canonical characters across ten catalogue languages. Its 190,601
+production windows fit the existing registry cap of 200,000 per batch. During
+interactive model QA, the actual MPS build was intentionally interrupted at
+116,480 durable rows. The resumed run verified 455 committed chunks and encoded
+74,121 new rows in 347.787 seconds, with no durable-window re-encoding. An
+uncommitted in-flight chunk may have been encoded again; that earlier amount was
+not measured after the encoder was deliberately aborted. The final source and
+model-file checks passed.
+
+Owned output was 130,878,924 bytes, including a 99,586,048-byte window manifest.
+The resumed encoder/native peak RSS values were 847,216,640 / 71,811,072 bytes;
+these are not peaks for the earlier interrupted run or the whole machine.
+The combined registry now lists this batch and the earlier 96 editions without
+rewriting their original live bindings:
+
+```sh
+.venv/bin/python scripts/install_semantic_batch_registry.py \
+  --library data/full \
+  --batch data/semantic-batches/fr-de-96-v1 \
+  --batch data/semantic-batches/multilingual1000-v1 \
+  --destination data/semantic-overlays/multilingual1096-registry-v1
+```
+
+The actual local server enables that registry through the environment variable
+documented in [the batch overlay contract](SEMANTIC_BATCH_OVERLAY.md). The union
+of editions served through book-scoped routes is now 2,420: the original 1,308,
+16 additional Russian editions and 1,096 additional batch editions. **Unscoped
+global dense search still covers 1,308 editions.** All 11,001 editions retain
+lexical search, metadata discovery and reading. Edition counts remain distinct
+from confirmed unique complete works.
+
+A Russian natural-language question about freedom and bread retrieved verified
+German passages from Dostoevsky's `Der Großinquisitor` (`pg38336-full`). Initial
+observations were 21.37 seconds cold and 13.77 warm; source/provenance revalidation
+and immutable artifact reads require performance work before broader latency
+claims. The [public receipt](../experiments/semantic-batch-multilingual1000-v1.json)
+preserves these observations rather than replacing them with later results.

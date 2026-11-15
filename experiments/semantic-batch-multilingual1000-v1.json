@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "experiment": "direct-live-multilingual1000-v1",
+  "status": "complete-and-registered-scoped-book-search",
+  "closed_final_used": false,
+  "editions": 1000,
+  "catalog_languages": {
+    "pt": 100,
+    "en": 162,
+    "it": 100,
+    "fi": 100,
+    "da": 38,
+    "es": 100,
+    "nl": 100,
+    "sv": 100,
+    "fr": 100,
+    "de": 100
+  },
+  "canonical_passages": 53889,
+  "canonical_characters": 49491880,
+  "windows": 190601,
+  "resumption": {
+    "interrupted_durable_rows": 116480,
+    "encoded_on_resume": 74121,
+    "resumed_chunks": 455,
+    "new_chunks": 290,
+    "durable_windows_reencoded": 0,
+    "uncommitted_windows_reencoded": "not measured; an interrupted in-flight chunk may be re-encoded"
+  },
+  "resume_encode_seconds": 347.7874941714108,
+  "resume_only_peak_rss_bytes": {
+    "encoder": 847216640,
+    "native": 71811072
+  },
+  "owned_output_bytes": 130878924,
+  "source_unchanged": true,
+  "model_files_unchanged": true,
+  "source_database_copied": false,
+  "full_float32_matrix_stored": false,
+  "runtime_report_sha256": "310ad2d9c7b983c4e3aaed97ea1f21d8f14f127c9642af8097322612a216f659",
+  "manifest_sha256": "d89e36e1c9e1edc080cedbfdb769a97ef70aa31e8bad86e252f3a85a30eeeded",
+  "ready_sha256": "906d41b32fd37e7827955acae69eed3cae9a52bc01a3666061d8ae45decd5dca",
+  "input_chain": "8e6ede77bf7851263d480224f1253113266446d06f6c39a541e578df73eb363a",
+  "codec_sha256": "2af559dc93e3eaddc983c25361a20ad4f43583285e031975fb50a32247a610a0",
+  "combined_registry_sha256": "33af8c628c00c0a762f8278234eec0dcf6fe5c61f692bec0b4df70426c2269d5",
+  "registered_batch_editions_total": 1096,
+  "global_baseline_editions": 1308,
+  "additional_ru_editions_outside_baseline": 16,
+  "book_scoped_served_union_editions": 2420,
+  "whole_library_dense_search_editions": 1308,
+  "live_probe": {
+    "book_id": "pg38336-full",
+    "query": "Почему люди отказываются от свободы ради хлеба и спокойствия?",
+    "observed_seconds_before_runtime_optimization": [
+      21.37321058381349,
+      13.766719625331461
+    ],
+    "retrieval_strategy": "explicit-book-batch-IVFPQ-RRF-v1",
+    "new_open_probe": true
+  },
+  "limitations": [
+    "Edition counts do not confirm unique complete works; catalogue language labels and authorship require separate audits.",
+    "Semantic routes are book-scoped; global and language-only routing is unchanged except the existing Russian layer.",
+    "The13.77s warm probe motivates runtime optimization; these two observations are not a representative latency benchmark.",
+    "Resume peak is not peak for the earlier interrupted run or all concurrent processes.",
+    "Per-query source inspection was conservative at this measurement; post-measurement performance work must preserve result/source validity."
+  ]
+}
